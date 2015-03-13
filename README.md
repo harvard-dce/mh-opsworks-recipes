@@ -1,4 +1,4 @@
-# mh-opsworks-berkshelf-cookbook
+# mh-opsworks-recipes-cookbook
 
 A custom cookbook in support of mh-opsworks
 
@@ -16,7 +16,7 @@ Ubuntu 14.04 LTS, and more specifically amazon aws
     <th>Default</th>
   </tr>
   <tr>
-    <td><tt>['mh-opsworks-berkshelf']['bacon']</tt></td>
+    <td><tt>['mh-opsworks-recipes']['bacon']</tt></td>
     <td>Boolean</td>
     <td>whether to include bacon</td>
     <td><tt>true</tt></td>
@@ -25,14 +25,14 @@ Ubuntu 14.04 LTS, and more specifically amazon aws
 
 ## Usage
 
-### mh-opsworks-berkshelf::default
+### mh-opsworks-recipes::default
 
-Include `mh-opsworks-berkshelf` in your node's `run_list`:
+Include `mh-opsworks-recipes` in your node's `run_list`:
 
 ```json
 {
   "run_list": [
-    "recipe[mh-opsworks-berkshelf::default]"
+    "recipe[mh-opsworks-recipes::default]"
   ]
 }
 ```

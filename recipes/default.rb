@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: mh-opsworks-berkshelf
+# Cookbook Name:: mh-opsworks-recipes
 # Recipe:: default
 #
 # Copyright (C) 2015 YOUR_NAME

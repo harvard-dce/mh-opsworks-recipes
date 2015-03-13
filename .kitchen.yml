@@ -8,9 +8,9 @@ provisioner:
 
 platforms:
   - name: ubuntu-14.04
-  - name: centos-6.4
 
 suites:
   - name: default
     run_list:
+      - recipe[mh-opsworks-recipes::install-mh-base-packages]
     attributes:
