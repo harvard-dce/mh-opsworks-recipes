@@ -7,10 +7,16 @@ group 'matterhorn' do
 end
 
 user 'matterhorn' do
-  supports manage_home: false
+  supports manage_home: true
   comment 'Matterhorn application user'
   uid 2122
   gid 'matterhorn'
-  home '/opt/matterhorn'
   shell '/bin/false'
+  home '/home/matterhorn'
+end
+
+directory '/home/matterhorn/.ssh' do
+  owner 'matterhorn'
+  group 'matterhorn'
+  mode '700'
 end

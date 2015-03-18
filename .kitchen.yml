@@ -15,3 +15,6 @@ suites:
       - recipe[mh-opsworks-recipes::install-utils]
       - recipe[mh-opsworks-recipes::install-mh-base-packages]
     attributes:
+  - name: user-creation
+    run_list:
+      - recipe[mh-opsworks-recipes::create-matterhorn-user]
