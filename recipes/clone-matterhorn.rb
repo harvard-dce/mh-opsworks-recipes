@@ -1,8 +1,7 @@
 # Cookbook Name:: mh-opsworks-recipes
-# Recipe:: create-matterhorn-user
+# Recipe:: clone-matterhorn
 
-include_recipe 'mh-opsworks-recipes::create-matterhorn-user'
-
+matterhorn_repo_root = node[:matterhorn_repo_root]
 git_data = node[:deploy][:matterhorn][:scm]
 
 repo = ''
@@ -36,7 +35,7 @@ Host *
   end
 end
 
-directory '/opt/matterhorn' do
+directory matterhorn_repo_root do
   owner 'matterhorn'
   group 'matterhorn'
   mode '755'
@@ -45,7 +44,7 @@ end
 git 'Clone matterhorn' do
   repository repo
   revision git_data[:revision]
-  destination '/opt/matterhorn'
+  destination matterhorn_repo_root
   user 'matterhorn'
   group 'matterhorn'
 end
