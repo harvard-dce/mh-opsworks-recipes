@@ -21,3 +21,6 @@ suites:
   - name: storage-server
     run_list:
       - recipe[mh-opsworks-recipes::nfs-export]
+  - name: ffmpeg
+    run_list:
+      - recipe[mh-opsworks-recipes::install-ffmpeg]
