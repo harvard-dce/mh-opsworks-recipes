@@ -24,3 +24,6 @@ suites:
   - name: ffmpeg
     run_list:
       - recipe[mh-opsworks-recipes::install-ffmpeg]
+  - name: nginx
+    run_list:
+      - recipe[mh-opsworks-recipes::configure-nginx-proxy]

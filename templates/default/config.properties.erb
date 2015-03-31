@@ -5,7 +5,7 @@
 # The HTTP server port.  If you set this to port 80, you need to run Matterhorn as root. Alternatively, if you want
 # users to access Matterhorn on port 80 but do not want to run as root, keep the default port (8080) and use an Apache
 # HTTPD server with mod_proxy to forward port 80 traffic to Matterhorn on port 8080.
-org.osgi.service.http.port=<%= @http_port %>
+org.osgi.service.http.port=<%= @matterhorn_backend_http_port %>
 
 # Whether Matterhorn itself should handle HTTPS traffic.  Even if you set this to 'false',you can still use an Apache
 # HTTPD server as a proxy to handle SSL)

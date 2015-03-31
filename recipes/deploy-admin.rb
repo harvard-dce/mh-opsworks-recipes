@@ -105,7 +105,7 @@ deploy_revision matterhorn_repo_root do
       owner 'matterhorn'
       group 'matterhorn'
       variables({
-        http_port: 8080,
+        matterhorn_backend_http_port: 8080,
         hostname: admin_hostname,
         local_workspace_root: local_workspace_root,
         export_root: storage_info[:export_root],
