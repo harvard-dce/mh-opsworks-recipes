@@ -27,3 +27,6 @@ suites:
   - name: nginx
     run_list:
       - recipe[mh-opsworks-recipes::configure-nginx-proxy]
+  - name: sh-to-bash
+    run_list:
+      - recipe[mh-opsworks-recipes::set-bash-as-default-shell]
