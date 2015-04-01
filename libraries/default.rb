@@ -1,5 +1,50 @@
 module MhOpsworksRecipes
-  module GitHelpers
+  module RecipeHelpers
+
+    def get_default_email_sender
+      node.fetch(:default_email_sender, 'no-reply@localhost')
+    end
+
+    def get_admin_user_info
+      node.fetch(
+        :admin_auth, {
+          user: 'admin',
+          pass: 'password'
+        }
+      )
+    end
+
+    def get_rest_auth_info
+      node.fetch(
+        :rest_auth, {
+          user: 'user',
+          pass: 'pass'
+        }
+      )
+    end
+
+    def get_storage_info
+      node.fetch(
+        :storage, {
+          export_root: '/var/tmp',
+          network: '10.0.0.0/8',
+          layer_shortname: 'storage'
+        }
+      )
+    end
+
+    def get_local_workspace_root
+      node.fetch(
+        :local_workspace_root, '/var/matterhorn-workspace'
+      )
+    end
+
+    def get_log_directory
+      node.fetch(
+        :matterhorn_log_directory, '/var/log/matterhorn'
+      )
+    end
+
     def git_repo_url(git_data)
       git_user = git_data[:user]
 
@@ -88,10 +133,70 @@ module MhOpsworksRecipes
             dest: 'etc/workflows/DCE-zip-publish-external.xml',
           }
         ],
-        worker: [],
+        worker: [
+          {
+            src: 'dce-config/email/errorDetails',
+            dest: 'etc/email/errorDetails'
+          },
+          {
+            src: 'dce-config/email/eventDetails',
+            dest: 'etc/email/eventDetails'
+          },
+          {
+            src: 'dce-config/email/metasynchDetails',
+            dest: 'etc/email/metasynchDetails'
+          },
+          {
+            src: 'dce-config/encoding/internal/DCE-h264-movies.properties',
+            dest: 'etc/encoding/DCE-h264-movies.properties'
+          },
+          {
+            src: 'dce-config/load/internal/org.opencastproject.ingest.scanner.InboxScannerService-inbox-archive-retrieve.cfg',
+            dest: 'etc/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-archive-retrieve.cfg'
+          },
+          {
+            src: 'dce-config/load/internal/org.opencastproject.ingest.scanner.InboxScannerService-inbox-hold-for-append.cfg',
+            dest: 'etc/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-hold-for-append.cfg'
+          },
+          {
+            src: 'dce-config/load/internal/org.opencastproject.ingest.scanner.InboxScannerService-inbox.cfg',
+            dest: 'etc/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox.cfg'
+          },
+          {
+            src: 'dce-config/services/edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.properties',
+            dest: 'etc/services/edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.properties',
+          },
+          {
+            src: 'dce-config/services/org.opencastproject.execute.impl.ExecuteServiceImpl.properties',
+            dest: 'etc/services/org.opencastproject.execute.impl.ExecuteServiceImpl.properties',
+          },
+          {
+            src: 'dce-config/workflows/DCE-error-handler.xml',
+            dest: 'etc/workflows/DCE-error-handler.xml',
+          }
+        ],
         engage: []
       }
       files.fetch(node_profile.to_sym, [])
+    end
+
+    def set_service_registry_dispatch_interval(current_deploy_root)
+      template %Q|#{current_deploy_root}/etc/services/org.opencastproject.serviceregistry.impl.ServiceRegistryJpaImpl.properties| do
+        source 'ServiceRegistryJpaImpl.properties.erb'
+        owner 'matterhorn'
+        group 'matterhorn'
+        variables({
+          dispatch_interval: 0
+        })
+      end
+    end
+
+    def install_matterhorn_images_properties(current_deploy_root)
+      template %Q|#{current_deploy_root}/etc/encoding/matterhorn-images.properties| do
+        source 'matterhorn-images.properties.erb'
+        owner 'matterhorn'
+        group 'matterhorn'
+      end
     end
 
     def install_init_scripts(current_deploy_root, matterhorn_repo_root)

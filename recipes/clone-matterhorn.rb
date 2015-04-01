@@ -1,7 +1,7 @@
 # Cookbook Name:: mh-opsworks-recipes
 # Recipe:: clone-matterhorn
 
-::Chef::Recipe.send(:include, MhOpsworksRecipes::GitHelpers)
+::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
 matterhorn_repo_root = node[:matterhorn_repo_root]
 git_data = node[:deploy][:matterhorn][:scm]

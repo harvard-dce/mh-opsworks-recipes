@@ -1,5 +1,5 @@
 # Cookbook Name:: mh-opsworks-recipes
-# Recipe:: deploy-admin
+# Recipe:: deploy-worker
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 Chef::Provider::Deploy::Revision.send(:include, MhOpsworksRecipes::DeployHelpers)
@@ -33,6 +33,8 @@ if admin_attributes
   admin_hostname = admin_attributes[:public_dns_name]
 end
 
+hostname = node[:opsworks][:instance][:private_dns_name]
+
 database_connection = node[:deploy][:matterhorn][:database]
 
 repo_url = git_repo_url(git_data)
@@ -60,12 +62,19 @@ deploy_revision matterhorn_repo_root do
     execute %Q|cd #{most_recent_deploy} && git submodule update --remote --init --recursive|
 
     install_init_scripts(most_recent_deploy, matterhorn_repo_root)
-    install_matterhorn_conf(most_recent_deploy, matterhorn_repo_root, 'admin')
+    install_matterhorn_conf(most_recent_deploy, matterhorn_repo_root, 'worker')
     install_multitenancy_config(most_recent_deploy, admin_hostname, engage_hostname)
     remove_felix_fileinstall(most_recent_deploy)
     install_smtp_config(most_recent_deploy, default_email_sender)
     install_logging_config(most_recent_deploy)
-    copy_files_into_place_for(:admin, most_recent_deploy)
+
+    # WORKER SPECIFIC
+    #TODO - this should probably be checked into the repo
+    install_matterhorn_images_properties(most_recent_deploy)
+    set_service_registry_dispatch_interval(most_recent_deploy)
+    # /WORKER SPECIFIC
+
+    copy_files_into_place_for(:worker, most_recent_deploy)
 
     template %Q|#{most_recent_deploy}/etc/config.properties| do
       source 'config.properties.erb'
@@ -73,7 +82,7 @@ deploy_revision matterhorn_repo_root do
       group 'matterhorn'
       variables({
         matterhorn_backend_http_port: 8080,
-        hostname: admin_hostname,
+        hostname: hostname,
         local_workspace_root: local_workspace_root,
         export_root: storage_info[:export_root],
         admin_url: "http://#{admin_hostname}",
@@ -86,6 +95,6 @@ deploy_revision matterhorn_repo_root do
       })
     end
 
-    maven_build_for(:admin, most_recent_deploy)
+    maven_build_for(:worker, most_recent_deploy)
   end
 end
