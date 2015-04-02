@@ -1,5 +1,5 @@
 # Cookbook Name:: mh-opsworks-recipes
-# Recipe:: deploy-admin
+# Recipe:: deploy-engage
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 Chef::Provider::Deploy::Revision.send(:include, MhOpsworksRecipes::DeployHelpers)
@@ -14,21 +14,28 @@ capture_agent_query_url = node.fetch(
   :capture_agent_query_url, 'http://example.com'
 )
 
+## Engage specific
+user_tracking_authhost = node.fetch(
+  :user_tracking_authhost, 'http://example.com'
+)
+## /Engage specific
+
 wowza_host = node.fetch(
   :wowza_host, 'mh-wowza'
 )
 git_data = node[:deploy][:matterhorn][:scm]
-(private_engage_hostname, engage_attributes) = node[:opsworks][:layers][:engage][:instances].first
-
+(private_admin_hostname, admin_attributes) = node[:opsworks][:layers][:admin][:instances].first
 default_email_sender = get_default_email_sender
 
-public_engage_hostname = engage_hostname = ''
-if engage_attributes
-  engage_hostname = engage_attributes[:private_dns_name]
-  public_engage_hostname = engage_attributes[:public_dns_name]
+engage_hostname = node[:opsworks][:instance][:private_dns_name]
+public_engage_hostname = node[:opsworks][:instance][:public_dns_name]
+
+admin_hostname = ''
+if admin_attributes
+  admin_hostname = admin_attributes[:public_dns_name]
 end
 
-admin_hostname = hostname = node[:opsworks][:instance][:public_dns_name]
+hostname = node[:opsworks][:instance][:public_dns_name]
 
 database_connection = node[:deploy][:matterhorn][:database]
 
@@ -55,16 +62,22 @@ deploy_revision matterhorn_repo_root do
   before_symlink do
     most_recent_deploy = path_to_most_recent_deploy(new_resource)
     execute %Q|cd #{most_recent_deploy} && git submodule update --remote --init --recursive|
-
-    maven_build_for(:admin, most_recent_deploy)
+    maven_build_for(:engage, most_recent_deploy)
 
     install_init_scripts(most_recent_deploy, matterhorn_repo_root)
-    install_matterhorn_conf(most_recent_deploy, matterhorn_repo_root, 'admin')
+    install_matterhorn_conf(most_recent_deploy, matterhorn_repo_root, 'engage')
     install_multitenancy_config(most_recent_deploy, admin_hostname, public_engage_hostname)
     remove_felix_fileinstall(most_recent_deploy)
     install_smtp_config(most_recent_deploy, default_email_sender)
     install_logging_config(most_recent_deploy)
-    copy_files_into_place_for(:admin, most_recent_deploy)
+
+    # ENGAGE SPECIFIC
+    #TODO - this should probably be checked into the repo
+    set_service_registry_dispatch_interval(most_recent_deploy)
+    configure_usertracking(most_recent_deploy, user_tracking_authhost)
+    # /ENGAGE SPECIFIC
+
+    copy_files_into_place_for(:engage, most_recent_deploy)
 
     template %Q|#{most_recent_deploy}/etc/config.properties| do
       source 'config.properties.erb'

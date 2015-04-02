@@ -175,9 +175,57 @@ module MhOpsworksRecipes
             dest: 'etc/workflows/DCE-error-handler.xml',
           }
         ],
-        engage: []
+        engage: [
+          {
+            src: 'dce-config/email/errorDetails',
+            dest: 'etc/email/errorDetails'
+          },
+          {
+            src: 'dce-config/email/eventDetails',
+            dest: 'etc/email/eventDetails'
+          },
+          {
+            src: 'dce-config/email/metasynchDetails',
+            dest: 'etc/email/metasynchDetails'
+          },
+          {
+            src: 'dce-config/load/internal/org.opencastproject.ingest.scanner.InboxScannerService-inbox-archive-retrieve.cfg',
+            dest: 'etc/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-archive-retrieve.cfg'
+          },
+          {
+            src: 'dce-config/load/internal/org.opencastproject.ingest.scanner.InboxScannerService-inbox-hold-for-append.cfg',
+            dest: 'etc/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-hold-for-append.cfg'
+          },
+          {
+            src: 'dce-config/load/internal/org.opencastproject.ingest.scanner.InboxScannerService-inbox.cfg',
+            dest: 'etc/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox.cfg'
+          },
+          {
+            src: 'dce-config/services/edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.properties',
+            dest: 'etc/services/edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.properties',
+          },
+          {
+            src: 'dce-config/services/org.opencastproject.execute.impl.ExecuteServiceImpl.properties',
+            dest: 'etc/services/org.opencastproject.execute.impl.ExecuteServiceImpl.properties',
+          },
+          {
+            src: 'dce-config/workflows/DCE-error-handler.xml',
+            dest: 'etc/workflows/DCE-error-handler.xml',
+          }
+        ]
       }
       files.fetch(node_profile.to_sym, [])
+    end
+
+    def configure_usertracking(current_deploy_root, user_tracking_authhost)
+      template %Q|#{current_deploy_root}/etc/services/org.opencastproject.usertracking.impl.UserTrackingServiceImpl.properties| do
+        source 'UserTrackingServiceImpl.properties.erb'
+        owner 'matterhorn'
+        group 'matterhorn'
+        variables({
+          user_tracking_authhost: user_tracking_authhost
+        })
+      end
     end
 
     def set_service_registry_dispatch_interval(current_deploy_root)
@@ -285,6 +333,10 @@ module MhOpsworksRecipes
     end
 
     def maven_build_for(node_profile, current_deploy_root)
+      # TODO - if failed builds continue to be an issue because of ephemeral
+      # node_modules or issues while maven pulls down artifacts,
+      # run this in a begin/rescue block and retry a build immediately
+      # after failure a few times before permanently failing
       build_profiles = {
         admin: 'admin,dist-stub,engage-stub,worker-stub,workspace,serviceregistry',
         ingest: 'ingest-standalone',

@@ -23,9 +23,10 @@ git_data = node[:deploy][:matterhorn][:scm]
 
 default_email_sender = get_default_email_sender
 
-engage_hostname = ''
+public_engage_hostname = engage_hostname = ''
 if engage_attributes
-  engage_hostname = engage_attributes[:public_dns_name]
+  engage_hostname = engage_attributes[:private_dns_name]
+  public_engage_hostname = engage_attributes[:public_dns_name]
 end
 
 admin_hostname = ''
@@ -60,10 +61,11 @@ deploy_revision matterhorn_repo_root do
   before_symlink do
     most_recent_deploy = path_to_most_recent_deploy(new_resource)
     execute %Q|cd #{most_recent_deploy} && git submodule update --remote --init --recursive|
+    maven_build_for(:worker, most_recent_deploy)
 
     install_init_scripts(most_recent_deploy, matterhorn_repo_root)
     install_matterhorn_conf(most_recent_deploy, matterhorn_repo_root, 'worker')
-    install_multitenancy_config(most_recent_deploy, admin_hostname, engage_hostname)
+    install_multitenancy_config(most_recent_deploy, admin_hostname, public_engage_hostname)
     remove_felix_fileinstall(most_recent_deploy)
     install_smtp_config(most_recent_deploy, default_email_sender)
     install_logging_config(most_recent_deploy)
@@ -86,15 +88,13 @@ deploy_revision matterhorn_repo_root do
         local_workspace_root: local_workspace_root,
         export_root: storage_info[:export_root],
         admin_url: "http://#{admin_hostname}",
-        admin_hostname: admin_hostname,
         capture_agent_query_url: capture_agent_query_url,
         rest_auth: rest_auth_info,
         admin_auth: admin_user_info,
         wowza_host: wowza_host,
-        database: database_connection
+        database: database_connection,
+        engage_hostname: engage_hostname
       })
     end
-
-    maven_build_for(:worker, most_recent_deploy)
   end
 end
