@@ -343,7 +343,11 @@ module MhOpsworksRecipes
         worker: 'worker-standalone,serviceregistry,workspace',
         engage: 'engage-standalone,dist,serviceregistry,workspace'
       }
-      execute %Q|cd #{current_deploy_root} && MAVEN_OPTS='-Xms256m -Xmx960m -XX:PermSize=64m -XX:MaxPermSize=256m' mvn clean install -DdeployTo="#{current_deploy_root}" -Dmaven.test.skip=true -P#{build_profiles[node_profile.to_sym]}|
+      execute 'maven build for matterhorn' do
+        command %Q|cd #{current_deploy_root} && MAVEN_OPTS='-Xms256m -Xmx960m -XX:PermSize=64m -XX:MaxPermSize=256m' mvn clean install -DdeployTo="#{current_deploy_root}" -Dmaven.test.skip=true -P#{build_profiles[node_profile.to_sym]}|
+        retries 3
+        retry_delay 30
+      end
     end
 
     def remove_felix_fileinstall(current_deploy_root)
