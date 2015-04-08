@@ -32,11 +32,11 @@ if File.directory?(production_deploy_root)
   ruby_block "update engage hostname" do
     block do
       editor = Chef::Util::FileEdit.new(production_deploy_root + '/etc/config.properties')
-      editor.search_file_replace(
+      editor.search_file_replace_line(
         /edu\.harvard\.dce\.external\.host=/,
         "edu.harvard.dce.external.host=#{engage_hostname}"
       )
-      editor.search_file_replace(
+      editor.search_file_replace_line(
         /org\.opencastproject\.file\.repo\.url=/,
         "org.opencastproject.file.repo.url=http://#{admin_hostname}"
       )
