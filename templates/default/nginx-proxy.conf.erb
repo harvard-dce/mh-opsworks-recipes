@@ -15,6 +15,8 @@ server {
     client_max_body_size 100000m;
     proxy_pass http://127.0.0.1:<%= @matterhorn_backend_http_port %>;
   }
+
+  include /etc/nginx/proxy-includes/*.conf;
 }
 
 # another virtual host using mix of IP-, name-, and port-based configuration

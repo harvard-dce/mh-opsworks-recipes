@@ -10,6 +10,11 @@ template %Q|/etc/nginx/sites-enabled/default| do
   })
 end
 
+directory '/etc/nginx/proxy-includes' do
+  owner 'root'
+  group 'root'
+end
+
 service 'nginx' do
   action [:enable, :restart]
 end
