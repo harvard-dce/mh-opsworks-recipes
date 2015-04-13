@@ -30,3 +30,7 @@ suites:
   - name: sh-to-bash
     run_list:
       - recipe[mh-opsworks-recipes::set-bash-as-default-shell]
+  - name: set-timezone
+    run_list:
+      - recipe[mh-opsworks-recipes::set-timezone]
+
