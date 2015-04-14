@@ -15,4 +15,4 @@ link '/usr/bin/node' do
   to '/usr/bin/nodejs'
 end
 
-include_recipe "mh-opsworks-recipes::clean-up-package-installs"
+include_recipe "mh-opsworks-recipes::clean-up-package-cache"

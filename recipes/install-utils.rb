@@ -7,4 +7,4 @@ include_recipe "mh-opsworks-recipes::update-package-repo"
   package package_name
 end
 
-include_recipe "mh-opsworks-recipes::clean-up-package-installs"
+include_recipe "mh-opsworks-recipes::clean-up-package-cache"
