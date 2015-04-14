@@ -1,10 +1,5 @@
 module MhOpsworksRecipes
   module RecipeHelpers
-
-    def get_default_email_sender
-      node.fetch(:default_email_sender, 'no-reply@localhost')
-    end
-
     def get_admin_user_info
       node.fetch(
         :admin_auth, {
@@ -296,13 +291,15 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_smtp_config(current_deploy_root, default_email_sender)
+    def install_smtp_config(current_deploy_root)
+      default_email_sender = node.fetch(:default_email_sender, 'no-reply@localhost')
+
       template %Q|#{current_deploy_root}/etc/services/org.opencastproject.kernel.mail.SmtpService.properties| do
         source 'org.opencastproject.kernel.mail.SmtpService.properties.erb'
         owner 'matterhorn'
         group 'matterhorn'
         variables({
-          default_email_sender: default_email_sender
+          default_email_sender: default_email_sender,
         })
       end
     end

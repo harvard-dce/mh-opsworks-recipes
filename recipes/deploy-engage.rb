@@ -25,7 +25,6 @@ wowza_host = node.fetch(
 )
 git_data = node[:deploy][:matterhorn][:scm]
 (private_admin_hostname, admin_attributes) = node[:opsworks][:layers][:admin][:instances].first
-default_email_sender = get_default_email_sender
 
 engage_hostname = node[:opsworks][:instance][:private_dns_name]
 public_engage_hostname = node[:opsworks][:instance][:public_dns_name]
@@ -72,7 +71,7 @@ deploy_revision matterhorn_repo_root do
     install_matterhorn_conf(most_recent_deploy, matterhorn_repo_root, 'engage')
     install_multitenancy_config(most_recent_deploy, admin_hostname, public_engage_hostname)
     remove_felix_fileinstall(most_recent_deploy)
-    install_smtp_config(most_recent_deploy, default_email_sender)
+    install_smtp_config(most_recent_deploy)
     install_logging_config(most_recent_deploy)
 
     # ENGAGE SPECIFIC
