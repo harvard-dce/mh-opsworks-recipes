@@ -8,3 +8,5 @@ version          '0.1.0'
 
 depends 'nfs', '~> 2.1.0'
 depends 'apt'
+depends 'awscli', '~> 1.0.1'
+depends 'cron', '~> 1.6.1'

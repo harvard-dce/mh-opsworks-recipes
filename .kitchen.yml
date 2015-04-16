@@ -33,4 +33,3 @@ suites:
   - name: set-timezone
     run_list:
       - recipe[mh-opsworks-recipes::set-timezone]
-
