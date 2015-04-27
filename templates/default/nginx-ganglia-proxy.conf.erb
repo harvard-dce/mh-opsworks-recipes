@@ -1,5 +1,8 @@
   location /ganglia {
     gzip on;
+    proxy_read_timeout 30m;
+    proxy_send_timeout 30m;
+
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_pass http://<%= @ganglia_host %>/ganglia;
