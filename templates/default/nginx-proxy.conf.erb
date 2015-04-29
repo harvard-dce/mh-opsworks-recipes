@@ -8,16 +8,20 @@ server {
   # Make site accessible from http://localhost/
   server_name localhost;
 
+  proxy_read_timeout 30m;
+  proxy_send_timeout 30m;
+  proxy_set_header Host $host;
+  proxy_set_header X-Real-IP $remote_addr;
+
+  client_max_body_size 102400m;
+  gzip on;
+
+  location ~* \.(mp4|mov|flv|avi|) {
+    proxy_buffering off;
+    proxy_pass http://127.0.0.1:<%= @matterhorn_backend_http_port %>;
+  }
+
   location / {
-    gzip on;
-    proxy_read_timeout 30m;
-    proxy_send_timeout 30m;
-
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-
-    # 100 * 1024 = 100 gig or 102400m
-    client_max_body_size 102400m;
     proxy_pass http://127.0.0.1:<%= @matterhorn_backend_http_port %>;
   }
 
