@@ -16,7 +16,7 @@ server {
   client_max_body_size 102400m;
   gzip on;
 
-  location ~* \.(mp4|mov|flv|avi|) {
+  location ~* \.(mp4|mov|flv|avi) {
     proxy_buffering off;
     proxy_pass http://127.0.0.1:<%= @matterhorn_backend_http_port %>;
   }
