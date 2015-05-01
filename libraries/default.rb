@@ -76,11 +76,11 @@ module MhOpsworksRecipes
             dest: 'etc/email/metasynchDetails'
           },
           {
-            src: 'dce-config/load/internal/org.opencastproject.ingest.scanner.InboxScannerService-inbox-archive-retrieve.cfg',
+            src: 'dce-config/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-archive-retrieve.cfg',
             dest: 'etc/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-archive-retrieve.cfg'
           },
           {
-            src: 'dce-config/load/internal/org.opencastproject.ingest.scanner.InboxScannerService-inbox-hold-for-append.cfg',
+            src: 'dce-config/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-hold-for-append.cfg',
             dest: 'etc/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-hold-for-append.cfg'
           },
           {
@@ -96,7 +96,7 @@ module MhOpsworksRecipes
             dest: 'etc/services/org.opencastproject.execute.impl.ExecuteServiceImpl.properties',
           },
           {
-            src: 'dce-config/workflows/internal/DCE-archive-publish-external.xml',
+            src: 'dce-config/workflows/DCE-archive-publish-external.xml',
             dest: 'etc/workflows/DCE-archive-publish-external.xml',
           },
           {
@@ -104,28 +104,24 @@ module MhOpsworksRecipes
             dest: 'etc/workflows/DCE-error-handler.xml',
           },
           {
-            src: 'dce-config/workflows/internal/DCE-ingest-from-prodsys.xml',
+            src: 'dce-config/workflows/DCE-ingest-from-prodsys.xml',
             dest: 'etc/workflows/DCE-ingest-from-prodsys.xml',
           },
           {
-            src: 'dce-config/workflows/internal/DCE-production.xml',
+            src: 'dce-config/workflows/DCE-production.xml',
             dest: 'etc/workflows/DCE-production.xml',
           },
           {
-            src: 'dce-config/workflows/internal/DCE-retrieve-from-archive.xml',
+            src: 'dce-config/workflows/DCE-retrieve-from-archive.xml',
             dest: 'etc/workflows/DCE-retrieve-from-archive.xml',
           },
           {
-            src: 'dce-config/workflows/internal/DCE-transcode-4x3.xml',
+            src: 'dce-config/workflows/DCE-transcode-4x3.xml',
             dest: 'etc/workflows/DCE-transcode-4x3.xml',
           },
           {
-            src: 'dce-config/workflows/internal/DCE-transcode-hold-append.xml',
+            src: 'dce-config/workflows/DCE-transcode-hold-append.xml',
             dest: 'etc/workflows/DCE-transcode-hold-append.xml',
-          },
-          {
-            src: 'dce-config/workflows/internal/DCE-zip-publish-external.xml',
-            dest: 'etc/workflows/DCE-zip-publish-external.xml',
           }
         ],
         worker: [
@@ -142,19 +138,19 @@ module MhOpsworksRecipes
             dest: 'etc/email/metasynchDetails'
           },
           {
-            src: 'dce-config/encoding/internal/DCE-h264-movies.properties',
+            src: 'dce-config/encoding/DCE-h264-movies.properties',
             dest: 'etc/encoding/DCE-h264-movies.properties'
           },
           {
-            src: 'dce-config/load/internal/org.opencastproject.ingest.scanner.InboxScannerService-inbox-archive-retrieve.cfg',
+            src: 'dce-config/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-archive-retrieve.cfg',
             dest: 'etc/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-archive-retrieve.cfg'
           },
           {
-            src: 'dce-config/load/internal/org.opencastproject.ingest.scanner.InboxScannerService-inbox-hold-for-append.cfg',
+            src: 'dce-config/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-hold-for-append.cfg',
             dest: 'etc/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-hold-for-append.cfg'
           },
           {
-            src: 'dce-config/load/internal/org.opencastproject.ingest.scanner.InboxScannerService-inbox.cfg',
+            src: 'dce-config/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox.cfg',
             dest: 'etc/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox.cfg'
           },
           {
@@ -184,15 +180,15 @@ module MhOpsworksRecipes
             dest: 'etc/email/metasynchDetails'
           },
           {
-            src: 'dce-config/load/internal/org.opencastproject.ingest.scanner.InboxScannerService-inbox-archive-retrieve.cfg',
+            src: 'dce-config/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-archive-retrieve.cfg',
             dest: 'etc/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-archive-retrieve.cfg'
           },
           {
-            src: 'dce-config/load/internal/org.opencastproject.ingest.scanner.InboxScannerService-inbox-hold-for-append.cfg',
+            src: 'dce-config/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-hold-for-append.cfg',
             dest: 'etc/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-hold-for-append.cfg'
           },
           {
-            src: 'dce-config/load/internal/org.opencastproject.ingest.scanner.InboxScannerService-inbox.cfg',
+            src: 'dce-config/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox.cfg',
             dest: 'etc/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox.cfg'
           },
           {
