@@ -2,22 +2,17 @@
 # Recipe:: create-alerts-from-opsworks-metrics
 
 include_recipe "awscli::default"
+::Chef::Resource::RubyBlock.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
 ruby_block "add alarms" do
   block do
-    # Instance attributes
     opsworks_instance_id = node[:opsworks][:instance][:id]
     region = node[:opsworks][:instance][:region]
-    stack_name = node[:opsworks][:stack][:name]
-    hostname = node[:opsworks][:instance][:hostname]
 
     # Instance properties for monitoring
     number_of_cpus = %x(nproc).chomp.to_i
     total_ram = %x(grep MemTotal /proc/meminfo | sed -r 's/[^0-9]//g').chomp.to_i
     local_file_systems=%x(mount | grep -E 'type ext|type xfs' | cut -f3 -d' ').chomp.split(/\n/)
-
-    topic_name = stack_name.downcase.gsub(/[^a-z\d\-_]/,'_')
-    alarm_name_prefix = %Q|#{topic_name}_#{hostname}|
 
     # Thresholds for monitoring targets
     disk_free_threshold = 20

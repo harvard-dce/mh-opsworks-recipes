@@ -9,6 +9,16 @@ module MhOpsworksRecipes
       )
     end
 
+    def topic_name
+      stack_name = node[:opsworks][:stack][:name]
+      stack_name.downcase.gsub(/[^a-z\d\-_]/,'_')
+    end
+
+    def alarm_name_prefix
+      hostname = node[:opsworks][:instance][:hostname]
+      alarm_name_prefix = %Q|#{topic_name}_#{hostname}|
+    end
+
     def get_rest_auth_info
       node.fetch(
         :rest_auth, {
