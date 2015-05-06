@@ -8,6 +8,9 @@ server {
   # Make site accessible from http://localhost/
   server_name localhost;
 
+  # Use local workspace to cache large proxied HTTP body parts
+  client_body_temp_path <%= @client_body_temp_path %>;
+
   proxy_read_timeout 30m;
   proxy_send_timeout 30m;
   proxy_set_header Host $host;
