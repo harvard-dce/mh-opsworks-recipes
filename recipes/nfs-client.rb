@@ -9,22 +9,62 @@ storage_info = node.fetch(
   }
 )
 
+# Ensure nfs client requirements are installed
+package 'autofs5'
 include_recipe "nfs::client4"
 
-layer_shortname = storage_info[:layer_shortname]
+export_root = storage_info[:export_root]
+storage_hostname = ''
+storage_available = false
 
-(hostname, values) = node[:opsworks][:layers][layer_shortname.to_sym][:instances].first
-
-directory storage_info[:export_root] do
-  owner "root"
-  group "root"
-  mode "755"
+if storage_info[:type] == 'external'
+  storage_available = true
+  storage_hostname = storage_info[:nfs_server_host]
+else
+  layer_shortname = storage_info[:layer_shortname]
+  (storage_hostname, storage_available) = node[:opsworks][:layers][layer_shortname.to_sym][:instances].first
 end
 
-mount storage_info[:export_root] do
-  supports remount: true
-  device %Q|#{hostname}:#{storage_info[:export_root]}|
-  fstype "nfs"
-  options "rw"
-  action [:mount, :enable]
+directory export_root do
+  owner "matterhorn"
+  group "matterhorn"
+  mode "755"
+  recursive true
+end
+
+if storage_available
+  file '/etc/auto.matterhorn' do
+    action :create
+    owner 'root'
+    group 'root'
+    mode '640'
+    content %Q|#{export_root} -fstype=nfs,rw #{storage_hostname}:#{export_root}|
+  end
+
+  service 'autofs' do
+    action [:enable]
+  end
+
+  ruby_block "update /etc/auto.master to include matterhorn map" do
+    block do
+      editor = Chef::Util::FileEdit.new('/etc/auto.master')
+      editor.insert_line_if_no_match(/auto\.matterhorn/, "/- /etc/auto.matterhorn --timeout=600")
+      editor.write_file
+    end
+    not_if { ::File.read('/etc/auto.master').include?('auto.matterhorn') }
+  end
+
+  # For some reason, doing this the more native chef way doesn't
+  # cause autofs to fully restart and notice the new mount configuration
+  execute 'restart autofs' do
+    command 'service autofs restart'
+  end
+
+  [ export_root, export_root + '/archive' ].each do |matterhorn_directory|
+    directory matterhorn_directory do
+      owner 'matterhorn'
+      group 'matterhorn'
+      mode '755'
+    end
+  end
 end
