@@ -24,4 +24,4 @@ else
   end
 end
 
-execute '/etc/init.d/nginx reload'
+execute 'service nginx reload'
