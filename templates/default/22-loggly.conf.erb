@@ -1,0 +1,22 @@
+# An on-disk queue is created for this action. If the remote host is
+# down, messages are spooled to disk and sent when it is up again.
+# Setup disk assisted queues
+$WorkDirectory /var/spool/rsyslog # where to place spool files
+$ActionQueueFileName LogglyForward     # unique name prefix for spool files
+$ActionQueueMaxDiskSpace 1g       # 1gb space limit (use as much as possible)
+$ActionQueueSaveOnShutdown on     # save messages to disk on shutdown
+$ActionQueueType LinkedList       # run asynchronously
+$ActionResumeRetryCount -1        # infinite retries if host is down
+
+#RsyslogGnuTLS
+$DefaultNetstreamDriverCAFile /etc/rsyslog.d/keys/loggly-ca.crt
+$ActionSendStreamDriver gtls
+$ActionSendStreamDriverMode 1
+$ActionSendStreamDriverAuthMode x509/name
+$ActionSendStreamDriverPermittedPeer *.loggly.com
+
+$template LogglyFormat,"<%%pri%>%protocol-version% %timestamp:::date-rfc3339% %HOSTNAME% %app-name% %procid% %msgid% [<%= @loggly_token %>@41058 tag=<%= @short_stack_name %> tag=<%= @layer %> tag=<%= @hostname %> tag=<%= @stack_and_hostname %>] %msg%\n"
+
+# Send messages to Loggly over TCP using the template
+:app-name, isequal, "matterhorn" @@<%= @loggly_url %>;LogglyFormat
+& ~

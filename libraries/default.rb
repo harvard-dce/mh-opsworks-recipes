@@ -19,6 +19,14 @@ module MhOpsworksRecipes
       alarm_name_prefix = %Q|#{topic_name}_#{hostname}|
     end
 
+    def short_stack_name
+      topic_name
+    end
+
+    def stack_and_hostname
+      alarm_name_prefix
+    end
+
     def get_rest_auth_info
       node.fetch(
         :rest_auth, {

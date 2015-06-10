@@ -1,4 +1,4 @@
-log4j.rootLogger=ERROR,stdout,file
+log4j.rootLogger=ERROR,stdout,file,SYSLOG
 
 # Loglevel configuration
 log4j.logger.org.opencastproject=<%= @main_log_level %>
@@ -23,3 +23,11 @@ log4j.appender.file.maxBackupIndex=4
 log4j.appender.file.File=${opencast.logdir}/matterhorn.log
 log4j.logger.edu.harvard.dce=DEBUG
 log4j.appender.file.DatePattern='.'yyyy-MM-dd
+
+# Syslog
+log4j.appender.SYSLOG=org.apache.log4j.net.SyslogAppender
+log4j.appender.SYSLOG.SyslogHost=localhost
+log4j.appender.SYSLOG.Facility=local3
+log4j.appender.SYSLOG.Header=true
+log4j.appender.SYSLOG.layout=org.apache.log4j.EnhancedPatternLayout
+log4j.appender.SYSLOG.layout.ConversionPattern=matterhorn %p %t %c{1}.%M - %m %throwable%n
