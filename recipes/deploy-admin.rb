@@ -20,9 +20,8 @@ wowza_host = node.fetch(
 git_data = node[:deploy][:matterhorn][:scm]
 (private_engage_hostname, engage_attributes) = node[:opsworks][:layers][:engage][:instances].first
 
-public_engage_hostname = engage_hostname = ''
+public_engage_hostname = ''
 if engage_attributes
-  engage_hostname = engage_attributes[:private_dns_name]
   public_engage_hostname = engage_attributes[:public_dns_name]
 end
 
@@ -82,7 +81,7 @@ deploy_revision matterhorn_repo_root do
         admin_auth: admin_user_info,
         wowza_host: wowza_host,
         database: database_connection,
-        engage_hostname: engage_hostname
+        engage_hostname: public_engage_hostname
       })
     end
   end

@@ -23,7 +23,7 @@ git_data = node[:deploy][:matterhorn][:scm]
 
 public_engage_hostname = engage_hostname = ''
 if engage_attributes
-  engage_hostname = engage_attributes[:private_dns_name]
+  engage_hostname = engage_attributes[:hostname]
   public_engage_hostname = engage_attributes[:public_dns_name]
 end
 
@@ -32,7 +32,7 @@ if admin_attributes
   admin_hostname = admin_attributes[:public_dns_name]
 end
 
-hostname = node[:opsworks][:instance][:private_dns_name]
+hostname = node[:opsworks][:instance][:hostname]
 
 database_connection = node[:deploy][:matterhorn][:database]
 
@@ -95,7 +95,7 @@ deploy_revision matterhorn_repo_root do
         admin_auth: admin_user_info,
         wowza_host: wowza_host,
         database: database_connection,
-        engage_hostname: engage_hostname
+        engage_hostname: public_engage_hostname
       })
     end
   end

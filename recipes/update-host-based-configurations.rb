@@ -11,9 +11,8 @@ production_deploy_root = matterhorn_repo_root + '/current'
 (private_admin_hostname, admin_attributes) = node[:opsworks][:layers][:admin][:instances].first
 (private_engage_hostname, engage_attributes) = node[:opsworks][:layers][:engage][:instances].first
 
-public_engage_hostname = engage_hostname = ''
+public_engage_hostname = ''
 if engage_attributes
-  engage_hostname = engage_attributes[:private_dns_name]
   public_engage_hostname = engage_attributes[:public_dns_name]
 end
 
@@ -34,7 +33,7 @@ if File.directory?(production_deploy_root)
       editor = Chef::Util::FileEdit.new(production_deploy_root + '/etc/config.properties')
       editor.search_file_replace_line(
         /edu\.harvard\.dce\.external\.host=/,
-        "edu.harvard.dce.external.host=#{engage_hostname}"
+        "edu.harvard.dce.external.host=#{public_engage_hostname}"
       )
       editor.search_file_replace_line(
         /org\.opencastproject\.file\.repo\.url=/,
