@@ -14,6 +14,14 @@ capture_agent_query_url = node.fetch(
   :capture_agent_query_url, 'http://example.com'
 )
 
+auth_host = node.fetch(
+  :auth_host, 'http://example.com'
+)
+
+auth_activated = node.fetch(
+  :auth_activated, 'true'
+)
+
 wowza_host = node.fetch(
   :wowza_host, 'mh-wowza'
 )
@@ -71,6 +79,7 @@ deploy_revision matterhorn_repo_root do
     remove_felix_fileinstall(most_recent_deploy)
     install_smtp_config(most_recent_deploy)
     install_logging_config(most_recent_deploy)
+    install_auth_service(most_recent_deploy, auth_host, auth_activated)
 
     # WORKER SPECIFIC
     #TODO - this should probably be checked into the repo

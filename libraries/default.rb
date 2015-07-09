@@ -102,10 +102,6 @@ module MhOpsworksRecipes
             dest: 'etc/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-hold-for-append.cfg'
           },
           {
-            src: 'dce-config/services/edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.properties',
-            dest: 'etc/services/edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.properties',
-          },
-          {
             src: 'dce-config/services/edu.harvard.dce.utils.cleanup.FailedZipsScanner.properties',
             dest: 'etc/services/edu.harvard.dce.utils.cleanup.FailedZipsScanner.properties',
           },
@@ -172,10 +168,6 @@ module MhOpsworksRecipes
             dest: 'etc/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox.cfg'
           },
           {
-            src: 'dce-config/services/edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.properties',
-            dest: 'etc/services/edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.properties',
-          },
-          {
             src: 'dce-config/services/org.opencastproject.execute.impl.ExecuteServiceImpl.properties',
             dest: 'etc/services/org.opencastproject.execute.impl.ExecuteServiceImpl.properties',
           },
@@ -208,10 +200,6 @@ module MhOpsworksRecipes
           {
             src: 'dce-config/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox.cfg',
             dest: 'etc/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox.cfg'
-          },
-          {
-            src: 'dce-config/services/edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.properties',
-            dest: 'etc/services/edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.properties',
           },
           {
             src: 'dce-config/services/org.opencastproject.execute.impl.ExecuteServiceImpl.properties',
@@ -315,6 +303,18 @@ module MhOpsworksRecipes
         group 'matterhorn'
         variables({
           default_email_sender: default_email_sender,
+        })
+      end
+    end
+
+    def install_auth_service(current_deploy_root, auth_host, auth_activated = 'true')
+      template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.properties| do
+        source 'edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.properties.erb'
+        owner 'matterhorn'
+        group 'matterhorn'
+        variables({
+          auth_host: auth_host,
+          auth_activated: auth_activated
         })
       end
     end
