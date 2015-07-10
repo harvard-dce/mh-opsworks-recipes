@@ -3,8 +3,7 @@
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
-package 'rsyslog-gnutls'
-
+install_package('rsyslog-gnutls')
 loggly_info = node.fetch(:loggly, { token: '', url: '' })
 instance_attributes = node[:opsworks].fetch(:instance, {})
 

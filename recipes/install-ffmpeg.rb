@@ -1,6 +1,7 @@
 # Cookbook Name:: mh-opsworks-recipes
 # Recipe:: install-ffmpeg
 
+::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 ppa = node.fetch(:ffmpeg_ppa, "http://ppa.launchpad.net/mc3man/trusty-media/ubuntu")
 ppa_key = node.fetch(:ffmpeg_ppa_key, "ED8E640A")
 
@@ -14,7 +15,4 @@ apt_repository "ffmpeg" do
   key ppa_key
 end
 
-apt_package "ffmpeg" do
-  options "--force-yes"
-  action :upgrade
-end
+install_package('ffmpeg')

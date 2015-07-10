@@ -1,6 +1,8 @@
 # Cookbook Name:: mh-opsworks-recipes
 # Recipe:: nfs-client
 
+::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
+
 storage_info = node.fetch(
   :storage, {
     export_root: '/var/tmp',
@@ -10,7 +12,7 @@ storage_info = node.fetch(
 )
 
 # Ensure nfs client requirements are installed
-package 'autofs5'
+install_package('autofs5')
 include_recipe "nfs::client4"
 
 export_root = storage_info[:export_root]

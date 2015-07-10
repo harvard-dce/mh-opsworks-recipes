@@ -1,7 +1,8 @@
 # Cookbook Name:: mh-opsworks-recipes
 # Recipe:: enable-postfix-smarthost
 
-package 'postfix'
+::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
+install_package('postfix')
 
 smtp_info = node.fetch(:smtp_auth, {})
 hostname = node[:opsworks][:instance][:hostname]

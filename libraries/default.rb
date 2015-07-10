@@ -1,5 +1,22 @@
 module MhOpsworksRecipes
   module RecipeHelpers
+    def install_package(name)
+      #
+      # Yes, I know about the "package" resource, but for some reason using a timeout
+      # with it causes a compile-time error.
+      #
+      # We really want to be able to timeout and retry installs to get faster package
+      # mirrors. This is an annoying quirk with the ubuntu package mirror repos.
+      #
+      execute "install #{name}" do
+        environment 'DEBIAN_FRONTEND' => 'noninteractive'
+        command %Q|apt-get install -y #{name}|
+        retries 5
+        retry_delay 15
+        timeout 180
+      end
+    end
+
     def get_admin_user_info
       node.fetch(
         :admin_auth, {

@@ -1,7 +1,8 @@
 # Cookbook Name:: mh-opsworks-recipes
 # Recipe:: configure-nginx-proxy
 
-package 'nginx'
+::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
+install_package('nginx')
 
 template %Q|/etc/nginx/sites-enabled/default| do
   source 'nginx-proxy.conf.erb'
