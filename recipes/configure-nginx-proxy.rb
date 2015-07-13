@@ -1,6 +1,7 @@
 # Cookbook Name:: mh-opsworks-recipes
 # Recipe:: configure-nginx-proxy
 
+include_recipe "mh-opsworks-recipes::update-package-repo"
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 install_package('nginx')
 

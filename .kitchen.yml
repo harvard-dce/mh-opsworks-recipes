@@ -30,9 +30,13 @@ suites:
     run_list:
       - recipe[mh-opsworks-recipes::install-ffmpeg]
 
-  - name: nginx
+  - name: nginx-proxy
     run_list:
       - recipe[mh-opsworks-recipes::configure-nginx-proxy]
+
+  - name: nginx-engage-proxy
+    run_list:
+      - recipe[mh-opsworks-recipes::configure-engage-nginx-proxy]
 
   - name: sh-to-bash
     run_list:
