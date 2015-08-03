@@ -16,6 +16,11 @@ install_package('autofs5')
 include_recipe "nfs::client4"
 
 export_root = storage_info[:export_root]
+
+# If we've explictly defined an nfs server export root path different than
+# the path we use everywhere else, use that for the export root.  This is
+# primarily for efs, which exports a filesystem on the root path always.
+nfs_server_export_root = storage_info[:nfs_server_export_root] || storage_info[:export_root]
 storage_hostname = ''
 storage_available = false
 
@@ -27,39 +32,40 @@ else
   (storage_hostname, storage_available) = node[:opsworks][:layers][layer_shortname.to_sym][:instances].first
 end
 
-directory export_root do
-  owner "matterhorn"
-  group "matterhorn"
-  mode "755"
-  recursive true
-end
-
 if storage_available
+  directory '/etc/auto.master.d' do
+    action :create
+    owner 'root'
+    group 'root'
+    mode '755'
+  end
+
   file '/etc/auto.matterhorn' do
     action :create
     owner 'root'
     group 'root'
     mode '640'
-    content %Q|#{export_root} -fstype=nfs,rw #{storage_hostname}:#{export_root}|
+    content %Q|#{export_root} -fstype=nfs4 #{storage_hostname}:#{nfs_server_export_root}\n|
   end
 
-  service 'autofs' do
-    action [:enable]
+  file '/etc/auto.master.d/matterhorn.autofs' do
+    action :create
+    owner 'root'
+    group 'root'
+    mode '640'
+    content "/- /etc/auto.matterhorn -t 3600 -n 1"
   end
 
-  ruby_block "update /etc/auto.master to include matterhorn map" do
-    block do
-      editor = Chef::Util::FileEdit.new('/etc/auto.master')
-      editor.insert_line_if_no_match(/auto\.matterhorn/, "/- /etc/auto.matterhorn --timeout=600")
-      editor.write_file
-    end
-    not_if { ::File.read('/etc/auto.master').include?('auto.matterhorn') }
-  end
-
-  # For some reason, doing this the more native chef way doesn't
-  # cause autofs to fully restart and notice the new mount configuration
-  execute 'restart autofs' do
+  # Only restart if we don't have an active mount
+  execute 'service autofs restart' do
     command 'service autofs restart'
+    not_if %Q|grep ' #{export_root} ' /proc/mounts|
+  end
+
+  execute 'warm directory' do
+    command %Q|ls #{export_root}|
+    retries 10
+    retry_delay 5
   end
 
   [ export_root, export_root + '/archive' ].each do |matterhorn_directory|
@@ -67,6 +73,7 @@ if storage_available
       owner 'matterhorn'
       group 'matterhorn'
       mode '755'
+      recursive true
     end
   end
 end

@@ -7,6 +7,7 @@ Chef::Provider::Deploy::Revision.send(:include, MhOpsworksRecipes::DeployHelpers
 matterhorn_repo_root = node[:matterhorn_repo_root]
 local_workspace_root = get_local_workspace_root
 storage_info = get_storage_info
+export_root = storage_info[:export_root]
 rest_auth_info = get_rest_auth_info
 admin_user_info = get_admin_user_info
 
@@ -83,7 +84,7 @@ deploy_revision matterhorn_repo_root do
         matterhorn_backend_http_port: 8080,
         hostname: hostname,
         local_workspace_root: local_workspace_root,
-        export_root: storage_info[:export_root],
+        export_root: export_root,
         admin_url: "http://#{admin_hostname}",
         capture_agent_query_url: capture_agent_query_url,
         rest_auth: rest_auth_info,
