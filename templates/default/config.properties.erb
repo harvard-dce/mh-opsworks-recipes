@@ -73,7 +73,7 @@ org.opencastproject.security.demo.loadusers=true
 # ${org.opencastproject.server.url} can not be used, because the streaming server does not use the HTTP protocol.
 # Streaming is not included in the default workflow, since the Red5 streaming server is a 3rd party component that
 # requires separate installation.
-org.opencastproject.streaming.url=rtmp://<%= @wowza_host %>/matterhorn-engage
+org.opencastproject.streaming.url=rtmp://<%= @engage_hostname %>/matterhorn-engage
 
 # The directory where the matterhorn streaming app for Red5 stores the streams
 org.opencastproject.streaming.directory=${org.opencastproject.shared_storage.dir}/streams
@@ -206,8 +206,11 @@ org.opencastproject.textanalyzer.tesseract.path=/usr/bin/tesseract
 org.opencastproject.admin.email=admin@localhost
 
 #DCE Phoebe - to fetch any config use: /info/configuration/<config name>.json
-org.opencastproject.livestreamingserverapp=<%= @wowza_host %>:1935/live/
+org.opencastproject.captureagent_monitor_url=<%= @capture_agent_monitor_url %>
 org.opencastproject.captureagent.location.url=<%= @capture_agent_query_url %>
+
+#DCE Phoebe - This is the live edge for student viewing eg: rtmp://54.164.45.243:80/live/
+org.opencastproject.live.streaming.url=<%= @live_streaming_url %>
 
 edu.harvard.dce.inbox_root=${org.opencastproject.shared_storage.dir}
 

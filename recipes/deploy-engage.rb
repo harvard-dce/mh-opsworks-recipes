@@ -16,6 +16,14 @@ capture_agent_query_url = node.fetch(
   :capture_agent_query_url, 'http://example.com'
 )
 
+capture_agent_monitor_url = node.fetch(
+  :capture_agent_monitor_url, 'http://example.com/monitor_url'
+)
+
+live_streaming_url = node.fetch(
+  :live_streaming_url, 'rtmp://example.com/streaming_url'
+)
+
 auth_host = node.fetch(
   :auth_host, 'http://example.com'
 )
@@ -30,9 +38,6 @@ user_tracking_authhost = node.fetch(
 )
 ## /Engage specific
 
-wowza_host = node.fetch(
-  :wowza_host, 'mh-wowza'
-)
 git_data = node[:deploy][:matterhorn][:scm]
 (private_admin_hostname, admin_attributes) = node[:opsworks][:layers][:admin][:instances].first
 
@@ -106,10 +111,11 @@ deploy_revision matterhorn_repo_root do
         capture_agent_query_url: capture_agent_query_url,
         rest_auth: rest_auth_info,
         admin_auth: admin_user_info,
-        wowza_host: wowza_host,
         database: database_connection,
         engage_hostname: public_engage_hostname,
         cloudfront_url: cloudfront_url,
+        capture_agent_monitor_url: capture_agent_monitor_url,
+        live_streaming_url: live_streaming_url,
       })
     end
   end
