@@ -10,6 +10,7 @@ storage_info = get_storage_info
 export_root = storage_info[:export_root]
 rest_auth_info = get_rest_auth_info
 admin_user_info = get_admin_user_info
+cloudfront_url = node[:cloudfront_url]
 
 capture_agent_query_url = node.fetch(
   :capture_agent_query_url, 'http://example.com'
@@ -91,7 +92,8 @@ deploy_revision matterhorn_repo_root do
         admin_auth: admin_user_info,
         wowza_host: wowza_host,
         database: database_connection,
-        engage_hostname: public_engage_hostname
+        engage_hostname: public_engage_hostname,
+        cloudfront_url: cloudfront_url,
       })
     end
   end

@@ -82,7 +82,11 @@ org.opencastproject.streaming.directory=${org.opencastproject.shared_storage.dir
 org.opencastproject.download.directory=${org.opencastproject.shared_storage.dir}/downloads
 
 # The base URL for media downloads.
+<% if @cloudfront_url %>
+org.opencastproject.download.url=https://<%= @cloudfront_url %>
+<% else %>
 org.opencastproject.download.url=${org.opencastproject.server.url}/static
+<% end %>
 
 # Relational Database configuration.  By default, Matterhorn uses an embedded H2 database.  A standalone database server
 # is recommended for production systems.  If you run the ddl script for your db vendor (see docs/scripts/ddl/) manually,
