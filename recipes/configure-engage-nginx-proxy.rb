@@ -54,6 +54,7 @@ certificate_exists = ! cert_content.empty?
 
 template %Q|/etc/nginx/sites-enabled/default| do
   source 'engage-nginx-proxy-conf.erb'
+  manage_symlink_source true
   variables({
     export_root: storage_info[:export_root],
     matterhorn_backend_http_port: 8080,
