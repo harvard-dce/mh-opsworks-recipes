@@ -45,3 +45,7 @@ suites:
   - name: set-timezone
     run_list:
       - recipe[mh-opsworks-recipes::set-timezone]
+
+  - name: populate-maven-cache
+    run_list:
+      - recipe[mh-opsworks-recipes::populate-maven-cache]
