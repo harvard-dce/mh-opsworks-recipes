@@ -44,6 +44,29 @@ module MhOpsworksRecipes
       alarm_name_prefix
     end
 
+    def toggle_maintenance_mode_to(mode)
+      rest_auth_info = get_rest_auth_info
+      (private_admin_hostname, admin_attributes) = node[:opsworks][:layers][:admin][:instances].first
+      hostname = ''
+
+      if node[:opsworks][:instance][:layers].include?('workers')
+        hostname = node[:opsworks][:instance][:private_dns_name]
+      else
+        hostname = node[:opsworks][:instance][:public_dns_name]
+      end
+
+      if private_admin_hostname
+        command = %Q|/usr/bin/curl -f -s --digest -u "#{rest_auth_info[:user]}:#{rest_auth_info[:pass]}" -H "X-Requested-Auth: Digest" -F host=http://#{hostname} -F maintenance=#{mode} http://#{private_admin_hostname}/services/maintenance|
+        # Chef::Log.info "command: #{command}"
+        execute "toggle maintenance mode to #{mode}" do
+          user 'matterhorn'
+          command command
+          retries 5
+          retry_delay 30
+        end
+      end
+    end
+
     def get_rest_auth_info
       node.fetch(
         :rest_auth, {
@@ -73,6 +96,15 @@ module MhOpsworksRecipes
       node.fetch(
         :matterhorn_log_directory, '/var/log/matterhorn'
       )
+    end
+
+    def allow_matterhorn_user_to_restart_daemon_via_sudo
+      file '/etc/sudoers.d/matterhorn' do
+        owner 'root'
+        group 'root'
+        content %Q|matterhorn ALL=NOPASSWD:/etc/init.d/matterhorn\n|
+        mode '0600'
+      end
     end
 
     def git_repo_url(git_data)

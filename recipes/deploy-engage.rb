@@ -58,6 +58,8 @@ repo_url = git_repo_url(git_data)
 
 include_recipe "mh-opsworks-recipes::create-matterhorn-directories"
 
+allow_matterhorn_user_to_restart_daemon_via_sudo
+
 deploy_revision matterhorn_repo_root do
   repo repo_url
   revision git_data.fetch(:revision, 'master')
@@ -121,4 +123,9 @@ deploy_revision matterhorn_repo_root do
       })
     end
   end
+end
+
+execute "start matterhorn if it isn't already running" do
+  user 'matterhorn'
+  command "pgrep -u matterhorn java > /dev/null; if [ $? = 1 ]; then sudo /etc/init.d/matterhorn start; fi"
 end

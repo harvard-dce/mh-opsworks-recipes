@@ -44,13 +44,15 @@ if admin_attributes
   admin_hostname = admin_attributes[:public_dns_name]
 end
 
-hostname = node[:opsworks][:instance][:hostname]
+hostname = node[:opsworks][:instance][:private_dns_name]
 
 database_connection = node[:deploy][:matterhorn][:database]
 
 repo_url = git_repo_url(git_data)
 
 include_recipe "mh-opsworks-recipes::create-matterhorn-directories"
+
+allow_matterhorn_user_to_restart_daemon_via_sudo
 
 deploy_revision matterhorn_repo_root do
   repo repo_url
@@ -115,4 +117,9 @@ deploy_revision matterhorn_repo_root do
       })
     end
   end
+end
+
+execute "start matterhorn if it isn't already running" do
+  user 'matterhorn'
+  command "pgrep -u matterhorn java > /dev/null; if [ $? = 1 ]; then sudo /etc/init.d/matterhorn start; fi"
 end

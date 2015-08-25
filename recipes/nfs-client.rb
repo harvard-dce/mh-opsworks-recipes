@@ -63,7 +63,7 @@ if storage_available
   end
 
   execute 'warm directory' do
-    command %Q|ls #{export_root}|
+    command %Q|ls -flai #{export_root}/|
     retries 10
     retry_delay 5
   end

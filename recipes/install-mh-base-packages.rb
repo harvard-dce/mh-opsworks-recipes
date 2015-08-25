@@ -8,7 +8,7 @@ include_recipe "mh-opsworks-recipes::update-package-repo"
   gstreamer0.10-plugins-base gstreamer0.10-plugins-good gstreamer0.10-tools
   gstreamer0.10-plugins-bad gstreamer0.10-plugins-ugly
   libglib2.0-dev mysql-client gzip tesseract-ocr npm nodejs nodejs-dev
-  mediainfo |.each do |package_name|
+  mediainfo curl|.each do |package_name|
     install_package(package_name)
   end
 
