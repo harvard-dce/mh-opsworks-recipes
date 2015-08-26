@@ -1,0 +1,17 @@
+# Configuration for DCE Live Service
+
+# The same mime-type applies to all flavors and resolutions
+live.mime-type=video/x-flv
+
+# If a comma-separated list is informed, several resolutions will be generated for each flavor
+live.resolution=1920x540,960x270
+
+# Possible variable substitutions:
+# #{id} = media package id
+# #{flavor} = type-subtype of flavor
+# #{caName} = capture agent name
+# #{resolution} = video resolution e.g. 1920x1080
+#live.stream-name=#{id}-#{flavor}.stream
+live.stream-name=#{id}-#{flavor}.stream-#{resolution}<%= @live_stream_suffix %>
+
+live.download-source-flavors=dublincore/*

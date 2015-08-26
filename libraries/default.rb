@@ -324,6 +324,17 @@ module MhOpsworksRecipes
       end
     end
 
+    def install_live_streaming_service_config(current_deploy_root,live_streaming_suffix)
+      template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.live.impl.LiveServiceImpl.properties| do
+        source 'edu.harvard.dce.live.impl.LiveServiceImpl.properties.erb'
+        owner 'matterhorn'
+        group 'matterhorn'
+        variables({
+          live_stream_suffix: live_streaming_suffix
+        })
+      end
+    end
+
     def install_auth_service(current_deploy_root, auth_host, auth_activated = 'true')
       template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.properties| do
         source 'edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.properties.erb'

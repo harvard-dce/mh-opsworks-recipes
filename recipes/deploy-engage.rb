@@ -23,6 +23,7 @@ capture_agent_monitor_url = node.fetch(
 live_streaming_url = node.fetch(
   :live_streaming_url, 'rtmp://example.com/streaming_url'
 )
+live_streaming_suffix = node.fetch(:live_streaming_suffix, '')
 
 auth_host = node.fetch(
   :auth_host, 'http://example.com'
@@ -89,6 +90,7 @@ deploy_revision matterhorn_repo_root do
     install_smtp_config(most_recent_deploy)
     install_logging_config(most_recent_deploy)
     install_auth_service(most_recent_deploy, auth_host, auth_activated)
+    install_live_streaming_service_config(most_recent_deploy, live_streaming_suffix)
 
     # ENGAGE SPECIFIC
     #TODO - this should probably be checked into the repo

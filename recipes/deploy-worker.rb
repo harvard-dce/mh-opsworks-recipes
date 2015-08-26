@@ -23,14 +23,11 @@ capture_agent_monitor_url = node.fetch(
 live_streaming_url = node.fetch(
   :live_streaming_url, 'rtmp://example.com/streaming_url'
 )
+live_streaming_suffix = node.fetch(:live_streaming_suffix, '')
 
-auth_host = node.fetch(
-  :auth_host, 'http://example.com'
-)
+auth_host = node.fetch(:auth_host, 'http://example.com')
 
-auth_activated = node.fetch(
-  :auth_activated, 'true'
-)
+auth_activated = node.fetch(:auth_activated, 'true')
 
 git_data = node[:deploy][:matterhorn][:scm]
 (private_admin_hostname, admin_attributes) = node[:opsworks][:layers][:admin][:instances].first
@@ -87,6 +84,7 @@ deploy_revision matterhorn_repo_root do
     install_smtp_config(most_recent_deploy)
     install_logging_config(most_recent_deploy)
     install_auth_service(most_recent_deploy, auth_host, auth_activated)
+    install_live_streaming_service_config(most_recent_deploy, live_streaming_suffix)
 
     # WORKER SPECIFIC
     #TODO - this should probably be checked into the repo
