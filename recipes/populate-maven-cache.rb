@@ -1,14 +1,12 @@
 # Cookbook Name:: mh-opsworks-recipes
 # Recipe:: populate-maven-cache
 
-include_recipe "mh-opsworks-recipes::update-package-repo"
-::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
-install_package('curl')
+include_recipe "awscli::default"
 
 bucket_name = node.fetch(:shared_asset_bucket_name, 'mh-opsworks-shared-assets')
 
 execute 'download and unpack maven cache' do
-  command %Q|cd /root && /bin/rm -Rf .m2/ && /usr/bin/curl --continue-at - --silent http://s3.amazonaws.com/#{bucket_name}/maven_cache.tgz --output m2_cache.tgz && /bin/tar xvfz m2_cache.tgz && rm m2_cache.tgz|
+  command %Q|cd /root && /bin/rm -Rf .m2/ && aws s3 cp s3://#{bucket_name}/maven_cache.tgz . && /bin/tar xvfz maven_cache.tgz && rm maven_cache.tgz|
   retries 10
   retry_delay 15
   timeout 45
