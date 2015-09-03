@@ -56,7 +56,7 @@ module MhOpsworksRecipes
       end
 
       if private_admin_hostname
-        command = %Q|/usr/bin/curl -f -s --digest -u "#{rest_auth_info[:user]}:#{rest_auth_info[:pass]}" -H "X-Requested-Auth: Digest" -F host=http://#{hostname} -F maintenance=#{mode} http://#{private_admin_hostname}/services/maintenance|
+        command = %Q|/usr/bin/curl -s --digest -u "#{rest_auth_info[:user]}:#{rest_auth_info[:pass]}" -H "X-Requested-Auth: Digest" -F host=http://#{hostname} -F maintenance=#{mode} http://#{private_admin_hostname}/services/maintenance|
         # Chef::Log.info "command: #{command}"
         execute "toggle maintenance mode to #{mode}" do
           user 'matterhorn'
