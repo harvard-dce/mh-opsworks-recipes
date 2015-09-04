@@ -72,11 +72,6 @@ deploy_revision matterhorn_repo_root do
 
   before_symlink do
     most_recent_deploy = path_to_most_recent_deploy(new_resource)
-    execute 'update submodules' do
-      command %Q|cd #{most_recent_deploy} && git submodule update --remote --init --recursive|
-      retries 5
-      retry_delay 5
-    end
     maven_build_for(:worker, most_recent_deploy)
 
     install_init_scripts(most_recent_deploy, matterhorn_repo_root)
