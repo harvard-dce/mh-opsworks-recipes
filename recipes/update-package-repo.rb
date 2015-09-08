@@ -15,4 +15,5 @@ execute 'update package repository' do
   timeout 180
   retries 5
   retry_delay 15
+  ignore_failure true
 end
