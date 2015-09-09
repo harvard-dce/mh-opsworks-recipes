@@ -9,6 +9,8 @@ storage_info = node.fetch(
   }
 )
 
+shared_storage_root = storage_info[:shared_storage_root] || storage_info[:export_root]
+
 include_recipe "nfs::server4"
 
 nfs_export storage_info[:export_root] do
@@ -18,8 +20,9 @@ nfs_export storage_info[:export_root] do
   options ['no_root_squash']
 end
 
-directory storage_info[:export_root] do
+directory shared_storage_root do
   owner 'matterhorn'
   group 'matterhorn'
   mode '755'
+  recursive true
 end

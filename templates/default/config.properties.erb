@@ -37,7 +37,7 @@ org.opencastproject.jobs.url=${org.opencastproject.server.url}
 
 # The directory where the system will store its processed files (including temporary files).  This directory should
 # be persistent between reboots (i.e., not /tmp)
-org.opencastproject.shared_storage.dir=<%= @export_root %>
+org.opencastproject.shared_storage.dir=<%= @shared_storage_root %>
 org.opencastproject.storage.dir=<%= @local_workspace_root %>
 
 # The username and password to present to other Matterhorn servers when calling their REST endpoints.

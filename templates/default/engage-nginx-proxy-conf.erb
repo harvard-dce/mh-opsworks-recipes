@@ -17,7 +17,7 @@ server {
   gzip on;
 
   location /static {
-    alias <%= @export_root %>/downloads;
+    alias <%= @shared_storage_root %>/downloads;
   }
 
   location / {
@@ -60,7 +60,7 @@ server {
   gzip on;
 
   location /static {
-    alias <%= @export_root %>/downloads;
+    alias <%= @shared_storage_root %>/downloads;
   }
 
   location / {

@@ -13,6 +13,8 @@ storage_info = node.fetch(
   }
 )
 
+shared_storage_root = storage_info[:shared_storage_root] || storage_info[:export_root]
+
 ssl_info = node.fetch(
   :ssl, {
     # Dummy self-signed cert.
@@ -56,7 +58,7 @@ template %Q|/etc/nginx/sites-enabled/default| do
   source 'engage-nginx-proxy-conf.erb'
   manage_symlink_source true
   variables({
-    export_root: storage_info[:export_root],
+    shared_storage_root: shared_storage_root,
     matterhorn_backend_http_port: 8080,
     certificate_exists: certificate_exists
   })

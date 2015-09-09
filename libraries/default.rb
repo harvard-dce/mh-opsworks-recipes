@@ -79,6 +79,7 @@ module MhOpsworksRecipes
     def get_storage_info
       node.fetch(
         :storage, {
+          shared_storage_root: '/var/tmp',
           export_root: '/var/tmp',
           network: '10.0.0.0/8',
           layer_shortname: 'storage'
