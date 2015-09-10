@@ -1,0 +1,8 @@
+# This file is installed automatically by chef. Do not edit or delete.
+[client]
+user="<%= @username %>"
+password="<%= @password %>"
+<% if ! @is_db_host %>
+host="<%= @host %>"
+port="<%= @port %>"
+<% end %>
