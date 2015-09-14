@@ -7,7 +7,9 @@ include_recipe "awscli::default"
 ruby_block "add alarms" do
   block do
     opsworks_instance_id = node[:opsworks][:instance][:id]
-    region = node[:opsworks][:instance][:region]
+    # All opsworks metrics are sent to us-east-1, so we need to write alarms
+    # off this region
+    region = 'us-east-1'
 
     # Instance properties for monitoring
     number_of_cpus = %x(nproc).chomp.to_i

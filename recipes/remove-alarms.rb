@@ -8,7 +8,7 @@ ruby_block 'remove alarms for instance' do
     require 'json'
 
     opsworks_instance_id = node[:opsworks][:instance][:id]
-    region = node[:opsworks][:instance][:region]
+    region = 'us-east-1'
 
     all_alarms = ::JSON.parse(
       %x(aws cloudwatch describe-alarms --alarm-name-prefix="#{alarm_name_prefix}" --region "#{region}" --output json)

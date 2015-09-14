@@ -50,7 +50,7 @@ end
 
 cron_d 'mysql_backup_metric' do
   user 'root'
-  minute run_mysql_dump_on_the + 45
+  minute "*/2"
   command %Q(/usr/local/bin/mysql-backup-metric.sh "#{export_root}/backups/mysql" "#{opsworks_instance_id}" 2>&1 | logger -t info)
   path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 end
@@ -58,7 +58,7 @@ end
 ruby_block "Fire alarm when the mysql database dump is not fresh" do
   block do
     opsworks_instance_id = node[:opsworks][:instance][:id]
-    region = node[:opsworks][:instance][:region]
+    region = 'us-east-1'
     # This is idempotent according to the aws docs
     topic_arn = %x(aws sns create-topic --name "#{topic_name}" --region #{region} --output text).chomp
 
