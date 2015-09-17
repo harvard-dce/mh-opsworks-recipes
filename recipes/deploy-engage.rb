@@ -42,8 +42,8 @@ user_tracking_authhost = node.fetch(
 git_data = node[:deploy][:matterhorn][:scm]
 (private_admin_hostname, admin_attributes) = node[:opsworks][:layers][:admin][:instances].first
 
-engage_hostname = node[:opsworks][:instance][:hostname]
 public_engage_hostname = node[:opsworks][:instance][:public_dns_name]
+private_hostname = node[:opsworks][:instance][:private_dns_name]
 
 admin_hostname = ''
 if admin_attributes
@@ -103,7 +103,7 @@ deploy_revision matterhorn_repo_root do
       group 'matterhorn'
       variables({
         matterhorn_backend_http_port: 8080,
-        hostname: public_engage_hostname,
+        hostname: private_hostname,
         local_workspace_root: local_workspace_root,
         shared_storage_root: shared_storage_root,
         admin_url: "http://#{admin_hostname}",

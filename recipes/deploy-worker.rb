@@ -44,7 +44,7 @@ if admin_attributes
   admin_hostname = admin_attributes[:public_dns_name]
 end
 
-hostname = node[:opsworks][:instance][:private_dns_name]
+private_hostname = node[:opsworks][:instance][:private_dns_name]
 
 database_connection = node[:deploy][:matterhorn][:database]
 
@@ -97,7 +97,7 @@ deploy_revision matterhorn_repo_root do
       group 'matterhorn'
       variables({
         matterhorn_backend_http_port: 8080,
-        hostname: hostname,
+        hostname: private_hostname,
         local_workspace_root: local_workspace_root,
         shared_storage_root: shared_storage_root,
         admin_url: "http://#{admin_hostname}",
