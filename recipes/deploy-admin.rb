@@ -68,14 +68,20 @@ deploy_revision matterhorn_repo_root do
     most_recent_deploy = path_to_most_recent_deploy(new_resource)
     maven_build_for(:admin, most_recent_deploy)
 
+    # Copy in the configs as distributed in the git repo.
+    # Some services will be further tweaked by templates
+    copy_files_into_place_for(:admin, most_recent_deploy)
+    copy_service_configs_into_place(most_recent_deploy)
+    copy_services_into_place(most_recent_deploy)
+
+    copy_workflows_into_place_for_admin(most_recent_deploy)
+
     install_init_scripts(most_recent_deploy, matterhorn_repo_root)
     install_matterhorn_conf(most_recent_deploy, matterhorn_repo_root, 'admin')
     install_multitenancy_config(most_recent_deploy, admin_hostname, public_engage_hostname)
     remove_felix_fileinstall(most_recent_deploy)
     install_smtp_config(most_recent_deploy)
     install_logging_config(most_recent_deploy)
-    copy_files_into_place_for(:admin, most_recent_deploy)
-    copy_workflows_into_place_for_admin(most_recent_deploy)
     install_auth_service(most_recent_deploy, auth_host, auth_activated)
     install_live_streaming_service_config(most_recent_deploy, live_streaming_suffix)
 

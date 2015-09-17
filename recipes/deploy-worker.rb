@@ -74,6 +74,12 @@ deploy_revision matterhorn_repo_root do
     most_recent_deploy = path_to_most_recent_deploy(new_resource)
     maven_build_for(:worker, most_recent_deploy)
 
+    # Copy in the configs as distributed in the git repo
+    # Some services will be further tweaked by templates
+    copy_files_into_place_for(:worker, most_recent_deploy)
+    copy_service_configs_into_place(most_recent_deploy)
+    copy_services_into_place(most_recent_deploy)
+
     install_init_scripts(most_recent_deploy, matterhorn_repo_root)
     install_matterhorn_conf(most_recent_deploy, matterhorn_repo_root, 'worker')
     install_multitenancy_config(most_recent_deploy, admin_hostname, public_engage_hostname)
@@ -88,8 +94,6 @@ deploy_revision matterhorn_repo_root do
     install_matterhorn_images_properties(most_recent_deploy)
     set_service_registry_dispatch_interval(most_recent_deploy)
     # /WORKER SPECIFIC
-
-    copy_files_into_place_for(:worker, most_recent_deploy)
 
     template %Q|#{most_recent_deploy}/etc/config.properties| do
       source 'config.properties.erb'

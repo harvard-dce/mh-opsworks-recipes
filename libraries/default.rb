@@ -143,22 +143,6 @@ module MhOpsworksRecipes
             src: 'dce-config/email/metasynchDetails',
             dest: 'etc/email/metasynchDetails'
           },
-          {
-            src: 'dce-config/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-archive-retrieve.cfg',
-            dest: 'etc/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-archive-retrieve.cfg'
-          },
-          {
-            src: 'dce-config/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-hold-for-append.cfg',
-            dest: 'etc/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-hold-for-append.cfg'
-          },
-          {
-            src: 'dce-config/services/edu.harvard.dce.utils.cleanup.FailedZipsScanner.properties',
-            dest: 'etc/services/edu.harvard.dce.utils.cleanup.FailedZipsScanner.properties',
-          },
-          {
-            src: 'dce-config/services/org.opencastproject.execute.impl.ExecuteServiceImpl.properties',
-            dest: 'etc/services/org.opencastproject.execute.impl.ExecuteServiceImpl.properties',
-          },
         ],
         worker: [
           {
@@ -178,22 +162,6 @@ module MhOpsworksRecipes
             dest: 'etc/encoding/DCE-h264-movies.properties'
           },
           {
-            src: 'dce-config/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-archive-retrieve.cfg',
-            dest: 'etc/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-archive-retrieve.cfg'
-          },
-          {
-            src: 'dce-config/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-hold-for-append.cfg',
-            dest: 'etc/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-hold-for-append.cfg'
-          },
-          {
-            src: 'dce-config/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox.cfg',
-            dest: 'etc/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox.cfg'
-          },
-          {
-            src: 'dce-config/services/org.opencastproject.execute.impl.ExecuteServiceImpl.properties',
-            dest: 'etc/services/org.opencastproject.execute.impl.ExecuteServiceImpl.properties',
-          },
-          {
             src: 'dce-config/workflows/DCE-error-handler.xml',
             dest: 'etc/workflows/DCE-error-handler.xml',
           }
@@ -210,22 +178,6 @@ module MhOpsworksRecipes
           {
             src: 'dce-config/email/metasynchDetails',
             dest: 'etc/email/metasynchDetails'
-          },
-          {
-            src: 'dce-config/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-archive-retrieve.cfg',
-            dest: 'etc/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-archive-retrieve.cfg'
-          },
-          {
-            src: 'dce-config/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-hold-for-append.cfg',
-            dest: 'etc/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox-hold-for-append.cfg'
-          },
-          {
-            src: 'dce-config/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox.cfg',
-            dest: 'etc/load/org.opencastproject.ingest.scanner.InboxScannerService-inbox.cfg'
-          },
-          {
-            src: 'dce-config/services/org.opencastproject.execute.impl.ExecuteServiceImpl.properties',
-            dest: 'etc/services/org.opencastproject.execute.impl.ExecuteServiceImpl.properties',
           },
           {
             src: 'dce-config/workflows/DCE-error-handler.xml',
@@ -371,7 +323,23 @@ module MhOpsworksRecipes
 
     def copy_workflows_into_place_for_admin(current_deploy_root)
       execute 'copy workflows into place for admin' do
-        command %Q|cp #{current_deploy_root}/dce-config/workflows/* #{current_deploy_root}/etc/workflows|
+        command %Q|find #{current_deploy_root}/dce-config/workflows -maxdepth 1 -type f -exec cp -t #{current_deploy_root}/etc/workflows {} +|
+        retries 3
+        retry_delay 10
+      end
+    end
+
+    def copy_service_configs_into_place(current_deploy_root)
+      execute 'copy service configs' do
+        command %Q|find #{current_deploy_root}/dce-config/load -maxdepth 1 -type f -exec cp -t #{current_deploy_root}/etc/load {} +|
+        retries 3
+        retry_delay 10
+      end
+    end
+
+    def copy_services_into_place(current_deploy_root)
+      execute 'copy services' do
+        command %Q|find #{current_deploy_root}/dce-config/services -maxdepth 1 -type f -exec cp -t #{current_deploy_root}/etc/services {} +|
         retries 3
         retry_delay 10
       end
