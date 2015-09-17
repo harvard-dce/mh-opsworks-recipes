@@ -159,34 +159,6 @@ module MhOpsworksRecipes
             src: 'dce-config/services/org.opencastproject.execute.impl.ExecuteServiceImpl.properties',
             dest: 'etc/services/org.opencastproject.execute.impl.ExecuteServiceImpl.properties',
           },
-          {
-            src: 'dce-config/workflows/DCE-archive-publish-external.xml',
-            dest: 'etc/workflows/DCE-archive-publish-external.xml',
-          },
-          {
-            src: 'dce-config/workflows/DCE-error-handler.xml',
-            dest: 'etc/workflows/DCE-error-handler.xml',
-          },
-          {
-            src: 'dce-config/workflows/DCE-ingest-from-prodsys.xml',
-            dest: 'etc/workflows/DCE-ingest-from-prodsys.xml',
-          },
-          {
-            src: 'dce-config/workflows/DCE-production.xml',
-            dest: 'etc/workflows/DCE-production.xml',
-          },
-          {
-            src: 'dce-config/workflows/DCE-retrieve-from-archive.xml',
-            dest: 'etc/workflows/DCE-retrieve-from-archive.xml',
-          },
-          {
-            src: 'dce-config/workflows/DCE-transcode-4x3.xml',
-            dest: 'etc/workflows/DCE-transcode-4x3.xml',
-          },
-          {
-            src: 'dce-config/workflows/DCE-transcode-hold-append.xml',
-            dest: 'etc/workflows/DCE-transcode-hold-append.xml',
-          }
         ],
         worker: [
           {
@@ -394,6 +366,14 @@ module MhOpsworksRecipes
         variables({
           main_log_level: 'DEBUG'
         })
+      end
+    end
+
+    def copy_workflows_into_place_for_admin(current_deploy_root)
+      execute 'copy workflows into place for admin' do
+        command %Q|cp #{current_deploy_root}/dce-config/workflows/* #{current_deploy_root}/etc/workflows|
+        retries 3
+        retry_delay 10
       end
     end
 

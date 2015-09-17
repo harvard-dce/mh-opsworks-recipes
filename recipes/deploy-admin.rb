@@ -75,6 +75,7 @@ deploy_revision matterhorn_repo_root do
     install_smtp_config(most_recent_deploy)
     install_logging_config(most_recent_deploy)
     copy_files_into_place_for(:admin, most_recent_deploy)
+    copy_workflows_into_place_for_admin(most_recent_deploy)
     install_auth_service(most_recent_deploy, auth_host, auth_activated)
     install_live_streaming_service_config(most_recent_deploy, live_streaming_suffix)
 
