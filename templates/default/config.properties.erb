@@ -85,7 +85,7 @@ org.opencastproject.download.directory=${org.opencastproject.shared_storage.dir}
 <% if @cloudfront_url %>
 org.opencastproject.download.url=https://<%= @cloudfront_url %>
 <% else %>
-org.opencastproject.download.url=${org.opencastproject.server.url}/static
+org.opencastproject.download.url=<%= (@using_ssl_for_engage) ? 'https://' : 'http://' %><%= @engage_hostname %>/static
 <% end %>
 
 # Relational Database configuration.  By default, Matterhorn uses an embedded H2 database.  A standalone database server

@@ -11,6 +11,7 @@ shared_storage_root = storage_info[:shared_storage_root] || storage_info[:export
 rest_auth_info = get_rest_auth_info
 admin_user_info = get_admin_user_info
 cloudfront_url = node[:cloudfront_url]
+using_ssl_for_engage = node[:ssl]
 
 capture_agent_query_url = node.fetch(
   :capture_agent_query_url, 'http://example.com'
@@ -119,6 +120,7 @@ deploy_revision matterhorn_repo_root do
         cloudfront_url: cloudfront_url,
         capture_agent_monitor_url: capture_agent_monitor_url,
         live_streaming_url: live_streaming_url,
+        using_ssl_for_engage: using_ssl_for_engage,
       })
     end
   end
