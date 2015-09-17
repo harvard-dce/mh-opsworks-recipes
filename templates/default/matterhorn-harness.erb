@@ -81,7 +81,7 @@ echo $$ > $pidfile
 MATTERHORN="<%= @matterhorn_root %>"
 CA=$MATTERHORN/capture-agent
 MATTERHORN_USER=matterhorn
-LOGDIR=/var/log/matterhorn
+LOGDIR="<%= @matterhorn_log_directory %>"
 LOGLEVEL="WARN"
 ECLIPSE_LOGLEVEL="SEVERE"
 [ -z $DEBUG ] && DEBUG=false

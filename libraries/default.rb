@@ -295,6 +295,8 @@ module MhOpsworksRecipes
     end
 
     def install_init_scripts(current_deploy_root, matterhorn_repo_root)
+      log_dir = node.fetch(:matterhorn_log_directory, '/var/log/matterhorn')
+
       template %Q|/etc/init.d/matterhorn| do
         source 'matterhorn-init-script.erb'
         owner 'matterhorn'
@@ -313,19 +315,23 @@ module MhOpsworksRecipes
         variables({
           main_config_file: %Q|#{matterhorn_repo_root}/current/etc/matterhorn.conf|,
           matterhorn_root: matterhorn_repo_root + '/current',
-          felix_config_dir: matterhorn_repo_root + '/current/etc'
+          felix_config_dir: matterhorn_repo_root + '/current/etc',
+          matterhorn_log_directory: log_dir
         })
       end
     end
 
     def install_matterhorn_conf(current_deploy_root, matterhorn_repo_root, node_profile)
+      log_dir = node.fetch(:matterhorn_log_directory, '/var/log/matterhorn')
+
       template %Q|#{current_deploy_root}/etc/matterhorn.conf| do
         source 'matterhorn.conf.erb'
         owner 'matterhorn'
         group 'matterhorn'
         variables({
           matterhorn_root: matterhorn_repo_root + '/current',
-          node_profile: node_profile
+          node_profile: node_profile,
+          matterhorn_log_directory: log_dir
         })
       end
     end
