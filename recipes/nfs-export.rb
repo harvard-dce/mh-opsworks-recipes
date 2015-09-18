@@ -1,6 +1,8 @@
 # Cookbook Name:: mh-opsworks-recipes
 # Recipe:: nfs-export
 
+::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
+
 storage_info = node.fetch(
   :storage, {
     export_root: '/var/tmp',
@@ -9,7 +11,7 @@ storage_info = node.fetch(
   }
 )
 
-shared_storage_root = storage_info[:shared_storage_root] || storage_info[:export_root]
+shared_storage_root = get_shared_storage_root
 
 include_recipe "nfs::server4"
 

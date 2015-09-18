@@ -87,6 +87,11 @@ module MhOpsworksRecipes
       )
     end
 
+    def get_shared_storage_root
+      storage_info = get_storage_info
+      storage_info[:shared_storage_root] || storage_info[:export_root]
+    end
+
     def get_local_workspace_root
       node.fetch(
         :local_workspace_root, '/var/matterhorn-workspace'

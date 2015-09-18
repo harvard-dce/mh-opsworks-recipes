@@ -16,7 +16,7 @@ install_package('autofs5')
 include_recipe "nfs::client4"
 
 export_root = storage_info[:export_root]
-shared_storage_root = storage_info[:shared_storage_root] || storage_info[:export_root]
+shared_storage_root = get_shared_storage_root
 
 # If we've explictly defined an nfs server export root path different than
 # the path we use everywhere else, use that for the export root.  This is
@@ -69,12 +69,10 @@ if storage_available
     retry_delay 5
   end
 
-  [ shared_storage_root, shared_storage_root + '/archive' ].each do |matterhorn_directory|
-    directory matterhorn_directory do
-      owner 'matterhorn'
-      group 'matterhorn'
-      mode '755'
-      recursive true
-    end
+  directory shared_storage_root do
+    owner 'matterhorn'
+    group 'matterhorn'
+    mode '755'
+    recursive true
   end
 end

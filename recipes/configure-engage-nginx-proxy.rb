@@ -13,7 +13,7 @@ storage_info = node.fetch(
   }
 )
 
-shared_storage_root = storage_info[:shared_storage_root] || storage_info[:export_root]
+shared_storage_root = get_shared_storage_root
 
 ssl_info = node.fetch(
   :ssl, {

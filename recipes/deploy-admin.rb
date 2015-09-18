@@ -7,7 +7,7 @@ Chef::Provider::Deploy::Revision.send(:include, MhOpsworksRecipes::DeployHelpers
 matterhorn_repo_root = node[:matterhorn_repo_root]
 local_workspace_root = get_local_workspace_root
 storage_info = get_storage_info
-shared_storage_root = storage_info[:shared_storage_root] || storage_info[:export_root]
+shared_storage_root = get_shared_storage_root
 rest_auth_info = get_rest_auth_info
 admin_user_info = get_admin_user_info
 cloudfront_url = node[:cloudfront_url]
