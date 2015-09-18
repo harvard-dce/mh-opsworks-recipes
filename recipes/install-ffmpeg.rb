@@ -2,17 +2,28 @@
 # Recipe:: install-ffmpeg
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
-ppa = node.fetch(:ffmpeg_ppa, "http://ppa.launchpad.net/mc3man/trusty-media/ubuntu")
-ppa_key = node.fetch(:ffmpeg_ppa_key, "ED8E640A")
+include_recipe "awscli::default"
 
-include_recipe "mh-opsworks-recipes::update-package-repo"
+bucket_name = node.fetch(:shared_asset_bucket_name, 'mh-opsworks-shared-assets')
+ffmpeg_version = node.fetch(:ffmpeg_version, '2.7.2')
+ffmpeg_archive = %Q|ffmpeg-#{ffmpeg_version}-static.tgz|
 
-apt_repository "ffmpeg" do
-  uri ppa
-  distribution node['lsb']['codename']
-  components ['main']
-  keyserver 'keyserver.ubuntu.com'
-  key ppa_key
+package 'ffmpeg' do
+  action :remove
+  ignore_failure true
 end
 
-install_package('ffmpeg')
+bash 'extract ffmpeg archive and create symbolic links' do
+  code %Q|
+cd /opt &&
+/bin/rm -Rf ffmpeg-#{ffmpeg_version} &&
+/usr/local/bin/aws s3 cp s3://#{bucket_name}/#{ffmpeg_archive} . &&
+/bin/tar xvfz #{ffmpeg_archive} &&
+cd /usr/local/bin/ &&
+/usr/bin/find /opt/ffmpeg-#{ffmpeg_version} -mindepth 1 -type f -executable -exec /bin/ln -sf {} \\;
+|
+  # retries 10
+  # retry_delay 5
+  timeout 300
+  not_if { ::File.exists?("/opt/#{ffmpeg_archive}") }
+end
