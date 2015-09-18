@@ -335,7 +335,7 @@ module MhOpsworksRecipes
       end
     end
 
-    def copy_service_configs_into_place(current_deploy_root)
+    def copy_configs_for_load_service(current_deploy_root)
       execute 'copy service configs' do
         command %Q|find #{current_deploy_root}/dce-config/load -maxdepth 1 -type f -exec cp -t #{current_deploy_root}/etc/load {} +|
         retries 3

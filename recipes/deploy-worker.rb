@@ -79,7 +79,7 @@ deploy_revision matterhorn_repo_root do
     # Copy in the configs as distributed in the git repo
     # Some services will be further tweaked by templates
     copy_files_into_place_for(:worker, most_recent_deploy)
-    copy_service_configs_into_place(most_recent_deploy)
+    copy_configs_for_load_service(most_recent_deploy)
     copy_services_into_place(most_recent_deploy)
 
     install_init_scripts(most_recent_deploy, matterhorn_repo_root)
