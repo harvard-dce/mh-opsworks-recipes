@@ -49,11 +49,7 @@ module MhOpsworksRecipes
       (private_admin_hostname, admin_attributes) = node[:opsworks][:layers][:admin][:instances].first
       hostname = ''
 
-      if node[:opsworks][:instance][:layers].include?('workers')
-        hostname = node[:opsworks][:instance][:private_dns_name]
-      else
-        hostname = node[:opsworks][:instance][:public_dns_name]
-      end
+      hostname = node[:opsworks][:instance][:private_dns_name]
 
       if private_admin_hostname
         command = %Q|/usr/bin/curl -s --digest -u "#{rest_auth_info[:user]}:#{rest_auth_info[:pass]}" -H "X-Requested-Auth: Digest" -F host=http://#{hostname} -F maintenance=#{mode} http://#{private_admin_hostname}/services/maintenance|
