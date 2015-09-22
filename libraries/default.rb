@@ -17,6 +17,42 @@ module MhOpsworksRecipes
       end
     end
 
+    def get_public_engage_hostname_on_engage
+      return node[:public_engage_hostname] if node[:public_engage_hostname]
+
+      node[:opsworks][:instance][:public_dns_name]
+    end
+
+    def get_public_admin_hostname_on_admin
+      return node[:public_admin_hostname] if node[:public_admin_hostname]
+
+      node[:opsworks][:instance][:public_dns_name]
+    end
+
+    def get_public_admin_hostname
+      return node[:public_admin_hostname] if node[:public_admin_hostname]
+
+      (private_admin_hostname, admin_attributes) = node[:opsworks][:layers][:admin][:instances].first
+
+      admin_hostname = ''
+      if admin_attributes
+        admin_hostname = admin_attributes[:public_dns_name]
+      end
+      admin_hostname
+    end
+
+    def get_public_engage_hostname
+      return node[:public_engage_hostname] if node[:public_engage_hostname]
+
+      (private_engage_hostname, engage_attributes) = node[:opsworks][:layers][:engage][:instances].first
+
+      public_engage_hostname = ''
+      if engage_attributes
+        public_engage_hostname = engage_attributes[:public_dns_name]
+      end
+      public_engage_hostname
+    end
+
     def get_admin_user_info
       node.fetch(
         :admin_auth, {

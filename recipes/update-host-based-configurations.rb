@@ -8,25 +8,15 @@ matterhorn_repo_root = node[:matterhorn_repo_root]
 
 production_deploy_root = matterhorn_repo_root + '/current'
 
-(private_admin_hostname, admin_attributes) = node[:opsworks][:layers][:admin][:instances].first
-(private_engage_hostname, engage_attributes) = node[:opsworks][:layers][:engage][:instances].first
-
-public_engage_hostname = ''
-if engage_attributes
-  public_engage_hostname = engage_attributes[:public_dns_name]
-end
-
-admin_hostname = ''
-if admin_attributes
-  admin_hostname = admin_attributes[:public_dns_name]
-end
+public_engage_hostname = get_public_engage_hostname
+public_admin_hostname = get_public_admin_hostname
 
 if File.directory?(production_deploy_root)
   # This is being run during the config lifecycle after a successful deploy,
   # so everytime a node goes online or off and right before deployment.
   # We only care about the fact that it runs before a node changes its online state
 
-  install_multitenancy_config(production_deploy_root, admin_hostname, public_engage_hostname)
+  install_multitenancy_config(production_deploy_root, public_admin_hostname, public_engage_hostname)
 
   ruby_block "update engage hostname" do
     block do
@@ -37,7 +27,7 @@ if File.directory?(production_deploy_root)
       )
       editor.search_file_replace_line(
         /org\.opencastproject\.file\.repo\.url=/,
-        "org.opencastproject.file.repo.url=http://#{admin_hostname}"
+        "org.opencastproject.file.repo.url=http://#{public_admin_hostname}"
       )
       editor.write_file
     end

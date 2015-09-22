@@ -37,15 +37,10 @@ user_tracking_authhost = node.fetch(
 ## /Engage specific
 
 git_data = node[:deploy][:matterhorn][:scm]
-(private_admin_hostname, admin_attributes) = node[:opsworks][:layers][:admin][:instances].first
-
-public_engage_hostname = node[:opsworks][:instance][:public_dns_name]
+public_engage_hostname = get_public_engage_hostname_on_engage
 private_hostname = node[:opsworks][:instance][:private_dns_name]
 
-admin_hostname = ''
-if admin_attributes
-  admin_hostname = admin_attributes[:public_dns_name]
-end
+public_admin_hostname = get_public_admin_hostname
 
 hostname = node[:opsworks][:instance][:hostname]
 
@@ -85,7 +80,7 @@ deploy_revision matterhorn_repo_root do
 
     install_init_scripts(most_recent_deploy, matterhorn_repo_root)
     install_matterhorn_conf(most_recent_deploy, matterhorn_repo_root, 'engage')
-    install_multitenancy_config(most_recent_deploy, admin_hostname, public_engage_hostname)
+    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_engage_hostname)
     remove_felix_fileinstall(most_recent_deploy)
     install_smtp_config(most_recent_deploy)
     install_logging_config(most_recent_deploy)
@@ -109,7 +104,7 @@ deploy_revision matterhorn_repo_root do
         hostname: private_hostname,
         local_workspace_root: local_workspace_root,
         shared_storage_root: shared_storage_root,
-        admin_url: "http://#{admin_hostname}",
+        admin_url: "http://#{public_admin_hostname}",
         capture_agent_query_url: capture_agent_query_url,
         rest_auth: rest_auth_info,
         admin_auth: admin_user_info,
