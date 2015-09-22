@@ -38,11 +38,11 @@ do
     exit=21
   else
     # Only reap files (older than a day) if we have a successful dump
-    find -type f -name "mysql*.sql.bz2" -mtime +1 -delete
+    find -type f -name "mysql*.sql.*" -mtime +1 -delete
 
-    bzip2 $basename
+    nice -n 10 gzip -5 $basename
     if [ $? -ne 0 ]; then
-      echo "Error running bzip2 on $basename" >&2
+      echo "Error running gzip on $basename" >&2
       exit=25
     fi
   fi
