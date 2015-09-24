@@ -3,6 +3,14 @@
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 include_recipe "awscli::default"
+include_recipe "mh-opsworks-recipes::update-package-repo"
+
+%W|libass-dev libfreetype6-dev libmp3lame-dev libogg-dev
+libopus-dev libsdl1.2-dev libtheora-dev libtool libva-dev libvdpau-dev
+libvorbis-dev libxcb-shm0-dev libxcb-xfixes0-dev
+libxcb1-dev zlib1g-dev|.each do |package|
+  install_package(package)
+end
 
 bucket_name = node.fetch(:shared_asset_bucket_name, 'mh-opsworks-shared-assets')
 ffmpeg_version = node.fetch(:ffmpeg_version, '2.7.2')
