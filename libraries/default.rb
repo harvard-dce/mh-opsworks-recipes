@@ -184,6 +184,10 @@ module MhOpsworksRecipes
             src: 'dce-config/email/metasynchDetails',
             dest: 'etc/email/metasynchDetails'
           },
+          {
+            src: 'dce-config/services/org.ops4j.pax.logging.properties',
+            dest: 'etc/services/org.ops4j.pax.logging.properties'
+          },
         ],
         worker: [
           {
@@ -205,7 +209,11 @@ module MhOpsworksRecipes
           {
             src: 'dce-config/workflows/DCE-error-handler.xml',
             dest: 'etc/workflows/DCE-error-handler.xml',
-          }
+          },
+          {
+            src: 'dce-config/services/org.ops4j.pax.logging.properties',
+            dest: 'etc/services/org.ops4j.pax.logging.properties'
+          },
         ],
         engage: [
           {
@@ -223,7 +231,11 @@ module MhOpsworksRecipes
           {
             src: 'dce-config/workflows/DCE-error-handler.xml',
             dest: 'etc/workflows/DCE-error-handler.xml',
-          }
+          },
+          {
+            src: 'dce-config/services/org.ops4j.pax.logging.properties',
+            dest: 'etc/services/org.ops4j.pax.logging.properties'
+          },
         ]
       }
       files.fetch(node_profile.to_sym, [])
@@ -359,17 +371,6 @@ module MhOpsworksRecipes
           auth_host: auth_host,
           redirect_location: redirect_location,
           auth_activated: auth_activated
-        })
-      end
-    end
-
-    def install_logging_config(current_deploy_root)
-      template %Q|#{current_deploy_root}/etc/services/org.ops4j.pax.logging.properties| do
-        source 'org.ops4j.pax.logging.properties.erb'
-        owner 'matterhorn'
-        group 'matterhorn'
-        variables({
-          main_log_level: 'DEBUG'
         })
       end
     end
