@@ -17,6 +17,10 @@ module MhOpsworksRecipes
       end
     end
 
+    def get_live_stream_name
+      node.fetch(:live_stream_name, '#{caName}-#{flavor}.stream-#{resolution}_1_200@')
+    end
+
     def get_public_engage_hostname_on_engage
       return node[:public_engage_hostname] if node[:public_engage_hostname]
 
@@ -335,13 +339,13 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_live_streaming_service_config(current_deploy_root,live_streaming_suffix)
+    def install_live_streaming_service_config(current_deploy_root,live_stream_name)
       template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.live.impl.LiveServiceImpl.properties| do
         source 'edu.harvard.dce.live.impl.LiveServiceImpl.properties.erb'
         owner 'matterhorn'
         group 'matterhorn'
         variables({
-          live_stream_suffix: live_streaming_suffix
+          live_stream_name: live_stream_name
         })
       end
     end
