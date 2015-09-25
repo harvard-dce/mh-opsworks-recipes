@@ -1,0 +1,19 @@
+Event Details
+
+<#if catalogs['series']?has_content>
+Course: ${catalogs['series']['subject']!'offering missing'} - ${catalogs['series']['title']!' '}
+Instructor: ${catalogs['series']['contributor']!'instructor missing'}
+</#if>
+
+Title: ${catalogs['episode']['title']!'title missing'}
+Publication: ${catalogs['episode']['type']!'typeNumber missing'}
+Event Date: ${mediaPackage.date?datetime?iso_local}
+Producer: ${catalogs['episode']['contributor']!'producer missing'}
+
+<#if catalogs['series']?has_content>
+<#if (catalogs['series']['identifier'])?matches("[0-9]{11}")>
+Publication listing page: http://<%= @engage_hostname %>/engage/ui/index.html#/${catalogs['series']['identifier'][0..3]}/${catalogs['series']['identifier'][4..5]}/${catalogs['series']['identifier'][6..10]}
+<#else>
+Publication listing page (Non-DCE Series Identifier) : http://<%= @engage_hostname %>/engage/ui/publicationListing.shtml?seriesId=${catalogs['series']['identifier']}
+</#if>
+</#if>

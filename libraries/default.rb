@@ -225,6 +225,17 @@ module MhOpsworksRecipes
       files.fetch(node_profile.to_sym, [])
     end
 
+    def install_published_event_details_email(current_deploy_root, engage_hostname)
+      template %Q|#{current_deploy_root}/etc/email/publishedEventDetails| do
+        source 'publishedEventDetails.erb'
+        owner 'matterhorn'
+        group 'matterhorn'
+        variables({
+          engage_hostname: engage_hostname
+        })
+      end
+    end
+
     def configure_usertracking(current_deploy_root, user_tracking_authhost)
       template %Q|#{current_deploy_root}/etc/services/org.opencastproject.usertracking.impl.UserTrackingServiceImpl.properties| do
         source 'UserTrackingServiceImpl.properties.erb'
