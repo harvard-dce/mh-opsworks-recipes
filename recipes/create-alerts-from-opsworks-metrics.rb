@@ -44,5 +44,12 @@ ruby_block "add alarms" do
       Chef::Log.info command
       %x(#{command})
     end
+
+    if ::File.exists?('/etc/mdadm/mdadm.conf')
+      # Using software raid - add the raid sync metric alarm
+      command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{alarm_name_prefix}_raid_array_sync" --alarm-description "Software RAID arrays out of sync on #{alarm_name_prefix}" --metric-name RAIDArrayInSync --namespace AWS/OpsworksCustom --statistic Minimum --period 120 --threshold 1 --comparison-operator LessThanThreshold --dimensions Name=InstanceId,Value=#{opsworks_instance_id} --evaluation-periods 1 --alarm-actions "#{topic_arn}" --ok-actions "#{topic_arn}")
+      Chef::Log.info command
+      %x(#{command})
+    end
   end
 end
