@@ -80,6 +80,7 @@ deploy_revision matterhorn_repo_root do
 
     install_init_scripts(most_recent_deploy, matterhorn_repo_root)
     install_matterhorn_conf(most_recent_deploy, matterhorn_repo_root, 'engage')
+    install_matterhorn_log_management
     install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_engage_hostname)
     remove_felix_fileinstall(most_recent_deploy)
     install_smtp_config(most_recent_deploy)
