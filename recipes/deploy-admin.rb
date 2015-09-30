@@ -44,6 +44,8 @@ include_recipe "mh-opsworks-recipes::create-matterhorn-directories"
 
 allow_matterhorn_user_to_restart_daemon_via_sudo
 
+deploy_action = get_deploy_action
+
 deploy_revision matterhorn_repo_root do
   repo repo_url
   revision git_data.fetch(:revision, 'master')
@@ -58,7 +60,7 @@ deploy_revision matterhorn_repo_root do
   purge_before_symlink([])
   symlink_before_migrate({})
   keep_releases 10
-  action :deploy
+  action deploy_action
 
   before_symlink do
     most_recent_deploy = path_to_most_recent_deploy(new_resource)

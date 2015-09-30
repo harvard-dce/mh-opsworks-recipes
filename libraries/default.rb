@@ -17,6 +17,17 @@ module MhOpsworksRecipes
       end
     end
 
+    def get_deploy_action
+      valid_actions = %i|deploy force_deploy rollback|
+      requested_action = node.fetch(:deploy_action, :deploy).to_sym
+      Chef::Log.info "requested_action: #{requested_action}"
+      if valid_actions.include?(requested_action)
+        requested_action
+      else
+        :deploy
+      end
+    end
+
     def get_live_stream_name
       node.fetch(:live_stream_name, '#{caName}-#{flavor}.stream-#{resolution}_1_200@')
     end
