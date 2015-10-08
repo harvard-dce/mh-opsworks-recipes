@@ -274,6 +274,17 @@ module MhOpsworksRecipes
       end
     end
 
+    def install_otherpubs_service_config(current_deploy_root, auth_host)
+      template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.otherpubs.service.OtherpubsService.properties| do
+        source 'edu.harvard.dce.otherpubs.service.OtherpubsService.properties.erb'
+        owner 'matterhorn'
+        group 'matterhorn'
+        variables({
+          auth_host: auth_host
+        })
+      end
+    end
+
     def set_service_registry_dispatch_interval(current_deploy_root)
       template %Q|#{current_deploy_root}/etc/services/org.opencastproject.serviceregistry.impl.ServiceRegistryJpaImpl.properties| do
         source 'ServiceRegistryJpaImpl.properties.erb'

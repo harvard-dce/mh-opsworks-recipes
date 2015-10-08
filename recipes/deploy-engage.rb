@@ -26,7 +26,7 @@ live_streaming_url = node.fetch(
 )
 live_stream_name = get_live_stream_name
 
-auth_host = node.fetch(:auth_host, 'http://example.com')
+auth_host = node.fetch(:auth_host, 'example.com')
 auth_redirect_location = node.fetch(:auth_redirect_location, 'http://example.com/some/url')
 auth_activated = node.fetch(:auth_activated, 'true')
 
@@ -93,9 +93,9 @@ deploy_revision matterhorn_repo_root do
     install_published_event_details_email(most_recent_deploy, public_engage_hostname)
 
     # ENGAGE SPECIFIC
-    #TODO - this should probably be checked into the repo
     set_service_registry_dispatch_interval(most_recent_deploy)
     configure_usertracking(most_recent_deploy, user_tracking_authhost)
+    install_otherpubs_service_config(most_recent_deploy, auth_host)
     # /ENGAGE SPECIFIC
 
     template %Q|#{most_recent_deploy}/etc/config.properties| do

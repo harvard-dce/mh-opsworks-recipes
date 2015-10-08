@@ -1,0 +1,12 @@
+# Configuration for DCE Other Publications Service
+# example: edu.harvard.dce.otherpubs.dns="http://<example host>.dce.harvard.edu"
+# example of offering msg path: /2015/02/29999/29999-msg.html
+
+edu.harvard.dce.otherpubs.dns=http://<%= @auth_host %>
+edu.harvard.dce.otherpubs.system.message.path=/includes/sys-msg.json
+edu.harvard.dce.otherpubs.offering.message.path=/$year/$term/$crn/$crn-msg.json
+edu.harvard.dce.otherpubs.live.url.template=/classroom/publicationListing.json
+# edu.harvard.dce.otherpubs.offering.pub.url.template=/$year/$term/$crn/publicationListing.json
+edu.harvard.dce.otherpubs.offering.pub.url.template=/$year/$term/$crn/publicationListingJson.js
+edu.harvard.dce.otherpubs.js.prefix.remove=dceLegacyAppPubs(
+edu.harvard.dce.otherpubs.js.postfix.remove=);

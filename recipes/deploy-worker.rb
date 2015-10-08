@@ -26,7 +26,7 @@ live_streaming_url = node.fetch(
 )
 live_stream_name = get_live_stream_name
 
-auth_host = node.fetch(:auth_host, 'http://example.com')
+auth_host = node.fetch(:auth_host, 'example.com')
 auth_redirect_location = node.fetch(:auth_redirect_location, 'http://example.com/some/url')
 
 auth_activated = node.fetch(:auth_activated, 'true')
