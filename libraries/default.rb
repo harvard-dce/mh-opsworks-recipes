@@ -326,6 +326,9 @@ module MhOpsworksRecipes
 
     def install_init_scripts(current_deploy_root, matterhorn_repo_root)
       log_dir = node.fetch(:matterhorn_log_directory, '/var/log/matterhorn')
+      total_ram_in_meg = %x(grep MemTotal /proc/meminfo | sed -r 's/[^0-9]//g').chomp.to_i / 1024
+      # A third of the RAM, minimum of 4096M for the java daemon
+      java_xmx_ram = [total_ram_in_meg / 3, 4096].max
 
       template %Q|/etc/init.d/matterhorn| do
         source 'matterhorn-init-script.erb'
@@ -343,6 +346,7 @@ module MhOpsworksRecipes
         group 'matterhorn'
         mode '755'
         variables({
+          java_xmx_ram: java_xmx_ram,
           main_config_file: %Q|#{matterhorn_repo_root}/current/etc/matterhorn.conf|,
           matterhorn_root: matterhorn_repo_root + '/current',
           felix_config_dir: matterhorn_repo_root + '/current/etc',
