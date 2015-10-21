@@ -10,8 +10,6 @@ storage_info = get_storage_info
 shared_storage_root = get_shared_storage_root
 rest_auth_info = get_rest_auth_info
 admin_user_info = get_admin_user_info
-cloudfront_url = node[:cloudfront_url]
-using_ssl_for_engage = node[:ssl]
 
 capture_agent_query_url = node.fetch(
   :capture_agent_query_url, 'http://example.com'
@@ -23,9 +21,8 @@ capture_agent_monitor_url = node.fetch(
   :capture_agent_monitor_url, 'http://example.com/monitor_url'
 )
 
-live_streaming_url = node.fetch(
-  :live_streaming_url, 'rtmp://example.com/streaming_url'
-)
+cloudfront_url = get_cloudfront_url
+live_streaming_url = get_live_streaming_url
 live_stream_name = get_live_stream_name
 
 auth_host = node.fetch(:auth_host, 'example.com')
@@ -116,7 +113,6 @@ deploy_revision "matterhorn" do
         s3_distribution_bucket_name: s3_distribution_bucket_name,
         capture_agent_monitor_url: capture_agent_monitor_url,
         live_streaming_url: live_streaming_url,
-        using_ssl_for_engage: using_ssl_for_engage,
         job_maxload: nil,
       })
     end

@@ -14,7 +14,7 @@ include_recipe "mh-opsworks-recipes::update-package-repo"
   install_package(package)
 end
 
-bucket_name = node.fetch(:shared_asset_bucket_name, 'mh-opsworks-shared-assets')
+bucket_name = get_shared_asset_bucket_name
 ffmpeg_version = node.fetch(:ffmpeg_version, '2.7.2')
 ffmpeg_archive = %Q|ffmpeg-#{ffmpeg_version}-static.tgz|
 

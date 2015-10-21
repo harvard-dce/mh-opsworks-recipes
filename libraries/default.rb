@@ -1,3 +1,4 @@
+require 'uri'
 module MhOpsworksRecipes
   module RecipeHelpers
 
@@ -26,8 +27,32 @@ module MhOpsworksRecipes
       end
     end
 
+    def get_shared_asset_bucket_name
+      node.fetch(:shared_asset_bucket_name, 'mh-opsworks-shared-assets')
+    end
+
+    def get_cluster_seed_bucket_name
+      node.fetch(:cluster_seed_bucket_name, 'dce-deac-test-cluster-seeds')
+    end
+
+    def get_seed_file
+      node.fetch(:cluster_seed_file, 'cluster_seed.tgz')
+    end
+
+    def dev_or_testing_cluster?
+      ['development', 'test'].include?(node[:cluster_env])
+    end
+
+    def engage_node?
+      node['opsworks']['instance']['hostname'].match(/^engage/)
+    end
+
     def admin_node?
       node['opsworks']['instance']['hostname'].match(/^admin/)
+    end
+
+    def get_db_seed_file
+      node.fetch(:db_seed_file, 'dce-config/docs/scripts/ddl/mysql5.sql')
     end
 
     def get_deploy_action
@@ -54,6 +79,10 @@ module MhOpsworksRecipes
       node.fetch(:live_stream_name, '#{caName}-#{flavor}.stream-#{resolution}_1_200@')
     end
 
+    def get_live_streaming_url
+      node.fetch(:live_streaming_url, 'rtmp://example.com/streaming_url')
+    end
+
     def get_public_engage_hostname_on_engage
       return node[:public_engage_hostname] if node[:public_engage_hostname]
 
@@ -78,6 +107,30 @@ module MhOpsworksRecipes
       admin_hostname
     end
 
+    def get_base_media_download_domain(engage_hostname)
+      uri = URI(get_base_media_download_url(engage_hostname))
+      uri.host
+    end
+
+    def get_base_media_download_url(engage_hostname)
+      # engage_hostname is passed in because we don't have the engage instance
+      # chef attributes when we're deploying the engage instance. The chef
+      # attributes don't make it into the shared chef environment until the
+      # node comes online.
+
+      cloudfront_url = get_cloudfront_url
+      base_media_download_url = ''
+
+      if cloudfront_url && (! cloudfront_url.empty?)
+        Chef::Log.info "Cloudfront url: #{cloudfront_url}"
+        base_media_download_url = %Q|https://#{cloudfront_url}|
+      else
+        Chef::Log.info "s3 distribution: #{engage_hostname}"
+        base_media_download_url = %Q|https://#{get_s3_distribution_bucket_name}.s3.amazonaws.com|
+      end
+      base_media_download_url
+    end
+
     def get_public_engage_hostname
       return node[:public_engage_hostname] if node[:public_engage_hostname]
 
@@ -88,6 +141,20 @@ module MhOpsworksRecipes
         public_engage_hostname = engage_attributes[:public_dns_name]
       end
       public_engage_hostname
+    end
+
+    def get_public_engage_ip
+      (private_engage_hostname, engage_attributes) = node[:opsworks][:layers][:engage][:instances].first
+      engage_attributes[:ip]
+    end
+
+    def get_public_admin_ip
+      (private_admin_hostname, admin_attributes) = node[:opsworks][:layers][:admin][:instances].first
+      admin_attributes[:ip]
+    end
+
+    def get_cloudfront_url
+      node[:cloudfront_url]
     end
 
     def get_admin_user_info

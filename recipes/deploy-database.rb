@@ -5,7 +5,7 @@
 Chef::Provider::Deploy::Revision.send(:include, MhOpsworksRecipes::DeployHelpers)
 
 matterhorn_repo_root = node[:matterhorn_repo_root]
-db_seed_file = node.fetch(:db_seed_file, 'dce-config/docs/scripts/ddl/mysql5.sql')
+db_seed_file = get_db_seed_file
 db_info = node[:deploy][:matterhorn][:database]
 
 host = db_info[:host]

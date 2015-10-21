@@ -2,6 +2,11 @@
 
 ## TO BE RELEASED
 
+* Allow for cluster state to be turned into a "seed file" and applied to
+  another cluster.  See `README.cluster_seed_files.txt` in
+  https://github.com/harvard-dce/mh-opsworks/ for more information on how this
+  feature works. Does not require specific chef recipes be run for a
+  deployment.
 * Fix the squid3 proxy ACL to correct rules for s3 endpoints - the zadara docs
   were very, very wrong. This does not require an explicit chef recipe run.
 
