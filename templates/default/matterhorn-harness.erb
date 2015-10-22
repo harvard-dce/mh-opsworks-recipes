@@ -120,7 +120,7 @@ GRAPHICS="-Djava.awt.headless=true -Dawt.toolkit=sun.awt.HeadlessToolkit"
 DISABLE_PHONEHOME="-Dnet.sf.ehcache.skipUpdateCheck=true"
 DISABLE_PHONEHOME="${DISABLE_PHONEHOME} -Dorg.terracotta.quartz.skipUpdateCheck=true"
 
-JAVA="-Xms2048m -Xmx=<%= @java_xmx_ram %>m -XX:MaxPermSize=1024m"
+JAVA="-Xms2048m -Xmx<%= @java_xmx_ram %>m -XX:MaxPermSize=1024m"
 [ "$1" == '--daemon' ] && GOSH="-Dgosh.args='--noshutdown -c noop=true'"
 
 if $DEBUG
