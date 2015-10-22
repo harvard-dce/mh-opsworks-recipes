@@ -326,9 +326,14 @@ module MhOpsworksRecipes
 
     def install_init_scripts(current_deploy_root, matterhorn_repo_root)
       log_dir = node.fetch(:matterhorn_log_directory, '/var/log/matterhorn')
-      total_ram_in_meg = %x(grep MemTotal /proc/meminfo | sed -r 's/[^0-9]//g').chomp.to_i / 1024
-      # A third of the RAM, minimum of 4096M for the java daemon
-      java_xmx_ram = [total_ram_in_meg / 3, 4096].max
+
+      auto_configure_java_xmx_memory = node.fetch(:auto_configure_java_xmx_memory, false)
+      java_xmx_ram = 4096
+      if auto_configure_java_xmx_memory
+        total_ram_in_meg = %x(grep MemTotal /proc/meminfo | sed -r 's/[^0-9]//g').chomp.to_i / 1024
+        # A third of the RAM, minimum of 4096M for the java daemon
+        java_xmx_ram = [total_ram_in_meg / 3, 4096].max
+      end
 
       template %Q|/etc/init.d/matterhorn| do
         source 'matterhorn-init-script.erb'
