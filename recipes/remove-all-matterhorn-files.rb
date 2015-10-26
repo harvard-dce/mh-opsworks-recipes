@@ -22,6 +22,4 @@ if testing_cluster?
       ignore_failure true
     end
   end
-
-  include_recipe 'mh-opsworks-recipes::create-matterhorn-directories'
 end
