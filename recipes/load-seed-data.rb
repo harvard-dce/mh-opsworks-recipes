@@ -23,6 +23,7 @@ if testing_cluster?
     execute 'load seed database and create seed files' do
       user "root"
       command %Q|/usr/local/bin/load-seed-data.sh -x -p "#{shared_storage_root}" -b "#{bucket_name}" -s "#{seed_file}"|
+      timeout 600
     end
   end
 end
