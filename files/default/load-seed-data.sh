@@ -61,6 +61,7 @@ fi
 
 cd $shared_files_path
 
+rm -Rf *
 aws s3 cp s3://"$bucket_name"/"$seed_file" .
 tar xvfz "$seed_file"
 rm "$seed_file"
