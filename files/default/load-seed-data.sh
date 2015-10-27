@@ -59,14 +59,12 @@ if [ -z "$seed_file" ]; then
   exit 1
 fi
 
-# TODO
-
 cd $shared_files_path
 
 aws s3 cp s3://"$bucket_name"/"$seed_file" .
 tar xvfz "$seed_file"
 rm "$seed_file"
 
-# TODO
-# Load database file
+/usr/bin/mysql matterhorn < "$shared_files_path/mysql_seed_backup/matterhorn.mysql"
 
+# TODO - modify hosts in the database via some version of the provision script from nmaekawa
