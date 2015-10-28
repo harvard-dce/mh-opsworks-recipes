@@ -67,5 +67,3 @@ tar xvfz "$seed_file"
 rm "$seed_file"
 
 /usr/bin/mysql matterhorn < "$shared_files_path/mysql_seed_backup/matterhorn.mysql"
-
-# TODO - modify hosts in the database via some version of the provision script from nmaekawa
