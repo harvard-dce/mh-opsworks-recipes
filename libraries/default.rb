@@ -78,6 +78,10 @@ module MhOpsworksRecipes
       node.fetch(:live_stream_name, '#{caName}-#{flavor}.stream-#{resolution}_1_200@')
     end
 
+    def get_live_streaming_url
+      node.fetch(:live_streaming_url, 'rtmp://example.com/streaming_url')
+    end
+
     def get_public_engage_hostname_on_engage
       return node[:public_engage_hostname] if node[:public_engage_hostname]
 
@@ -112,6 +116,20 @@ module MhOpsworksRecipes
         public_engage_hostname = engage_attributes[:public_dns_name]
       end
       public_engage_hostname
+    end
+
+    def get_public_engage_ip
+      (private_engage_hostname, engage_attributes) = node[:opsworks][:layers][:engage][:instances].first
+      engage_attributes[:ip]
+    end
+
+    def get_public_admin_ip
+      (private_admin_hostname, admin_attributes) = node[:opsworks][:layers][:admin][:instances].first
+      admin_attributes[:ip]
+    end
+
+    def get_cloudfront_url
+      node[:cloudfront_url]
     end
 
     def get_admin_user_info
