@@ -119,7 +119,7 @@ for statement in "${mh_episode_engage_ip_http_statement}" "${mh_episode_engage_i
 do
     echo "EXECUTING STATEMENT: ${statement}"
     echo
-    mysql -u ${MYSQL_MH_USER} -p${MYSQL_MH_PASSWD} -e "${statement}" matterhorn
+    mysql -e "${statement}" matterhorn
     echo
 done
 
