@@ -1,6 +1,7 @@
 server {
   listen 80 default_server;
   listen [::]:80 default_server ipv6only=on;
+  directio 1M;
 
   root /usr/share/nginx/html;
   index index.html index.htm;
@@ -30,6 +31,7 @@ server {
 server {
   listen 443 ssl;
   listen [::]:443 ipv6only=on ssl;
+  directio 1M;
 
   root /usr/share/nginx/html;
   index index.html index.htm;
