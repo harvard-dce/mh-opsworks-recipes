@@ -73,7 +73,9 @@ org.opencastproject.security.demo.loadusers=true
 # ${org.opencastproject.server.url} can not be used, because the streaming server does not use the HTTP protocol.
 # Streaming is not included in the default workflow, since the Red5 streaming server is a 3rd party component that
 # requires separate installation.
-org.opencastproject.streaming.url=rtmp://<%= @engage_hostname %>/matterhorn-engage
+# 
+# NO LONGER USED
+# org.opencastproject.streaming.url=rtmp://some-old-engage-server-maybe/matterhorn-engage
 
 # The directory where the matterhorn streaming app for Red5 stores the streams
 org.opencastproject.streaming.directory=${org.opencastproject.shared_storage.dir}/streams
@@ -84,6 +86,8 @@ org.opencastproject.download.directory=${org.opencastproject.shared_storage.dir}
 # The base URL for media downloads.
 <% if @cloudfront_url %>
 org.opencastproject.download.url=https://<%= @cloudfront_url %>
+<% elsif @using_asset_server %>
+org.opencastproject.download.url=http://<%= @asset_server_hostname %>/static
 <% else %>
 org.opencastproject.download.url=<%= (@using_ssl_for_engage) ? 'https://' : 'http://' %><%= @engage_hostname %>/static
 <% end %>
