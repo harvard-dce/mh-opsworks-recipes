@@ -7,7 +7,7 @@ ruby_block 'remove alarms for instance' do
   block do
     require 'json'
 
-    opsworks_instance_id = node[:opsworks][:instance][:id]
+    aws_instance_id = node[:opsworks][:instance][:aws_instance_id]
     region = 'us-east-1'
 
     all_alarms = ::JSON.parse(
@@ -17,7 +17,7 @@ ruby_block 'remove alarms for instance' do
     # Probably not necessary, but this ensures we don't remove alarms accidentally.
     alarms_for_instance = all_alarms['MetricAlarms'].find_all do |alarm|
       alarm['Dimensions'].find do |dimension|
-        dimension['Name'] == 'InstanceId' && dimension['Value'] == opsworks_instance_id
+        dimension['Name'] == 'InstanceId' && dimension['Value'] == aws_instance_id
       end
     end
 

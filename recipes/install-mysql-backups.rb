@@ -6,7 +6,7 @@ include_recipe "awscli::default"
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
 db_info = node[:deploy][:matterhorn][:database]
-opsworks_instance_id = node[:opsworks][:instance][:id]
+aws_instance_id = node[:opsworks][:instance][:aws_instance_id]
 
 storage_info = node.fetch(
   :storage, {
@@ -51,18 +51,18 @@ end
 cron_d 'mysql_backup_metric' do
   user 'root'
   minute "*/2"
-  command %Q(/usr/local/bin/mysql-backup-metric.sh "#{export_root}/backups/mysql" "#{opsworks_instance_id}" 2>&1 | logger -t info)
+  command %Q(/usr/local/bin/mysql-backup-metric.sh "#{export_root}/backups/mysql" "#{aws_instance_id}" 2>&1 | logger -t info)
   path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 end
 
 ruby_block "Fire alarm when the mysql database dump is not fresh" do
   block do
-    opsworks_instance_id = node[:opsworks][:instance][:id]
+    aws_instance_id = node[:opsworks][:instance][:aws_instance_id]
     region = 'us-east-1'
     # This is idempotent according to the aws docs
     topic_arn = %x(aws sns create-topic --name "#{topic_name}" --region #{region} --output text).chomp
 
-    command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{alarm_name_prefix}_mysql_backup_freshness" --alarm-description "MySQL backups are fresh" --metric-name MySQLDatabaseBackupIsFresh --namespace AWS/OpsworksCustom --statistic Minimum --period 60 --threshold 1 --comparison-operator LessThanThreshold --dimensions Name=InstanceId,Value=#{opsworks_instance_id} --evaluation-periods 1 --alarm-actions "#{topic_arn}" --ok-actions "#{topic_arn}")
+    command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{alarm_name_prefix}_mysql_backup_freshness" --alarm-description "MySQL backups are fresh" --metric-name MySQLDatabaseBackupIsFresh --namespace AWS/OpsworksCustom --statistic Minimum --period 60 --threshold 1 --comparison-operator LessThanThreshold --dimensions Name=InstanceId,Value=#{aws_instance_id} --evaluation-periods 1 --alarm-actions "#{topic_arn}" --ok-actions "#{topic_arn}")
     Chef::Log.info command
     %x(#{command})
   end

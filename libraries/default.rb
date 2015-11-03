@@ -1,5 +1,15 @@
 module MhOpsworksRecipes
   module RecipeHelpers
+
+    def get_memory_limit
+      # Default opsworks tuning gives mysql most of the instance memory, as it should
+      if database_node?
+        95
+      else
+        80
+      end
+    end
+
     def install_package(name)
       #
       # Yes, I know about the "package" resource, but for some reason using a timeout
@@ -15,6 +25,10 @@ module MhOpsworksRecipes
         retry_delay 15
         timeout 180
       end
+    end
+
+    def database_node?
+      node['opsworks']['instance']['hostname'].match(/^db-master/)
     end
 
     def get_deploy_action

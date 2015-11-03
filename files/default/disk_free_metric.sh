@@ -15,5 +15,5 @@ for partition_mount in $local_file_systems; do
     metric_name="SpaceFreeOn$metric_suffix"
   fi
   percent_free=$(expr 100 - $(df -hlP "$partition_mount" | tail -1 | awk '{ print $5 }' | tr -d '/%//'))
-  aws cloudwatch put-metric-data --region="$region" --namespace="$namespace" --dimensions="InstanceId=$instance_id" --metric-name="$metric_name" --value="$percent_free"
+  aws cloudwatch put-metric-data --region="$region" --namespace="$namespace" --dimensions="InstanceId=$instance_id" --metric-name="$metric_name" --value="$percent_free" --unit Percent
 done
