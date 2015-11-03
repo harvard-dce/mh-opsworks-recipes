@@ -57,7 +57,7 @@ module MhOpsworksRecipes
     end
 
     def using_asset_server?
-      node[:opsworks][:layers][:asset_server]
+      node[:opsworks][:layers][:asset_server] && node[:opsworks][:layers][:asset_server][:instances].any?
     end
 
     def get_public_asset_server_hostname
