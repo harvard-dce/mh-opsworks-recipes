@@ -2,22 +2,9 @@
 # Recipe:: install-custom-metrics
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
-include_recipe "awscli::default"
+include_recipe "mh-opsworks-recipes::create-metrics-dependencies"
 
 aws_instance_id = node[:opsworks][:instance][:aws_instance_id]
-
-user "custom_metrics" do
-  comment 'The custom metrics reporting user'
-  system true
-  shell '/bin/false'
-end
-
-cookbook_file "custom_metrics_shared.sh" do
-  path "/usr/local/bin/custom_metrics_shared.sh"
-  owner "root"
-  group "root"
-  mode "755"
-end
 
 cookbook_file "disk_free_metric.sh" do
   path "/usr/local/bin/disk_free_metric.sh"
