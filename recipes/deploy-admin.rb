@@ -24,6 +24,8 @@ capture_agent_monitor_url = node.fetch(
 )
 
 live_streaming_url = get_live_streaming_url
+live_stream_name = get_live_stream_name
+
 auth_host = node.fetch(:auth_host, 'example.com')
 auth_redirect_location = node.fetch(:auth_redirect_location, 'http://example.com/some/url')
 auth_activated = node.fetch(:auth_activated, 'true')
