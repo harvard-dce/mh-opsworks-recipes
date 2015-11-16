@@ -10,8 +10,6 @@ storage_info = get_storage_info
 shared_storage_root = get_shared_storage_root
 rest_auth_info = get_rest_auth_info
 admin_user_info = get_admin_user_info
-cloudfront_url = get_cloudfront_url
-using_ssl_for_engage = node[:ssl]
 
 capture_agent_query_url = node.fetch(
   :capture_agent_query_url, 'http://example.com'
