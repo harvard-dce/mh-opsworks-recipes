@@ -8,7 +8,7 @@ shared_storage_root = get_shared_storage_root
 source_engage_ip = get_public_engage_ip
 source_engage_host = get_public_engage_hostname
 source_admin_ip = get_public_admin_ip
-source_cloudfront_domain = get_cloudfront_url
+source_cloudfront_domain = get_base_media_download_url
 source_wowza_edge_url = get_live_streaming_url
 
 if testing_cluster?
