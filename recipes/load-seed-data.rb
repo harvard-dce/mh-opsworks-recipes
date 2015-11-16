@@ -12,7 +12,7 @@ bucket_name = get_shared_asset_bucket_name
 engage_ip = get_public_engage_ip
 engage_host = get_public_engage_hostname
 admin_ip = get_public_admin_ip
-cloudfront_domain = get_base_media_download_url
+cloudfront_domain = get_base_media_download_url(engage_host)
 wowza_edge_url = get_live_streaming_url
 
 if testing_cluster?
