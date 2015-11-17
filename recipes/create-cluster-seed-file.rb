@@ -21,9 +21,12 @@ if testing_cluster?
   end
 
   if do_it && database_node?
+    run_command = %Q|/usr/local/bin/create-cluster-seed-file.sh -x -p "#{shared_storage_root}" --source_engage_ip "#{source_engage_ip}" --source_engage_host "#{source_engage_host}" --source_admin_ip "#{source_admin_ip}" --source_cloudfront_domain="#{source_cloudfront_domain}" --source_wowza_edge_url="#{source_wowza_edge_url}"|
+
+    Chef::Log.info("Command: #{run_command}")
     execute 'create cluster seed file' do
       user "root"
-      command %Q|/usr/local/bin/create-cluster-seed-file.sh -x -p "#{shared_storage_root}" --source_engage_ip "#{source_engage_ip}" --source_engage_host "#{source_engage_host}" --source_admin_ip "#{source_admin_ip}" --source_cloudfront_domain="#{source_cloudfront_domain}" --source_wowza_edge_url="#{source_wowza_edge_url}"|
+      command run_command
     end
   end
 end
