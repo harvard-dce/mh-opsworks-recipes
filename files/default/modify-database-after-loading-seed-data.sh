@@ -85,27 +85,17 @@ TARGET_ADMIN_IP="$admin_ip"
 TARGET_CLOUDFRONT_DOMAIN="$cloudfront_domain"
 TARGET_WOWZA_EDGE_URL="$wowza_edge_url"
 
-mh_episode_engage_ip_http_statement="UPDATE mh_episode_episode SET mediapackage_xml = REPLACE( mediapackage_xml, 'http://${SOURCE_ENGAGE_IP}', 'https://${TARGET_ENGAGE_HOST}' ) WHERE mediapackage_xml LIKE ('%http://${SOURCE_ENGAGE_IP}%');"
+mh_episode_engage_ip_statement="UPDATE mh_episode_episode SET mediapackage_xml = REPLACE( mediapackage_xml, '${SOURCE_ENGAGE_IP}', '${TARGET_ENGAGE_HOST}' ) WHERE mediapackage_xml LIKE ('%${SOURCE_ENGAGE_IP}%');"
 
-mh_episode_engage_ip_https_statement="UPDATE mh_episode_episode SET mediapackage_xml = REPLACE( mediapackage_xml, 'https://${SOURCE_ENGAGE_IP}', 'https://${TARGET_ENGAGE_HOST}' ) WHERE mediapackage_xml LIKE ('%https://${SOURCE_ENGAGE_IP}%');"
+mh_episode_engage_host_statement="UPDATE mh_episode_episode SET mediapackage_xml = REPLACE( mediapackage_xml, '${SOURCE_ENGAGE_HOST}', '${TARGET_ENGAGE_HOST}') WHERE mediapackage_xml LIKE ('%${SOURCE_ENGAGE_HOST}%');"
 
-mh_episode_engage_host_http_statement="UPDATE mh_episode_episode SET mediapackage_xml = REPLACE( mediapackage_xml, 'http://${SOURCE_ENGAGE_HOST}', 'https://${TARGET_ENGAGE_HOST}') WHERE mediapackage_xml LIKE ('%http://${SOURCE_ENGAGE_HOST}%');"
+mh_job_admin_ip_statement="UPDATE mh_job SET payload = REPLACE( payload, '${SOURCE_ADMIN_IP}', '${TARGET_ADMIN_IP}') WHERE operation = 'START_WORKFLOW' and payload like '%${SOURCE_ADMIN_IP}%';"
 
-mh_episode_engage_ip_https_statement="UPDATE mh_episode_episode SET mediapackage_xml = REPLACE( mediapackage_xml, 'https://${SOURCE_ENGAGE_HOST}', 'https://${TARGET_ENGAGE_HOST}' ) WHERE mediapackage_xml LIKE ('%https://${SOURCE_ENGAGE_HOST}%');"
+mh_job_engage_ip_statement="UPDATE mh_job SET payload = REPLACE( payload, '${SOURCE_ENGAGE_IP}', '${TARGET_ENGAGE_HOST}') WHERE operation = 'START_WORKFLOW' and payload like '%${SOURCE_ENGAGE_IP}%';"
 
-mh_job_admin_ip_statement="UPDATE mh_job SET payload = REPLACE( payload, 'http://${SOURCE_ADMIN_IP}', 'http://${TARGET_ADMIN_IP}') WHERE operation = 'START_WORKFLOW' and payload like '%http://${SOURCE_ADMIN_IP}%';"
+mh_job_engage_host_statement="UPDATE mh_job SET payload = REPLACE( payload, '${SOURCE_ENGAGE_HOST}', '${TARGET_ENGAGE_HOST}') WHERE operation = 'START_WORKFLOW' and payload like '%${SOURCE_ENGAGE_HOST}%';"
 
-mh_job_engage_ip_http_statement="UPDATE mh_job SET payload = REPLACE( payload, 'http://${SOURCE_ENGAGE_IP}', 'https://${TARGET_ENGAGE_HOST}') WHERE operation = 'START_WORKFLOW' and payload like '%http://${SOURCE_ENGAGE_IP}%';"
-
-mh_job_engage_ip_https_statement="UPDATE mh_job SET payload = REPLACE( payload, 'https://${SOURCE_ENGAGE_IP}', 'https://${TARGET_ENGAGE_HOST}') WHERE operation = 'START_WORKFLOW' and payload like '%https://${SOURCE_ENGAGE_IP}%';"
-
-mh_job_engage_host_http_statement="UPDATE mh_job SET payload = REPLACE( payload, 'http://${SOURCE_ENGAGE_HOST}', 'https://${TARGET_ENGAGE_HOST}') WHERE operation = 'START_WORKFLOW' and payload like '%http://${SOURCE_ENGAGE_HOST}%';"
-
-mh_job_engage_ip_https_statement="UPDATE mh_job SET payload = REPLACE( payload, 'https://${SOURCE_ENGAGE_HOST}', 'https://${TARGET_ENGAGE_HOST}') WHERE operation = 'START_WORKFLOW' and payload like '%https://${SOURCE_ENGAGE_HOST}%';"
-
-################################################################################
-# ATT: this assume that all references to engage are already https cloudfront
-mh_search_cloudfront_statement="UPDATE mh_search SET mediapackage_xml = REPLACE( mediapackage_xml, 'https://${SOURCE_CLOUDFRONT_DOMAIN}', 'https://${TARGET_CLOUDFRONT_DOMAIN}') WHERE mediapackage_xml like '%https://${SOURCE_CLOUDFRONT_DOMAIN}%';"
+mh_search_cloudfront_statement="UPDATE mh_search SET mediapackage_xml = REPLACE( mediapackage_xml, '${SOURCE_CLOUDFRONT_DOMAIN}', '${TARGET_CLOUDFRONT_DOMAIN}') WHERE mediapackage_xml like '%${SOURCE_CLOUDFRONT_DOMAIN}%';"
 
 mh_search_wowza_edge_url_statement="UPDATE mh_search SET mediapackage_xml = REPLACE( mediapackage_xml, '${SOURCE_WOWZA_EDGE_URL}', '${TARGET_WOWZA_EDGE_URL}') WHERE mediapackage_xml like '%${SOURCE_WOWZA_EDGE_URL}%';"
 
@@ -115,7 +105,7 @@ mh_host_registration_deactivate_statement="UPDATE mh_host_registration SET activ
 mh_host_registration_offline_statement="UPDATE mh_host_registration SET online = 0;"
 mh_host_registration_maintenance_statement="UPDATE mh_host_registration SET maintenance = 1;"
 
-for statement in "${mh_episode_engage_ip_http_statement}" "${mh_episode_engage_ip_https_statement}" "${mh_episode_engage_host_http_statement}" "${mh_episode_engage_host_https_statement}" "${mh_job_admin_ip_statement}" "${mh_job_engage_ip_http_statement}" "${mh_job_engage_ip_https_statement}" "${mh_job_engage_host_http_statement}" "${mh_job_engage_host_https_statement}" "${mh_search_cloudfront_statement}" "${mh_search_wowza_edge_url_statement}" "${mh_service_registration_deactivate_statement}" "${mh_host_registration_deactivate_statement}" "${mh_service_registration_offline_statement}" "${mh_host_registration_offline_statement}" "${mh_host_registration_maintenance_statement}"
+for statement in "${mh_episode_engage_ip_statement}" "${mh_episode_engage_host_statement}" "${mh_job_admin_ip_statement}" "${mh_job_engage_ip_statement}" "${mh_job_engage_host_statement}" "${mh_search_cloudfront_statement}" "${mh_search_wowza_edge_url_statement}" "${mh_service_registration_deactivate_statement}" "${mh_host_registration_deactivate_statement}" "${mh_service_registration_offline_statement}" "${mh_host_registration_offline_statement}" "${mh_host_registration_maintenance_statement}"
 do
     echo "EXECUTING STATEMENT: ${statement}"
     echo
