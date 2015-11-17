@@ -10,6 +10,7 @@ source_engage_host = get_public_engage_hostname
 source_admin_ip = get_public_admin_ip
 source_cloudfront_domain = get_base_media_download_url(source_engage_host)
 source_wowza_edge_url = get_live_streaming_url
+Chef::Log.info("From create-cluster-seed-file: source_cloudfront_domain: #{source_cloudfront_domain}")
 
 if testing_cluster?
   cookbook_file 'create-cluster-seed-file.sh' do
