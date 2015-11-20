@@ -40,7 +40,7 @@ private_hostname = node[:opsworks][:instance][:private_dns_name]
 using_asset_server = using_asset_server?
 asset_server_hostname = get_public_asset_server_hostname
 
-database_connection = node[:deploy][:matterhorn][:database]
+database_connection = get_database_connection
 
 repo_url = git_repo_url(git_data)
 

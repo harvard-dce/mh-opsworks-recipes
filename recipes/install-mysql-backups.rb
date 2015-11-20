@@ -5,7 +5,6 @@ include_recipe "awscli::default"
 ::Chef::Resource::RubyBlock.send(:include, MhOpsworksRecipes::RecipeHelpers)
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
-db_info = node[:deploy][:matterhorn][:database]
 aws_instance_id = node[:opsworks][:instance][:aws_instance_id]
 
 storage_info = node.fetch(

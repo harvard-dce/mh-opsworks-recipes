@@ -1,6 +1,11 @@
 module MhOpsworksRecipes
   module RecipeHelpers
 
+    def get_database_connection
+      (private_database_hostname, database_attributes) = node[:opsworks][:layers]['db-master'][:instances].first
+      node[:deploy][:matterhorn][:database].merge(host: private_database_hostname)
+    end
+
     def get_memory_limit
       # Default opsworks tuning gives mysql most of the instance memory, as it should
       if database_node?

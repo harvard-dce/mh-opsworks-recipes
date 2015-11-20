@@ -47,7 +47,7 @@ public_admin_hostname = get_public_admin_hostname
 
 hostname = node[:opsworks][:instance][:hostname]
 
-database_connection = node[:deploy][:matterhorn][:database]
+database_connection = get_database_connection
 
 repo_url = git_repo_url(git_data)
 
