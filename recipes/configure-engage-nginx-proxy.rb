@@ -36,7 +36,7 @@ cert_content = ''
 # Store the certificate and key
 if ! ssl_info[:certificate].empty? && ! ssl_info[:key].empty?
   # Concatenate the cert and the chain cert
-  cert_content = %Q|#{ssl_info[:certificate]}#{ssl_info[:chain]}|
+  cert_content = %Q|#{ssl_info[:certificate]}\n#{ssl_info[:chain]}\n|
   file "/etc/nginx/ssl/certificate.cert" do
     owner 'root'
     group 'root'
@@ -47,7 +47,7 @@ if ! ssl_info[:certificate].empty? && ! ssl_info[:key].empty?
   file "/etc/nginx/ssl/certificate.key" do
     owner 'root'
     group 'root'
-    content ssl_info[:key]
+    content ssl_info[:key] + "\n"
     mode '0600'
   end
 end
