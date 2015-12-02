@@ -354,15 +354,25 @@ module MhOpsworksRecipes
       end
     end
 
+    def xmx_ram_ratio_for_this_node
+      if node['opsworks']['instance']['hostname'].match(/^admin/)
+        # 80% of the RAM for matterhorn
+        0.8
+      else
+        0.25
+      end
+    end
+
     def install_init_scripts(current_deploy_root, matterhorn_repo_root)
       log_dir = node.fetch(:matterhorn_log_directory, '/var/log/matterhorn')
 
-      auto_configure_java_xmx_memory = node.fetch(:auto_configure_java_xmx_memory, false)
+      auto_configure_java_xmx_memory = node.fetch(:auto_configure_java_xmx_memory, true)
       java_xmx_ram = 4096
       if auto_configure_java_xmx_memory
         total_ram_in_meg = %x(grep MemTotal /proc/meminfo | sed -r 's/[^0-9]//g').chomp.to_i / 1024
-        # A third of the RAM, minimum of 4096M for the java daemon
-        java_xmx_ram = [total_ram_in_meg / 3, 4096].max
+        # configure Xmx value for matterhorn as a percent of the total ram for this
+        # node, with a minimum of 4096
+        java_xmx_ram = [(total_ram_in_meg * xmx_ram_ratio_for_this_node).to_i, 4096].max
       end
 
       template %Q|/etc/init.d/matterhorn| do
