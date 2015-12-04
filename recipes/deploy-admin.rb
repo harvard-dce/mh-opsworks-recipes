@@ -88,6 +88,7 @@ deploy_revision matterhorn_repo_root do
     )
     install_live_streaming_service_config(most_recent_deploy, live_stream_name)
     install_published_event_details_email(most_recent_deploy, public_engage_hostname)
+    initialize_database(most_recent_deploy)
 
     template %Q|#{most_recent_deploy}/etc/config.properties| do
       source 'config.properties.erb'
