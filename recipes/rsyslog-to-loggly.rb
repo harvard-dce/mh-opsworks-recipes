@@ -12,7 +12,7 @@ loggly_url = loggly_info[:url]
 layer = instance_attributes.fetch(:layers, []).first
 hostname = instance_attributes[:hostname]
 local_stack_and_hostname = stack_and_hostname
-local_short_stack_name = short_stack_name
+local_stack_shortname = stack_shortname
 
 
 if loggly_token != '' && loggly_url != ''
@@ -47,7 +47,7 @@ if loggly_token != '' && loggly_url != ''
       layer: layer || 'unassigned',
       hostname: hostname,
       stack_and_hostname: local_stack_and_hostname,
-      short_stack_name: local_short_stack_name
+      stack_shortname: local_stack_shortname
     })
   end
   execute 'service rsyslog restart'

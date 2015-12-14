@@ -2,18 +2,11 @@ module MhOpsworksRecipes
   module RecipeHelpers
 
     def get_database_connection
-      # (private_database_hostname, database_attributes) = node[:opsworks][:layers]['db-master'][:instances].first
-      # node[:deploy][:matterhorn][:database].merge(host: private_database_hostname)
       node[:deploy][:matterhorn][:database]
     end
 
     def get_memory_limit
-      # Default opsworks tuning gives mysql most of the instance memory, as it should
-      if database_node?
-        95
-      else
-        80
-      end
+      80
     end
 
     def install_package(name)
@@ -33,8 +26,8 @@ module MhOpsworksRecipes
       end
     end
 
-    def database_node?
-      node['opsworks']['instance']['hostname'].match(/^db-master/)
+    def admin_node?
+      node['opsworks']['instance']['hostname'].match(/^admin/)
     end
 
     def get_deploy_action
@@ -113,13 +106,17 @@ module MhOpsworksRecipes
       stack_name.downcase.gsub(/[^a-z\d\-_]/,'_')
     end
 
+    def rds_name
+      %Q|#{stack_shortname}-database|
+    end
+
     def alarm_name_prefix
       hostname = node[:opsworks][:instance][:hostname]
       alarm_name_prefix = %Q|#{topic_name}_#{hostname}|
     end
 
-    def short_stack_name
-      topic_name
+    def stack_shortname
+      stack_name = node[:opsworks][:stack][:name].gsub(/[^a-z\d\-]/,'-')
     end
 
     def stack_and_hostname

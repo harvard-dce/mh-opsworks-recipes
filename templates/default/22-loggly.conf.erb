@@ -15,7 +15,7 @@ $ActionSendStreamDriverMode 1
 $ActionSendStreamDriverAuthMode x509/name
 $ActionSendStreamDriverPermittedPeer *.loggly.com
 
-$template LogglyFormat,"<%%pri%>%protocol-version% %timestamp:::date-rfc3339% %HOSTNAME% %app-name% %procid% %msgid% [<%= @loggly_token %>@41058 tag=<%= @short_stack_name %> tag=<%= @layer %> tag=<%= @hostname %> tag=<%= @stack_and_hostname %>] %msg%\n"
+$template LogglyFormat,"<%%pri%>%protocol-version% %timestamp:::date-rfc3339% %HOSTNAME% %app-name% %procid% %msgid% [<%= @loggly_token %>@41058 tag=<%= @stack_shortname %> tag=<%= @layer %> tag=<%= @hostname %> tag=<%= @stack_and_hostname %>] %msg%\n"
 
 # Send messages to Loggly over TCP using the template
 :app-name, isequal, "matterhorn" @@<%= @loggly_url %>;LogglyFormat

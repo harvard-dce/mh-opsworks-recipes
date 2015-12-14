@@ -73,11 +73,11 @@ cron_d 'raid_metrics' do
   only_if { ::File.exists?('/etc/mdadm/mdadm.conf') }
 end
 
-cron_d 'mysql_available_metrics' do
-  user 'root'
-  minute '*'
-  command %Q(/usr/local/bin/mysql_available_metric.sh "#{aws_instance_id}" 2>&1 | logger -t info)
-  path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
-  # Only if mysql is installed on this node
-  only_if '/usr/bin/dpkg -l mysql-server &> /dev/null'
+if admin_node?
+  cron_d 'mysql_available_metrics' do
+    user 'root'
+    minute '*'
+    command %Q(/usr/local/bin/mysql_available_metric.sh "#{aws_instance_id}" 2>&1 | logger -t info)
+    path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  end
 end

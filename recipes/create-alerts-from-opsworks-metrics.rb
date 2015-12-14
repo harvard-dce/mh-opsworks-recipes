@@ -53,8 +53,8 @@ ruby_block "add alarms" do
       %x(#{command})
     end
 
-    if system('/usr/bin/dpkg -l mysql-server')
-      # Mysql is installed. Create availability metric alarm on this instance.
+    if admin_node?
+      # Create a mysql availability ping
       command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{alarm_name_prefix}_mysql_availablity" --alarm-description "MySQL is unavailable #{alarm_name_prefix}" --metric-name MySQLServerAvailable --namespace AWS/OpsworksCustom --statistic Minimum --period 120 --threshold 1 --comparison-operator LessThanThreshold --dimensions Name=InstanceId,Value=#{aws_instance_id} --evaluation-periods 1 --alarm-actions "#{topic_arn}" --ok-actions "#{topic_arn}")
       Chef::Log.info command
       %x(#{command})
