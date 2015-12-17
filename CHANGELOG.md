@@ -2,6 +2,10 @@
 
 ## TO BE RELEASED
 
+* Install the newrelic agent when '{"newrelic": {"key": "your key"}' is
+  included in the stack's `custom_json`. See the main mh-opsworks README for
+  info.
+
 ## 1.1.0 - 1/28/2016
 
 * All clusters should now include a `private_assets_bucket_name` in their

@@ -438,7 +438,8 @@ module MhOpsworksRecipes
           main_config_file: %Q|#{matterhorn_repo_root}/current/etc/matterhorn.conf|,
           matterhorn_root: matterhorn_repo_root + '/current',
           felix_config_dir: matterhorn_repo_root + '/current/etc',
-          matterhorn_log_directory: log_dir
+          matterhorn_log_directory: log_dir,
+          enable_newrelic: enable_newrelic?
         })
       end
     end
@@ -482,6 +483,31 @@ module MhOpsworksRecipes
         variables({
           default_email_sender: default_email_sender,
         })
+      end
+    end
+
+    def enable_newrelic?
+      node[:newrelic]
+    end
+
+    def configure_newrelic(current_deploy_root, node_name)
+      if enable_newrelic?
+        log_dir = node.fetch(:matterhorn_log_directory, '/var/log/matterhorn')
+
+        newrelic_att = node.fetch(:newrelic, {})
+        newrelic_key = newrelic_att[:key]
+        environment_name = node[:opsworks][:stack][:name]
+        template %Q|#{current_deploy_root}/etc/newrelic.yml| do
+          source 'newrelic.yml.erb'
+          owner 'matterhorn'
+          group 'matterhorn'
+          variables({
+            newrelic_key: newrelic_key,
+            node_name: node_name,
+            environment_name: environment_name,
+            log_dir: log_dir
+          })
+        end
       end
     end
 
