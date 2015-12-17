@@ -17,6 +17,10 @@ server {
   client_max_body_size 102400m;
   gzip on;
 
+  add_header 'Access-Control-Allow-Origin' '*';
+  add_header 'Access-Control-Allow-Credentials' 'true';
+  add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
+
   location /static {
     alias <%= @shared_storage_root %>/downloads;
   }
@@ -60,6 +64,10 @@ server {
 
   client_max_body_size 102400m;
   gzip on;
+
+  add_header 'Access-Control-Allow-Origin' '*';
+  add_header 'Access-Control-Allow-Credentials' 'true';
+  add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
 
   location /static {
     alias <%= @shared_storage_root %>/downloads;
