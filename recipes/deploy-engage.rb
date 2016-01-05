@@ -127,7 +127,9 @@ deploy_revision matterhorn_repo_root do
   end
 end
 
-execute "start matterhorn if it isn't already running" do
-  user 'matterhorn'
-  command "pgrep -u matterhorn java > /dev/null; if [ $? = 1 ]; then sudo /etc/init.d/matterhorn start; fi"
+unless node[:dont_start_matterhorn_after_deploy]
+  execute "start matterhorn if it isn't already running" do
+    user 'matterhorn'
+    command "pgrep -u matterhorn java > /dev/null; if [ $? = 1 ]; then sudo /etc/init.d/matterhorn start; fi"
+  end
 end
