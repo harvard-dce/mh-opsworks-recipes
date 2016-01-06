@@ -115,6 +115,7 @@ deploy_revision matterhorn_repo_root do
         capture_agent_monitor_url: capture_agent_monitor_url,
         live_streaming_url: live_streaming_url,
         using_ssl_for_engage: using_ssl_for_engage,
+        job_maxload: 4,
       })
     end
   end

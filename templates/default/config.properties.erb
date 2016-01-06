@@ -218,4 +218,6 @@ org.opencastproject.live.streaming.url=<%= @live_streaming_url %>
 
 edu.harvard.dce.inbox_root=${org.opencastproject.shared_storage.dir}
 
-org.opencastproject.server.maxload=4
+<% if @job_maxload %>
+org.opencastproject.server.maxload=<%= @job_maxload %>
+<% end %>
