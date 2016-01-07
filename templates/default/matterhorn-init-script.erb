@@ -30,6 +30,13 @@ lockfile=/var/lock/subsys/matterhorn
 [ -d "/var/lock/subsys" ] || lockfile="/var/lock/LCK.${prog}"
 pidfile="/var/run/${prog}.pid"
 
+# Used in the "restart until the daemon is actually working" feature
+# now included in start()
+test_string="j_username"
+max_start_attempts=10
+attempts=0
+
+
 killdelay=7
 
 # Load configuration files
@@ -58,6 +65,20 @@ start() {
 	# If we failed to start matterhorn but a lock was created, we want to remove
 	# the file (flock does not remove the file automatically):
 	[ ! $retval -eq 0 ] && rm -f $lockfile
+
+  # Attempt to restart the daemon until it actually looks like it's
+  # started correctly
+  sleep 10
+  if [ "$attempts" -lt "$max_start_attempts" ]
+    then
+      if ! $(/usr/bin/curl -s -L http://localhost/ | grep -q "$test_string"); then
+        attempts=$[$attempts + 1]
+        restart
+      fi
+    else
+      retval=1
+      smsg="Daemon did not start after $max_start_attempts attempts"
+  fi
 
 	[ $retval -eq 0 ] && success "$smsg" || failed "$smsg"
 	return $retval

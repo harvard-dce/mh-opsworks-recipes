@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 1.0.3 - 1/8/2016
+
+* Fix find's mtime invocation to ensure we're compressing and reaping files at
+  the correct times. *Requires that the MySQL backup installation chef recipe be
+  run on the admin node.*
+* Relax the `matterhorn_availability` alert to require errors over two 2 minute
+  periods instead of just one.
+* Modify the matterhorn init script to check that the daemon started properly,
+  working around the race condition related to bundle loading. See the relevant
+  commit for details.
+
 ## 1.0.2 - 1/6/2016
 
 * Only set the `org.opencastproject.server.maxload` property on worker nodes -
