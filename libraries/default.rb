@@ -340,14 +340,14 @@ module MhOpsworksRecipes
       cron_d 'compress_matterhorn_logs' do
         user 'matterhorn'
         predefined_value '@daily'
-        command %Q(find #{log_dir} -maxdepth 1 -type f -name 'matterhorn.log.2*' -not -name '*.gz' -mtime +#{compress_after_days} -exec /bin/gzip {} \\;)
+        command %Q(find #{log_dir} -maxdepth 1 -type f -name 'matterhorn.log.2*' -not -name '*.gz' -mtime #{compress_after_days} -exec /bin/gzip {} \\;)
         path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
       end
 
       cron_d 'delete_matterhorn_logs' do
         user 'matterhorn'
         predefined_value '@daily'
-        command %Q(find #{log_dir} -maxdepth 1 -type f -name 'matterhorn.log.2*.gz' -mtime +#{delete_after_days} -delete)
+        command %Q(find #{log_dir} -maxdepth 1 -type f -name 'matterhorn.log.2*.gz' -mtime #{delete_after_days} -delete)
         path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
       end
     end
