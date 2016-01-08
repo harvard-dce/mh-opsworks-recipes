@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## To be released
+
+* Get rid of the no longer necessary ffmpeg package removal
+
 ## 1.0.3 - 1/8/2016
 
 * Fix find's mtime invocation to ensure we're compressing and reaping files at

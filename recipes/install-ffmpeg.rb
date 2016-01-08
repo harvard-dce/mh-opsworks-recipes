@@ -18,11 +18,6 @@ bucket_name = node.fetch(:shared_asset_bucket_name, 'mh-opsworks-shared-assets')
 ffmpeg_version = node.fetch(:ffmpeg_version, '2.7.2')
 ffmpeg_archive = %Q|ffmpeg-#{ffmpeg_version}-static.tgz|
 
-package 'ffmpeg' do
-  action :remove
-  ignore_failure true
-end
-
 bash 'extract ffmpeg archive and create symbolic links' do
   code %Q|
 cd /opt &&
