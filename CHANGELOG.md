@@ -2,6 +2,8 @@
 
 ## To be released
 
+* *REQUIRES MANUAL CHEF RECIPE RUNS* Send X-Forwarded-For header from the nginx
+  proxies so that user-tracking gets correct client ip
 * Get rid of the no longer necessary ffmpeg package removal
 
 ## 1.0.3 - 1/8/2016
