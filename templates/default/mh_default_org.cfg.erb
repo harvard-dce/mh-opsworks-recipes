@@ -116,11 +116,21 @@ prop.adminui.i18n_tab_users.enable=false
 prop.adminui.chunksize=100000
 
 # Define whether series metadata pre-population should occur when a recording is scheduled.
+# Note: this populates episodes dublincore with series dublincore. It uses series as a template.
 #
 # Values: true | false
 # Default: false
 #
 prop.adminui.series_prepopulate.enable=false
+
+# DCE MATT-1833, pre-populate dce_episode (using Otherpubs service endpoint)
+# Note: this populates episodes dublincore with episode default data. This allows
+# the series to have different, offering specific, dublincore data from its episodes.
+#
+# Values: true | false
+# Default: true
+#
+prop.adminui.dce_episode_prepopulate.enable=true
 
 # Defines whether to display the default login and username on the login page
 #
