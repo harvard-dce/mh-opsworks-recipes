@@ -471,6 +471,18 @@ module MhOpsworksRecipes
       end
     end
 
+    def install_aws_s3_distribution_service_config(current_deploy_root, region, s3_distribution_bucket_name)
+      template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.distribution.aws.s3.AwsS3DistributionServiceImpl.properties| do
+        source 'edu.harvard.dce.distribution.aws.s3.AwsS3DistributionServiceImpl.properties.erb'
+        owner 'matterhorn'
+        group 'matterhorn'
+        variables({
+          region: region,
+          s3_distribution_bucket_name: s3_distribution_bucket_name 
+        })
+      end
+    end
+
     def install_auth_service(current_deploy_root, auth_host, redirect_location, auth_activated = 'true')
       template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.properties| do
         source 'edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.properties.erb'

@@ -1,0 +1,11 @@
+# Configuration for DCE AWS S3 Distribution Service
+
+# The AWS region. Default is us-east-1. Name must be a valid AWS region name.
+edu.harvard.dce.aws.s3.region=<%= @region %>
+
+# The AWS S3 bucket name (mandatory). '_' is not allowed.
+# Files will be copied under bucket/engage-player
+# You should use a distinct bucket name for each MH cluster.
+# Examples: mh-devAWS, mh-dev04, mh-stage, mh-production, etc.
+edu.harvard.dce.aws.s3.bucket=<%= @s3_distribution_bucket_name %>
+
