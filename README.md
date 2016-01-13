@@ -57,14 +57,19 @@ Include `mh-opsworks-recipes` in your node's `run_list`:
   require a manual chef recipe invocation.
 * Rebase against develop and submit a pull request off of develop.
 
-## Releasing new chef recipes
+## QA'ing and releasing new chef recipes
 
 * Update CHANGELOG.md to collapse all "To be released" changes under a new
   version, following [semver](http://semver.org).
-* Rebase develop onto master.
-* Merge develop into master.
-* Tag the release on master.
+* Rebase develop onto master (just to be sure).
+* Cut an RC tag and link that into your staging cluster. Annotate the tag to
+  reference the matterhorn tag this is meant to work with.
+* QA. When QA passes,
+* Merge the RC tag into master,
+* Tag the release on master based on the RC tag
 * Push the tag to the remote via `git push --tags`
+* Make sure the release manager knows the correct tag to use in the cluster
+  config.
 
 ## License
 
