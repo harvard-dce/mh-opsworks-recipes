@@ -5,6 +5,7 @@
 * Clean up s3 distribution configuration. Remove asset server hooks.
 * *REQUIRES MANUAL CHEF RECIPE RUNS* engage nginx uid cookie & usertracking
   session id + uid log for identifying shopping period viewers
+* *REQUIRES MANUAL CHEF RECIPE RUNS* Use mo-scaler --scale-available option
 
 ## 1.0.6 - 1/18/2016
 
