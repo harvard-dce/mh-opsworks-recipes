@@ -1,11 +1,11 @@
 # CHANGELOG
 
-## To be released
+## 1.0.4 - 1/14/2016
 
 * *REQUIRES MANUAL CHEF RECIPE RUNS* Send X-Forwarded-For header from the nginx
   proxies so that user-tracking gets correct client ip
 * Get rid of the no longer necessary ffmpeg package removal
-* Modify mh_default and otherpubs config for MATT-1822 auto populate admin UI upload
+* Modify `mh_default` and otherpubs config for MATT-1822 auto populate admin UI upload
 
 ## 1.0.3 - 1/8/2016
 
