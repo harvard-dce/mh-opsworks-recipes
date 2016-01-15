@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.0.5 - 1/14/2016
+
+* Hot fix for Otherpubs sevice config
+
 ## 1.0.4 - 1/14/2016
 
 * *REQUIRES MANUAL CHEF RECIPE RUNS* Send X-Forwarded-For header from the nginx
