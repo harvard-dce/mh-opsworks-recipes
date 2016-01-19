@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.0.6 - 1/18/2016
+
+* Configuration for the new Matterhorn S3 distribution service. 
+
 ## 1.0.5 - 1/14/2016
 
 * Hot fix for Otherpubs sevice config

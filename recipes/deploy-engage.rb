@@ -35,6 +35,9 @@ auth_activated = node.fetch(:auth_activated, 'true')
 user_tracking_authhost = node.fetch(
   :user_tracking_authhost, 'http://example.com'
 )
+# S3 distribution service
+region = node.fetch(:region, 'us-east-1')
+s3_distribution_bucket_name = node[:s3_distribution_bucket_name]
 ## /Engage specific
 
 git_data = node[:deploy][:matterhorn][:scm]
@@ -99,6 +102,7 @@ deploy_revision matterhorn_repo_root do
     set_service_registry_dispatch_interval(most_recent_deploy)
     configure_usertracking(most_recent_deploy, user_tracking_authhost)
     install_otherpubs_service_config(most_recent_deploy, auth_host)
+    install_aws_s3_distribution_service_config(most_recent_deploy, region, s3_distribution_bucket_name)
     # /ENGAGE SPECIFIC
 
     template %Q|#{most_recent_deploy}/etc/config.properties| do
