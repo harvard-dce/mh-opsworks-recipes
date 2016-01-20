@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## To be released
+
+* Clean up s3 distribution configuration. Remove asset server hooks.
+
 ## 1.0.6 - 1/18/2016
 
 * Configuration for the new Matterhorn S3 distribution service. 

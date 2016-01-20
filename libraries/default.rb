@@ -69,17 +69,6 @@ module MhOpsworksRecipes
       admin_hostname
     end
 
-    def using_asset_server?
-      node[:opsworks][:layers][:asset_server] && node[:opsworks][:layers][:asset_server][:instances].any?
-    end
-
-    def get_public_asset_server_hostname
-      if using_asset_server?
-        (private_asset_server_hostname, asset_server_attributes) = node[:opsworks][:layers][:asset_server][:instances].first
-        return asset_server_attributes[:public_dns_name]
-      end
-    end
-
     def get_public_engage_hostname
       return node[:public_engage_hostname] if node[:public_engage_hostname]
 
@@ -99,6 +88,10 @@ module MhOpsworksRecipes
           pass: 'password'
         }
       )
+    end
+
+    def get_s3_distribution_bucket_name
+      node[:s3_distribution_bucket_name]
     end
 
     def topic_name
@@ -478,7 +471,7 @@ module MhOpsworksRecipes
         group 'matterhorn'
         variables({
           region: region,
-          s3_distribution_bucket_name: s3_distribution_bucket_name 
+          s3_distribution_bucket_name: s3_distribution_bucket_name
         })
       end
     end

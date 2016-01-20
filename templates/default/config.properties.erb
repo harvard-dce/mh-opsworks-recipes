@@ -86,10 +86,9 @@ org.opencastproject.download.directory=${org.opencastproject.shared_storage.dir}
 # The base URL for media downloads.
 <% if @cloudfront_url %>
 org.opencastproject.download.url=https://<%= @cloudfront_url %>
-<% elsif @using_asset_server %>
-org.opencastproject.download.url=http://<%= @asset_server_hostname %>/static
 <% else %>
-org.opencastproject.download.url=<%= (@using_ssl_for_engage) ? 'https://' : 'http://' %><%= @engage_hostname %>/static
+# Distribute directly from the s3 bucket.
+org.opencastproject.download.url=https://<%= @s3_distribution_bucket_name %>.s3.amazonaws.com/
 <% end %>
 
 # Relational Database configuration.  By default, Matterhorn uses an embedded H2 database.  A standalone database server

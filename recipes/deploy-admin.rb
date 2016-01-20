@@ -18,6 +18,8 @@ capture_agent_query_url = node.fetch(
   :capture_agent_query_url, 'http://example.com'
 )
 
+s3_distribution_bucket_name = get_s3_distribution_bucket_name
+
 capture_agent_monitor_url = node.fetch(
   :capture_agent_monitor_url, 'http://example.com/monitor_url'
 )
@@ -36,8 +38,6 @@ git_data = node[:deploy][:matterhorn][:scm]
 public_engage_hostname = get_public_engage_hostname
 public_admin_hostname = get_public_admin_hostname_on_admin
 private_hostname = node[:opsworks][:instance][:private_dns_name]
-using_asset_server = using_asset_server?
-asset_server_hostname = get_public_asset_server_hostname
 
 database_connection = get_database_connection
 
@@ -106,9 +106,8 @@ deploy_revision matterhorn_repo_root do
         admin_auth: admin_user_info,
         database: database_connection,
         engage_hostname: public_engage_hostname,
-        using_asset_server: using_asset_server,
-        asset_server_hostname: asset_server_hostname,
         cloudfront_url: cloudfront_url,
+        s3_distribution_bucket_name: s3_distribution_bucket_name,
         capture_agent_monitor_url: capture_agent_monitor_url,
         live_streaming_url: live_streaming_url,
         using_ssl_for_engage: using_ssl_for_engage,
