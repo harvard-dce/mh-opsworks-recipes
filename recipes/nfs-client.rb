@@ -2,6 +2,7 @@
 # Recipe:: nfs-client
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
+::Chef::Resource::RubyBlock.send(:include, MhOpsworksRecipes::RecipeHelpers)
 include_recipe 'mh-opsworks-recipes::create-metrics-dependencies'
 
 storage_info = node.fetch(
