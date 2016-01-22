@@ -3,7 +3,6 @@
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 Chef::Provider::Deploy::Revision.send(:include, MhOpsworksRecipes::DeployHelpers)
-include_recipe "mh-opsworks-recipes::monitor-matterhorn-daemon"
 
 matterhorn_repo_root = node[:matterhorn_repo_root]
 local_workspace_root = get_local_workspace_root
@@ -123,3 +122,5 @@ unless node[:dont_start_matterhorn_after_deploy]
     command "pgrep -u matterhorn java > /dev/null; if [ $? = 1 ]; then sudo /etc/init.d/matterhorn start; fi"
   end
 end
+
+include_recipe "mh-opsworks-recipes::monitor-matterhorn-daemon"

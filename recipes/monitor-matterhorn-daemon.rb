@@ -28,7 +28,7 @@ ruby_block "add matterhorn monitoring" do
     # This is idempotent according to the aws docs
     topic_arn = %x(aws sns create-topic --name "#{topic_name}" --region #{region} --output text).chomp
 
-    command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{alarm_name_prefix}_matterhorn_availability" --alarm-description "Matterhorn is unavailable #{alarm_name_prefix}" --metric-name MatterhornAvailable --namespace AWS/OpsworksCustom --statistic Minimum --period 120 --threshold 1 --comparison-operator LessThanThreshold --dimensions Name=InstanceId,Value=#{aws_instance_id} --evaluation-periods 2 --alarm-actions "#{topic_arn}")
+    command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{alarm_name_prefix}_matterhorn_availability" --alarm-description "Matterhorn is unavailable #{alarm_name_prefix}" --metric-name MatterhornAvailable --namespace AWS/OpsworksCustom --statistic Minimum --period 120 --threshold 1 --comparison-operator LessThanThreshold --dimensions Name=InstanceId,Value=#{aws_instance_id} --evaluation-periods 4 --alarm-actions "#{topic_arn}")
     Chef::Log.info command
     %x(#{command})
   end
