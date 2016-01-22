@@ -4,12 +4,17 @@
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 include_recipe "mh-opsworks-recipes::update-package-repo"
 
+package "maven2" do
+  action :purge
+  ignore_failure true
+end
+
 %w|autofs5
 curl
 dkms
 gzip
 libglib2.0-dev
-maven2
+maven
 mediainfo
 mysql-client
 nodejs
