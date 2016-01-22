@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## TO BE RELEASED
+
+* *REQUIRES CHEF RECIPE RUNS* Rotate nginx logs more aggressively than a week,
+  but still keep a year. All this change does is install a new logrotate file,
+  overriding the default. The recipes can be run whenever.
+    # After the recipes have been updated. . .
+    ./bin/rake stack:commands:execute_recipes_on_layers recipes="mh-opsworks-recipes::configure-nginx-proxy" layers="Admin, Workers"
+    ./bin/rake stack:commands:execute_recipes_on_layers recipes="mh-opsworks-recipes::configure-engage-nginx-proxy" layers="Engage"
+
 ## 1.0.7 - 1/21/2016
 
 * Clean up s3 distribution configuration. Remove asset server hooks.

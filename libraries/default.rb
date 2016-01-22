@@ -41,6 +41,15 @@ module MhOpsworksRecipes
       end
     end
 
+    def install_nginx_logrotate_customizations
+      cookbook_file "nginx-logrotate.conf" do
+        path "/etc/logrotate.d/nginx"
+        owner "root"
+        group "root"
+        mode "644"
+      end
+    end
+
     def get_live_stream_name
       node.fetch(:live_stream_name, '#{caName}-#{flavor}.stream-#{resolution}_1_200@')
     end
