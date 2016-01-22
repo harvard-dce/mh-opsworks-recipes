@@ -4,7 +4,7 @@
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
 moscaler_attributes = {
-  ec2_management_release: 'v0.2.2',
+  ec2_management_release: 'v0.4.0',
   offpeak_instances: 2,
   peak_instances: 10,
   weekend_instances: 1
@@ -67,7 +67,7 @@ cron_d 'moscaler_offpeak' do
   hour '0-7,23'
   minute '*/5'
   weekday '1-5'
-  command %Q(cd /home/ec2_manager/mo-scaler && /usr/bin/run-one ./manager.py scale to #{offpeak_instances} 2>&1 | logger -t info)
+  command %Q(cd /home/ec2_manager/mo-scaler && /usr/bin/run-one ./manager.py scale to #{offpeak_instances} --scale-available 2>&1 | logger -t info)
   path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 end
 
@@ -77,7 +77,7 @@ cron_d 'moscaler_normal' do
   hour '8-22'
   minute '*/5'
   weekday '1-5'
-  command %Q(cd /home/ec2_manager/mo-scaler && /usr/bin/run-one ./manager.py scale to #{peak_instances} 2>&1 | logger -t info)
+  command %Q(cd /home/ec2_manager/mo-scaler && /usr/bin/run-one ./manager.py scale to #{peak_instances} --scale-available 2>&1 | logger -t info)
   path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 end
 
@@ -86,6 +86,6 @@ cron_d 'moscaler_weekend' do
   user 'ec2_manager'
   minute '*/5'
   weekday '6,7'
-  command %Q(cd /home/ec2_manager/mo-scaler && /usr/bin/run-one ./manager.py scale to #{weekend_instances} 2>&1 | logger -t info)
+  command %Q(cd /home/ec2_manager/mo-scaler && /usr/bin/run-one ./manager.py scale to #{weekend_instances} --scale-available 2>&1 | logger -t info)
   path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 end
