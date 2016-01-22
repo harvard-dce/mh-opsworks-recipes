@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## To be released
+## 1.0.7 - 1/21/2016
 
 * Clean up s3 distribution configuration. Remove asset server hooks.
 * *REQUIRES MANUAL CHEF RECIPE RUNS* engage nginx uid cookie & usertracking
