@@ -86,7 +86,7 @@ deploy_revision matterhorn_repo_root do
       most_recent_deploy, auth_host, auth_redirect_location, auth_activated
     )
     install_live_streaming_service_config(most_recent_deploy, live_stream_name)
-    install_otherpubs_service_config(most_recent_deploy, auth_host)
+    install_otherpubs_service_config(most_recent_deploy, matterhorn_repo_root, auth_host)
     install_published_event_details_email(most_recent_deploy, public_engage_hostname)
     initialize_database(most_recent_deploy)
 

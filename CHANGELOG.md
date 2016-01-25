@@ -2,6 +2,9 @@
 
 ## TO BE RELEASED
 
+* All clusters should now include a `private_assets_bucket_name` in their
+  cluster config, which can be the same as the `cluster_config_bucket_name` as
+  that's a private bucket too and includes some shared assets.
 * *REQUIRES CHEF RECIPE RUNS* Rotate nginx logs more aggressively than a week,
   but still keep a year. All this change does is install a new logrotate file,
   overriding the default. The recipes can be run whenever.

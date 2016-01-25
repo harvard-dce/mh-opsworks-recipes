@@ -98,7 +98,7 @@ deploy_revision matterhorn_repo_root do
     # ENGAGE SPECIFIC
     set_service_registry_dispatch_interval(most_recent_deploy)
     configure_usertracking(most_recent_deploy, user_tracking_authhost)
-    install_otherpubs_service_config(most_recent_deploy, auth_host)
+    install_otherpubs_service_config(most_recent_deploy, matterhorn_repo_root, auth_host)
     install_aws_s3_distribution_service_config(most_recent_deploy, region, s3_distribution_bucket_name)
     # /ENGAGE SPECIFIC
 

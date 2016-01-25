@@ -13,9 +13,16 @@ edu.harvard.dce.otherpubs.offering.pub.path.template=/$year/$term/$crn/publicati
 # For other (ac-web/Banner) course metadata data
 # Enable Access to Banner episode metadata via the Otherpubs endpoint
 # Used by Admin UI schedule and upload UI auto-form fill by series id
-
-edu.harvard.dce.otherpubs.coursedata.dns=https://ac-web.dce.harvard.edu
-edu.harvard.dce.otherpubs.coursedata.courses.path.template=/rest/de/__get_courses_by_term.php?term=$term
-edu.harvard.dce.otherpubs.coursedata.coursedetail.path.template=/rest/de/__get_course_details.php?term=$year$term&crn=$crn
-edu.harvard.dce.otherpubs.coursedata.coursepeople.path.template=/rest/de/__get_course_people.php?term=$year$term&crn=$crn
+# edu.harvard.dce.otherpubs.coursedata.dns=https://ac-web.dce.harvard.edu
+# edu.harvard.dce.otherpubs.coursedata.courses.path.template=/rest/de/__get_courses_by_term.php?term=$term
+# edu.harvard.dce.otherpubs.coursedata.coursedetail.path.template=/rest/de/__get_course_details.php?term=$year$term&crn=$crn
+# edu.harvard.dce.otherpubs.coursedata.coursepeople.path.template=/rest/de/__get_course_people.php?term=$year$term&crn=$crn
+#
+# MATT-1857 Get episode defaults from S3 static JSON bucket extracted from Legacy by MatterhornEpisodeDefaultsDriver
+# edu.harvard.dce.otherpubs.coursedata.dns=
+edu.harvard.dce.otherpubs.coursedata.courses.path.template=/EpisodeDefaults.json
+edu.harvard.dce.otherpubs.coursedata.coursedetail.path.template=/EpisodeDefaults.json
+edu.harvard.dce.otherpubs.coursedata.coursepeople.path.template=/EpisodeDefaults.json
+# MATT-1893 Get episode defaults from a local json file
+edu.harvard.dce.otherpubs.coursedata.dir=<%= @matterhorn_repo_root %>/current/etc/default_data
 
