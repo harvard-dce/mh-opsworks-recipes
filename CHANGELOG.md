@@ -15,6 +15,16 @@
         # This is currently on the "Ganglia" layer in prod,
         # the value below is for dev clusters.
         ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin" recipes="mh-opsworks-recipes::install-mysql-backups"
+* *REQUIRES OPTIONAL CHEF RECIPE RUNS*  Installs the `file_uploader` user onto
+  the instance of your choice. This allows you to use an rsync backchannel for
+  uploads directly to the matterhorn inbox in combination with a couple cron jobs
+  to copy and maintain these uploads. If you want to use this feature, add it to
+  the setup lifecycle in the appropriate layer in your cluster config and then
+  run this recipe.  This recipe does not need to be run at any particular time
+  relative to a deployment.
+
+        # The current value for the admin node
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin" recipes="mh-opsworks-recipes::create-file-uploader-user"
 
 ## 1.1.0 - 1/28/2016
 
