@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## 1.1.0 - 1/28/2016
+
 * All clusters should now include a `private_assets_bucket_name` in their
   cluster config, which can be the same as the `cluster_config_bucket_name` as
   that's a private bucket too and includes some shared assets.
