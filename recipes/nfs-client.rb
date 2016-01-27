@@ -2,6 +2,7 @@
 # Recipe:: nfs-client
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
+::Chef::Resource::RubyBlock.send(:include, MhOpsworksRecipes::RecipeHelpers)
 include_recipe 'mh-opsworks-recipes::create-metrics-dependencies'
 
 storage_info = node.fetch(
@@ -105,7 +106,7 @@ ruby_block "add nfs availability check" do
     # This is idempotent according to the aws docs
     topic_arn = %x(aws sns create-topic --name "#{topic_name}" --region #{region} --output text).chomp
 
-    command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{alarm_name_prefix}_nfs_availability" --alarm-description "NFS is unavailable #{alarm_name_prefix}" --metric-name NFSAvailable --namespace AWS/OpsworksCustom --statistic Minimum --period 120 --threshold 1 --comparison-operator LessThanThreshold --dimensions Name=InstanceId,Value=#{aws_instance_id} --evaluation-periods 1 --alarm-actions "#{topic_arn}" --ok-actions "#{topic_arn}")
+    command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{alarm_name_prefix}_nfs_availability" --alarm-description "NFS is unavailable #{alarm_name_prefix}" --metric-name NFSAvailable --namespace AWS/OpsworksCustom --statistic Minimum --period 120 --threshold 1 --comparison-operator LessThanThreshold --dimensions Name=InstanceId,Value=#{aws_instance_id} --evaluation-periods 1 --alarm-actions "#{topic_arn}")
     Chef::Log.info command
     %x(#{command})
   end

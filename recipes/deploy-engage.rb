@@ -3,7 +3,6 @@
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 Chef::Provider::Deploy::Revision.send(:include, MhOpsworksRecipes::DeployHelpers)
-include_recipe "mh-opsworks-recipes::monitor-matterhorn-daemon"
 
 matterhorn_repo_root = node[:matterhorn_repo_root]
 local_workspace_root = get_local_workspace_root
@@ -99,7 +98,7 @@ deploy_revision matterhorn_repo_root do
     # ENGAGE SPECIFIC
     set_service_registry_dispatch_interval(most_recent_deploy)
     configure_usertracking(most_recent_deploy, user_tracking_authhost)
-    install_otherpubs_service_config(most_recent_deploy, auth_host)
+    install_otherpubs_service_config(most_recent_deploy, matterhorn_repo_root, auth_host)
     install_aws_s3_distribution_service_config(most_recent_deploy, region, s3_distribution_bucket_name)
     # /ENGAGE SPECIFIC
 
@@ -135,3 +134,5 @@ unless node[:dont_start_matterhorn_after_deploy]
     command "pgrep -u matterhorn java > /dev/null; if [ $? = 1 ]; then sudo /etc/init.d/matterhorn start; fi"
   end
 end
+
+include_recipe "mh-opsworks-recipes::monitor-matterhorn-daemon"

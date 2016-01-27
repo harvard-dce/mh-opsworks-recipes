@@ -41,6 +41,15 @@ module MhOpsworksRecipes
       end
     end
 
+    def install_nginx_logrotate_customizations
+      cookbook_file "nginx-logrotate.conf" do
+        path "/etc/logrotate.d/nginx"
+        owner "root"
+        group "root"
+        mode "644"
+      end
+    end
+
     def get_live_stream_name
       node.fetch(:live_stream_name, '#{caName}-#{flavor}.stream-#{resolution}_1_200@')
     end
@@ -295,13 +304,36 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_otherpubs_service_config(current_deploy_root, auth_host)
+    def download_episode_defaults_json_file(current_deploy_root)
+      private_assets_bucket_name = node.fetch(:private_assets_bucket_name, 'default-private-bucket')
+
+      episode_default_storage_dir = %Q|#{current_deploy_root}/etc/default_data|
+
+      directory episode_default_storage_dir  do
+        owner 'matterhorn'
+        group 'matterhorn'
+        mode '755'
+        recursive true
+      end
+
+      execute 'download the EpisodeDefaults.json file into the correct location' do
+        command %Q|cd #{episode_default_storage_dir} && aws s3 cp s3://#{private_assets_bucket_name}/EpisodeDefaults.json EpisodeDefaults.json|
+        retries 10
+        retry_delay 5
+        timeout 300
+      end
+    end
+
+    def install_otherpubs_service_config(current_deploy_root, matterhorn_repo_root, auth_host)
+      download_episode_defaults_json_file(current_deploy_root)
+
       template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.otherpubs.service.OtherpubsService.properties| do
         source 'edu.harvard.dce.otherpubs.service.OtherpubsService.properties.erb'
         owner 'matterhorn'
         group 'matterhorn'
         variables({
-          auth_host: auth_host
+          auth_host: auth_host,
+          matterhorn_repo_root: matterhorn_repo_root
         })
       end
     end

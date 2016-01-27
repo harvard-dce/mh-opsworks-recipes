@@ -1,5 +1,30 @@
 # CHANGELOG
 
+## TO BE RELEASED
+
+## 1.1.0 - 1/28/2016
+
+* All clusters should now include a `private_assets_bucket_name` in their
+  cluster config, which can be the same as the `cluster_config_bucket_name` as
+  that's a private bucket too and includes some shared assets.
+* *REQUIRES CHEF RECIPE RUNS* Rotate nginx logs more aggressively than a week,
+  but still keep a year. All this change does is install a new logrotate file,
+  overriding the default. The recipes can be run whenever.
+
+        # After the recipes have been updated. . .
+        ./bin/rake stack:commands:execute_recipes_on_layers recipes="mh-opsworks-recipes::configure-nginx-proxy" layers="Admin, Workers"
+        ./bin/rake stack:commands:execute_recipes_on_layers recipes="mh-opsworks-recipes::configure-engage-nginx-proxy" layers="Engage"
+
+* *REQUIRES MANUAL CHEF RECIPE RUNS* Remove the "ok-action" alarms - they are
+  too chatty and not useful. These recipe runs can happen post-deploy.
+
+        ./bin/rake stack:commands:execute_recipes_on_layers recipes="mh-opsworks-recipes::create-alerts-from-opsworks-metrics"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Ganglia" recipes="mh-opsworks-recipes::create-mysql-alarms"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin" recipes="mh-opsworks-recipes::install-mysql-backups"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin,Workers,Engage,Utility,Asset Server" recipes="mh-opsworks-recipes::nfs-client"
+
+  Be sure to double-check all layers and recipe combinations.
+
 ## 1.0.7 - 1/21/2016
 
 * Clean up s3 distribution configuration. Remove asset server hooks.
