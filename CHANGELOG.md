@@ -5,6 +5,16 @@
 * Install the newrelic agent when '{"newrelic": {"key": "your key"}' is
   included in the stack's `custom_json`. See the main mh-opsworks README for
   info.
+* *REQUIRES MANUAL CHEF RECIPE RUNS* Make the mysql dumps more bandwidth
+  efficient by using "--compress" on the mysqldump client and an inline gzip
+  when saving to shared storage. This causes bandwidth during mysql dumps to
+  drop by 4 or 5 times without an appreciable performance penalty.  This recipe
+  can by run at any time, be sure to confirm the instance your dumps are
+  happening on by finding this recipe in your active cluster config.
+
+        # This is currently on the "Ganglia" layer in prod,
+        # the value below is for dev clusters.
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin" recipes="mh-opsworks-recipes::install-mysql-backups"
 
 ## 1.1.0 - 1/28/2016
 
