@@ -446,6 +446,7 @@ module MhOpsworksRecipes
 
     def install_matterhorn_conf(current_deploy_root, matterhorn_repo_root, node_profile)
       log_dir = node.fetch(:matterhorn_log_directory, '/var/log/matterhorn')
+      java_debug_enabled = node.fetch(:java_debug_enabled, 'true')
 
       template %Q|#{current_deploy_root}/etc/matterhorn.conf| do
         source 'matterhorn.conf.erb'
@@ -454,7 +455,8 @@ module MhOpsworksRecipes
         variables({
           matterhorn_root: matterhorn_repo_root + '/current',
           node_profile: node_profile,
-          matterhorn_log_directory: log_dir
+          matterhorn_log_directory: log_dir,
+          java_debug_enabled: java_debug_enabled
         })
       end
     end

@@ -2,6 +2,9 @@
 
 ## TO BE RELEASED
 
+* Allow java debug to be set to `true` or `false` via the `java_debug_enabled`
+  stack `custom_json` parameter. It currently defaults to "true" (so, enabled)
+  because most clusters are going to be development or testing clusters.
 * Install the newrelic agent when '{"newrelic": {"key": "your key"}' is
   included in the stack's `custom_json`. See the main mh-opsworks README for
   info.
