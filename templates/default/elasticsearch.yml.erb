@@ -1,0 +1,23 @@
+# This file is installed automatically by chef. Do not edit or delete.
+
+cluster.name: <%= @cluster_name %>
+path.data: <%= @data_path %>
+node.name: ${HOSTNAME}
+network.host: <%= @es_host %>
+bootstrap.mlockall: true
+
+# disable replication
+index.number_of_shards: 1
+index.number_of_replicas: 0
+
+# index/query performance
+indices.fielddata.cache.size:  40%
+threadpool.bulk.queue_size: 1000
+threadpool.search.queue_size: 3000
+
+# disable cluster-joining
+discovery.zen.ping.multicast.enabled: false
+node.local: true
+
+# cloud-aws settings
+cloud.aws.region: <%= @aws_region %>

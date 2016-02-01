@@ -1,0 +1,6 @@
+user="kibana"
+group="root"
+chroot="/"
+chdir="/"
+nice=""
+
