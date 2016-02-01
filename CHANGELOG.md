@@ -7,6 +7,8 @@
   [mh-opsworks](https://github.com/harvard-dce/mh-opsworks/blob/master/README.zadara.md)
   for more information about how to use this recipe. This recipe is independent
   of deployments.
+* Recipes, etc for setting up ELK. See README.elk.md in mh-opsworks for setup
+  instructions.
 
 ## 1.1.5 - 2/25/2016
 
