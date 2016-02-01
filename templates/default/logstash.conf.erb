@@ -1,0 +1,55 @@
+input {
+  tcp {
+    codec => "json_lines"
+    port => <%= @tcp_port %>
+  }
+  sqs {
+    queue => "<%= @sqs_queue_name %>"
+  }
+}
+
+filter {
+  date {
+    match => [ "created", "YYYY-MM-dd'T'HH:mm:ssZZ" ]
+    timezone => "America/New_York"
+  }
+  mutate {
+    add_field => {
+      "hostname" => "%{ip}"
+    }
+  }
+  geoip {
+    source => "ip"
+    lru_cache_size => 100000
+  }
+  if [useragent] =~ /.+/ {
+    useragent {
+      lru_cache_size => 100000
+      source => "useragent"
+      target => "ua"
+    }
+  }
+  mutate {
+    remove_field => "useragent"
+  }
+}
+
+output {
+  <% if @stdout_output -%>
+  stdout {
+    codec => rubydebug
+  }
+  <% end -%>
+  <% if @elasticsearch_host -%>
+  elasticsearch {
+    hosts => ["<%= @elasticsearch_host %>"]
+    document_id => "%{action_id}"
+    doc_as_upsert => true
+    manage_template => false
+    document_type => "user_actions"
+    index => "<%= @elasticsearch_index_prefix %>-%{+YYYY.MM.dd}"
+    workers => 4
+    flush_size => 10000
+  }
+  <% end -%>
+}

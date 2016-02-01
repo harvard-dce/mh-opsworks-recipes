@@ -216,6 +216,25 @@ module MhOpsworksRecipes
       end
       repo
     end
+    
+    def get_elk_info
+      stack_name = node[:opsworks][:stack][:name]
+      ::Chef::Mixin::DeepMerge.deep_merge({
+        es_major_version: '2.x',
+        es_version: '2.2.0',
+        es_cluster_name: stack_name,
+        es_index_prefix: "dce-#{stack_name}",
+        logstash_major_version: '2.1',
+        logstash_version: '1:2.1.1-1',
+        logstash_tcp_port: '5000',
+        logstash_stdout_output: false,
+        kibana_version: '4.4.0',
+        kibana_checksum: '82fa06e11942e13bba518655c1d34752ca259bab',
+        kibana_auth: {},
+        harvester_release: 'master'
+        }, node.fetch(:elk, {}))
+    end
+    
   end
 
   module DeployHelpers
