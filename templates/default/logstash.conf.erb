@@ -1,0 +1,64 @@
+# This file is installed automatically by chef. Do not edit or delete.
+
+input {
+  tcp {
+    codec => "json_lines"
+    port => <%= @tcp_port %>
+  }
+  sqs {
+    queue => "<%= @sqs_queue_name %>"
+  }
+}
+
+filter {
+  # for older dumps with non-UTC event timestamps in 'created' field
+  if !("" in [timestamp]) and ("" in [created]) {
+    ruby {
+      code => "event['timestamp'] = DateTime.strptime(event['created'], '%Y-%m-%dT%H:%M:%S%z').new_offset(0).to_s"
+      remove_field => ["created"]
+    }
+  }
+  date {
+    match => [ "timestamp", "YYYY-MM-dd'T'HH:mm:ssZZ" ]
+    remove_field => ["timestamp"]
+  }
+  mutate {
+    add_field => {
+      "hostname" => "%{ip}"
+    }
+  }
+  geoip {
+    source => "ip"
+    lru_cache_size => 100000
+  }
+  if [useragent] =~ /.+/ {
+    useragent {
+      lru_cache_size => 100000
+      source => "useragent"
+      target => "ua"
+    }
+  }
+  mutate {
+    remove_field => "useragent"
+  }
+}
+
+output {
+  <% if @stdout_output -%>
+  stdout {
+    codec => rubydebug
+  }
+  <% end -%>
+  <% if @elasticsearch_host -%>
+  elasticsearch {
+    hosts => ["<%= @elasticsearch_host %>"]
+    document_id => "%{action_id}"
+    doc_as_upsert => true
+    manage_template => false
+    document_type => "event"
+    index => "<%= @elasticsearch_index_prefix %>-%{+YYYY.MM.dd}"
+    workers => 4
+    flush_size => 10000
+  }
+  <% end -%>
+}
