@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## 1.1.1 - 2/3/2016
+
 * Allow java debug to be set to `true` or `false` via the `java_debug_enabled`
   stack `custom_json` parameter. It currently defaults to "true" (so, enabled)
   because most clusters are going to be development or testing clusters.
