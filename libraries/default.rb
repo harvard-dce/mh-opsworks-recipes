@@ -397,11 +397,11 @@ module MhOpsworksRecipes
       database_name = db_info[:database]
 
       database_connection = %Q|/usr/bin/mysql --user="#{username}" --host="#{host}" --port=#{port} --password="#{password}" "#{database_name}"|
-      create_database = %Q|#{database_connection} < #{current_deploy_root}/#{db_seed_file}|
+      create_tables = %Q|#{database_connection} < #{current_deploy_root}/#{db_seed_file}|
       tables_exist = %Q(#{database_connection} -B -e "show tables" | grep -qie "Tables_in_#{database_name}")
 
-      execute 'Create database' do
-        command create_database
+      execute 'Create tables' do
+        command create_tables
         not_if tables_exist
       end
     end
