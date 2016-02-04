@@ -5,7 +5,7 @@
 
 backupdir="$1"
 mysqluser=root
-options="--single-transaction --extended-insert --disable-keys --quick --set-charset --skip-comments"
+options="--compress --single-transaction --extended-insert --disable-keys --quick --set-charset --skip-comments"
 
 if [ -z "$backupdir" ]; then
   backupdir="/var/backups/mysql"
@@ -30,8 +30,8 @@ for db in `echo 'show databases' | mysql -u $mysqluser | tail -n +2 | egrep -v "
 do
   echo "Dumping database $db"
   runtime=$(date +%FT%H:%M)
-  basename=mysql-$db-$runtime.sql
-  mysqldump -u $mysqluser $options $db > $basename
+  basename=mysql-$db-$runtime.sql.gz
+  mysqldump -u $mysqluser $options $db | gzip > $basename
 
   if [ $? -ne 0 ]; then
     echo "Error dumping $basename" >&2
@@ -39,12 +39,6 @@ do
   else
     # Only reap files (older than a day) if we have a successful dump
     find -type f -name "mysql*.sql.*" -mtime 1 -delete
-
-    nice -n 10 gzip -5 $basename
-    if [ $? -ne 0 ]; then
-      echo "Error running gzip on $basename" >&2
-      exit=25
-    fi
   fi
 done
 

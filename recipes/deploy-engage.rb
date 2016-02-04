@@ -57,6 +57,8 @@ allow_matterhorn_user_to_restart_daemon_via_sudo
 
 deploy_action = get_deploy_action
 
+newrelic_app_name = alarm_name_prefix
+
 deploy_revision matterhorn_repo_root do
   repo repo_url
   revision git_data.fetch(:revision, 'master')
@@ -94,6 +96,7 @@ deploy_revision matterhorn_repo_root do
     )
     install_live_streaming_service_config(most_recent_deploy, live_stream_name)
     install_published_event_details_email(most_recent_deploy, public_engage_hostname)
+    configure_newrelic(most_recent_deploy, newrelic_app_name)
 
     # ENGAGE SPECIFIC
     set_service_registry_dispatch_interval(most_recent_deploy)

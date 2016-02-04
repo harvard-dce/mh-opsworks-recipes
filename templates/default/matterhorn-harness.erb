@@ -3,6 +3,10 @@
 prog="matterhorn"
 config="<%= @main_config_file %>"
 pidfile="/var/run/${prog}.pid"
+<% if @enable_newrelic %>
+NEW_RELIC_JAR="<%= @matterhorn_root %>/lib/ext/newrelic/newrelic.jar"
+NEWRELIC_CONFIG="-Dnewrelic.config.file=<%= @felix_config_dir %>/newrelic.yml"
+<% end %>
 
 # Times to try sending a SIGTERM before sending a SIGKILL
 kill_attempts=20
@@ -135,7 +139,13 @@ else
 	DEBUG=""
 fi
 
-MATTERHORN_OPTS="$GOSH $DEBUG $FELIX $GRAPHICS $JAVA $LOGGING $JMX $DISABLE_PHONEHOME $ADD_OPTS"
+<% if @enable_newrelic %>
+NEWRELIC="-javaagent:${NEW_RELIC_JAR} $NEWRELIC_CONFIG"
+<% else %>
+NEWRELIC=""
+<% end %>
+
+MATTERHORN_OPTS="$NEWRELIC $GOSH $DEBUG $FELIX $GRAPHICS $JAVA $LOGGING $JMX $DISABLE_PHONEHOME $ADD_OPTS"
 
 # Execute Capture-Agent device configuration
 $IS_CA && $CA/device_config.sh
