@@ -2,6 +2,11 @@
 
 ## TO BE RELEASED
 
+* Allow java unit tests to be run during a (re)deploy. They do not run by
+  default.  If you want to run them by default for all deploys set
+  `skip_java_unit_tests` to `false` in your cluster config's `custom_json`
+  config. You can run unit tests manually via the
+  `deployment:redeploy_app_with_unit_tests` rake task.
 * *REQUIRES MANUAL CHEF RECIPE RUNS*: Use maven3 instead of maven2, prepares us
   for matterhorn 1.6.x
     # Right before the deploy. . .

@@ -598,9 +598,14 @@ module MhOpsworksRecipes
         worker: 'worker-standalone,serviceregistry,workspace',
         engage: 'engage-standalone,dist,serviceregistry,workspace'
       }
+      skip_unit_tests = node.fetch(:skip_java_unit_tests, 'true')
+      retry_this_many = 3
+      if skip_unit_tests.to_s == 'false'
+        retry_this_many = 0
+      end
       execute 'maven build for matterhorn' do
-        command %Q|cd #{current_deploy_root} && MAVEN_OPTS='-Xms256m -Xmx960m -XX:PermSize=64m -XX:MaxPermSize=256m' mvn clean install -DdeployTo="#{current_deploy_root}" -Dmaven.test.skip=true -P#{build_profiles[node_profile.to_sym]}|
-        retries 3
+        command %Q|cd #{current_deploy_root} && MAVEN_OPTS='-Xms256m -Xmx960m -XX:PermSize=64m -XX:MaxPermSize=256m' mvn clean install -DdeployTo="#{current_deploy_root}" -Dmaven.test.skip=#{skip_unit_tests} -P#{build_profiles[node_profile.to_sym]}|
+        retries retry_this_many
         retry_delay 30
       end
     end
