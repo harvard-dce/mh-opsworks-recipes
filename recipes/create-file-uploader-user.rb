@@ -26,10 +26,11 @@ end
 
 user 'file_uploader' do
   supports manage_home: true
-  comment 'Matterhorn application user'
+  comment 'rsync file upload user'
   gid 'file_uploader'
   shell '/bin/bash'
   home '/home/file_uploader'
+  ignore_failure true
 end
 
 directory "/home/file_uploader/.ssh" do

@@ -2,6 +2,13 @@
 
 ## TO BE RELEASED
 
+## 1.1.2 - 2/10/2016
+
+* Allow the "create-file-uploader-user" recipe to fail, to work around
+  mysterious "usermod: no options" chef bug. Does not require anything to be
+  done during a deployment. The recipe always works the first time it's run, it's
+  just the second time that we sometimes see this failure.
+
 ## 1.1.1 - 2/3/2016
 
 * Allow java debug to be set to `true` or `false` via the `java_debug_enabled`
