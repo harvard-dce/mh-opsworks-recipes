@@ -45,8 +45,18 @@ cron_d 'disk_metrics' do
   user 'custom_metrics'
   minute '*/2'
   # Redirect stderr and stdout to logger. The command is silent on succesful runs
-  command %Q(/usr/local/bin/disk_free_metric.sh "#{aws_instance_id}" 2>&1 | logger -t info)
+  command %Q(/usr/local/bin/disk_free_metric.sh "#{aws_instance_id}" "type ext|type xfs" 2>&1 | logger -t info)
   path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+end
+
+if admin_node?
+  cron_d 'nfs_disk_metrics' do
+    user 'custom_metrics'
+    minute '*/2'
+    # Redirect stderr and stdout to logger. The command is silent on succesful runs
+    command %Q(/usr/local/bin/disk_free_metric.sh "#{aws_instance_id}" "type nfs" 2>&1 | logger -t info)
+    path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  end
 end
 
 cron_d 'load_metrics' do

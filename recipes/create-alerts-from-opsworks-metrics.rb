@@ -14,10 +14,12 @@ ruby_block "add alarms" do
     # Instance properties for monitoring
     number_of_cpus = %x(nproc).chomp.to_i
     total_ram = %x(grep MemTotal /proc/meminfo | sed -r 's/[^0-9]//g').chomp.to_i
-    local_file_systems=%x(mount | grep -E 'type ext|type xfs' | cut -f3 -d' ').chomp.split(/\n/)
+    local_file_systems = %x(mount | grep -E 'type ext|type xfs' | cut -f3 -d' ').chomp.split(/\n/)
+    nfs_file_systems = %x(mount | grep -E 'type nfs' | cut -f3 -d' ').chomp.split(/\n/)
 
     # Thresholds for monitoring targets
-    disk_free_threshold = 20
+    local_disk_free_threshold = 20
+    nfs_disk_free_threshold = 10
     # As a percentage
     memory_limit = get_memory_limit
     load_limit = number_of_cpus * 1.5
@@ -34,14 +36,9 @@ ruby_block "add alarms" do
     %x(#{command})
 
     local_file_systems.each do |partition_mount|
-      metric_name = ''
-      if partition_mount == '/'
-        metric_name = 'SpaceFreeOnRootPartition'
-      else
-        metric_suffix = partition_mount.gsub(/[^a-z\d]/,'_')
-        metric_name = "SpaceFreeOn#{metric_suffix}"
-      end
-      command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{alarm_name_prefix}_#{metric_name}" --alarm-description "#{metric_name} running low on #{alarm_name_prefix}" --metric-name "#{metric_name}" --namespace AWS/OpsworksCustom --statistic Average --period 240 --threshold #{disk_free_threshold} --comparison-operator LessThanThreshold --dimensions Name=InstanceId,Value=#{aws_instance_id} --evaluation-periods 1 --alarm-actions "#{topic_arn}" --unit Percent)
+      metric_name = calculate_disk_partition_metric_name(partition_mount)
+
+      command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{alarm_name_prefix}_#{metric_name}" --alarm-description "#{metric_name} running low on #{alarm_name_prefix}" --metric-name "#{metric_name}" --namespace AWS/OpsworksCustom --statistic Average --period 240 --threshold #{local_disk_free_threshold} --comparison-operator LessThanThreshold --dimensions Name=InstanceId,Value=#{aws_instance_id} --evaluation-periods 1 --alarm-actions "#{topic_arn}" --unit Percent)
       Chef::Log.info command
       %x(#{command})
     end
@@ -58,6 +55,15 @@ ruby_block "add alarms" do
       command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{alarm_name_prefix}_mysql_availablity" --alarm-description "MySQL is unavailable #{alarm_name_prefix}" --metric-name MySQLServerAvailable --namespace AWS/OpsworksCustom --statistic Minimum --period 120 --threshold 1 --comparison-operator LessThanThreshold --dimensions Name=InstanceId,Value=#{aws_instance_id} --evaluation-periods 1 --alarm-actions "#{topic_arn}")
       Chef::Log.info command
       %x(#{command})
+
+      # Create the nfs usage alarm from the admin node
+      nfs_file_systems.each do |partition_mount|
+        metric_name = calculate_disk_partition_metric_name(partition_mount)
+        command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{alarm_name_prefix}_#{metric_name}" --alarm-description "#{metric_name} running low on #{alarm_name_prefix}" --metric-name "#{metric_name}" --namespace AWS/OpsworksCustom --statistic Average --period 240 --threshold #{nfs_disk_free_threshold} --comparison-operator LessThanThreshold --dimensions Name=InstanceId,Value=#{aws_instance_id} --evaluation-periods 1 --alarm-actions "#{topic_arn}" --unit Percent)
+        Chef::Log.info command
+        %x(#{command})
+      end
+
     end
   end
 end

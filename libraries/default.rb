@@ -108,6 +108,15 @@ module MhOpsworksRecipes
       stack_name.downcase.gsub(/[^a-z\d\-_]/,'_')
     end
 
+    def calculate_disk_partition_metric_name(partition)
+      if partition == '/'
+        'SpaceFreeOnRootPartition'
+      else
+        metric_suffix = partition.gsub(/[^a-z\d]/,'_')
+        "SpaceFreeOn#{metric_suffix}"
+      end
+    end
+
     def rds_name
       %Q|#{stack_shortname}-database|
     end

@@ -10,7 +10,12 @@
 * *REQUIRES MANUAL CHEF RECIPE RUNS*: Use maven3 instead of maven2, prepares us
   for matterhorn 1.6.x
     # Right before the deploy. . .
-    ./bin/rake stack:commands:update_chef_recipes stack:commands:execute_recipes_on_layers layers="Admin, Workers, Engage" recipes="mh-opsworks-recipes::install-mh-base-packages"
+        ./bin/rake stack:commands:update_chef_recipes stack:commands:execute_recipes_on_layers layers="Admin, Workers, Engage" recipes="mh-opsworks-recipes::install-mh-base-packages"
+* *REQUIRES MANUAL CHEF RECIPE RUNS* Install a cloudwatch metric and alarm to
+  track nfs mount space available. Does not require anything to be done during
+  a deployment.
+
+        ./bin/rake stack:commands:execute_recipes_on_layers recipes="mh-opsworks-recipes::install-custom-metrics,mh-opsworks-recipes::create-alerts-from-opsworks-metrics"
 
 ## 1.1.2 - 2/10/2016
 
