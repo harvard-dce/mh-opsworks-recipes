@@ -1,0 +1,14 @@
+[program:<%= @capture_agent_manager_name %>]
+command = /home/capture_agent_manager/sites/<%= @capture_agent_manager_name %>/gunicorn_start.sh
+directory = /home/capture_agent_manager/sites/<%= @capture_agent_manager_name %>
+user = capture_agent_manager
+redirect_stderr = True
+
+stdout_logfile = /home/capture_agent_manager/logs/<%= @capture_agent_manager_name %>_gunicorn_stdout.log
+stderr_logfile = /home/capture_agent_manager/logs/<%= @capture_agent_manager_name %>_gunicorn_stderr.log
+stdout_logfile_maxbytes = 0
+stderr_logfile_maxbytes = 0
+stdout_logfile_backups = 0
+stderr_logfile_backups = 0
+
+

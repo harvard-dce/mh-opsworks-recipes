@@ -382,6 +382,27 @@ module MhOpsworksRecipes
         mode '0600'
       end
     end
+
+    def get_capture_agent_manager_info
+      node.fetch(
+        :capture_agent_manager, {
+          ca_stats_user: 'user',
+          ca_stats_passwd: 'passwd',
+          ca_stats_json_url: 'http://ca-status.dceapp.net/ca_stats/ca_stats.json',
+          epipearl_user: 'admin',
+          epipearl_passwd: 'passwd',
+          ldap_host: 'dev-ldap1.dce.harvard.edu',
+          ldap_base_search: 'dc=dce,dc=harvard,dc=edu',
+          ldap_bind_dn: 'cn=user,dc=dce,dc=harvard,dc=edu',
+          ldap_bind_passwd: 'passwd',
+          capture_agent_manager_secret_key: 'super_secret_really',
+          log_config: 'logging.yaml',
+          memcached_port: '8008',
+          capture_agent_manager_git_repo: 'https://github.com/harvard-dce/capture_agent_manager',
+          capture_agent_manager_git_revision: 'master'
+          }
+        )
+    end
   end
 
   module DeployHelpers

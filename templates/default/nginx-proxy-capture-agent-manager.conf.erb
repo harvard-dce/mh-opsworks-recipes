@@ -1,0 +1,10 @@
+    location / {
+        proxy_buffering off;
+        proxy_pass http://unix:/home/capture_agent_manager/sock/<%= @capture_agent_manager %>.sock;
+    }
+
+    location /static {
+        alias /home/capture_agent_manager/sites/<%= @capture_agent_manager %>/<%= @capture_agent_manager %>/static;
+        autoindex on;
+    }
+
