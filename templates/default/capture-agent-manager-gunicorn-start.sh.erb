@@ -1,0 +1,32 @@
+#!/bin/bash
+
+NAME="<%= @capture_agent_manager_name %>"
+USER="<%= @capture_agent_manager_usr_name %>"
+GROUP=${USER}
+FLASKDIR="/home/${USER}/sites/${NAME}"
+VENVDIR="${FLASKDIR}/venv"
+SOCKFILE="/home/${USER}/sock/${NAME}.sock"
+NUM_WORKERS=3
+
+echo "starting ${NAME}"
+
+# activate virtualenv
+source ${VENVDIR}/bin/activate
+
+export PYTHONPATH=${FLASKIDR}:${PYTHONPATH}
+
+# export all env vars for app
+source ${FLASKDIR}/${NAME}.env
+
+# create the run directory if it doesn't exist
+RUNDIR=$(dirname ${SOCKFILE})
+test -d ${RUNDIR} || mkdir -p ${RUNDIR}
+
+# start gunicorn
+exec gunicorn ${NAME}.app:create_app\(\) \
+    --name ${NAME} \
+    --workers ${NUM_WORKERS} \
+    --user=${USER} --group=${GROUP} \
+    --log-level=<%= @capture_agent_manager_gunicorn_log_level %> \
+    --log-file=- \
+    --bind=unix:${SOCKFILE}
