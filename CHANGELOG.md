@@ -2,6 +2,12 @@
 
 ## TO BE RELEASED
 
+* *REQUIRES MANUAL CHEF RECIPE RUNS*: Copy and symlink the nginx log dir to
+  /opt/matterhorn/nginx. This should be registered into the engage layer's
+  `setup` recipes and run whenever. It does not have to be run during a deploy.
+        ./bin/rake stack:commands:execute_recipes_on_instances recipes="mh-opsworks-recipes::symlink-nginx-log-dir" hostnames="engage1"
+  Remove the `/var/log/nginx_old` directory after you've manually confirmed logs
+  are going to the right place.
 * Allow java unit tests to be run during a (re)deploy. They do not run by
   default.  If you want to run them by default for all deploys set
   `skip_java_unit_tests` to `false` in your cluster config's `custom_json`
