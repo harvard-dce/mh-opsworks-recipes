@@ -17,6 +17,12 @@
 
         ./bin/rake stack:commands:execute_recipes_on_layers recipes="mh-opsworks-recipes::install-custom-metrics,mh-opsworks-recipes::create-alerts-from-opsworks-metrics"
 
+## 1.1.3 - 2/7/2016
+
+* HOTFIX - define dependencies better to ensure we stay with chef 11 compatible
+  cookbooks. Fixes `awscli` cookbook which depends on the broken
+  `build-essential` cookbook.
+
 ## 1.1.2 - 2/10/2016
 
 * Allow the "create-file-uploader-user" recipe to fail, to work around
