@@ -31,7 +31,7 @@ module MhOpsworksRecipes
     end
 
     def get_deploy_action
-      valid_actions = %i|deploy force_deploy rollback|
+      valid_actions = [:deploy, :force_deploy, :rollback]
       requested_action = node.fetch(:deploy_action, :deploy).to_sym
       Chef::Log.info "requested_action: #{requested_action}"
       if valid_actions.include?(requested_action)
