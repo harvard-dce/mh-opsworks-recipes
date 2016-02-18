@@ -2,10 +2,14 @@
 
 ## TO BE RELEASED
 
+## 1.1.4 - 2/18/2016
+
 * *REQUIRES MANUAL CHEF RECIPE RUNS*: Copy and symlink the nginx log dir to
   /opt/matterhorn/nginx. This should be registered into the engage layer's
   `setup` recipes and run whenever. It does not have to be run during a deploy.
+
         ./bin/rake stack:commands:execute_recipes_on_instances recipes="mh-opsworks-recipes::symlink-nginx-log-dir" hostnames="engage1"
+
   Remove the `/var/log/nginx_old` directory after you've manually confirmed logs
   are going to the right place.
 * Allow java unit tests to be run during a (re)deploy. They do not run by
@@ -15,17 +19,21 @@
   `deployment:redeploy_app_with_unit_tests` rake task.
 * *REQUIRES MANUAL CHEF RECIPE RUNS*: Use maven3 instead of maven2, prepares us
   for matterhorn 1.6.x
+
     # Right before the deploy. . .
         ./bin/rake stack:commands:update_chef_recipes stack:commands:execute_recipes_on_layers layers="Admin, Workers, Engage" recipes="mh-opsworks-recipes::install-mh-base-packages"
+
 * *REQUIRES MANUAL CHEF RECIPE RUNS* Install a cloudwatch metric and alarm to
   track nfs mount space available. Does not require anything to be done during
   a deployment.
+
         ./bin/rake stack:commands:execute_recipes_on_layers recipes="mh-opsworks-recipes::install-custom-metrics,mh-opsworks-recipes::create-alerts-from-opsworks-metrics"
+
 * Install awscli directly, without the awscli recipe. Simplifies dependencies
   significantly. Does not require manual chef recipe runs, it'll run
   automatically when needed by other recipes.
 
-## 1.1.3 - 2/7/2016
+## 1.1.3 - 2/17/2016
 
 * HOTFIX - define dependencies better to ensure we stay with chef 11 compatible
   cookbooks. Fixes `awscli` cookbook which depends on the broken
