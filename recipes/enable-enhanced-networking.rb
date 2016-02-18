@@ -3,7 +3,7 @@
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
-include_recipe "awscli::default"
+include_recipe "mh-opsworks-recipes::install-awscli"
 install_package('dkms')
 bucket_name = node.fetch(:shared_asset_bucket_name, 'mh-opsworks-shared-assets')
 dkms_version = node.fetch(:ixgbevf_version, "2.16.1")

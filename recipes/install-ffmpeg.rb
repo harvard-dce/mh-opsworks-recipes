@@ -2,7 +2,7 @@
 # Recipe:: install-ffmpeg
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
-include_recipe "awscli::default"
+include_recipe "mh-opsworks-recipes::install-awscli"
 include_recipe "mh-opsworks-recipes::update-package-repo"
 
 # The list of libraries that've been built against the ffmpeg binary (and are

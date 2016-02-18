@@ -20,8 +20,10 @@
 * *REQUIRES MANUAL CHEF RECIPE RUNS* Install a cloudwatch metric and alarm to
   track nfs mount space available. Does not require anything to be done during
   a deployment.
-
         ./bin/rake stack:commands:execute_recipes_on_layers recipes="mh-opsworks-recipes::install-custom-metrics,mh-opsworks-recipes::create-alerts-from-opsworks-metrics"
+* Install awscli directly, without the awscli recipe. Simplifies dependencies
+  significantly. Does not require manual chef recipe runs, it'll run
+  automatically when needed by other recipes.
 
 ## 1.1.3 - 2/7/2016
 

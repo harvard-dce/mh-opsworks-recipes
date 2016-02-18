@@ -49,3 +49,7 @@ suites:
   - name: populate-maven-cache
     run_list:
       - recipe[mh-opsworks-recipes::populate-maven-cache]
+
+  - name: install-awscli
+    run_list:
+      - recipe[mh-opsworks-recipes::install-awscli]
