@@ -173,6 +173,19 @@ module MhOpsworksRecipes
       )
     end
 
+    def get_storage_hostname
+      storage_info = get_storage_info
+
+      if storage_info[:type] == 'external'
+        storage_info[:nfs_server_host]
+      else
+        layer_shortname = storage_info[:layer_shortname]
+        (storage_hostname, storage_available) = node[:opsworks][:layers][layer_shortname.to_sym][:instances].first
+
+        storage_hostname
+      end
+    end
+
     def get_shared_storage_root
       storage_info = get_storage_info
       storage_info[:shared_storage_root] || storage_info[:export_root]

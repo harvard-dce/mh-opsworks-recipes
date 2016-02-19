@@ -5,13 +5,7 @@
 ::Chef::Resource::RubyBlock.send(:include, MhOpsworksRecipes::RecipeHelpers)
 include_recipe 'mh-opsworks-recipes::create-metrics-dependencies'
 
-storage_info = node.fetch(
-  :storage, {
-    export_root: '/var/tmp',
-    network: '10.0.0.0/8',
-    layer_shortname: 'storage'
-  }
-)
+storage_info = get_storage_info
 
 # Ensure nfs client requirements are installed
 install_package('autofs5')
@@ -24,14 +18,8 @@ shared_storage_root = get_shared_storage_root
 # the path we use everywhere else, use that for the export root.  This is
 # primarily for efs, which exports a filesystem on the root path always.
 nfs_server_export_root = storage_info[:nfs_server_export_root] || storage_info[:export_root]
-storage_hostname = ''
 
-if storage_info[:type] == 'external'
-  storage_hostname = storage_info[:nfs_server_host]
-else
-  layer_shortname = storage_info[:layer_shortname]
-  (storage_hostname, storage_available) = node[:opsworks][:layers][layer_shortname.to_sym][:instances].first
-end
+storage_hostname = get_storage_hostname
 
 directory '/etc/auto.master.d' do
   action :create

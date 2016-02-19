@@ -3,13 +3,7 @@
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
-storage_info = node.fetch(
-  :storage, {
-    export_root: '/var/tmp',
-    network: '10.0.0.0/8',
-    layer_shortname: 'storage'
-  }
-)
+storage_info = get_storage_info
 
 shared_storage_root = get_shared_storage_root
 
