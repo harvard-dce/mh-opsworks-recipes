@@ -9,6 +9,17 @@
 
         ./bin/rake stack:commands:execute_recipes_on_instances recipes="mh-opsworks-recipes::set-bash-as-default-shell"
 
+* *REQUIRES MANUAL CHEF RECIPE RUNS*: This recipe can be run at any time and
+  is deploy independent.  Switch to daily mysql backups as a way of having a
+  historical record of database state. RDS gives you the ability to restore to
+  any point in time back to the beginning of your retention period (30 days for
+  production), obviating the value and pretty major resource drain hourly MySQL
+  dumps impose on production. Be sure to confirm which layer you're running
+  your mysql backups on before running the command below:
+
+        # This is currently on the "Ganglia" layer in prod,
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Ganglia" recipes="mh-opsworks-recipes::install-mysql-backups"
+
 ## 1.1.4 - 2/18/2016
 
 * *REQUIRES MANUAL CHEF RECIPE RUNS*: Copy and symlink the nginx log dir to

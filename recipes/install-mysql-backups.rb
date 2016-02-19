@@ -6,16 +6,10 @@ include_recipe "mh-opsworks-recipes::install-awscli"
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
 aws_instance_id = node[:opsworks][:instance][:aws_instance_id]
+storage_info = get_storage_info
 
-storage_info = node.fetch(
-  :storage, {
-    export_root: '/var/tmp',
-    network: '10.0.0.0/8',
-    layer_shortname: 'storage'
-  }
-)
-
-run_mysql_dump_on_the = node.fetch(:run_mysql_dump_on_the, 2)
+mysql_dump_minute = node.fetch(:mysql_dump_minute, 2)
+mysql_dump_hour = node.fetch(:mysql_dump_hour, 3)
 
 export_root = storage_info[:export_root]
 
@@ -35,7 +29,8 @@ end
 
 cron_d 'mysql_backup' do
   user 'root'
-  minute run_mysql_dump_on_the
+  minute mysql_dump_minute.to_i
+  hour mysql_dump_hour.to_i
   command %Q(/usr/local/bin/mysql-backup.sh "#{export_root}/backups/mysql" 2>&1 | logger -t info)
   path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 end
@@ -49,7 +44,8 @@ end
 
 cron_d 'mysql_backup_metric' do
   user 'root'
-  minute "*/2"
+  minute mysql_dump_minute.to_i
+  hour mysql_dump_hour.to_i + 1
   command %Q(/usr/local/bin/mysql-backup-metric.sh "#{export_root}/backups/mysql" "#{aws_instance_id}" 2>&1 | logger -t info)
   path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 end
