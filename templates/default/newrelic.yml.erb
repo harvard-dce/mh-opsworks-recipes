@@ -197,7 +197,7 @@ common: &default_settings
     # by providing a comma separated list of status codes.
     # The default is to exclude 404s. If you want to override
     # this, you must provide any new value as an empty list is ignored.
-    ignore_status_codes: 404
+    ignore_status_codes: 404,401
 
   # Transaction Events are used for Histograms and Percentiles. Unaggregated data is collected
   # for each web transaction and sent to the server on harvest. 
