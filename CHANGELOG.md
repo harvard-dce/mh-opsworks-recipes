@@ -1,7 +1,8 @@
 # CHANGELOG
 
 ## TO BE RELEASED
-
+* Added 401 to newrelic template
+     This allows newrelic to ignore all httpcode 401 in addition to 404.
 ## 1.1.4 - 2/18/2016
 
 * *REQUIRES MANUAL CHEF RECIPE RUNS*: Copy and symlink the nginx log dir to
