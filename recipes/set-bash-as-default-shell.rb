@@ -8,3 +8,9 @@ execute 'set sh to bash and not dash' do
   retry_delay 5
 end
 
+cookbook_file "bash.bashrc" do
+  path "/etc/bash.bashrc"
+  owner "root"
+  group "root"
+  mode "644"
+end

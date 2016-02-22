@@ -2,6 +2,13 @@
 
 ## TO BE RELEASED
 
+* *REQUIRES MANUAL CHEF RECIPE RUNS:* Set the bash prompt to be in color and
+  put the cluster name in there. When a cluster includes "production" in the
+  name, make it red so that users know they're working in production.  This is
+  not tied to deployment and can be run at any time
+
+        ./bin/rake stack:commands:execute_recipes_on_instances recipes="mh-opsworks-recipes::set-bash-as-default-shell"
+
 ## 1.1.4 - 2/18/2016
 
 * *REQUIRES MANUAL CHEF RECIPE RUNS*: Copy and symlink the nginx log dir to
