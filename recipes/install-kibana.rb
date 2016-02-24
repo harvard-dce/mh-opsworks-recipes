@@ -7,7 +7,7 @@ elk_info = get_elk_info
 
 kibana_version = elk_info[:kibana_version]
 kibana_checksum = elk_info[:kibana_checksum]
-dl_path = "#{::Chef::Config[:file_cache_path]}/kibana.tar.gz" 
+download_path = "#{::Chef::Config[:file_cache_path]}/kibana.tar.gz" 
 
 group 'kibana' do
   append true
@@ -20,16 +20,21 @@ user 'kibana' do
   home '/opt/kibana'
 end
 
-remote_file "/etc/init.d/kibana" do
-  source "https://gist.githubusercontent.com/thisismitch/8b15ac909aed214ad04a/raw/fc5025c3fc499ad8262aff34ba7fde8c87ead7c0/kibana-4.x-init"
-  mode '0755'
+cookbook_file "/etc/init.d/kibana" do
+  source "kibana-4.x-init"
+  owner 'root'
+  group 'root'
+  mode '755'
 end
 
-remote_file "/etc/default/kibana" do
-  source "https://gist.githubusercontent.com/thisismitch/8b15ac909aed214ad04a/raw/fc5025c3fc499ad8262aff34ba7fde8c87ead7c0/kibana-4.x-default"
+cookbook_file "/etc/default/kibana" do
+  source "kibana-4.x-default"
+  owner 'root'
+  group 'root'
+  mode '644'
 end
 
-remote_file dl_path do
+remote_file download_path do
   source "https://download.elastic.co/kibana/kibana/kibana-#{kibana_version}-linux-x64.tar.gz"
   checksum kibana_checksum
   notifies :run, "bash[install_kibana]", :immediately
@@ -37,7 +42,7 @@ end
 
 bash "install_kibana" do
   code <<-EOH
-    tar -xz --strip-components=1 -C /opt/kibana -f #{dl_path}
+    tar -xz --strip-components=1 -C /opt/kibana -f #{download_path}
     chown -R kibana: /opt/kibana
     update-rc.d kibana defaults 96 9
   EOH

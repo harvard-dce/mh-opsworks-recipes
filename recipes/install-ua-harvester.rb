@@ -47,7 +47,7 @@ MATTERHORN_HOST="#{engage_attributes[:private_ip]}"
 S3_LAST_ACTION_TS_BUCKET=mh-user-action-harvester
 S3_LAST_ACTION_TS_KEY="#{stack_name}-last-action-ts"
 SQS_QUEUE_NAME="#{stack_name}-user-actions"
-LOGGLY_TAGS=jluker-elk
+LOGGLY_TAGS="#{stack_name}"
 #{loggly_config}
 |
   mode '600'
@@ -58,7 +58,7 @@ bash 'install dependencies' do
   user 'root'
 end
 
-# weekdays, offpeak, every five minutes from midnight - 7am + 11pm - midnight
+# fetch user action data from MH every 2m
 cron_d 'ua_harvester' do
   user 'ua_harvester'
   minute '*/2'

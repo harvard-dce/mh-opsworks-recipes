@@ -10,6 +10,9 @@ elk_info = get_elk_info
 
 template '/etc/logstash/conf.d/logstash.conf' do
   source 'logstash.conf.erb'
+  user 'root'
+  group 'root'
+  mode '644'
   variables({
     tcp_port: elk_info[:logstash_tcp_port],
     sqs_queue_name: "#{stack_name}-user-actions",
@@ -23,8 +26,11 @@ execute 'service logstash restart'
 
 template '/opt/kibana/config/kibana.yml' do
   source 'kibana.yml.erb'
+  user 'kibana'
+  group 'kibana'
+  mode '644'
   variables({
-    elasticsearch_host: es_attributes[:private_ip],
+    elasticsearch_host: es_attributes[:private_ip]
   })
 end
 

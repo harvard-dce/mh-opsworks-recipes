@@ -45,12 +45,12 @@ server {
   }
   
   location ~ ^/es.*$ {
-    proxy_pass http://elasticsearch1:9200;
+    proxy_pass http://<%= @elasticsearch_host %>:9200;
     rewrite ^/es(.*) /$1 break;
   }
 
   location ~ ^/kopf/.*$ {
-    proxy_pass http://elasticsearch1:9200;
+    proxy_pass http://<%= @elasticsearch_host %>:9200;
     rewrite ^/kopf/(.*) /_plugin/kopf/$1 break;
   }
 

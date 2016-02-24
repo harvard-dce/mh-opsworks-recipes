@@ -1,11 +1,11 @@
 
 {
-  "template" : "dce-*",
+  "template" : "useractions-*",
   "settings" : {
     "index.refresh_interval" : "5s"
   },
   "mappings" : {
-    "user_actions" : {
+    "event" : {
       "_all" : {"enabled" : false},
       "dynamic_templates" : [
       {

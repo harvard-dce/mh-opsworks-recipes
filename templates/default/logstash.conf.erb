@@ -46,7 +46,7 @@ output {
     document_id => "%{action_id}"
     doc_as_upsert => true
     manage_template => false
-    document_type => "user_actions"
+    document_type => "event"
     index => "<%= @elasticsearch_index_prefix %>-%{+YYYY.MM.dd}"
     workers => 4
     flush_size => 10000

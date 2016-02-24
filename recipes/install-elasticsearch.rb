@@ -8,7 +8,6 @@ elk_info = get_elk_info
 es_major_version = elk_info[:es_major_version]
 es_version = elk_info[:es_version]
 es_cluster_name = elk_info[:es_cluster_name]
-index_template_path = "#{::Chef::Config[:file_cache_path]}/index-template.json" 
 
 apt_repository 'elasticsearch' do
   uri "http://packages.elasticsearch.org/elasticsearch/#{es_major_version}/debian"
@@ -31,10 +30,16 @@ end
 cookbook_file "kopf_external_settings.json" do
   path '/usr/share/elasticsearch/plugins/kopf/_site/kopf_external_settings.json'
   source "kopf_external_settings.json"
+  owner 'root'
+  group 'root'
+  mode '644'
 end.run_action(:create)
 
 template '/etc/elasticsearch/elasticsearch.yml' do
   source 'elasticsearch.yml.erb'
+  owner 'root'
+  group 'root'
+  mode '644'
   variables({
     cluster_name: es_cluster_name
   })
@@ -42,16 +47,32 @@ end
 
 execute 'service elasticsearch restart'
 
-cookbook_file "index-template.json" do
-  path index_template_path
-  source "index-template.json"
+directory "/etc/elasticsearch/templates" do
+  owner 'root'
+  group 'root'
+  mode '755'
 end.run_action(:create)
 
+cookbook_file "/etc/elasticsearch/templates/useractions.json" do
+  source "useractions.json"
+  owner 'root'
+  group 'root'
+  mode '644'
+end.run_action(:create)
+
+http_request "delete existing templates" do
+  url 'http://localhost:9200/_template/dce-*'
+  action :delete
+  retries 2
+  retry_delay 30
+  ignore_failure true
+end
+
 http_request "put index template" do
-  url 'http://localhost:9200/_template/dce'
-  message ::File.read(index_template_path)
+  url 'http://localhost:9200/_template/dce-useractions'
+  message ::File.read("/etc/elasticsearch/templates/useractions.json")
   action :put
-  retries 5
+  retries 2
   retry_delay 30
 end
 
