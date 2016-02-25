@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## 1.1.5 - 2/25/2016
+
 * *REQUIRES MANUAL CHEF RECIPE RUNS:* Set the bash prompt to be in color and
   put the cluster name in there. When a cluster includes "production" in the
   name, make it red so that users know they're working in production.  This is
@@ -19,6 +21,8 @@
 
         # This is currently on the "Ganglia" layer in prod,
         ./bin/rake stack:commands:execute_recipes_on_layers layers="Ganglia" recipes="mh-opsworks-recipes::install-mysql-backups"
+
+* Ignore 401s in newrelic logging.
 
 ## 1.1.4 - 2/18/2016
 
