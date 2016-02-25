@@ -1,0 +1,8 @@
+cluster.name: <%= @cluster_name %>
+node.name: ${HOSTNAME}
+network.host: 0.0.0.0
+bootstrap.mlockall: true
+indices.fielddata.cache.size:  40%
+threadpool.bulk.queue_size: 1000
+threadpool.search.queue_size: 3000
+
