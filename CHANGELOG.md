@@ -2,13 +2,14 @@
 
 ## TO BE RELEASED
 
+## 1.1.5 - 2/25/2016
+
 * Create a squid3 proxy to be used by the zadara storage array to get to s3 for
   object store backups.  See
   [mh-opsworks](https://github.com/harvard-dce/mh-opsworks/blob/master/README.zadara.md)
   for more information about how to use this recipe. This recipe is independent
   of deployments.
 
-## 1.1.5 - 2/25/2016
 
 * *REQUIRES MANUAL CHEF RECIPE RUNS:* Set the bash prompt to be in color and
   put the cluster name in there. When a cluster includes "production" in the
