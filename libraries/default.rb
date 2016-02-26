@@ -237,6 +237,7 @@ module MhOpsworksRecipes
         es_version: '2.2.0',
         es_cluster_name: stack_name,
         es_index_prefix: "useractions-#{stack_name}",
+        es_data_path: "/vol/data",
         logstash_major_version: '2.1',
         logstash_version: '1:2.1.1-1',
         logstash_tcp_port: '5000',

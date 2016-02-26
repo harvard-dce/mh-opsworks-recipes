@@ -8,6 +8,7 @@ elk_info = get_elk_info
 es_major_version = elk_info[:es_major_version]
 es_version = elk_info[:es_version]
 es_cluster_name = elk_info[:es_cluster_name]
+data_path = elk_info[:es_data_path]
 
 apt_repository 'elasticsearch' do
   uri "http://packages.elasticsearch.org/elasticsearch/#{es_major_version}/debian"
@@ -41,7 +42,8 @@ template '/etc/elasticsearch/elasticsearch.yml' do
   group 'root'
   mode '644'
   variables({
-    cluster_name: es_cluster_name
+    cluster_name: es_cluster_name,
+    data_path: data_path
   })
 end
 
