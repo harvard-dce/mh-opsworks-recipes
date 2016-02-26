@@ -113,7 +113,6 @@ deploy_revision "matterhorn" do
         s3_distribution_bucket_name: s3_distribution_bucket_name,
         capture_agent_monitor_url: capture_agent_monitor_url,
         live_streaming_url: live_streaming_url,
-        using_ssl_for_engage: using_ssl_for_engage,
         job_maxload: nil,
       })
     end

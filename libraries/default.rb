@@ -107,6 +107,30 @@ module MhOpsworksRecipes
       admin_hostname
     end
 
+    def get_base_media_download_domain(engage_hostname)
+      uri = URI(get_base_media_download_url(engage_hostname))
+      uri.host
+    end
+
+    def get_base_media_download_url(engage_hostname)
+      # engage_hostname is passed in because we don't have the engage instance
+      # chef attributes when we're deploying the engage instance. The chef
+      # attributes don't make it into the shared chef environment until the
+      # node comes online.
+
+      cloudfront_url = get_cloudfront_url
+      base_media_download_url = ''
+
+      if cloudfront_url && (! cloudfront_url.empty?)
+        Chef::Log.info "Cloudfront url: #{cloudfront_url}"
+        base_media_download_url = %Q|https://#{cloudfront_url}|
+      else
+        Chef::Log.info "s3 distribution: #{engage_hostname}"
+        base_media_download_url = %Q|https://#{get_s3_distribution_bucket_name}.s3.amazonaws.com|
+      end
+      base_media_download_url
+    end
+
     def get_public_engage_hostname
       return node[:public_engage_hostname] if node[:public_engage_hostname]
 
