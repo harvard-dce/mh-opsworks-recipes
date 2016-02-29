@@ -11,6 +11,8 @@ source_admin_ip = get_public_admin_ip
 source_cloudfront_domain = get_base_media_download_domain(source_engage_host)
 source_wowza_edge_url = get_live_streaming_url
 source_s3_bucket = get_s3_distribution_bucket_name
+upload_s3_bucket = get_shared_asset_bucket_name
+base_cluster_seed_name = topic_name
 
 if testing_cluster?
   cookbook_file 'create-cluster-seed-file.sh' do
@@ -23,7 +25,7 @@ if testing_cluster?
   if do_it && admin_node?
     execute 'create cluster seed file' do
       user "root"
-      command %Q|/usr/local/bin/create-cluster-seed-file.sh -x -p "#{shared_storage_root}" --source_engage_ip "#{source_engage_ip}" --source_engage_host "#{source_engage_host}" --source_admin_ip "#{source_admin_ip}" --source_cloudfront_domain "#{source_cloudfront_domain}" --source_wowza_edge_url "#{source_wowza_edge_url}" --source_s3_bucket "#{source_s3_bucket}"|
+      command %Q|/usr/local/bin/create-cluster-seed-file.sh -x -p "#{shared_storage_root}" --source_engage_ip "#{source_engage_ip}" --source_engage_host "#{source_engage_host}" --source_admin_ip "#{source_admin_ip}" --source_cloudfront_domain "#{source_cloudfront_domain}" --source_wowza_edge_url "#{source_wowza_edge_url}" --source_s3_bucket "#{source_s3_bucket}" --base_cluster_seed_name "#{base_cluster_seed_name}" --upload_s3_bucket "#{upload_s3_bucket}"|
     end
   end
 end
