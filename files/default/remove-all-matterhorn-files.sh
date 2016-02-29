@@ -35,4 +35,6 @@ if [ -z "$shared_files_path" ]; then
   exit 1
 fi
 
+# TODO - remove the S3 files from the correct distribution bucket
+
 /bin/rm -Rf $shared_files_path/*

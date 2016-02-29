@@ -30,7 +30,7 @@ if testing_cluster?
     mode '700'
   end
 
-  if do_it && database_node?
+  if do_it && admin_node?
     include_recipe 'mh-opsworks-recipes::remove-all-matterhorn-files'
 
     execute 'load seed database and create seed files' do
