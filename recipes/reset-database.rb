@@ -14,7 +14,7 @@ if testing_cluster?
     mode '700'
   end
 
-  if do_it && database_node?
+  if do_it && admin_node?
     execute 'delete matterhorn database' do
       user "root"
       command %Q|/usr/local/bin/reset-mysql-database.sh -x -f "#{matterhorn_repo_root}/current/#{db_seed_file}"|
