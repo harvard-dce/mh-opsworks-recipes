@@ -20,7 +20,7 @@ if testing_cluster?
     mode '700'
   end
 
-  if do_it && database_node?
+  if do_it && admin_node?
     execute 'create cluster seed file' do
       user "root"
       command %Q|/usr/local/bin/create-cluster-seed-file.sh -x -p "#{shared_storage_root}" --source_engage_ip "#{source_engage_ip}" --source_engage_host "#{source_engage_host}" --source_admin_ip "#{source_admin_ip}" --source_cloudfront_domain "#{source_cloudfront_domain}" --source_wowza_edge_url "#{source_wowza_edge_url}" --source_s3_bucket "#{source_s3_bucket}"|
