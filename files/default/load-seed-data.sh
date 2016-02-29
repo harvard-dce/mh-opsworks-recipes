@@ -66,5 +66,7 @@ aws s3 cp s3://"$bucket_name"/"$seed_file" .
 tar xvfz "$seed_file"
 rm "$seed_file"
 
+# TODO - upload s3 files to the correct distribution bucket 
+
 /usr/bin/mysql -e 'drop database matterhorn; create database matterhorn;'
 /usr/bin/mysql matterhorn < "$shared_files_path/mysql_seed_backup/matterhorn.mysql"
