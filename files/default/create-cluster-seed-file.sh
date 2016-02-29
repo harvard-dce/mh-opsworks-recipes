@@ -8,6 +8,7 @@ source_engage_host=
 source_admin_ip=
 source_cloudfront_domain=
 source_wowza_edge_url=
+source_s3_bucket=
 
 while :; do
   case $1 in
@@ -44,6 +45,11 @@ while :; do
       shift 2
       continue
       ;;
+    --source_s3_bucket)
+      source_s3_bucket=$2
+      shift 2
+      continue
+      ;;
     *)
       break
   esac
@@ -68,11 +74,14 @@ fi
 
 cluster_seed_path="$shared_files_path/cluster_seed"
 db_backup_path="$shared_files_path/mysql_seed_backup"
+s3_backup_path="$shared_files_path/s3_contents"
 
 /bin/mkdir -p "$cluster_seed_path"
 /bin/mkdir -p "$db_backup_path"
 
 /usr/bin/mysqldump --single-transaction --extended-insert --disable-keys --quick --set-charset --skip-comments matterhorn > "$db_backup_path/matterhorn.mysql"
+
+aws s3 sync s3://"$source_s3_bucket" "$s3_backup_path"
 
 cd "$shared_files_path"
 
@@ -85,6 +94,7 @@ source_engage_host='$source_engage_host'
 source_admin_ip='$source_admin_ip'
 source_cloudfront_domain='$source_cloudfront_domain'
 source_wowza_edge_url='$source_wowza_edge_url'
+source_s3_bucket='$source_s3_bucket'
 " > seed_cluster_hostnames.txt
 
 tar -czf "$cluster_seed_path/cluster_seed.tgz" . --exclude="*/cluster_seed.tgz"
