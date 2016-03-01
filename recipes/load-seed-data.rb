@@ -14,6 +14,7 @@ engage_host = get_public_engage_hostname
 admin_ip = get_public_admin_ip
 cloudfront_domain = get_base_media_download_domain(engage_host)
 wowza_edge_url = get_live_streaming_url
+s3_distribution_bucket = get_shared_asset_bucket_name
 
 if testing_cluster?
   cookbook_file 'load-seed-data.sh' do
@@ -35,7 +36,7 @@ if testing_cluster?
 
     execute 'load seed database and create seed files' do
       user "root"
-      command %Q|/usr/local/bin/load-seed-data.sh -x -p "#{shared_storage_root}" -b "#{bucket_name}" -s "#{seed_file}"|
+      command %Q|/usr/local/bin/load-seed-data.sh -x -p "#{shared_storage_root}" -b "#{bucket_name}" -s "#{seed_file}" -n "#{s3_distribution_bucket}"|
       timeout 600
     end
 
