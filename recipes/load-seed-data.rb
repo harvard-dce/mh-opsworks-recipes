@@ -2,7 +2,7 @@
 # Recipe:: reset-database
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
-include_recipe "awscli::default"
+include_recipe "mh-opsworks-recipes::install-awscli"
 
 do_it = node.fetch(:do_it, false)
 shared_storage_root = get_shared_storage_root
