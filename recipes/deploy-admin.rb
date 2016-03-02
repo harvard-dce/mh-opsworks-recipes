@@ -50,7 +50,8 @@ deploy_action = get_deploy_action
 
 newrelic_app_name = alarm_name_prefix
 
-deploy_revision matterhorn_repo_root do
+deploy_revision "matterhorn" do
+  deploy_to matterhorn_repo_root
   repo repo_url
   revision git_data.fetch(:revision, 'master')
   enable_submodules true
