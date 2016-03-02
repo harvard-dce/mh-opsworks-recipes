@@ -1,7 +1,6 @@
 # Cookbook Name:: mh-opsworks-recipes
 # Recipe:: install-deploy-key
 
-matterhorn_repo_root = node[:matterhorn_repo_root]
 git_data = node[:deploy][:matterhorn][:scm]
 
 ssh_key = git_data.fetch(:ssh_key, '')

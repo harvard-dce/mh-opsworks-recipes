@@ -2,6 +2,23 @@
 
 ## TO BE RELEASED
 
+* *REQUIRES EDITS TO THE CLUSTER CONFIG* *REQUIRES MANUAL CHEF RECIPE RUNS*: 
+  Before doing a deploy, you must edit the production cluster config
+  `custom_json` to set:
+
+        "matterhorn_repo_root": "/opt/matterhorn/deploy",
+        "nginx_log_root_dir": "/opt/matterhorn",
+
+  `matterhorn_repo_root` already exists and should be updated -
+  `nginx_log_root_dir` is new and should be created. Proceed to update chef
+  recipes and do your deploy normally after that.
+
+  This new feature clarifies the name of the deployed app and allows it to
+  easily be moved into a separate subdirectory under /opt/matterhorn.  The manual
+  recipe run below can be run at any time after a successful deploy.
+
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin, Workers, Engage" recipes="mh-opsworks-recipes::remove-legacy-deploy-dir"
+
 ## 1.1.5 - 2/25/2016
 
 * Create a squid3 proxy to be used by the zadara storage array to get to s3 for
