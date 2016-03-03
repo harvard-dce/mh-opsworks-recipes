@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## 1.1.6 - 3/3/2016
+
 * *REQUIRES EDITS TO THE CLUSTER CONFIG* *REQUIRES MANUAL CHEF RECIPE RUNS*: 
   Before doing a deploy and after the morning scaled instances have started,
   you must edit the production cluster config `custom_json` to set:
