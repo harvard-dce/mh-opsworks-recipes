@@ -3,8 +3,8 @@
 ## TO BE RELEASED
 
 * *REQUIRES EDITS TO THE CLUSTER CONFIG* *REQUIRES MANUAL CHEF RECIPE RUNS*: 
-  Before doing a deploy, you must edit the production cluster config
-  `custom_json` to set:
+  Before doing a deploy and after the morning scaled instances have started,
+  you must edit the production cluster config `custom_json` to set:
 
         "matterhorn_repo_root": "/opt/matterhorn/deploy",
         "nginx_log_root_dir": "/opt/matterhorn",
@@ -18,6 +18,13 @@
   recipe run below can be run at any time after a successful deploy.
 
         ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin, Workers, Engage" recipes="mh-opsworks-recipes::remove-legacy-deploy-dir"
+
+* *REQUIRES MANUAL CHEF RECIPE RUNS*: Open up nginx logs to be world-readable
+  by default. This happens post daily log rotation
+
+        # After the recipes have been updated. . .
+        ./bin/rake stack:commands:execute_recipes_on_layers recipes="mh-opsworks-recipes::configure-nginx-proxy" layers="Admin, Workers"
+        ./bin/rake stack:commands:execute_recipes_on_layers recipes="mh-opsworks-recipes::configure-engage-nginx-proxy" layers="Engage"
 
 ## 1.1.5 - 2/25/2016
 
