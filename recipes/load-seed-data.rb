@@ -14,7 +14,7 @@ engage_host = get_public_engage_hostname
 admin_ip = get_public_admin_ip
 cloudfront_domain = get_base_media_download_domain(engage_host)
 wowza_edge_url = get_live_streaming_url
-s3_distribution_bucket = get_shared_asset_bucket_name
+s3_distribution_bucket = get_s3_distribution_bucket_name
 
 if testing_cluster?
   cookbook_file 'load-seed-data.sh' do
