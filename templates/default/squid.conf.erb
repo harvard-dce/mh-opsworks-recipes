@@ -19,15 +19,20 @@ acl CONNECT method CONNECT
 # zadara ACLs as defined here: https://support.zadarastorage.com/entries/69891364-Setup-Backup-To-S3-B2S3-Through-a-Proxy-In-Your-AWS-VPC
 acl vpsa src <%= @storage_ip_address %>/32
 
+# From https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region
 acl s3 dstdom_regex .*s3\.amazonaws\.com
+acl s3 dstdom_regex .*s3-external-1\.amazonaws\.com
+acl s3 dstdom_regex .*s3-us-west-1\.amazonaws\.com
+acl s3 dstdom_regex .*s3-us-west-2\.amazonaws\.com
+acl s3 dstdom_regex .*s3-eu-west-1\.amazonaws\.com
 acl s3 dstdom_regex .*s3\.eu-central-1\.amazonaws\.com
-acl s3 dstdom_regex .*s3\.sa-east-1\.amazonaws\.com
-acl s3 dstdom_regex .*s3\.ap-northeast-1\.amazonaws\.com
-acl s3 dstdom_regex .*s3\.eu-west-1\.amazonaws\.com
-acl s3 dstdom_regex .*s3\.us-west-1\.amazonaws\.com
-acl s3 dstdom_regex .*s3\.us-west-2\.amazonaws\.com
-acl s3 dstdom_regex .*s3\.ap-southeast-2\.amazonaws\.com
-acl s3 dstdom_regex .*s3\.ap-southeast-1\.amazonaws\.com
+acl s3 dstdom_regex .*s3-eu-central-1\.amazonaws\.com
+acl s3 dstdom_regex .*s3-ap-northeast-1\.amazonaws\.com
+acl s3 dstdom_regex .*s3\.ap-northeast-2\.amazonaws\.com
+acl s3 dstdom_regex .*s3-ap-northeast-2\.amazonaws\.com
+acl s3 dstdom_regex .*s3-ap-southeast-1\.amazonaws\.com
+acl s3 dstdom_regex .*s3-ap-southeast-2\.amazonaws\.com
+acl s3 dstdom_regex .*s3-sa-east-1\.amazonaws\.com
 
 http_access allow vpsa s3
 

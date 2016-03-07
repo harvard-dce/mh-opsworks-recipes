@@ -2,6 +2,9 @@
 
 ## TO BE RELEASED
 
+* Fix the squid3 proxy ACL to correct rules for s3 endpoints - the zadara docs
+  were very, very wrong. This does not require an explicit chef recipe run.
+
 ## 1.1.6 - 3/3/2016
 
 * *REQUIRES EDITS TO THE CLUSTER CONFIG* *REQUIRES MANUAL CHEF RECIPE RUNS*: 
