@@ -5,7 +5,7 @@
 
 include_recipe "mh-opsworks-recipes::install-awscli"
 install_package('dkms')
-bucket_name = node.fetch(:shared_asset_bucket_name, 'mh-opsworks-shared-assets')
+bucket_name = get_shared_asset_bucket_name
 dkms_version = node.fetch(:ixgbevf_version, "2.16.1")
 
 cookbook_file 'enable_enhanced_networking.sh' do
