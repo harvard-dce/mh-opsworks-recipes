@@ -7,7 +7,7 @@ include_recipe "mh-opsworks-recipes::install-awscli"
 do_it = node.fetch(:do_it, false)
 shared_storage_root = get_shared_storage_root
 seed_file = get_seed_file
-bucket_name = get_shared_asset_bucket_name
+cluster_seed_bucket_name = get_cluster_seed_bucket_name
 
 engage_ip = get_public_engage_ip
 engage_host = get_public_engage_hostname
@@ -36,7 +36,7 @@ if testing_cluster?
 
     execute 'load seed database and create seed files' do
       user "root"
-      command %Q|/usr/local/bin/load-seed-data.sh -x -p "#{shared_storage_root}" -b "#{bucket_name}" -s "#{seed_file}" -n "#{s3_distribution_bucket}"|
+      command %Q|/usr/local/bin/load-seed-data.sh -x -p "#{shared_storage_root}" -b "#{cluster_seed_bucket_name}" -s "#{seed_file}" -n "#{s3_distribution_bucket}"|
       timeout 600
     end
 

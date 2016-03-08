@@ -31,6 +31,10 @@ module MhOpsworksRecipes
       node.fetch(:shared_asset_bucket_name, 'mh-opsworks-shared-assets')
     end
 
+    def get_cluster_seed_bucket_name
+      node.fetch(:cluster_seed_bucket_name, 'dce-deac-test-cluster-seeds')
+    end
+
     def get_seed_file
       node.fetch(:cluster_seed_file, 'cluster_seed.tgz')
     end
