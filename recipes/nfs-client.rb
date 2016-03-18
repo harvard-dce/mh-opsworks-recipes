@@ -63,39 +63,41 @@ directory shared_storage_root do
   recursive true
 end
 
-heartbeat_root_dir = shared_storage_root + "/.storage_heartbeat"
-aws_instance_id = node[:opsworks][:instance][:aws_instance_id]
+if on_aws?
+  heartbeat_root_dir = shared_storage_root + "/.storage_heartbeat"
+  aws_instance_id = node[:opsworks][:instance][:aws_instance_id]
 
-cookbook_file 'nfs_available.sh' do
-  path '/usr/local/bin/nfs_available.sh'
-  owner 'root'
-  group 'root'
-  mode '755'
-end
+  cookbook_file 'nfs_available.sh' do
+    path '/usr/local/bin/nfs_available.sh'
+    owner 'root'
+    group 'root'
+    mode '755'
+  end
 
-directory heartbeat_root_dir do
-  owner 'custom_metrics'
-  group 'custom_metrics'
-  mode '700'
-  recursive true
-end
+  directory heartbeat_root_dir do
+    owner 'custom_metrics'
+    group 'custom_metrics'
+    mode '700'
+    recursive true
+  end
 
-cron_d 'nfs_available' do
-  user 'custom_metrics'
-  minute '*/2'
-  # Redirect stderr and stdout to logger. The command is silent on succesful runs
-  command %Q(/usr/local/bin/nfs_available.sh "#{aws_instance_id}" "#{heartbeat_root_dir}" 2>&1 | logger -t info)
-  path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
-end
+  cron_d 'nfs_available' do
+    user 'custom_metrics'
+    minute '*/2'
+    # Redirect stderr and stdout to logger. The command is silent on succesful runs
+    command %Q(/usr/local/bin/nfs_available.sh "#{aws_instance_id}" "#{heartbeat_root_dir}" 2>&1 | logger -t info)
+    path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  end
 
-ruby_block "add nfs availability check" do
-  block do
-    region = 'us-east-1'
-    # This is idempotent according to the aws docs
-    topic_arn = %x(aws sns create-topic --name "#{topic_name}" --region #{region} --output text).chomp
+  ruby_block "add nfs availability check" do
+    block do
+      region = 'us-east-1'
+      # This is idempotent according to the aws docs
+      topic_arn = %x(aws sns create-topic --name "#{topic_name}" --region #{region} --output text).chomp
 
-    command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{alarm_name_prefix}_nfs_availability" --alarm-description "NFS is unavailable #{alarm_name_prefix}" --metric-name NFSAvailable --namespace AWS/OpsworksCustom --statistic Minimum --period 120 --threshold 1 --comparison-operator LessThanThreshold --dimensions Name=InstanceId,Value=#{aws_instance_id} --evaluation-periods 1 --alarm-actions "#{topic_arn}")
-    Chef::Log.info command
-    %x(#{command})
+      command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{alarm_name_prefix}_nfs_availability" --alarm-description "NFS is unavailable #{alarm_name_prefix}" --metric-name NFSAvailable --namespace AWS/OpsworksCustom --statistic Minimum --period 120 --threshold 1 --comparison-operator LessThanThreshold --dimensions Name=InstanceId,Value=#{aws_instance_id} --evaluation-periods 1 --alarm-actions "#{topic_arn}")
+      Chef::Log.info command
+      %x(#{command})
+    end
   end
 end

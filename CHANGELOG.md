@@ -2,6 +2,11 @@
 
 ## TO BE RELEASED
 
+* Local opsworks cluster support, in concert with changes made to mh-opsworks
+  proper.  Modify some chef recipes to only run functions when on AWS. Nothing
+  is required to be run outside of a normal deploy. See `README.local-opsworks.md`
+  in mh-opsworks for full info on how this feature works.
+
 ## 1.3.1 - 4/14/2016
 
 * Start matterhorn at boot via cron's @reboot functionality. Runs automatically

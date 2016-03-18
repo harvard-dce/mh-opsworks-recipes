@@ -86,9 +86,15 @@ deploy_revision "matterhorn" do
       most_recent_deploy, auth_host, auth_redirect_location, auth_activated
     )
     install_live_streaming_service_config(most_recent_deploy, live_stream_name)
+    # Admin Specific
     install_otherpubs_service_config(most_recent_deploy, matterhorn_repo_root, auth_host)
+    # /Admin Specific
     install_published_event_details_email(most_recent_deploy, public_engage_hostname)
     configure_newrelic(most_recent_deploy, newrelic_app_name)
+
+    if using_local_distribution?
+      update_properties_files_for_local_distribution(most_recent_deploy)
+    end
 
     # ADMIN SPECIFIC
     initialize_database(most_recent_deploy)

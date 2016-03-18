@@ -103,6 +103,10 @@ deploy_revision "matterhorn" do
     install_aws_s3_distribution_service_config(most_recent_deploy, region, s3_distribution_bucket_name)
     # /ENGAGE SPECIFIC
 
+    if using_local_distribution?
+      update_properties_files_for_local_distribution(most_recent_deploy)
+    end
+
     template %Q|#{most_recent_deploy}/etc/config.properties| do
       source 'config.properties.erb'
       owner 'matterhorn'
