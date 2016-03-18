@@ -51,6 +51,10 @@ module MhOpsworksRecipes
       node['opsworks']['instance']['hostname'].match(/^admin/)
     end
 
+    def database_node?
+      node['opsworks']['instance']['hostname'].match(/^db-master/)
+    end
+
     def get_db_seed_file
       node.fetch(:db_seed_file, 'dce-config/docs/scripts/ddl/mysql5.sql')
     end

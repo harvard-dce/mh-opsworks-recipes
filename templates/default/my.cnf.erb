@@ -2,5 +2,7 @@
 [client]
 user=<%= @username %>
 password=<%= @password %>
+<% unless @is_db_node %>
 host=<%= @host %>
+<% end %>
 port=<%= @port %>
