@@ -39,6 +39,15 @@ module MhOpsworksRecipes
       node.fetch(:cluster_seed_file, 'cluster_seed.tgz')
     end
 
+    def on_aws?
+      if node['vagrant_environment'] == true
+        Chef::Log.info "deploying to a vagrant cluster"
+        false
+      else
+        true
+      end
+    end
+
     def dev_or_testing_cluster?
       ['development', 'test'].include?(node[:cluster_env])
     end
@@ -52,7 +61,7 @@ module MhOpsworksRecipes
     end
 
     def database_node?
-      node['opsworks']['instance']['hostname'].match(/^db-master/)
+      node['opsworks']['instance']['hostname'].match(/^(db-master|all-in-one)/)
     end
 
     def get_db_seed_file
@@ -469,11 +478,13 @@ module MhOpsworksRecipes
         recursive true
       end
 
-      execute 'download the EpisodeDefaults.json file into the correct location' do
-        command %Q|cd #{episode_default_storage_dir} && aws s3 cp s3://#{private_assets_bucket_name}/EpisodeDefaults.json EpisodeDefaults.json|
-        retries 10
-        retry_delay 5
-        timeout 300
+      if node['vagrant_environment'] != true
+        execute 'download the EpisodeDefaults.json file into the correct location' do
+          command %Q|cd #{episode_default_storage_dir} && aws s3 cp s3://#{private_assets_bucket_name}/EpisodeDefaults.json EpisodeDefaults.json|
+          retries 10
+          retry_delay 5
+          timeout 300
+        end
       end
     end
 
@@ -751,10 +762,10 @@ module MhOpsworksRecipes
       # run this in a begin/rescue block and retry a build immediately
       # after failure a few times before permanently failing
       build_profiles = {
-        admin: 'admin,dist-stub,engage-stub,worker-stub,workspace,serviceregistry',
-        ingest: 'ingest-standalone',
-        worker: 'worker-standalone,serviceregistry,workspace',
-        engage: 'engage-standalone,dist,serviceregistry,workspace'
+        admin: '-Padmin,dist-stub,engage-stub,worker-stub,workspace,serviceregistry',
+        ingest: '-Pingest-standalone',
+        worker: '-Pworker-standalone,serviceregistry,workspace',
+        engage: '-Pengage-standalone,dist,serviceregistry,workspace'
       }
       skip_unit_tests = node.fetch(:skip_java_unit_tests, 'true')
       retry_this_many = 3
@@ -762,7 +773,7 @@ module MhOpsworksRecipes
         retry_this_many = 0
       end
       execute 'maven build for matterhorn' do
-        command %Q|cd #{current_deploy_root} && MAVEN_OPTS='-Xms256m -Xmx960m -XX:PermSize=64m -XX:MaxPermSize=256m' mvn clean install -DdeployTo="#{current_deploy_root}" -Dmaven.test.skip=#{skip_unit_tests} -P#{build_profiles[node_profile.to_sym]}|
+        command %Q|cd #{current_deploy_root} && MAVEN_OPTS='-Xms256m -Xmx960m -XX:PermSize=64m -XX:MaxPermSize=256m' mvn clean install -DdeployTo="#{current_deploy_root}" -Dmaven.test.skip=#{skip_unit_tests} #{build_profiles[node_profile.to_sym]}|
         retries retry_this_many
         retry_delay 30
       end
