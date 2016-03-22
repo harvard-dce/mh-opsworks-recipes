@@ -9,6 +9,11 @@
   deployment.
 * Fix the squid3 proxy ACL to correct rules for s3 endpoints - the zadara docs
   were very, very wrong. This does not require an explicit chef recipe run.
+* *REQUIRES MANUAL CHEF RECIPE RUNS*:
+  Updated loggly TLS certificate. Manual recipe run can be executed any time 
+  after a successful deploy.
+
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin, Workers, Engage" recipes="mh-opsworks-recipes::rsyslog-to-loggly"
 
 ## 1.1.6 - 3/3/2016
 
