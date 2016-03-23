@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## 1.2.0 - 3/23/2016
+
 * Allow for cluster state to be turned into a "seed file" and applied to
   another cluster.  See `README.cluster_seed_files.txt` in
   https://github.com/harvard-dce/mh-opsworks/ for more information on how this
