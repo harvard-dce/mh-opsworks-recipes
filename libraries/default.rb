@@ -1,3 +1,4 @@
+require 'uri'
 module MhOpsworksRecipes
   module RecipeHelpers
 
@@ -26,8 +27,32 @@ module MhOpsworksRecipes
       end
     end
 
+    def get_shared_asset_bucket_name
+      node.fetch(:shared_asset_bucket_name, 'mh-opsworks-shared-assets')
+    end
+
+    def get_cluster_seed_bucket_name
+      node.fetch(:cluster_seed_bucket_name, 'dce-deac-test-cluster-seeds')
+    end
+
+    def get_seed_file
+      node.fetch(:cluster_seed_file, 'cluster_seed.tgz')
+    end
+
+    def dev_or_testing_cluster?
+      ['development', 'test'].include?(node[:cluster_env])
+    end
+
+    def engage_node?
+      node['opsworks']['instance']['hostname'].match(/^engage/)
+    end
+
     def admin_node?
       node['opsworks']['instance']['hostname'].match(/^admin/)
+    end
+
+    def get_db_seed_file
+      node.fetch(:db_seed_file, 'dce-config/docs/scripts/ddl/mysql5.sql')
     end
 
     def get_deploy_action
@@ -54,6 +79,10 @@ module MhOpsworksRecipes
       node.fetch(:live_stream_name, '#{caName}-#{flavor}.stream-#{resolution}_1_200@')
     end
 
+    def get_live_streaming_url
+      node.fetch(:live_streaming_url, 'rtmp://example.com/streaming_url')
+    end
+
     def get_public_engage_hostname_on_engage
       return node[:public_engage_hostname] if node[:public_engage_hostname]
 
@@ -78,6 +107,30 @@ module MhOpsworksRecipes
       admin_hostname
     end
 
+    def get_base_media_download_domain(engage_hostname)
+      uri = URI(get_base_media_download_url(engage_hostname))
+      uri.host
+    end
+
+    def get_base_media_download_url(engage_hostname)
+      # engage_hostname is passed in because we don't have the engage instance
+      # chef attributes when we're deploying the engage instance. The chef
+      # attributes don't make it into the shared chef environment until the
+      # node comes online.
+
+      cloudfront_url = get_cloudfront_url
+      base_media_download_url = ''
+
+      if cloudfront_url && (! cloudfront_url.empty?)
+        Chef::Log.info "Cloudfront url: #{cloudfront_url}"
+        base_media_download_url = %Q|https://#{cloudfront_url}|
+      else
+        Chef::Log.info "s3 distribution: #{engage_hostname}"
+        base_media_download_url = %Q|https://#{get_s3_distribution_bucket_name}.s3.amazonaws.com|
+      end
+      base_media_download_url
+    end
+
     def get_public_engage_hostname
       return node[:public_engage_hostname] if node[:public_engage_hostname]
 
@@ -88,6 +141,20 @@ module MhOpsworksRecipes
         public_engage_hostname = engage_attributes[:public_dns_name]
       end
       public_engage_hostname
+    end
+
+    def get_public_engage_ip
+      (private_engage_hostname, engage_attributes) = node[:opsworks][:layers][:engage][:instances].first
+      engage_attributes[:ip]
+    end
+
+    def get_public_admin_ip
+      (private_admin_hostname, admin_attributes) = node[:opsworks][:layers][:admin][:instances].first
+      admin_attributes[:ip]
+    end
+
+    def get_cloudfront_url
+      node[:cloudfront_url]
     end
 
     def get_admin_user_info
@@ -228,6 +295,66 @@ module MhOpsworksRecipes
         repo = git_data[:repository]
       end
       repo
+    end
+    
+    def get_elk_info
+      stack_name = stack_shortname
+      ::Chef::Mixin::DeepMerge.deep_merge({
+        es_major_version: '2.x',
+        es_version: '2.2.0',
+        es_cluster_name: stack_name,
+        es_index_prefix: "useractions-#{stack_name}",
+        es_data_path: "/vol/elasticsearch_data",
+        es_enable_snapshots: true,
+        logstash_major_version: '2.1',
+        logstash_version: '1:2.1.1-1',
+        logstash_tcp_port: '5000',
+        logstash_stdout_output: false,
+        kibana_version: '4.4.1',
+        kibana_checksum: 'b4f1b5d89a0854e3fb1e6d31faa1bc78e063b083',
+        http_auth: {},
+        http_ssl: get_dummy_cert,
+        harvester_release: 'master',
+        }, node.fetch(:elk, {}))
+    end
+    
+    def get_dummy_cert
+      {
+        # Dummy self-signed cert.
+        certificate: "-----BEGIN CERTIFICATE-----\nMIIDvzCCAqegAwIBAgIJANg1Xye10w+RMA0GCSqGSIb3DQEBCwUAMHYxCzAJBgNV\nBAYTAlVTMQswCQYDVQQIDAJNQTESMBAGA1UEBwwJQ2FtYnJpZGdlMSAwHgYDVQQK\nDBdIYXJ2YXJkIERDRSBTZWxmLXNpZ25lZDEkMCIGA1UEAwwbc2VsZi1zaWduZWQu\nZGNlLmhhcnZhcmQuZWR1MB4XDTE1MDcxMzIwMzQyOFoXDTI1MDcxMDIwMzQyOFow\ndjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAk1BMRIwEAYDVQQHDAlDYW1icmlkZ2Ux\nIDAeBgNVBAoMF0hhcnZhcmQgRENFIFNlbGYtc2lnbmVkMSQwIgYDVQQDDBtzZWxm\nLXNpZ25lZC5kY2UuaGFydmFyZC5lZHUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAw\nggEKAoIBAQCt36/OLrRa3vui1ns7ey67btL/AN6lw2scwO0iurKUw5vomfEqjhks\n04dsBKTheSjYH4UroKN9ubJeVIZ+FL3ewSVLVMLG10TSya1vm2J0xR3nrWnbL9uo\nz7lERmQSXzllr5PHj+q3aI3ewTXQk8Ic71NFGBGDcDBRPdWEzyqsfvFvMVACGUBH\nrDyWO4WBbLp3gzbwITnQhGXz+f9cha1IiBYrrbysDDuw81Fa2HEiDiA3ghGVR4q9\nDwVjpf1YpZyaMxRs28pUZ8Eu5gyfemznQIW1pRnyN2/77IZsFooMzQ+q0jxjjTzb\nuNoQSL+Gfpo5Rxvg+bR5+qyz4v07eFeRAgMBAAGjUDBOMB0GA1UdDgQWBBQQKYCF\n2ey1VaoiL0p10diP4nH7mjAfBgNVHSMEGDAWgBQQKYCF2ey1VaoiL0p10diP4nH7\nmjAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQAyHRUGjkwKbnJDKAT8\n9Lce8qNxEtuwz+87/YgM2rrXNkSN9WfrZNFsM2T5sCtC5hxzI/cK34e8Mlcejx3+\nBG7ioH+3qyanIVvqMWJ1UGliWZ3W3Ol20ZgPYrkQrWMZBQfTJGNZsu3qCrloy91s\nwXxIPtjMPiDvmW8s96oDX9eceFofcFIvMBW60Y68nBQakzN0bdPobB0zpIg3VrKe\nMBPsYtmTtTGEf4MgKzjYWq0detrmZqF4pq4l8qzU66VTSmgjjEDgg0kq/abx+/Ut\nK8bq+Wo7AjgVVZf/IaUUr8B6/uOdnQQRDyBjqCH+lH3g/ZpZ2OJBvtWGj7DtZHWI\ny5IO\n-----END CERTIFICATE-----\n",
+        # Dummy self-signed key.
+        key: "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCt36/OLrRa3vui\n1ns7ey67btL/AN6lw2scwO0iurKUw5vomfEqjhks04dsBKTheSjYH4UroKN9ubJe\nVIZ+FL3ewSVLVMLG10TSya1vm2J0xR3nrWnbL9uoz7lERmQSXzllr5PHj+q3aI3e\nwTXQk8Ic71NFGBGDcDBRPdWEzyqsfvFvMVACGUBHrDyWO4WBbLp3gzbwITnQhGXz\n+f9cha1IiBYrrbysDDuw81Fa2HEiDiA3ghGVR4q9DwVjpf1YpZyaMxRs28pUZ8Eu\n5gyfemznQIW1pRnyN2/77IZsFooMzQ+q0jxjjTzbuNoQSL+Gfpo5Rxvg+bR5+qyz\n4v07eFeRAgMBAAECggEAWEyauXiaevN2kzGdD431I5aabIoCh+gAA3AufU6W1lmo\nWa2j/dqACnW59i89lIu1JFyNgqRnorelT6ZZTro12mP4DpOS/uvftbRZ8a3ViDt6\nfmdgtMFPKiGjknq042ecfHl38QazSkU8lv1D2RLQp2UawqIAcuGMiBWA05tproNK\nvSyKs3MueGeOvWTQh2bvQVHH0OOC594QexxquDme9DJDgEgQq1UKJW8Hzu3oQbQJ\n9/UFjcPXmkO/+2DN0nLW+O8w1HtvVfr6Pa0UusR5WgFgNlvMBAc3XG+2V5iG/5By\ngTV0zkoBf4F5UqBOn9x/+kY/hrS6CPm+fgYn1ErwAQKBgQDX2u0rXDtsqOZJSB5K\neZBaUGHLZjzXNenCRcMKm+m/DGR8UjAKhEPdBGrQgP2g4LqpHbhWBLrdWaauUM/d\nX5XHeY6sed+VhSIg30HrNUa8dG93rDTnErBaUQb4tLs3iKmFOxpsZEbFO0Pw2mRH\nNH3kXSgr/rvOdG6PUwarfr7fgQKBgQDONfwt4NFV8EqMjNZANp2yh9MP7HH6bisi\nvaM6T/90Om//q4ciWnGEe8IDbZYln01/tzOjRIsY/xSDM2Hccbn3GLAFxeDPMIKH\nTr0cSxJKU++a7Dl9zvcg9jzdjCsDUfoUyNn209syzcziSX5/TaAKXzQbRhhrC/bK\nE9RaBouAEQKBgQCK4tpnY9j4eVRzImwbD0zKT54c+ZN8Bbx6u9hbIyarPpYJR/iR\nS7k+pHD154lJ0k9IMU9CSZjSg7SzxFt63N3Kk3Qxldk+o4LqE7yeUpFJAMIYBj2j\n0GqYMjqCHAe6G7y3dOfzhjHjBdcZSevrxOKb5TTL2gONO21H2uwXvF2kAQKBgF7q\nrncXooOiJU5ojT3lZdUFe/s6ZIRXLXfCPl3a8MS5GVBfzcXcR6AprvYQ/Sm4F94P\nn68pH7WTxAdYIVVs66J3NJ6TpJT5yTsq3RUm4PZhiEqRLS1hlJMRhJadrDbNBwWG\nJf3dKmpKHGKUXauPOXlMtRlQvHCZgzEky3vcw11hAoGBAJoXXOOXpMAHcpgWVttT\nYauJB3ekj8lVMX2l4lEyQ0o/1ODemJ1u+571TCqnRtQF9RwtwkR7m3+ivmgF/njV\n6dCrgelCpFYGHDVuw/Ieiqz7Fx8J++9SvXi9NM9a7fI2Td6/V3d1dYi/VHifYr5F\nQmBPCO5TwRB13PcVR2u7PuW1\n-----END PRIVATE KEY-----\n",
+        chain: ''
+      }
+    end
+
+    def cert_defined(ssl_info)
+      ! ssl_info[:certificate].empty? && ! ssl_info[:key].empty?
+    end
+
+    def create_ssl_cert(ssl_info)
+      directory '/etc/nginx/ssl' do
+        owner 'root'
+        group 'root'
+        mode '0700'
+      end
+      
+      # Store the certificate and key
+      # Concatenate the cert and the chain cert
+      cert_content = %Q|#{ssl_info[:certificate]}\n#{ssl_info[:chain]}\n|
+      file "/etc/nginx/ssl/certificate.cert" do
+        owner 'root'
+        group 'root'
+        content cert_content
+        mode '0600'
+      end
+    
+      file "/etc/nginx/ssl/certificate.key" do
+        owner 'root'
+        group 'root'
+        content ssl_info[:key] + "\n"
+        mode '0600'
+      end
     end
   end
 
@@ -428,17 +555,22 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_init_scripts(current_deploy_root, matterhorn_repo_root)
-      log_dir = node.fetch(:matterhorn_log_directory, '/var/log/matterhorn')
-
+    def xmx_ram_for_this_node(xmx_ram_ratio)
       auto_configure_java_xmx_memory = node.fetch(:auto_configure_java_xmx_memory, true)
-      java_xmx_ram = 4096
       if auto_configure_java_xmx_memory
         total_ram_in_meg = %x(grep MemTotal /proc/meminfo | sed -r 's/[^0-9]//g').chomp.to_i / 1024
-        # configure Xmx value for matterhorn as a percent of the total ram for this
+        # configure Xmx value as a percent of the total ram for this
         # node, with a minimum of 4096
-        java_xmx_ram = [(total_ram_in_meg * xmx_ram_ratio_for_this_node).to_i, 4096].max
+        [(total_ram_in_meg * xmx_ram_ratio).to_i, 4096].max
+      else
+        4096
       end
+    end
+
+    def install_init_scripts(current_deploy_root, matterhorn_repo_root)
+      log_dir = node.fetch(:matterhorn_log_directory, '/var/log/matterhorn')
+      xmx_ram_ratio = xmx_ram_ratio_for_this_node
+      java_xmx_ram = xmx_ram_for_this_node(xmx_ram_ratio)
 
       template %Q|/etc/init.d/matterhorn| do
         source 'matterhorn-init-script.erb'

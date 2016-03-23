@@ -1,4 +1,7 @@
 # Cookbook Name:: mh-opsworks-recipes
 # Recipe:: stop-matterhorn
 
-execute 'service matterhorn stop'
+execute 'stop matterhorn' do
+  command 'service matterhorn stop'
+  only_if '[ -f /etc/init.d/matterhorn ]'
+end

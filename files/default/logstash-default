@@ -1,0 +1,5 @@
+# This file is installed automatically by chef. Do not edit or delete.
+
+LS_OPTS="-w 2"
+KILL_ON_STOP_TIMEOUT=1
+

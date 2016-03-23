@@ -2,6 +2,23 @@
 
 ## TO BE RELEASED
 
+* Allow for cluster state to be turned into a "seed file" and applied to
+  another cluster.  See `README.cluster_seed_files.txt` in
+  https://github.com/harvard-dce/mh-opsworks/ for more information on how this
+  feature works. Does not require specific chef recipes be run for a
+  deployment.
+* Fix the squid3 proxy ACL to correct rules for s3 endpoints - the zadara docs
+  were very, very wrong. This does not require an explicit chef recipe run.
+* *REQUIRES MANUAL CHEF RECIPE RUNS*:
+  Updated loggly TLS certificate. Manual recipe run can be executed any time 
+  after a successful deploy.
+
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin, Workers, Engage" recipes="mh-opsworks-recipes::rsyslog-to-loggly"
+
+* *OPTIONAL EDITS TO THE CLUSTER CONFIG*:
+  Recipes, etc for setting up Analytics layer/node. See README.analytics.md in 
+  mh-opsworks for setup instructions.
+
 ## 1.1.6 - 3/3/2016
 
 * *REQUIRES EDITS TO THE CLUSTER CONFIG* *REQUIRES MANUAL CHEF RECIPE RUNS*: 
@@ -35,7 +52,6 @@
   [mh-opsworks](https://github.com/harvard-dce/mh-opsworks/blob/master/README.zadara.md)
   for more information about how to use this recipe. This recipe is independent
   of deployments.
-
 
 * *REQUIRES MANUAL CHEF RECIPE RUNS:* Set the bash prompt to be in color and
   put the cluster name in there. When a cluster includes "production" in the
