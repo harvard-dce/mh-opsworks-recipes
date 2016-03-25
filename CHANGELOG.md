@@ -24,6 +24,10 @@
 
         ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin, Workers, Engage" recipes="mh-opsworks-recipes::rsyslog-to-loggly"
 
+* *OPTIONAL EDITS TO THE CLUSTER CONFIG*:
+  Recipes, etc for setting up Analytics layer/node. See README.analytics.md in 
+  mh-opsworks for setup instructions.
+
 ## 1.1.6 - 3/3/2016
 
 * *REQUIRES EDITS TO THE CLUSTER CONFIG* *REQUIRES MANUAL CHEF RECIPE RUNS*:
