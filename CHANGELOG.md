@@ -2,6 +2,13 @@
 
 ## TO BE RELEASED
 
+* *OPTIONAL EDITS TO THE CLUSTER CONFIG* *REQUIRES MANUAL CHEF RECIPE RUNS*:
+  Recipes, etc for setting up Analytics layer/node. See README.analytics.md in
+  mh-opsworks for setup instructions.
+  The manual recipe run can be executed any time after a successful deploy.
+
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Engage" recipes="mh-opsworks-recipes::configure-engage-nginx-proxy"
+
 ## 1.2.0 - 3/23/2016
 
 * Allow for cluster state to be turned into a "seed file" and applied to
@@ -12,14 +19,14 @@
 * Fix the squid3 proxy ACL to correct rules for s3 endpoints - the zadara docs
   were very, very wrong. This does not require an explicit chef recipe run.
 * *REQUIRES MANUAL CHEF RECIPE RUNS*:
-  Updated loggly TLS certificate. Manual recipe run can be executed any time 
+  Updated loggly TLS certificate. Manual recipe run can be executed any time
   after a successful deploy.
 
         ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin, Workers, Engage" recipes="mh-opsworks-recipes::rsyslog-to-loggly"
 
 ## 1.1.6 - 3/3/2016
 
-* *REQUIRES EDITS TO THE CLUSTER CONFIG* *REQUIRES MANUAL CHEF RECIPE RUNS*: 
+* *REQUIRES EDITS TO THE CLUSTER CONFIG* *REQUIRES MANUAL CHEF RECIPE RUNS*:
   Before doing a deploy and after the morning scaled instances have started,
   you must edit the production cluster config `custom_json` to set:
 
@@ -50,7 +57,6 @@
   [mh-opsworks](https://github.com/harvard-dce/mh-opsworks/blob/master/README.zadara.md)
   for more information about how to use this recipe. This recipe is independent
   of deployments.
-
 
 * *REQUIRES MANUAL CHEF RECIPE RUNS:* Set the bash prompt to be in color and
   put the cluster name in there. When a cluster includes "production" in the
@@ -177,7 +183,7 @@
 
 ## 1.0.6 - 1/18/2016
 
-* Configuration for the new Matterhorn S3 distribution service. 
+* Configuration for the new Matterhorn S3 distribution service.
 
 ## 1.0.5 - 1/14/2016
 
