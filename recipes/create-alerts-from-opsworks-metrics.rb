@@ -7,6 +7,7 @@ include_recipe "mh-opsworks-recipes::install-awscli"
 ruby_block "add alarms" do
   block do
     aws_instance_id = node[:opsworks][:instance][:aws_instance_id]
+    stack_id = node[:opsworks][:stack][:id]
     # All opsworks metrics are sent to us-east-1, so we need to write alarms
     # off this region
     region = 'us-east-1'
@@ -63,7 +64,12 @@ ruby_block "add alarms" do
         Chef::Log.info command
         %x(#{command})
       end
+    end
 
+    if monitoring_node?
+      command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{alarm_name_prefix}_instances_failed" --alarm-description "Instances failed to start correctly" --metric-name InstancesStartedOK --namespace AWS/OpsworksCustom --statistic Minimum --period 60 --threshold 1 --comparison-operator LessThanThreshold --dimensions Name=StackId,Value=#{stack_id} --evaluation-periods 1 --alarm-actions "#{topic_arn}")
+      Chef::Log.info command
+      %x(#{command})
     end
   end
 end

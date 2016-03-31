@@ -2,6 +2,12 @@
 
 ## TO BE RELEASED
 
+* *REQUIRES MANUAL CHEF RECIPE RUNS* Add a metric and alarm to check if
+  instances fail to start up. This can be done any time before or after a
+  deploy.
+
+        ./bin/rake stack:commands:execute_recipes_on_layers recipes="mh-opsworks-recipes::install-custom-metrics,mh-opsworks-recipes::create-alerts-from-opsworks-metrics"
+
 * *OPTIONAL EDITS TO THE CLUSTER CONFIG* *REQUIRES MANUAL CHEF RECIPE RUNS*:
   Recipes, etc for setting up Analytics layer/node. See README.analytics.md in
   mh-opsworks for setup instructions.
