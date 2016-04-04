@@ -2,6 +2,13 @@
 
 ## TO BE RELEASED
 
+* *REQUIRES MANUAL CHEF RECIPE RUNS* Hang more alarms on database metrics to catch
+  problems relating to disk IO. Lower the CPU threshold.  This can be done any
+  time before or after a deploy.
+
+        # This is currently on the "Ganglia" layer in prod,
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Ganglia" recipes="mh-opsworks-recipes::create-mysql-alarms"
+
 * *REQUIRES MANUAL CHEF RECIPE RUNS* Add a metric and alarm to check if
   instances fail to start up. This can be done any time before or after a
   deploy.

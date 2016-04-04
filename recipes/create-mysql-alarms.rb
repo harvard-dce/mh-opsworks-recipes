@@ -21,9 +21,9 @@ ruby_block "fire alarms for MySQL RDS metrics" do
     Chef::Log.info command
     %x(#{command})
 
-    # CPU utilization over the last 2 minutes
-    upper_cpu_percent = 75
-    command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{rds_name}_cpu_usage_high" --alarm-description "MySQL RDS cpu utilization is high" --metric-name CPUUtilization --namespace AWS/RDS --statistic Maximum --period 60 --threshold #{upper_cpu_percent} --comparison-operator GreaterThanThreshold --dimensions Name=DBInstanceIdentifier,Value=#{rds_name} --evaluation-periods 2 --alarm-actions "#{topic_arn}")
+    # CPU utilization over 25 for 5 1 minute periods
+    upper_cpu_percent = 25
+    command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{rds_name}_cpu_usage_high" --alarm-description "MySQL RDS cpu utilization is high" --metric-name CPUUtilization --namespace AWS/RDS --statistic Maximum --period 60 --threshold #{upper_cpu_percent} --comparison-operator GreaterThanThreshold --dimensions Name=DBInstanceIdentifier,Value=#{rds_name} --evaluation-periods 5 --alarm-actions "#{topic_arn}")
     Chef::Log.info command
     %x(#{command})
 
@@ -31,6 +31,20 @@ ruby_block "fire alarms for MySQL RDS metrics" do
     min_freeable_ram_in_bytes = 2 * 1024 * 1024 * 1024
 
     command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{rds_name}_freeable_memory_low" --alarm-description "MySQL RDS freeable memory is low" --metric-name FreeableMemory --namespace AWS/RDS --statistic Maximum --period 60 --threshold #{min_freeable_ram_in_bytes} --comparison-operator LessThanThreshold --dimensions Name=DBInstanceIdentifier,Value=#{rds_name} --evaluation-periods 2 --alarm-actions "#{topic_arn}")
+    Chef::Log.info command
+    %x(#{command})
+
+    # Write operations over the threshold for 5 1 minute periods. This is rather coarse and reactionary, but
+    # if there are too many writes the database is probably not responding well.
+    alert_on_write_iops_over = 140
+    command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{rds_name}_write_iops_high" --alarm-description "MySQL RDS write iops are high" --metric-name WriteIOPS --namespace AWS/RDS --statistic Maximum --period 60 --threshold #{alert_on_write_iops_over} --comparison-operator GreaterThanThreshold --dimensions Name=DBInstanceIdentifier,Value=#{rds_name} --evaluation-periods 5 --alarm-actions "#{topic_arn}")
+    Chef::Log.info command
+    %x(#{command})
+
+    # Queue depth is over 2 for 5 1 minute periods. This means IO processes are stacking
+    # up and EBS is getting swamped.
+    disk_queue_depth_over = 2
+    command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{rds_name}_queue_depth_high" --alarm-description "MySQL RDS EBS queue depth is high" --metric-name DiskQueueDepth --namespace AWS/RDS --statistic Maximum --period 60 --threshold #{disk_queue_depth_over} --comparison-operator GreaterThanThreshold --dimensions Name=DBInstanceIdentifier,Value=#{rds_name} --evaluation-periods 5 --alarm-actions "#{topic_arn}")
     Chef::Log.info command
     %x(#{command})
   end
