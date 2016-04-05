@@ -2,6 +2,11 @@
 
 ## TO BE RELEASED
 
+* *REQUIRES MANUAL CHEF RECIPES RUNS* *MUST BE RUN BEFORE THE DEPLOY*  Update the
+  version of node on the cluster to work around an npm / gzipping bug.
+
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin, Workers, Engage" recipes="mh-opsworks-recipes::install-mh-base-packages"
+
 * *REQUIRES MANUAL CHEF RECIPE RUNS* Hang more alarms on database metrics to catch
   problems relating to disk IO. Lower the CPU threshold.  This can be done any
   time before or after a deploy.

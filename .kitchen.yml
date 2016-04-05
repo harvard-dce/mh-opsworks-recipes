@@ -1,6 +1,10 @@
 ---
 driver:
   name: vagrant
+  customize:
+    nictype1: virtio
+    cpus: 2
+    memory: 512
 
 provisioner:
   name: chef_solo
@@ -13,6 +17,10 @@ suites:
   - name: default
     run_list:
       - recipe[mh-opsworks-recipes::install-mh-base-packages]
+
+  - name: nodejs
+    run_list:
+      - recipe[mh-opsworks-recipes::install-nodejs]
 
   - name: utils
     run_list:

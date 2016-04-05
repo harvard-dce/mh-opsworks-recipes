@@ -17,9 +17,6 @@ libglib2.0-dev
 maven
 mediainfo
 mysql-client
-nodejs
-nodejs-dev
-npm
 openjdk-7-jdk
 openjdk-7-jre
 postfix
@@ -30,8 +27,5 @@ tesseract-ocr|.each do |package_name|
   install_package(package_name)
 end
 
-link '/usr/bin/node' do
-  to '/usr/bin/nodejs'
-end
-
+include_recipe 'mh-opsworks-recipes::install-nodejs'
 include_recipe "mh-opsworks-recipes::clean-up-package-cache"
