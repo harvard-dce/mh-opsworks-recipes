@@ -17,6 +17,7 @@ suites:
   - name: default
     run_list:
       - recipe[mh-opsworks-recipes::install-mh-base-packages]
+      - recipe[mh-opsworks-recipes::install-utils]
 
   - name: nodejs
     run_list:
@@ -37,6 +38,8 @@ suites:
   - name: ffmpeg
     run_list:
       - recipe[mh-opsworks-recipes::install-ffmpeg]
+    attributes:
+      vagrant_environment: true
 
   - name: nginx-proxy
     run_list:
@@ -57,6 +60,8 @@ suites:
   - name: populate-maven-cache
     run_list:
       - recipe[mh-opsworks-recipes::populate-maven-cache]
+    attributes:
+      vagrant_environment: true
 
   - name: install-awscli
     run_list:

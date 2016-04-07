@@ -42,8 +42,8 @@ execute 'tell postfix where CA cert is' do
   retry_delay 5
 end
 
-execute 'reload postfix to pick up config changes' do
-  command %Q|service postfix reload|
+service 'postfix' do
+  action :reload
   retries 5
   retry_delay 5
 end

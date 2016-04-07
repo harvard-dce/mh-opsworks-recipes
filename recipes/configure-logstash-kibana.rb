@@ -7,7 +7,7 @@ include_recipe 'mh-opsworks-recipes::configure-elk-nginx-proxy'
 
 stack_name = stack_shortname
 elk_info = get_elk_info
-es_host = node['opsworks']['instance']['private_ip']
+es_host = node[:opsworks][:instance][:private_ip]
 
 template '/etc/logstash/conf.d/logstash.conf' do
   source 'logstash.conf.erb'

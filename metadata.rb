@@ -5,6 +5,8 @@ license          'All rights reserved'
 description      'Installs/Configures mh-opsworks-recipes'
 long_description 'Installs/Configures mh-opsworks-recipes'
 version          '0.1.0'
+issues_url       'http://github.com/harvard-dce/mh-opsworks-recipes/issues' if respond_to?(:issues_url)
+source_url       'http://github.com/harvard-dce/mh-opsworks-recipes/'if respond_to?(:source_url)
 
 depends 'nfs', '~> 2.1.0'
 depends 'apt', '~> 2.9.2'

@@ -2,6 +2,7 @@
 # Recipe:: convert-mysql-to-multiple-data-files
 
 require 'find'
+require 'mixlib/shellout'
 
 db_info = node[:deploy][:matterhorn][:database]
 host = db_info[:host]
@@ -11,7 +12,10 @@ port = db_info[:port]
 database_name = db_info[:database]
 
 database_connection = %Q|/usr/bin/mysql --user="#{username}" --host="#{host}" --port=#{port} --password="#{password}"|
-datadir = `#{database_connection} -B -e 'show variables like "%datadir%"' | grep datadir`.split(' ')[1]
+datadir_finder = Mixlib::ShellOut.new(%Q(#{database_connection} -B -e 'show variables like "%datadir%"' | grep datadir))
+datadir_finder.run_command
+datadir_finder.error!
+datadir = datadir_finder.stdout.split(' ')[1]
 
 unless File.exists?("#{datadir}#{database_name}")
   Chef::Log.info 'First time database deployment. Converting to per-table innodb storage'

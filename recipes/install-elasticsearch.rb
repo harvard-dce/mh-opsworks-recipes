@@ -3,6 +3,7 @@
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::DeployHelpers)
+::Chef::Resource::RubyBlock.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
 elk_info = get_elk_info
 
@@ -11,8 +12,8 @@ es_version = elk_info[:es_version]
 es_cluster_name = elk_info[:es_cluster_name]
 data_path = elk_info[:es_data_path]
 es_heap_size = xmx_ram_for_this_node(0.5)
-es_host = node['opsworks']['instance']['private_ip']
-region = node['opsworks']['instance']['region']
+es_host = node[:opsworks][:instance][:private_ip]
+region = node[:opsworks][:instance][:region]
 stack_name = stack_shortname
 enable_snapshots = elk_info[:es_enable_snapshots]
 es_repo_bucket = "#{stack_name}-snapshots"
@@ -135,7 +136,7 @@ if enable_snapshots
     block do
       command = %Q(aws s3 mb s3://#{es_repo_bucket} --region #{region})
       Chef::Log.info command
-      %x(#{command})
+      execute_command(command)
     end
   end
 

@@ -5,7 +5,7 @@
 
 elk_info = get_elk_info
 http_auth = elk_info[:http_auth]
-es_host = node['opsworks']['instance']['private_ip']
+es_host = node[:opsworks][:instance][:private_ip]
 
 template %Q|/etc/nginx/sites-enabled/default| do
   source 'elk-nginx-proxy-conf.erb'

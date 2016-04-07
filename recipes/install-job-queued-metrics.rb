@@ -43,6 +43,6 @@ ruby_block "add up alarm for matterhorn job queued based scaling" do
 
     command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{topic_name}_jobs_queued_high" --alarm-description "Many matterhorn jobs to process" --metric-name MatterhornJobsQueued --namespace AWS/OpsworksCustom --statistic Average --period 180 --threshold #{scale_up_limit} --comparison-operator GreaterThanThreshold --dimensions Name=InstanceId,Value=#{aws_instance_id} --evaluation-periods 1 --no-actions-enabled)
     Chef::Log.info command
-    %x(#{command})
+    execute_command(command)
   end
 end

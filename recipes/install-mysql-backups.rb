@@ -55,10 +55,10 @@ ruby_block "Fire alarm when the mysql database dump is not fresh" do
     aws_instance_id = node[:opsworks][:instance][:aws_instance_id]
     region = 'us-east-1'
     # This is idempotent according to the aws docs
-    topic_arn = %x(aws sns create-topic --name "#{topic_name}" --region #{region} --output text).chomp
+    topic_arn = execute_command(%Q(aws sns create-topic --name "#{topic_name}" --region #{region} --output text)).chomp
 
     command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{alarm_name_prefix}_mysql_backup_freshness" --alarm-description "MySQL backups are fresh" --metric-name MySQLDatabaseBackupIsFresh --namespace AWS/OpsworksCustom --statistic Minimum --period 60 --threshold 1 --comparison-operator LessThanThreshold --dimensions Name=InstanceId,Value=#{aws_instance_id} --evaluation-periods 1 --alarm-actions "#{topic_arn}")
     Chef::Log.info command
-    %x(#{command})
+    execute_command(command)
   end
 end

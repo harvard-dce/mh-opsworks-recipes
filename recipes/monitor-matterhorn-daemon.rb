@@ -28,11 +28,11 @@ if on_aws?
       aws_instance_id = node[:opsworks][:instance][:aws_instance_id]
       region = 'us-east-1'
       # This is idempotent according to the aws docs
-      topic_arn = %x(aws sns create-topic --name "#{topic_name}" --region #{region} --output text).chomp
+      topic_arn = execute_command(%Q(aws sns create-topic --name "#{topic_name}" --region #{region} --output text)).chomp
 
       command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{alarm_name_prefix}_matterhorn_availability" --alarm-description "Matterhorn is unavailable #{alarm_name_prefix}" --metric-name MatterhornAvailable --namespace AWS/OpsworksCustom --statistic Minimum --period 120 --threshold 1 --comparison-operator LessThanThreshold --dimensions Name=InstanceId,Value=#{aws_instance_id} --evaluation-periods 4 --alarm-actions "#{topic_arn}")
       Chef::Log.info command
-      %x(#{command})
+      execute_command(command)
     end
   end
 end

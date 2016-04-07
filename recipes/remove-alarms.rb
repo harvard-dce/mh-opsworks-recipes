@@ -11,7 +11,7 @@ ruby_block 'remove alarms for instance' do
     region = 'us-east-1'
 
     all_alarms = ::JSON.parse(
-      %x(aws cloudwatch describe-alarms --alarm-name-prefix="#{alarm_name_prefix}" --region "#{region}" --output json)
+      execute_command(%Q(aws cloudwatch describe-alarms --alarm-name-prefix="#{alarm_name_prefix}" --region "#{region}" --output json))
     )
 
     # Probably not necessary, but this ensures we don't remove alarms accidentally.
@@ -24,8 +24,7 @@ ruby_block 'remove alarms for instance' do
     alarm_name_list = alarms_for_instance.map { |alarm| alarm['AlarmName'] }.join(' ')
 
     command = %Q(aws cloudwatch delete-alarms --region "#{region}" --alarm-names #{alarm_name_list})
-
     Chef::Log.info command
-    %x(#{command})
+    execute_command(command)
   end
 end

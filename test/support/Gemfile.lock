@@ -1,0 +1,30 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    erubis (2.7.0)
+    foodcritic (6.0.1)
+      erubis
+      gherkin (~> 2.11)
+      nokogiri (>= 1.5, < 2.0)
+      rake
+      rufus-lru (~> 1.0)
+      treetop (~> 1.4)
+      yajl-ruby (~> 1.1)
+    gherkin (2.12.2)
+      multi_json (~> 1.3)
+    mini_portile2 (2.0.0)
+    multi_json (1.11.2)
+    nokogiri (1.6.7.2)
+      mini_portile2 (~> 2.0.0.rc2)
+    polyglot (0.3.5)
+    rake (11.1.2)
+    rufus-lru (1.0.5)
+    treetop (1.6.5)
+      polyglot (~> 0.3)
+    yajl-ruby (1.2.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  foodcritic (~> 6.0.0)

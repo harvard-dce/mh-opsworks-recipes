@@ -1,0 +1,11 @@
+language: ruby
+gemfile:
+   - test/support/Gemfile
+cache:
+  - bundler
+rvm:
+  - 2.0.0
+notifications:
+  email:
+    - false
+script: BUNDLE_GEMFILE=test/support/Gemfile bundle exec foodcritic -f any .

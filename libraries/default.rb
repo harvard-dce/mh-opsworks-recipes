@@ -1,6 +1,15 @@
 require 'uri'
+require 'mixlib/shellout'
+
 module MhOpsworksRecipes
   module RecipeHelpers
+
+    def execute_command(command)
+      command = Mixlib::ShellOut.new(command)
+      command.run_command
+      command.error!
+      command.stdout
+    end
 
     def get_database_connection
       node[:deploy][:matterhorn][:database]
@@ -40,7 +49,7 @@ module MhOpsworksRecipes
     end
 
     def on_aws?
-      if node['vagrant_environment'] == true
+      if node[:vagrant_environment] == true
         Chef::Log.info "deploying to a vagrant cluster"
         false
       else
@@ -53,19 +62,19 @@ module MhOpsworksRecipes
     end
 
     def engage_node?
-      node['opsworks']['instance']['hostname'].match(/^engage/)
+      node[:opsworks][:instance][:hostname].match(/^engage/)
     end
 
     def admin_node?
-      node['opsworks']['instance']['hostname'].match(/^admin/)
+      node[:opsworks][:instance][:hostname].match(/^admin/)
     end
 
     def monitoring_node?
-      node['opsworks']['instance']['hostname'].match(/^monitoring\-master/)
+      node[:opsworks][:instance][:hostname].match(/^monitoring\-master/)
     end
 
     def database_node?
-      node['opsworks']['instance']['hostname'].match(/^(db-master|all-in-one|local-support)/)
+      node[:opsworks][:instance][:hostname].match(/^(db-master|all-in-one|local-support)/)
     end
 
     def get_db_seed_file
@@ -482,7 +491,7 @@ module MhOpsworksRecipes
         recursive true
       end
 
-      if node['vagrant_environment'] != true
+      if node[:vagrant_environment] != true
         execute 'download the EpisodeDefaults.json file into the correct location' do
           command %Q|cd #{episode_default_storage_dir} && aws s3 cp s3://#{private_assets_bucket_name}/EpisodeDefaults.json EpisodeDefaults.json|
           retries 10
@@ -546,7 +555,7 @@ module MhOpsworksRecipes
     end
 
     def xmx_ram_ratio_for_this_node
-      if node['opsworks']['instance']['hostname'].match(/^admin/)
+      if node[:opsworks][:instance][:hostname].match(/^admin/)
         # 80% of the RAM for matterhorn
         0.8
       else
@@ -577,7 +586,10 @@ module MhOpsworksRecipes
     def xmx_ram_for_this_node(xmx_ram_ratio)
       auto_configure_java_xmx_memory = node.fetch(:auto_configure_java_xmx_memory, true)
       if auto_configure_java_xmx_memory
-        total_ram_in_meg = %x(grep MemTotal /proc/meminfo | sed -r 's/[^0-9]//g').chomp.to_i / 1024
+        ram_finder = Mixlib::ShellOut.new(%q(grep MemTotal /proc/meminfo | sed -r 's/[^0-9]//g'))
+        ram_finder.run_command
+        ram_finder.error!
+        total_ram_in_meg = ram_finder.stdout.chomp.to_i / 1024
         # configure Xmx value as a percent of the total ram for this
         # node, with a minimum of 4096
         [(total_ram_in_meg * xmx_ram_ratio).to_i, 4096].max

@@ -3,6 +3,7 @@
 
 include_recipe "mh-opsworks-recipes::update-package-repo"
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
+::Chef::Resource::RubyBlock.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
 engage_node = search(:node, 'role:engage').first
 
@@ -12,7 +13,7 @@ harvester_release = elk_info[:harvester_release]
 rest_auth_info = get_rest_auth_info
 stack_name = stack_shortname
 sqs_queue_name = "#{stack_name}-user-actions"
-region = node["opsworks"]["instance"]["region"]
+region = node[:opsworks][:instance][:region]
 loggly_info = node.fetch(:loggly, { token: '', url: '' })
 loggly_config = if loggly_info[:token] != ''
                   %Q|LOGGLY_TOKEN=#{loggly_info[:token]}|
@@ -72,7 +73,7 @@ ruby_block 'create sqs queue' do
   block do
     command = %Q(aws sqs create-queue --region "#{region}" --queue-name "#{sqs_queue_name}")
     Chef::Log.info command
-    %x(#{command})
+    execute_command(command)
   end
 end
 

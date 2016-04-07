@@ -45,8 +45,8 @@ file '/etc/auto.master.d/matterhorn.autofs' do
 end
 
 # Only restart if we don't have an active mount
-execute 'service autofs restart' do
-  command 'service autofs restart'
+service 'autofs' do
+  action :restart
   not_if %Q|grep ' #{export_root} ' /proc/mounts|
 end
 
@@ -93,11 +93,11 @@ if on_aws?
     block do
       region = 'us-east-1'
       # This is idempotent according to the aws docs
-      topic_arn = %x(aws sns create-topic --name "#{topic_name}" --region #{region} --output text).chomp
+      topic_arn = execute_command(%Q(aws sns create-topic --name "#{topic_name}" --region #{region} --output text)).chomp
 
       command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{alarm_name_prefix}_nfs_availability" --alarm-description "NFS is unavailable #{alarm_name_prefix}" --metric-name NFSAvailable --namespace AWS/OpsworksCustom --statistic Minimum --period 120 --threshold 1 --comparison-operator LessThanThreshold --dimensions Name=InstanceId,Value=#{aws_instance_id} --evaluation-periods 1 --alarm-actions "#{topic_arn}")
       Chef::Log.info command
-      %x(#{command})
+      execute_command(command)
     end
   end
 end
