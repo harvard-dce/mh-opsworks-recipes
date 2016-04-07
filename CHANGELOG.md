@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## 1.3.0 - 4/7/2016
+
 * *REQUIRES MANUAL CHEF RECIPES RUNS* *MUST BE RUN BEFORE THE DEPLOY*  Update the
   version of node on the cluster to work around an npm / gzipping bug.
 
