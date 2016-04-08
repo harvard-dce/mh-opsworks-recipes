@@ -119,6 +119,8 @@ deploy_revision "matterhorn" do
   end
 end
 
+include_recipe 'mh-opsworks-recipes::register-matterhorn-to-boot'
+
 unless node[:dont_start_matterhorn_after_deploy]
   execute "start matterhorn if it isn't already running" do
     user 'matterhorn'
