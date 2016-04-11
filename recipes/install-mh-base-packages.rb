@@ -13,6 +13,7 @@ end
 curl
 dkms
 gzip
+jq
 libglib2.0-dev
 maven
 mediainfo

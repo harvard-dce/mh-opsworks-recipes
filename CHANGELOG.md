@@ -2,6 +2,20 @@
 
 ## TO BE RELEASED
 
+* Start matterhorn at boot via cron's @reboot functionality. Runs automatically
+  as part of a deploy.
+* Change the `dont_start_matterhorn_after_deploy` stack `custom_json` override
+  to `dont_start_matterhorn_automatically` because it has a larger scope now.
+  When set to `true`, this allows you to start ec2 instances without starting the
+  matterhorn daemon.  This hooks into the init script (no other way, really) and
+  will prevent matterhorn from booting until you unset it or set it to `false`.
+  That's a lot of scary words for something that'll only impact you if you
+  explictly use it. If you want to start matterhorn after disabling it with the
+  variable, you: 1) remove or edit the variable in your cluster config via
+  "cluster:edit", and 2) run "matterhorn:restart" via the mh-opsworks tooling.
+  Using the mh-opsworks tooling will propagate the `custom_json` change and
+  ensure matterhorn can start properly.
+
 ## 1.3.0 - 4/7/2016
 
 * *REQUIRES MANUAL CHEF RECIPES RUNS* *MUST BE RUN BEFORE THE DEPLOY*  Update the

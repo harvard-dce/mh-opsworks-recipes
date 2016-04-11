@@ -130,7 +130,7 @@ end
 
 include_recipe 'mh-opsworks-recipes::register-matterhorn-to-boot'
 
-unless node[:dont_start_matterhorn_after_deploy]
+unless node[:dont_start_matterhorn_automatically]
   execute "start matterhorn if it isn't already running" do
     user 'matterhorn'
     command "pgrep -u matterhorn java > /dev/null; if [ $? = 1 ]; then sudo /etc/init.d/matterhorn start; fi"
