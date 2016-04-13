@@ -4,7 +4,8 @@
 
 * Start matterhorn at boot via cron's @reboot functionality. Runs automatically
   as part of a deploy.
-* Change the `dont_start_matterhorn_after_deploy` stack `custom_json` override
+* *REQUIRES MANUAL CHEF RECIPE RUNS* * MUST BE RUN BEFORE THE DEPLOY*
+  Change the `dont_start_matterhorn_after_deploy` stack `custom_json` override
   to `dont_start_matterhorn_automatically` because it has a larger scope now.
   When set to `true`, this allows you to start ec2 instances without starting the
   matterhorn daemon.  This hooks into the init script (no other way, really) and
@@ -15,6 +16,8 @@
   "cluster:edit", and 2) run "matterhorn:restart" via the mh-opsworks tooling.
   Using the mh-opsworks tooling will propagate the `custom_json` change and
   ensure matterhorn can start properly.
+
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin, Workers, Engage" recipes="mh-opsworks-recipes::install-mh-base-packages"
 
 ## 1.3.0 - 4/7/2016
 
