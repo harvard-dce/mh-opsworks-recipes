@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## 1.3.1 - 4/14/2016
+
 * Start matterhorn at boot via cron's @reboot functionality. Runs automatically
   as part of a deploy.
 * *REQUIRES MANUAL CHEF RECIPE RUNS* * MUST BE RUN BEFORE THE DEPLOY*
