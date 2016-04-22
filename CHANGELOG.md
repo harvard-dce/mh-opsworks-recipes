@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## 1.3.2 - 4/22/2016
+
 * Local opsworks cluster support, in concert with changes made to mh-opsworks
   proper.  Modify some chef recipes to only run functions when on AWS. Nothing
   is required to be run outside of a normal deploy. See `README.local-opsworks.md`
