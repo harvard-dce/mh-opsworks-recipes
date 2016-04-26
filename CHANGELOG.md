@@ -2,6 +2,13 @@
 
 ## TO BE RELEASED
 
+* Implement foodcritic linting via [travis](https://travis-ci.org). Nothing to
+  run.
+* Use the service resource to idiomatically start services. Nothing to run, just
+  make sure that matterhorn starts correctly after a deploy.
+* Fix and improve test-kitchen bats tests. Nothing to run.
+* Better docs.
+
 ## 1.3.2 - 4/22/2016
 
 * Local opsworks cluster support, in concert with changes made to mh-opsworks
