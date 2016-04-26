@@ -1,3 +1,12 @@
+GIT
+  remote: https://github.com/harvard-dce/yard-chef
+  revision: f6a2c94a8f4cab6e6d2d2d7128fa2545fd04b509
+  branch: master
+  specs:
+    yard-chef (1.0.0)
+      redcarpet (~> 2.1.1)
+      yard (~> 0.8)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -18,13 +27,16 @@ GEM
       mini_portile2 (~> 2.0.0.rc2)
     polyglot (0.3.5)
     rake (11.1.2)
+    redcarpet (2.1.1)
     rufus-lru (1.0.5)
     treetop (1.6.5)
       polyglot (~> 0.3)
     yajl-ruby (1.2.1)
+    yard (0.8.7.6)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   foodcritic (~> 6.0.0)
+  yard-chef!

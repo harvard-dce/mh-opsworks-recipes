@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* Recipe level docs. There are no functional changes in this feature. Nothing
+  to run.
 * Implement foodcritic linting via [travis](https://travis-ci.org). Nothing to
   run.
 * Use the service resource to idiomatically start services. Nothing to run, just

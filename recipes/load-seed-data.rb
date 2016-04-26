@@ -1,5 +1,5 @@
 # Cookbook Name:: mh-opsworks-recipes
-# Recipe:: reset-database
+# Recipe:: load-seed-data
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 include_recipe "mh-opsworks-recipes::install-awscli"
