@@ -2,6 +2,7 @@
 
 ## TO BE RELEASED
 
+* Only update apt repo if it's more than 30 minutes old. Nothing to be run.
 * Recipe level docs. There are no functional changes in this feature. Nothing
   to run.
 * Implement foodcritic linting via [travis](https://travis-ci.org). Nothing to
