@@ -24,6 +24,9 @@ region = node.fetch(:region, 'us-east-1')
 s3_distribution_bucket_name = get_s3_distribution_bucket_name
 ## /all-in-one specific
 
+# S3 file archive service, also needs the aws region
+s3_file_archive_bucket_name = get_s3_file_archive_bucket_name
+
 capture_agent_monitor_url = node.fetch(
   :capture_agent_monitor_url, 'http://example.com/monitor_url'
 )
@@ -95,6 +98,7 @@ deploy_revision "matterhorn" do
     )
     install_live_streaming_service_config(most_recent_deploy, live_stream_name)
     install_otherpubs_service_config(most_recent_deploy, matterhorn_repo_root, auth_host)
+    install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name)
     install_published_event_details_email(most_recent_deploy, public_hostname)
     configure_newrelic(most_recent_deploy, newrelic_app_name)
 
