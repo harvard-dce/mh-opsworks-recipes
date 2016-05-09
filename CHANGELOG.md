@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* Fix all-in-one node provisioning, primarily for local vagrant development.
+  Nothing to run.
 * Only update apt repo if it's more than 30 minutes old. Nothing to be run.
 * Recipe level docs. There are no functional changes in this feature. Nothing
   to run.

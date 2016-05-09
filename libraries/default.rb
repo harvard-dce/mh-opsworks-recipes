@@ -605,7 +605,7 @@ module MhOpsworksRecipes
     def update_properties_files_for_local_distribution(current_deploy_root)
       ruby_block "update engage hostname" do
         block do
-          ['engage.properties', 'admin.properties'].each do |properties_file|
+          ['engage.properties', 'admin.properties', 'all-in-one.properties'].each do |properties_file|
             editor = Chef::Util::FileEdit.new(current_deploy_root + '/etc/profiles/' + properties_file)
             editor.search_file_replace(
               /mh-harvard-dce-distribution-service-aws-s3/,

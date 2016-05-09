@@ -101,12 +101,15 @@ deploy_revision "matterhorn" do
     # all-in-one SPECIFIC
     initialize_database(most_recent_deploy)
 
-    set_service_registry_dispatch_interval(most_recent_deploy)
     configure_usertracking(most_recent_deploy, user_tracking_authhost)
     install_otherpubs_service_config(most_recent_deploy, matterhorn_repo_root, auth_host)
     install_aws_s3_distribution_service_config(most_recent_deploy, region, s3_distribution_bucket_name)
     install_matterhorn_images_properties(most_recent_deploy)
     # /all-in-one SPECIFIC
+
+    if using_local_distribution?
+      update_properties_files_for_local_distribution(most_recent_deploy)
+    end
 
     template %Q|#{most_recent_deploy}/etc/config.properties| do
       source 'config.properties.erb'
