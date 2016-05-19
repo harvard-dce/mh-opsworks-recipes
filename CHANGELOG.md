@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## 1.3.3 - 5/19/2016
+
 * Fix all-in-one node provisioning, primarily for local vagrant development.
   Nothing to run.
 * Only update apt repo if it's more than 30 minutes old. Nothing to be run.
