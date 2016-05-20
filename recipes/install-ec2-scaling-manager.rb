@@ -2,18 +2,19 @@
 # Recipe:: install-ec2-scaling-manager
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
+include_recipe "mh-opsworks-recipes::update-package-repo"
 
 moscaler_attributes = {
-  ec2_management_release: 'v0.4.0',
-  offpeak_instances: 2,
-  peak_instances: 10,
-  weekend_instances: 1
+  'ec2_management_release' => 'v0.4.0',
+  'offpeak_instances' => 2,
+  'peak_instances' => 10,
+  'weekend_instances' => 1
 }.merge(node.fetch(:moscaler, {}))
 
-manager_release = moscaler_attributes[:ec2_management_release]
-offpeak_instances = moscaler_attributes[:offpeak_instances]
-peak_instances = moscaler_attributes[:peak_instances]
-weekend_instances = moscaler_attributes[:weekend_instances]
+manager_release = moscaler_attributes['ec2_management_release']
+offpeak_instances = moscaler_attributes['offpeak_instances']
+peak_instances = moscaler_attributes['peak_instances']
+weekend_instances = moscaler_attributes['weekend_instances']
 
 rest_auth_info = get_rest_auth_info
 stack_name = node[:opsworks][:stack][:name]
@@ -25,8 +26,7 @@ loggly_config = if loggly_info[:token] != ''
                   ''
                 end
 
-install_package('python-pip')
-install_package('run-one')
+install_package('python-pip run-one git')
 
 user "ec2_manager" do
   comment 'The ec2_manager user'

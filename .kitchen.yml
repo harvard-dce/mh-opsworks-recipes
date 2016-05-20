@@ -66,3 +66,23 @@ suites:
   - name: install-awscli
     run_list:
       - recipe[mh-opsworks-recipes::install-awscli]
+
+  - name: install-ec2-scaling-manager
+    run_list:
+      - recipe[mh-opsworks-recipes::install-ec2-scaling-manager]
+    attributes:
+      opsworks:
+        stack:
+          name: scaling-test
+
+  - name: modified-install-ec2-scaling-manager
+    run_list:
+      - recipe[mh-opsworks-recipes::install-ec2-scaling-manager]
+    attributes:
+      moscaler:
+        offpeak_instances: 10
+        peak_instances: 10
+        weekend_instances: 10
+      opsworks:
+        stack:
+          name: scaling-test

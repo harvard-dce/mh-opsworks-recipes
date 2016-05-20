@@ -2,6 +2,11 @@
 
 ## TO BE RELEASED
 
+* Fix `mh-opsworks-recipes::install-ec2-scaling-manager` to correctly update
+  the cron jobs when run. Implement basic serverspec tests to ensure the
+  default attributes and a run with customized attributes works. Nothing to
+  run.
+
 ## 1.3.3 - 5/19/2016
 
 * Fix all-in-one node provisioning, primarily for local vagrant development.
