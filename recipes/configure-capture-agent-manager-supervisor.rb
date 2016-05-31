@@ -15,4 +15,4 @@ template %Q|/etc/supervisor/conf.d/#{app_name}.conf| do
   })
 end
 
-execute %Q|service supervisor restart && supervisorctl start #{app_name}|
+execute %Q|service supervisor restart|

@@ -1,11 +1,11 @@
 #!/bin/bash
 
 NAME="<%= @capture_agent_manager_name %>"
-FLASKDIR="/home/capture_agent_manager/sites/${NAME}"
+USER="capture_agent_manager"
+GROUP=${USER}
+FLASKDIR="/home/${USER}/sites/${NAME}"
 VENVDIR="${FLASKDIR}/venv"
-SOCKFILE="/home/capture_agent_manager/sock/${NAME}.sock"
-USER=capture_agent_manager
-GROUP=capture_agent_manager
+SOCKFILE="/home/${USER}/sock/${NAME}.sock"
 NUM_WORKERS=3
 
 echo "starting ${NAME}"
