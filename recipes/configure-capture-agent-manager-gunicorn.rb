@@ -3,22 +3,23 @@
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
-capture_agent_manager_info = node.fetch(:capture_agent_manager, {})
-app_name = capture_agent_manager_info.fetch(:capture_agent_manager_name, "capture_agent_manager")
+app_name = get_capture_agent_manager_app_name
+username = get_capture_agent_manager_usr_name
 
 execute "install gunicorn" do
-  command "source /home/capture_agent_manager/sites/#{app_name}/venv/bin/activate" \
+  command "source /home/#{username}/sites/#{app_name}/venv/bin/activate" \
     " && pip install gunicorn"
-  user "capture_agent_manager"
-  creates "/home/capture_agent_manager/sites/#{app_name}/venv/bin/gunicorn"
+  user username
+  creates "/home/#{username}/sites/#{app_name}/venv/bin/gunicorn"
 end
 
-template "/home/capture_agent_manager/sites/#{app_name}/gunicorn_start.sh" do
+template "/home/#{username}/sites/#{app_name}/gunicorn_start.sh" do
   source "capture-agent-manager-gunicorn-start.sh.erb"
-  owner "capture_agent_manager"
-  group "capture_agent_manager"
+  owner username
+  group username
   mode "775"
   variables({
-    capture_agent_manager_name: app_name
+    capture_agent_manager_name: app_name,
+    capture_agent_manager_username: username
   })
 end

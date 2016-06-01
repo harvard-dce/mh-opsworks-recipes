@@ -5,14 +5,15 @@ include_recipe "mh-opsworks-recipes::update-package-repo"
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 install_package("supervisor")
 
-capture_agent_manager_info = node.fetch(:capture_agent_manager, {})
-app_name = capture_agent_manager_info.fetch(:capture_agent_manager_name, "capture_agent_manager")
+app_name = get_capture_agent_manager_app_name
+username = get_capture_agent_manager_usr_name
 
-template %Q|/etc/supervisor/conf.d/#{app_name}.conf| do
+template "/etc/supervisor/conf.d/#{app_name}.conf" do
   source "capture-agent-manager-supervisor-conf.erb"
   variables({
-    capture_agent_manager_name: app_name
+    capture_agent_manager_name: app_name,
+    capture_agent_manager_username: username
   })
 end
 
-execute %Q|service supervisor restart|
+execute "service supervisor restart"

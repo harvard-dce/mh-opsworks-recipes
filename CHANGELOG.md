@@ -2,6 +2,20 @@
 
 ## TO BE RELEASED
 
+* recipes to install and configure the utility node to host the capture-agent-manager
+  flask-gunicorn webapp
+
+* *REQUIRES EDITS TO THE CLUSTER CONFIG* *REQUIRES MANUAL CHEF RECIPE RUNS*:
+  recipes, etc to install and configure the utility node to host the capture-agent
+  manager flask-gunicorn webapp. see README.capture-agent-manager.md in
+  mh-opsworks for setup instructions.
+  The manual recipe run can be executed any time since they affect only the
+  utility node
+
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Utility"
+        recipes="mh-opsworks-recipes::create-capture-agent-manager-user,mh-opsworks-recipes::create-capture-agent-manager-directories,mh-opsworks-recipes:install-capture-agent-manager-packages,mh-opsworks-recipes:install-capture-agent-manager,mh-opsworks-recipes:configure-capture-agent-manager-gunicorn,mh-opsworks-recipes:configure-capture-agent-manager-nginx-proxy,mh-opsworks-recipes:configure-capture-agent-manager-supervisor"
+
+
 ## 1.3.3 - 5/19/2016
 
 * Fix all-in-one node provisioning, primarily for local vagrant development.

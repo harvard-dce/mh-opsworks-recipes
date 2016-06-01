@@ -3,19 +3,20 @@
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
-capture_agent_manager_info = node.fetch(:capture_agent_manager, {})
-app_name = capture_agent_manager_info.fetch(:capture_agent_manager_name, "capture_agent_manager")
+capture_agent_manager_info = get_capture_agent_manager_info
+app_name = get_capture_agent_manager_app_name
+username = get_capture_agent_manager_usr_name
 
 git "git clone capture_agent_manager #{app_name}" do
-  repository capture_agent_manager_info.fetch(:capture_agent_manager_git_repo, "https://github.com/harvard-dce/capture_agent_manager")
-  revision capture_agent_manager_info.fetch(:capture_agent_manager_git_revision, "master")
-  destination "/home/capture_agent_manager/sites/#{app_name}"
-  user 'capture_agent_manager'
+  repository capture_agent_manager_info.fetch(:capture_agent_manager_git_repo)
+  revision capture_agent_manager_info.fetch(:capture_agent_manager_git_revision)
+  destination %Q|/home/#{username}/sites/#{app_name}|
+  user username
 end
 
-file "/home/capture_agent_manager/sites/#{app_name}/#{app_name}.env" do
-  owner "capture_agent_manager"
-  group "capture_agent_manager"
+file %Q|/home/#{username}/sites/#{app_name}/#{app_name}.env| do
+  owner username
+  group username
   content %Q|
 export CA_STATS_USER="#{capture_agent_manager_info[:ca_stats_user]}"
 export CA_STATS_PASSWD="#{capture_agent_manager_info[:ca_stats_passwd]}"
@@ -28,25 +29,25 @@ export LDAP_BIND_DN="#{capture_agent_manager_info[:ldap_bind_dn]}"
 export LDAP_BIND_PASSWD="#{capture_agent_manager_info[:ldap_bind_passwd]}"
 export LOG_CONFIG="#{capture_agent_manager_info[:log_config]}"
 export FLASK_SECRET="#{capture_agent_manager_info[:capture_agent_manager_secret_key]}"
-export DATABASE_USR="#{capture_agent_manager_info[:capture_agent_manager]}"
+export DATABASE_USR="#{capture_agent_manager_info[:capture_agent_manager_database_usr]}"
 export DATABASE_PWD="#{capture_agent_manager_info[:capture_agent_manager_database_pwd]}"
 |
   mode "600"
 end
 
 execute "create virtualenv" do
-  command "/usr/bin/virtualenv /home/capture_agent_manager/sites/#{app_name}/venv"
-  user "capture_agent_manager"
-  creates "/home/capture_agent_manager/sites/#{app_name}/venv/bin/activate"
+  command %Q|/usr/bin/virtualenv /home/#{username}/sites/#{app_name}/venv|
+  user username
+  creates %Q|/home/#{username}/sites/#{app_name}/venv/bin/activate|
 end
 
 execute "install capture_agent_manager dependencies" do
-  command "source /home/capture_agent_manager/sites/#{app_name}/venv/bin/activate && pip install -r /home/capture_agent_manager/sites/#{app_name}/requirements.txt"
-  user "capture_agent_manager"
+  command %Q|source /home/#{username}/sites/#{app_name}/venv/bin/activate && pip install -r /home/#{username}/sites/#{app_name}/requirements.txt|
+  user username
 end
 
 cookbook_file "capture-agent-manager-logrotate.conf" do
-  path "/etc/logrotate.d/#{app_name}"
+  path %Q|/etc/logrotate.d/#{app_name}|
   owner "root"
   group "root"
   mode "644"

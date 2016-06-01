@@ -867,6 +867,101 @@ and README.zadara.md in mh-opsworks.
 * squid3 is restarted to apply the new proxy config.
 '
 )
+recipe(
+  'mh-opsworks-recipes::configure-capture-agent-manager-gunicorn',
+  'sets up start script for gunicorn with capture-agent-manager app
+
+this is relevant for the utility node, where the capture-agent-manager `cadash`
+should run.
+
+=== attributes
+* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_app_name
+* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_usr_name
+
+=== effects
+* gunicorn installed under the virtualenv for the capture-agent-manager-app root dir
+  (usually /home/user/sites/<app>/venv)
+* script to start gunicorn running the capture-agent-manager-app under app root dir
+'
+)
+recipe(
+  'mh-opsworks-recipes::configure-capture-agent-manager-nginx-proxy',
+  'sets up an nginx proxy that allows connections to flask-gunicorn apps via https-only
+
+=== attributes
+* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_app_name
+* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_usr_name
+
+=== effects
+* A configured and restarted nginx linked to flask-gunicorn capture-agent-manager app
+* HTTPS-only setup
+'
+)
+recipe(
+  'mh-opsworks-recipes::configure-capture-agent-manager-supervisor',
+  'installs and sets up supervisor for gunicorn apps to run as service-daemon
+
+=== attributes
+* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_app_name
+* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_usr_name
+
+=== effects
+* configured capture-agent-manager app as a supervisor task under `/etc/supervisord/conf.d/<app>.conf`
+* supervisor restarted
+'
+)
+recipe(
+  'mh-opsworks-recipes::create-capture-agent-manager-directories',
+  'creates directories(logs, app, etc) for capture-agent-manager flask-gunicorn app
+
+=== attributes
+* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_usr_name
+
+=== effects
+* directories for app(sites), logs, sock created under capture-agent-manager user
+'
+)
+recipe(
+  'mh-opsworks-recipes::create-capture-agent-manager-user',
+  'create user and group to run capture-agent-manager flask-gunicorn app as
+
+=== attributes
+* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_usr_name
+
+=== effects
+* capture-agent-manager user and group created
+* .ssh dir in home dir
+'
+)
+recipe(
+  'mh-opsworks-recipes::install-capture-agent-manager-packages',
+  '
+
+=== attributes
+none
+
+=== effects
+* packages needed for capture-agent-manager app to run like: redis, nginx, python,
+  and supervisor, among others
+* the package cache is cleared to save space
+'
+)
+recipe(
+  'mh-opsworks-recipes::install-capture-agent-manager',
+  'sets up flask-gunicorn app for capture-agent-manager
+
+=== attributes
+* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_info
+* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_app_name
+* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_usr_name
+
+=== effects
+* capture-agent-manager app cloned or checked out under capture-agent-manager `$HOME/sites`
+* environment vars for capture-agent-manager app are configured in a source file
+* pip dependencies installed in virtualenv under capture-agent-manager `$HOME/sites/venv`
+* configured logrotate file for capture-agent-manager app log
+'
+)
 
 depends 'nfs', '~> 2.1.0'
 depends 'apt', '~> 2.9.2'

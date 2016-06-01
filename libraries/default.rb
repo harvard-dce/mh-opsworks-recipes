@@ -382,6 +382,40 @@ module MhOpsworksRecipes
         mode '0600'
       end
     end
+
+    def get_capture_agent_manager_info
+      node.fetch(
+        :capture_agent_manager, {
+          capture_agent_manager_app_name: 'cadash',
+          capture_agent_manager_usr_name: 'capture_agent_manager',
+          capture_agent_manager_secret_key: 'super_secret_key',
+          log_config: '/home/capture_agent_manager/sites/cadash/logging.yaml',
+          ca_stats_user: 'usr',
+          ca_stats_passwd: 'pwd',
+          ca_stats_json_url: 'http://fake-ca-status.com/ca-status.json',
+          epipearl_user: 'usr',
+          epipearl_passwd: 'pwd',
+          ldap_host: 'ldap-hostname.some-domain.com',
+          ldap_base_search: 'dc=some-domain,dc=com',
+          ldap_bind_dn: 'cn=fake_usr,dc=some-domain,dc=com',
+          ldap_bind_passwd: 'pwd',
+          capture_agent_manager_git_repo: 'https://github.com/capture_agent_git_repo',
+          capture_agent_manager_git_revision: 'master',
+          capture_agent_manager_database_usr: 'usr',
+          capture_agent_manager_database_pwd: 'pwd'
+        }
+      )
+    end
+
+    def get_capture_agent_manager_app_name
+      ca_info = get_capture_agent_manager_info
+      ca_info[:capture_agent_manager_app_name]
+    end
+
+    def get_capture_agent_manager_usr_name
+      ca_info = get_capture_agent_manager_info
+      ca_info[:capture_agent_manager_usr_name]
+    end
   end
 
   module DeployHelpers
