@@ -3,24 +3,24 @@
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
-username = get_capture_agent_manager_usr_name
+usr_name = get_capture_agent_manager_usr_name
 
-group username do
+group usr_name do
   append true
   gid 2133
 end
 
-user username do
+user usr_name do
   supports manage_home: true
   comment "capture agent manager user"
   uid 2133
   gid 2133
   shell "/bin/false"
-  home "/home/#{username}"
+  home "/home/#{usr_name}"
 end
 
-directory "/home/#{username}/.ssh" do
-  owner username
-  group username
+directory "/home/#{usr_name}/.ssh" do
+  owner usr_name
+  group usr_name
   mode "700"
 end

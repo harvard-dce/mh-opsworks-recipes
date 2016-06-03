@@ -869,9 +869,9 @@ and README.zadara.md in mh-opsworks.
 )
 recipe(
   'mh-opsworks-recipes::configure-capture-agent-manager-gunicorn',
-  'sets up start script for gunicorn with capture-agent-manager app
+  'Sets up start script for gunicorn with capture-agent-manager app
 
-this is relevant for the utility node, where the capture-agent-manager `cadash`
+This is relevant for the utility node, where the capture-agent-manager `cadash`
 should run.
 
 === attributes
@@ -886,7 +886,7 @@ should run.
 )
 recipe(
   'mh-opsworks-recipes::configure-capture-agent-manager-nginx-proxy',
-  'sets up an nginx proxy that allows connections to flask-gunicorn apps via https-only
+  'Sets up an nginx proxy that allows connections to flask-gunicorn apps via https-only
 
 === attributes
 * MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_app_name
@@ -899,7 +899,7 @@ recipe(
 )
 recipe(
   'mh-opsworks-recipes::configure-capture-agent-manager-supervisor',
-  'installs and sets up supervisor for gunicorn apps to run as service-daemon
+  'Installs and sets up supervisor for gunicorn apps to run as service-daemon
 
 === attributes
 * MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_app_name
@@ -912,7 +912,7 @@ recipe(
 )
 recipe(
   'mh-opsworks-recipes::create-capture-agent-manager-directories',
-  'creates directories(logs, app, etc) for capture-agent-manager flask-gunicorn app
+  'Creates directories(logs, app, etc) for capture-agent-manager flask-gunicorn app
 
 === attributes
 * MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_usr_name
@@ -923,7 +923,7 @@ recipe(
 )
 recipe(
   'mh-opsworks-recipes::create-capture-agent-manager-user',
-  'create user and group to run capture-agent-manager flask-gunicorn app as
+  'Create user and group to run capture-agent-manager flask-gunicorn app as
 
 === attributes
 * MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_usr_name
@@ -935,7 +935,7 @@ recipe(
 )
 recipe(
   'mh-opsworks-recipes::install-capture-agent-manager-packages',
-  '
+  'Installs packages specific to the capture-agent-manager
 
 === attributes
 none
@@ -948,7 +948,7 @@ none
 )
 recipe(
   'mh-opsworks-recipes::install-capture-agent-manager',
-  'sets up flask-gunicorn app for capture-agent-manager
+  'Sets up flask-gunicorn app for capture-agent-manager
 
 === attributes
 * MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_info

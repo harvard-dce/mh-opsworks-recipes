@@ -2,13 +2,15 @@
 
 ## TO BE RELEASED
 
-* recipes to install and configure the utility node to host the capture-agent-manager
-  flask-gunicorn webapp
+* *[OPTIONAL]* Recipes to install and configure the utility node to host the
+  capture-agent-manager flask-gunicorn webapp. The utility node is optional and
+  only for DCE production cluster.
 
-* *REQUIRES EDITS TO THE CLUSTER CONFIG* *REQUIRES MANUAL CHEF RECIPE RUNS*:
+* *[OPTIONAL] EDITS TO THE CLUSTER CONFIG* *REQUIRES MANUAL CHEF RECIPE RUNS*:
   recipes, etc to install and configure the utility node to host the capture-agent
-  manager flask-gunicorn webapp. see README.capture-agent-manager.md in
+  manager flask-gunicorn webapp. See README.capture-agent-manager.md in
   mh-opsworks for setup instructions.
+
   The manual recipe run can be executed any time since they affect only the
   utility node
 

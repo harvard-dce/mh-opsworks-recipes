@@ -5,7 +5,7 @@ include_recipe "mh-opsworks-recipes::update-package-repo"
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
 app_name = get_capture_agent_manager_app_name
-username = get_capture_agent_manager_usr_name
+usr_name = get_capture_agent_manager_usr_name
 
 install_package("nginx")
 
@@ -31,7 +31,7 @@ template "/etc/nginx/proxy-includes/capture-agent-manager.conf" do
   source "nginx-proxy-capture-agent-manager.conf.erb"
   variables({
     capture_agent_manager: app_name,
-    capture_agent_manager_username: username
+    capture_agent_manager_usr_name: usr_name
   })
 end
 

@@ -3,16 +3,16 @@
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
-username = get_capture_agent_manager_usr_name
+usr_name = get_capture_agent_manager_usr_name
 
 [
-  %Q|home/#{username}/sites|,
-  %Q|home/#{username}/sock|,
-  %Q|home/#{username}/logs|
+  %Q|home/#{usr_name}/sites|,
+  %Q|home/#{usr_name}/sock|,
+  %Q|home/#{usr_name}/logs|
 ].each do |capture_agent_manager_directory|
   directory capture_agent_manager_directory do
-    owner username
-    group username
+    owner usr_name
+    group usr_name
     mode "755"
     recursive true
   end

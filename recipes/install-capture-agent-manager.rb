@@ -5,18 +5,18 @@
 
 capture_agent_manager_info = get_capture_agent_manager_info
 app_name = get_capture_agent_manager_app_name
-username = get_capture_agent_manager_usr_name
+usr_name = get_capture_agent_manager_usr_name
 
 git "git clone capture_agent_manager #{app_name}" do
   repository capture_agent_manager_info.fetch(:capture_agent_manager_git_repo)
   revision capture_agent_manager_info.fetch(:capture_agent_manager_git_revision)
-  destination %Q|/home/#{username}/sites/#{app_name}|
-  user username
+  destination %Q|/home/#{usr_name}/sites/#{app_name}|
+  user usr_name
 end
 
-file %Q|/home/#{username}/sites/#{app_name}/#{app_name}.env| do
-  owner username
-  group username
+file %Q|/home/#{usr_name}/sites/#{app_name}/#{app_name}.env| do
+  owner usr_name
+  group usr_name
   content %Q|
 export CA_STATS_USER="#{capture_agent_manager_info[:ca_stats_user]}"
 export CA_STATS_PASSWD="#{capture_agent_manager_info[:ca_stats_passwd]}"
@@ -36,14 +36,14 @@ export DATABASE_PWD="#{capture_agent_manager_info[:capture_agent_manager_databas
 end
 
 execute "create virtualenv" do
-  command %Q|/usr/bin/virtualenv /home/#{username}/sites/#{app_name}/venv|
-  user username
-  creates %Q|/home/#{username}/sites/#{app_name}/venv/bin/activate|
+  command %Q|/usr/bin/virtualenv /home/#{usr_name}/sites/#{app_name}/venv|
+  user usr_name
+  creates %Q|/home/#{usr_name}/sites/#{app_name}/venv/bin/activate|
 end
 
 execute "install capture_agent_manager dependencies" do
-  command %Q|source /home/#{username}/sites/#{app_name}/venv/bin/activate && pip install -r /home/#{username}/sites/#{app_name}/requirements.txt|
-  user username
+  command %Q|source /home/#{usr_name}/sites/#{app_name}/venv/bin/activate && pip install -r /home/#{usr_name}/sites/#{app_name}/requirements.txt|
+  user usr_name
 end
 
 cookbook_file "capture-agent-manager-logrotate.conf" do
