@@ -5,6 +5,8 @@
 
 app_name = get_capture_agent_manager_app_name
 usr_name = get_capture_agent_manager_usr_name
+capture_agent_manager_info = get_capture_agent_manager_info
+log_level = capture_agent_manager_info.fetch(:capture_agent_manager_gunicorn_log_level)
 
 execute "install gunicorn" do
   command "/home/#{usr_name}/sites/#{app_name}/venv/bin/pip install gunicorn"
@@ -19,6 +21,7 @@ template "/home/#{usr_name}/sites/#{app_name}/gunicorn_start.sh" do
   mode "775"
   variables({
     capture_agent_manager_name: app_name,
-    capture_agent_manager_usr_name: usr_name
+    capture_agent_manager_usr_name: usr_name,
+    capture_agent_manager_gunicorn_log_level: log_level
   })
 end
