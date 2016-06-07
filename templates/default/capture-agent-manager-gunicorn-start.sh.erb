@@ -27,6 +27,6 @@ exec gunicorn ${NAME}.app:create_app\(\) \
     --name ${NAME} \
     --workers ${NUM_WORKERS} \
     --user=${USER} --group=${GROUP} \
-    --log-level=debug \
+    --log-level=<%= @capture_agent_manager_gunicorn_log_level %> \
     --log-file=- \
     --bind=unix:${SOCKFILE}

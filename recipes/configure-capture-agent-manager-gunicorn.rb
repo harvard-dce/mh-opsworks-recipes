@@ -7,8 +7,7 @@ app_name = get_capture_agent_manager_app_name
 usr_name = get_capture_agent_manager_usr_name
 
 execute "install gunicorn" do
-  command "source /home/#{usr_name}/sites/#{app_name}/venv/bin/activate" \
-    " && pip install gunicorn"
+  command "/home/#{usr_name}/sites/#{app_name}/venv/bin/pip install gunicorn"
   user usr_name
   creates "/home/#{usr_name}/sites/#{app_name}/venv/bin/gunicorn"
 end

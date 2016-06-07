@@ -389,6 +389,7 @@ module MhOpsworksRecipes
           capture_agent_manager_app_name: 'cadash',
           capture_agent_manager_usr_name: 'capture_agent_manager',
           capture_agent_manager_secret_key: 'super_secret_key',
+          capture_agent_manager_gunicorn_log_level: 'debug',
           log_config: '/home/capture_agent_manager/sites/cadash/logging.yaml',
           ca_stats_user: 'usr',
           ca_stats_passwd: 'pwd',
@@ -399,7 +400,7 @@ module MhOpsworksRecipes
           ldap_base_search: 'dc=some-domain,dc=com',
           ldap_bind_dn: 'cn=fake_usr,dc=some-domain,dc=com',
           ldap_bind_passwd: 'pwd',
-          capture_agent_manager_git_repo: 'https://github.com/capture_agent_git_repo',
+          capture_agent_manager_git_repo: 'https://github.com/harvard-dce/cadash',
           capture_agent_manager_git_revision: 'master',
           capture_agent_manager_database_usr: 'usr',
           capture_agent_manager_database_pwd: 'pwd'

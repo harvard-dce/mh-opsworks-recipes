@@ -42,7 +42,7 @@ execute "create virtualenv" do
 end
 
 execute "install capture_agent_manager dependencies" do
-  command %Q|source /home/#{usr_name}/sites/#{app_name}/venv/bin/activate && pip install -r /home/#{usr_name}/sites/#{app_name}/requirements.txt|
+  command %Q|/home/#{usr_name}/sites/#{app_name}/venv/bin/pip install -r /home/#{usr_name}/sites/#{app_name}/requirements.txt|
   user usr_name
 end
 
