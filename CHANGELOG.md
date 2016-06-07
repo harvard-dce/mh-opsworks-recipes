@@ -2,6 +2,22 @@
 
 ## TO BE RELEASED
 
+* *[OPTIONAL]* Recipes to install and configure the utility node to host the
+  capture-agent-manager flask-gunicorn webapp. The utility node is optional and
+  only for DCE production cluster.
+
+* *[OPTIONAL] EDITS TO THE CLUSTER CONFIG* *REQUIRES MANUAL CHEF RECIPE RUNS*:
+  recipes, etc to install and configure the utility node to host the capture-agent
+  manager flask-gunicorn webapp. See README.capture-agent-manager.md in
+  mh-opsworks for setup instructions.
+
+  The manual recipe run can be executed any time since they affect only the
+  utility node
+
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Utility"
+        recipes="mh-opsworks-recipes::create-capture-agent-manager-user,mh-opsworks-recipes::create-capture-agent-manager-directories,mh-opsworks-recipes:install-capture-agent-manager-packages,mh-opsworks-recipes:install-capture-agent-manager,mh-opsworks-recipes:configure-capture-agent-manager-gunicorn,mh-opsworks-recipes:configure-capture-agent-manager-nginx-proxy,mh-opsworks-recipes:configure-capture-agent-manager-supervisor"
+
+
 ## 1.3.3 - 5/19/2016
 
 * Fix `mh-opsworks-recipes::install-ec2-scaling-manager` to correctly update
