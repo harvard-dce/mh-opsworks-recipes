@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## 1.4.0 - 6/8/2016
+
 * *[OPTIONAL]* Recipes to install and configure the utility node to host the
   capture-agent-manager flask-gunicorn webapp. The utility node is optional and
   only for DCE production cluster.
