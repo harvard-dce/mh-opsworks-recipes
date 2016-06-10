@@ -196,6 +196,10 @@ module MhOpsworksRecipes
       node[:s3_distribution_bucket_name]
     end
 
+    def get_s3_file_archive_bucket_name
+      node[:s3_file_archive_bucket_name]
+    end
+
     def topic_name
       stack_name = node[:opsworks][:stack][:name]
       stack_name.downcase.gsub(/[^a-z\d\-_]/,'_')
@@ -771,6 +775,18 @@ module MhOpsworksRecipes
         variables({
           region: region,
           s3_distribution_bucket_name: s3_distribution_bucket_name
+        })
+      end
+    end
+
+    def install_aws_s3_file_archive_service_config(current_deploy_root, region, s3_file_archive_bucket_name)
+      template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.episode.aws.s3.AwsS3ArchiveElementStore.properties| do
+        source 'edu.harvard.dce.episode.aws.s3.AwsS3ArchiveElementStore.properties.erb'
+        owner 'matterhorn'
+        group 'matterhorn'
+        variables({
+          region: region,
+          s3_file_archive_bucket_name: s3_file_archive_bucket_name
         })
       end
     end
