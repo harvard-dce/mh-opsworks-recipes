@@ -47,7 +47,7 @@ AWS_DEFAULT_REGION="#{region}"
 MATTERHORN_REST_USER="#{rest_auth_info[:user]}"
 MATTERHORN_REST_PASS="#{rest_auth_info[:pass]}"
 MATTERHORN_HOST="#{engage_node[:private_ip]}"
-S3_LAST_ACTION_TS_BUCKET=mh-user-action-harvester
+S3_LAST_ACTION_TS_BUCKET="#{stack_name}-ua-harvester"
 S3_LAST_ACTION_TS_KEY="#{stack_name}-last-action-ts"
 SQS_QUEUE_NAME="#{sqs_queue_name}"
 LOGGLY_TAGS="#{stack_name}"
@@ -65,7 +65,7 @@ end
 cron_d 'ua_harvester' do
   user 'ua_harvester'
   minute '*/2'
-  command %Q(cd /home/ua_harvester/harvester && /usr/bin/run-one ./ua_harvest.py 2>&1 | logger -t info)
+  command %Q(cd /home/ua_harvester/harvester && /usr/bin/run-one ./ua_harvest.py -b 10000 2>&1 | logger -t info)
   path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 end
 
