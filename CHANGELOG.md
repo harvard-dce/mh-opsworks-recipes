@@ -2,6 +2,10 @@
 
 ## TO BE RELEASED
 
+## 1.5.0 - 6/10/2016
+
+* Configuration for the new Matterhorn aws s3 file archive service (s3 bucket name).
+
 ## 1.4.0 - 6/8/2016
 
 * *[OPTIONAL]* Recipes to install and configure the utility node to host the
