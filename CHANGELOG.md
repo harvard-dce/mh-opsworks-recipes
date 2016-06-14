@@ -2,14 +2,14 @@
 
 ## TO BE RELEASED
 
-* *[OPTIONAL]* Changes to the `install-ua-harvester` recipe. Changed naming path 
-  of the s3 bucket used to store the useraction harvester's last action timestamp 
-  value. Only relevant for analytics node and only affects new clusters. Also 
-  bumped harvest batch size from the default 1000/per
 
 ## 1.5.0 - 6/10/2016
 
 * Configuration for the new Matterhorn aws s3 file archive service (s3 bucket name).
+* *[OPTIONAL]* Changes to the `install-ua-harvester` recipe. Changed naming path 
+  of the s3 bucket used to store the useraction harvester's last action timestamp 
+  value. Only relevant for analytics node and only affects new clusters. Also 
+  bumped harvest batch size from the default 1000/per
 
 ## 1.4.0 - 6/8/2016
 
