@@ -95,7 +95,7 @@ deploy_revision "matterhorn" do
     install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name)
     # /Admin Specific
     install_published_event_details_email(most_recent_deploy, public_engage_hostname)
-    configure_newrelic(most_recent_deploy, newrelic_app_name)
+    configure_newrelic(most_recent_deploy, newrelic_app_name, :admin)
 
     if using_local_distribution?
       update_properties_files_for_local_distribution(most_recent_deploy)
