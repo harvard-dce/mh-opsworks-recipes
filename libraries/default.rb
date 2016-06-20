@@ -421,6 +421,27 @@ module MhOpsworksRecipes
       ca_info = get_capture_agent_manager_info
       ca_info[:capture_agent_manager_usr_name]
     end
+    
+    def get_moscaler_info
+      {
+          'moscaler_strategy' => 'disabled', 
+          'moscaler_release' => 'v0.4.0',
+          'moscaler_debug' => false,
+          'offpeak_instances' => 2,
+          'peak_instances' => 10,
+          'weekend_instances' => 1,
+          'cron_interval' => '*/5',
+          'autoscale_up_increment' => 1,
+          'autoscale_down_increment' => 1,
+          'autoscale_up_threshold' => 6.0,
+          'autoscale_down_threshold' => 6.0,
+          'autoscale_type' => 'LayerLoad',
+          'autoscale_cloudwatch_metric' => 'load_5',
+          'min_workers' => 1,
+          'idle_uptime_threshold' => 50,
+          'autoscale_up_pause_interval' => 600
+        }.merge(node.fetch(:moscaler, {}))
+    end
   end
 
   module DeployHelpers
