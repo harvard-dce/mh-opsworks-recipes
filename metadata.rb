@@ -727,18 +727,19 @@ MhOpsworksRecipes::RecipeHelpers.dev_or_testing_cluster?
 '
 )
 recipe(
-  'mh-opsworks-recipes::install-ec2-scaling-manager',
-  'Installs the time-based opsworks ec2 instance manager
+  'mh-opsworks-recipes::install-moscaler',
+  'Installs the mo-scaler horizontal scaling manager
 
-This is the coarse time-based scaling we use by default.
+Depending on `custom_json` settings, will configure mo-scaler using either a time-based
+scaling strategy or one of the auto-scaling methods.
 
 === Attributes
-* <tt>node[:moscaler]</tt> - defines how many instances run at what times. See
-  the recipe for more details
+* <tt>node[:moscaler]</tt> - defines several options. See the recipe for more details.
 
 === Effects
-* Creates the ec2_manager user
+* Creates the moscaler user
 * Installs mo-scaler
+* Generates a `.env` file in /home/moscaler/mo-scaler based on attributes defined in <tt>node[:moscaler]</tt>
 * Sets up cron jobs to scale according to the attributes defined in <tt>node[:moscaler]</tt>
 '
 )

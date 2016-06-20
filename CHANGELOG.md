@@ -2,6 +2,12 @@
 
 ## TO BE RELEASED
 
+* *REQUIRES EDITS TO THE CLUSTER CONFIG* *REQUIRES MANUAL CHEF RECIPE RUNS*:
+  Renames `install-ec2-scaling-manager` to `install-moscaler` and updates the
+  recipe to allow control of the scaling strategy (time vs autoscale) as
+  well as disabling entirely. See `README.horizontal_scaling.md` in the
+  [mh-opsworks](https://github.com/harvard-dce/mh-opsworks) repo for details.
+
 ## 1.8.0 - 7/13/2016
 
 * Fixed notification email
