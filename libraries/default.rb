@@ -742,14 +742,12 @@ module MhOpsworksRecipes
 
 
     def configure_newrelic(current_deploy_root, node_name, layer_name)
-      #if enable_newrelic?
       if enable_newrelic_layer?(layer_name)
-        log_dir = node.fetch(:matterhorn_log_directory, '/var/log/matterhorn')
-        newrelic_layers = node.fetch(:newrelic,{})
-        newrelic_layer = newrelic_layers.fetch(layer_name,{})
+            log_dir = node.fetch(:matterhorn_log_directory, '/var/log/matterhorn')
+            newrelic_layers = node.fetch(:newrelic,{})
+            newrelic_layer = newrelic_layers.fetch(layer_name,{})
             newrelic_key = newrelic_layer[:key]
-            #newrelic_att = node.fetch(:newrelic, {})
-            #newrelic_key = newrelic_att[:key]
+
             environment_name = node[:opsworks][:stack][:name]
             template %Q|#{current_deploy_root}/etc/newrelic.yml| do
               source 'newrelic.yml.erb'
@@ -762,7 +760,7 @@ module MhOpsworksRecipes
                 log_dir: log_dir
               })
             end
-      end // enable_newrelic
+      end 
     end
 
     def install_live_streaming_service_config(current_deploy_root,live_stream_name)
