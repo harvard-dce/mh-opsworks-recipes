@@ -735,23 +735,18 @@ module MhOpsworksRecipes
       node[:newrelic]
     end
 
-    def enable_newrelic_layer(layer_name)?
-       return nil if not enable_newrelic?
-       newrelic_layers = node.fetch(:newrelic,{})
-       newrelic_layer = newrelic_layers[layer_name]
-       if newrelic_layer?
-          newrelic_layer.key?(:key)
-       else
-          nil
+    def enable_newrelic_layer?(layer_name)
+       nr_layers = node.fetch(:newrelic,{}) #  must be a hash
+       nr_layers.key?(layer_name)
     end
 
 
     def configure_newrelic(current_deploy_root, node_name, layer_name)
       #if enable_newrelic?
-      if enable_newrelic_layer(layer_name)?
+      if enable_newrelic_layer?(layer_name)
         log_dir = node.fetch(:matterhorn_log_directory, '/var/log/matterhorn')
         newrelic_layers = node.fetch(:newrelic,{})
-        newrelic_layer = newrelic_layers[layer_name]
+        newrelic_layer = newrelic_layers.fetch(layer_name,{})
             newrelic_key = newrelic_layer[:key]
             #newrelic_att = node.fetch(:newrelic, {})
             #newrelic_key = newrelic_att[:key]
