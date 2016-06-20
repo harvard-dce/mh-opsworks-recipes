@@ -741,7 +741,7 @@ module MhOpsworksRecipes
         newrelic_layers = node.fetch(:newrelic,{})
         newrelic_layer = newrelic_layers[layer_name]
 
-        if newrelic_layer? begin
+        if newrelic_layer? then
             newrelic_key = newrelic_layer[:key]
             #newrelic_att = node.fetch(:newrelic, {})
             #newrelic_key = newrelic_att[:key]
