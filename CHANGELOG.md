@@ -3,6 +3,14 @@
 ## TO BE RELEASED
 
 
+## 1.5.1 - 6/20/2016
+* Configuration for the newrelic is now different for each layer (admin,work,engage)
+"newrelic": {
+    "admin": { "key": "admin_key1" },
+    "worker": { "key": "worker_key1" }
+}
+If a layer is omitted, new relic will not be run. all-in-one will use admin key.
+
 ## 1.5.0 - 6/10/2016
 
 * Configuration for the new Matterhorn aws s3 file archive service (s3 bucket name).
