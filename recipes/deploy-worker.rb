@@ -86,7 +86,7 @@ deploy_revision "matterhorn" do
     )
     install_live_streaming_service_config(most_recent_deploy, live_stream_name)
     install_published_event_details_email(most_recent_deploy, public_engage_hostname)
-    configure_newrelic(most_recent_deploy, newrelic_app_name)
+    configure_newrelic(most_recent_deploy, newrelic_app_name, :workers)
 
     # WORKER SPECIFIC
     #TODO - this should probably be checked into the repo
