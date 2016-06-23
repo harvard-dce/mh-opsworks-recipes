@@ -100,7 +100,7 @@ deploy_revision "matterhorn" do
     install_otherpubs_service_config(most_recent_deploy, matterhorn_repo_root, auth_host)
     install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name)
     install_published_event_details_email(most_recent_deploy, public_hostname)
-    configure_newrelic(most_recent_deploy, newrelic_app_name)
+    configure_newrelic(most_recent_deploy, newrelic_app_name, :admin)  # All in one installation will use admin newrelic key
 
     # all-in-one SPECIFIC
     initialize_database(most_recent_deploy)
