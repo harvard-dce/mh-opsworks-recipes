@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## 1.6.0 - 6/24/2016
+
 * Configuration for the newrelic is now different for each layer (admin,work,engage)
 "stack": {
     "chef": {
