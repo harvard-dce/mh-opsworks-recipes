@@ -10,6 +10,7 @@ storage_info = get_storage_info
 shared_storage_root = get_shared_storage_root
 rest_auth_info = get_rest_auth_info
 admin_user_info = get_admin_user_info
+stack_name = stack_shortname
 
 capture_agent_query_url = node.fetch(
   :capture_agent_query_url, 'http://example.com'
@@ -118,6 +119,7 @@ deploy_revision "matterhorn" do
         capture_agent_monitor_url: capture_agent_monitor_url,
         live_streaming_url: live_streaming_url,
         job_maxload: 4,
+        stack_name: stack_name,
       })
     end
   end

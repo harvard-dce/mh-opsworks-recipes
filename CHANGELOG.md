@@ -2,6 +2,10 @@
 
 ## TO BE RELEASED
 
+## 1.7.0 - 7/5/2016
+
+* Added stack short name to config.properties so that we can show the cluster name when sending notification emails.  
+
 ## 1.6.0 - 6/24/2016
 
 * Configuration for the newrelic is now different for each layer (admin,work,engage)
