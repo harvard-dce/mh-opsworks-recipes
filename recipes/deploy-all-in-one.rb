@@ -32,6 +32,10 @@ capture_agent_monitor_url = node.fetch(
   :capture_agent_monitor_url, 'http://example.com/monitor_url'
 )
 
+live_monitor_url = node.fetch(
+  :live_monitor_url, 'http://example.com/monitor_url'
+)
+
 cloudfront_url = get_cloudfront_url
 live_streaming_url = get_live_streaming_url
 live_stream_name = get_live_stream_name
@@ -135,6 +139,7 @@ deploy_revision "matterhorn" do
         s3_distribution_bucket_name: s3_distribution_bucket_name,
         capture_agent_monitor_url: capture_agent_monitor_url,
         live_streaming_url: live_streaming_url,
+        live_monitor_url: live_monitor_url,
         job_maxload: nil,
         stack_name: stack_name,
       })
