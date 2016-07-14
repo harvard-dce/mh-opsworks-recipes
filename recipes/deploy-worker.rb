@@ -118,7 +118,7 @@ deploy_revision "matterhorn" do
         s3_distribution_bucket_name: s3_distribution_bucket_name,
         capture_agent_monitor_url: capture_agent_monitor_url,
         live_streaming_url: live_streaming_url,
-        job_maxload: 4,
+        job_maxload: 2,
         stack_name: stack_name,
       })
     end
