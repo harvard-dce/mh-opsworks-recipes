@@ -2,6 +2,15 @@
 
 ## TO BE RELEASED
 
+## 1.8.0 - 7/13/2016
+
+* Fixed notification email
+* Added live_monitor_url config for live akamai stream monitoring
+"stack": {
+    "chef": {
+    "custom_json": {
+        "live_monitor_url": rtmp:akamai_server:port/../#{caName}/...
+
 ## 1.7.0 - 7/5/2016
 
 * Added stack short name to config.properties so that we can show the cluster name when sending notification emails.  
