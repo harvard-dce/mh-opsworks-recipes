@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## 1.9.0 - 7/21/2016
+
 * *REQUIRES EDITS TO THE CLUSTER CONFIG* *REQUIRES MANUAL CHEF RECIPE RUNS*:
   Renames `install-ec2-scaling-manager` to `install-moscaler` and updates the
   recipe to allow control of the scaling strategy (time vs autoscale) as
