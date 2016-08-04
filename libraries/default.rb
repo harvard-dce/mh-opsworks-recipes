@@ -424,24 +424,19 @@ module MhOpsworksRecipes
     
     def get_moscaler_info
       {
-          'moscaler_strategy' => 'disabled', 
+          'moscaler_type' => 'disabled',
           'moscaler_release' => 'v1.0.0',
           'moscaler_debug' => false,
           'offpeak_instances' => 2,
           'peak_instances' => 10,
           'weekend_instances' => 1,
           'cron_interval' => '*/2',
-          'autoscale_up_increment' => 2,
-          'autoscale_down_increment' => 1,
-          'autoscale_up_threshold' => 12.0,
-          'autoscale_down_threshold' => 8.0,
-          'autoscale_type' => 'LayerLoad',
-          'autoscale_layerload_metric' => 'load_1',
-          'autoscale_layerload_sample_count' => 3,
-          'autoscale_layerload_sample_period' => 60,
           'min_workers' => 1,
           'idle_uptime_threshold' => 50,
-          'autoscale_pause_interval' => 300
+          'autoscale_up_increment' => 2,
+          'autoscale_down_increment' => 1,
+          'autoscale_pause_cycles' => 1,
+          'autoscale_strategies' => []
         }.merge(node.fetch(:moscaler, {}))
     end
   end
