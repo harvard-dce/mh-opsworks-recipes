@@ -10,13 +10,13 @@ moscaler_attributes = get_moscaler_info
 Chef::Log.info moscaler_attributes
 
 moscaler_release = moscaler_attributes['moscaler_release']
-moscaler_strategy = moscaler_attributes['moscaler_strategy']
+moscaler_type = moscaler_attributes['moscaler_type']
 debug_flag = moscaler_attributes['moscaler_debug'] ? '-d' : ''
 cron_interval = moscaler_attributes['cron_interval']
+autoscale_config = ''
 
 rest_auth_info = get_rest_auth_info
 stack_name = node[:opsworks][:stack][:name]
-autoscale_layer_id = node["opsworks"]["layers"]["workers"]["id"]
 region = "us-east-1"
 
 loggly_info = node.fetch(:loggly, { token: '', url: '' })
@@ -52,7 +52,7 @@ execute "Clean out existing cron jobs" do
   action :run  
 end
 
-if moscaler_strategy == 'time'
+if moscaler_type == 'time'
   
   offpeak_instances = moscaler_attributes['offpeak_instances']
   peak_instances = moscaler_attributes['peak_instances']
@@ -86,13 +86,27 @@ if moscaler_strategy == 'time'
     command %Q(cd /home/moscaler/mo-scaler && /usr/bin/run-one ./manager.py #{debug_flag} scale to #{weekend_instances} --scale-available 2>&1 | logger -t info)
     path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   end
-elsif moscaler_strategy == 'auto'
+elsif moscaler_type == 'auto'
   cron_d 'moscaler_auto' do
     user 'moscaler'
     minute cron_interval
     command %Q(cd /home/moscaler/mo-scaler && /usr/bin/run-one ./manager.py #{debug_flag} scale auto 2>&1 | logger -t info)
     path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   end
+
+  autoscale_config = %Q|AUTOSCALE_CONFIG="/home/moscaler/mo-scaler/autoscale.json"|
+
+  file '/home/moscaler/mo-scaler/autoscale.json' do
+    owner 'moscaler'
+    group 'moscaler'
+    content Chef::JSONCompat.to_json_pretty({
+      pause_cycles: moscaler_attributes['autoscale_pause_cycles'],
+      up_increment: moscaler_attributes['autoscale_up_increment'],
+      down_increment: moscaler_attributes['autoscale_down_increment'],
+      strategies: moscaler_attributes['autoscale_strategies']
+    })
+  end
+
 end
 
 file '/home/moscaler/mo-scaler/.env' do
@@ -106,19 +120,10 @@ AWS_DEFAULT_REGION="#{region}"
 
 MOSCALER_MIN_WORKERS=#{moscaler_attributes['min_workers']}
 MOSCALER_IDLE_UPTIME_THRESHOLD=#{moscaler_attributes['idle_uptime_threshold']}
-
-AUTOSCALE_UP_INCREMENT=#{moscaler_attributes['autoscale_up_increment']}
-AUTOSCALE_DOWN_INCREMENT=#{moscaler_attributes['autoscale_down_increment']}
-AUTOSCALE_UP_THRESHOLD=#{moscaler_attributes['autoscale_up_threshold']}
-AUTOSCALE_DOWN_THRESHOLD=#{moscaler_attributes['autoscale_down_threshold']}
-AUTOSCALE_TYPE=#{moscaler_attributes['autoscale_type']}
-AUTOSCALE_LAYERLOAD_METRIC=#{moscaler_attributes['autoscale_layerload_metric']}
-AUTOSCALE_LAYERLOAD_LAYER_ID=#{autoscale_layer_id}
-AUTOSCALE_LAYERLOAD_SAMPLE_COUNT=#{moscaler_attributes['autoscale_layerload_sample_count']}
-AUTOSCALE_LAYERLOAD_SAMPLE_PERIOD=#{moscaler_attributes['autoscale_layerload_sample_period']}
-AUTOSCALE_PAUSE_INTERVAL=#{moscaler_attributes['autoscale_pause_interval']}
-
+#{autoscale_config}
 #{loggly_config}
 |
   mode '600'
 end
+
+
