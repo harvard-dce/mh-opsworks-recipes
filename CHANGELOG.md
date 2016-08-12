@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## 1.10.0 - 8/12/2016
+
 * *REQURES EDITS TO THE CLUSTER CONFIG* *REQUIRES MANUAL CHEF RECIPE RUNS*:
   Changes to moscaler configuration deployment. Updated config will be detailed in the MH release notes.
   After an `update_chef_recipes` do a manual recipe exec:
@@ -15,7 +17,6 @@
   a manual recipe exec:
 
         ./bin/rake stack:commands:execute_recipes_on_layers layers="Ganglia" recipes="mh-opsworks-recipes::install-job-queued-metrics"
-
 
 ## 1.9.0 - 7/21/2016
 
