@@ -3,6 +3,10 @@
 ## TO BE RELEASED
 
 * `moscaler_release` now defaults to "master"
+* *REQUIRES MANUAL CHEF RECIPE RUN* 
+  Additional helpful utils to be installed by default
+  
+        ./bin/rake stack:commands:execute_recipes_on_layers recipes="mh-opsworks-recipes::install-utils"
 
 ## 1.10.0 - 8/12/2016
 
