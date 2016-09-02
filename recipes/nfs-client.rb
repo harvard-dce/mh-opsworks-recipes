@@ -47,7 +47,7 @@ end
 # Only restart if we don't have an active mount
 service 'autofs' do
   action :restart
-  not_if %Q|grep ' #{export_root} ' /proc/mounts|
+  not_if %Q|grep '#{storage_hostname}:#{export_root} ' /proc/mounts|
 end
 
 execute 'warm directory' do

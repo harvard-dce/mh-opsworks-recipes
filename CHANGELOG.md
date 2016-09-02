@@ -7,6 +7,8 @@
   Additional helpful utils to be installed by default
   
         ./bin/rake stack:commands:execute_recipes_on_layers recipes="mh-opsworks-recipes::install-utils"
+* prevent autofs restart only if existing mount matches the storage hostname. this
+  enables use of the `nfs-client` recipe for switching storage nodes or zadara vpsas
 
 ## 1.10.0 - 8/12/2016
 
