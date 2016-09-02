@@ -1,0 +1,15 @@
+#!/bin/bash
+
+namespace="DECustom"
+region="us-east-1"
+metric_name="CA-timedrift"
+dimension_name="CAName"
+
+ca_list=$(curl -v --user "<%= @ca_stats_user %>:<%= @ca_stats_passwd %>" "<%= @ca_stats_json_url %>" | grep address | awk  -F'"' '{print $4;}' | awk -F. '{print $1;}')
+
+for ca in ${ca_list}
+do
+    metric=$(echo "`date -u +%s` - `ssh -o 'StrictHostKeyChecking no' -i ${HOME}/.ssh/dce-epiphan root@${ca}.dce.harvard.edu date -u +%s`" | bc)
+    /usr/local/bin/aws cloudwatch put-metric-data --namespace ${namespace} --region ${region} --metric-name ${metric_name} --unit "Seconds" --value "${metric}" --dimensions "${dimension_name}=${ca}"
+done
+
