@@ -425,7 +425,7 @@ module MhOpsworksRecipes
     def get_moscaler_info
       {
           'moscaler_type' => 'disabled',
-          'moscaler_release' => 'v1.1.0',
+          'moscaler_release' => 'master',
           'moscaler_debug' => false,
           'offpeak_instances' => 2,
           'peak_instances' => 10,

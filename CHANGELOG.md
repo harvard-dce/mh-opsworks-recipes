@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* `moscaler_release` now defaults to "master"
+
 ## 1.10.0 - 8/12/2016
 
 * *REQURES EDITS TO THE CLUSTER CONFIG* *REQUIRES MANUAL CHEF RECIPE RUNS*:
