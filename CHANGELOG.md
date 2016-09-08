@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## 1.11.0 - 9/8/2016
+
 * `moscaler_release` now defaults to "master"
 * *REQUIRES MANUAL CHEF RECIPE RUN* 
   Additional helpful utils to be installed by default
@@ -9,6 +11,13 @@
         ./bin/rake stack:commands:execute_recipes_on_layers recipes="mh-opsworks-recipes::install-utils"
 * prevent autofs restart only if existing mount matches the storage hostname. this
   enables use of the `nfs-client` recipe for switching storage nodes or zadara vpsas
+* *REQURES EDITS TO THE CLUSTER CONFIG* *REQUIRES MANUAL CHEF RECIPE RUNS*:
+  Capture agent time drift metrics generation via utility node. Update the cluster config
+  to include the `ca_private_ssh_key` value in the `caputure_agent_manager` custom json
+  block, add the `mh-opsworks-recipes::install-capture-agent-timedrift-metric` recipe
+  to the utility node's setup phase, then manually run:
+
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Utility" recipes="mh-opsworks-recipes::install-ca-timedrift-metric"
 
 ## 1.10.0 - 8/12/2016
 
