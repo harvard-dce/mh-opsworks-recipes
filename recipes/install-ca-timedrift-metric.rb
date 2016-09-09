@@ -29,6 +29,7 @@ end
 
 cron_d "ca_timedrift_metrics" do
   user usr_name
+  minute "0"
   hour "*"
   # Redirect stderr and stdout to logger. The command is silent on succesful runs
   command %Q(/usr/local/bin/ca_timedrift.sh 2>&1 | logger -t info)
