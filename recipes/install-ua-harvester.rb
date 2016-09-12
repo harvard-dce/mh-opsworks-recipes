@@ -6,14 +6,16 @@ include_recipe "mh-opsworks-recipes::update-package-repo"
 ::Chef::Resource::RubyBlock.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
 engage_node = search(:node, 'role:engage').first
+admin_node = search(:node, 'role:admin').first
 
 elk_info = get_elk_info
 
-harvester_release = elk_info[:harvester_release]
+harvester_release = elk_info['harvester_release']
 rest_auth_info = get_rest_auth_info
 stack_name = stack_shortname
 sqs_queue_name = "#{stack_name}-user-actions"
 region = node[:opsworks][:instance][:region]
+es_host = node[:opsworks][:instance][:private_ip]
 loggly_info = node.fetch(:loggly, { token: '', url: '' })
 loggly_config = if loggly_info[:token] != ''
                   %Q|LOGGLY_TOKEN=#{loggly_info[:token]}|
@@ -46,8 +48,10 @@ file '/home/ua_harvester/harvester/.env' do
 AWS_DEFAULT_REGION="#{region}"
 MATTERHORN_REST_USER="#{rest_auth_info[:user]}"
 MATTERHORN_REST_PASS="#{rest_auth_info[:pass]}"
-MATTERHORN_HOST="#{engage_node[:private_ip]}"
-S3_LAST_ACTION_TS_BUCKET="#{stack_name}-ua-harvester"
+MATTERHORN_ENGAGE_HOST="#{engage_node[:private_ip]}"
+MATTERHORN_ADMIN_HOST="#{admin_node[:private_ip]}"
+ELASTICSEARCH_HOST="#{es_host}"
+S3_HARVEST_TS_BUCKET="#{stack_name}-ua-harvester"
 S3_LAST_ACTION_TS_KEY="#{stack_name}-last-action-ts"
 SQS_QUEUE_NAME="#{sqs_queue_name}"
 LOGGLY_TAGS="#{stack_name}"
@@ -65,7 +69,15 @@ end
 cron_d 'ua_harvester' do
   user 'ua_harvester'
   minute '*/2'
-  command %Q(cd /home/ua_harvester/harvester && /usr/bin/run-one ./ua_harvest.py -b 10000 2>&1 | logger -t info)
+  command %Q(cd /home/ua_harvester/harvester && /usr/bin/run-one ./ua_harvest.py harvest -b 10000 2>&1 | logger -t info)
+  path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+end
+
+cron_d 'load_episodes' do
+  user 'ua_harvester'
+  minute '0'
+  hour '4'
+  command %Q(cd /home/ua_harvester/harvester && /usr/bin/run-one ./ua_harvest.py load_episodes --created_from_days_ago 1 2>&1 | logger -t info)
   path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 end
 

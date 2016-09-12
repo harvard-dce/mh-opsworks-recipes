@@ -15,10 +15,10 @@ template '/etc/logstash/conf.d/logstash.conf' do
   group 'root'
   mode '644'
   variables({
-    tcp_port: elk_info[:logstash_tcp_port],
+    tcp_port: elk_info['logstash_tcp_port'],
     sqs_queue_name: "#{stack_name}-user-actions",
-    stdout_output: elk_info[:logstash_stdout_output],
-    elasticsearch_index_prefix: elk_info[:es_index_prefix],
+    stdout_output: elk_info['logstash_stdout_output'],
+    elasticsearch_index_prefix: elk_info['es_index_prefix'],
     elasticsearch_host: es_host
   })
 end

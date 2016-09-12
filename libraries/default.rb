@@ -36,6 +36,13 @@ module MhOpsworksRecipes
       end
     end
 
+    def pin_package(name, version)
+      apt_preference name do
+        pin "version #{version}"
+        pin_priority "700"
+      end
+    end
+
     def get_shared_asset_bucket_name
       node.fetch(:shared_asset_bucket_name, 'mh-opsworks-shared-assets')
     end
@@ -337,23 +344,25 @@ module MhOpsworksRecipes
 
     def get_elk_info
       stack_name = stack_shortname
-      ::Chef::Mixin::DeepMerge.deep_merge({
-        es_major_version: '2.x',
-        es_version: '2.2.0',
-        es_cluster_name: stack_name,
-        es_index_prefix: "useractions-#{stack_name}",
-        es_data_path: "/vol/elasticsearch_data",
-        es_enable_snapshots: true,
-        logstash_major_version: '2.1',
-        logstash_version: '1:2.1.1-1',
-        logstash_tcp_port: '5000',
-        logstash_stdout_output: false,
-        kibana_version: '4.4.2',
-        kibana_checksum: 'b4f1b5d89a0854e3fb1e6d31faa1bc78e063b083',
-        http_auth: {},
-        http_ssl: get_dummy_cert,
-        harvester_release: 'master',
-        }, node.fetch(:elk, {}))
+      {
+          'es_major_version' => '2.4',
+          'es_repo_uri' => 'http://packages.elasticsearch.org/elasticsearch/2.x/debian',
+          'es_cluster_name' => stack_name,
+          'es_index_prefix' => "useractions-#{stack_name}",
+          'es_data_path' => "/vol/elasticsearch_data",
+          'es_enable_snapshots' => true,
+          'logstash_major_version' => '1:2.4',
+          'logstash_repo_uri' => 'http://packages.elasticsearch.org/logstash/2.4/debian',
+          'logstash_tcp_port' => '5000',
+          'logstash_stdout_output' => false,
+          'kibana_major_version' => '4.6',
+          'kibana_repo_uri' => 'https://packages.elastic.co/kibana/4.6/debian',
+          'curator_major_version' => '3.5',
+          'curator_repo_uri' => 'http://packages.elastic.co/curator/3/debian',
+          'http_auth' => {},
+          'http_ssl' => get_dummy_cert,
+          'harvester_release' => 'master',
+      }.merge(node.fetch(:elk, {}))
     end
 
     def get_dummy_cert

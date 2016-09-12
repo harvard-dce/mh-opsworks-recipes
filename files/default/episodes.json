@@ -1,0 +1,105 @@
+
+{
+  "template" : "episodes",
+  "mappings" : {
+    "episode" : {
+      "_all" : {"enabled" : false},
+      "dynamic_templates" : [
+      {
+        "string_fields" : {
+          "match" : "*",
+          "match_mapping_type" : "string",
+          "mapping" : {
+            "type" : "string",
+            "index" : "not_analyzed",
+            "norms": {
+              "enabled": false
+            }
+          }
+        }
+      }, {
+        "float_fields" : {
+          "match" : "*",
+          "match_mapping_type" : "float",
+          "mapping" : {
+            "type" : "float",
+            "doc_values" : true
+          }
+        }
+      }, {
+        "double_fields" : {
+          "match" : "*",
+          "match_mapping_type" : "double",
+          "mapping" : {
+            "type" : "double",
+            "doc_values" : true
+          }
+        }
+      }, {
+        "byte_fields" : {
+          "match" : "*",
+          "match_mapping_type" : "byte",
+          "mapping" : {
+            "type" : "byte",
+            "doc_values" : true
+          }
+        }
+      }, {
+        "short_fields" : {
+          "match" : "*",
+          "match_mapping_type" : "short",
+          "mapping" : {
+            "type" : "short",
+            "doc_values" : true
+          }
+        }
+      }, {
+        "integer_fields" : {
+          "match" : "*",
+          "match_mapping_type" : "integer",
+          "mapping" : {
+            "type" : "integer",
+            "doc_values" : true
+          }
+        }
+      }, {
+        "long_fields" : {
+          "match" : "*",
+          "match_mapping_type" : "long",
+          "mapping" : {
+            "type" : "long",
+            "doc_values" : true
+          }
+        }
+      }, {
+        "date_fields" : {
+          "match" : "*",
+          "match_mapping_type" : "date",
+          "mapping" : {
+            "type" : "date",
+            "doc_values" : true
+          }
+        }
+      }, {
+        "geo_point_fields" : {
+          "match" : "*",
+          "match_mapping_type" : "geo_point",
+          "mapping" : {
+            "type" : "geo_point",
+            "doc_values" : true
+          }
+        }
+      } ],
+      "properties" : {
+        "live_stream": {
+          "type": "boolean"
+        },
+        "course": {
+          "type": "string",
+          "index": "analyzed"
+        }
+      }
+    }
+  }
+}
+

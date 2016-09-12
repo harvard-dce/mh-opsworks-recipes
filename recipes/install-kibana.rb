@@ -11,49 +11,24 @@ install_nginx_logrotate_customizations
 
 elk_info = get_elk_info
 
-kibana_version = elk_info[:kibana_version]
-kibana_checksum = elk_info[:kibana_checksum]
-download_path = "#{::Chef::Config[:file_cache_path]}/kibana.tar.gz" 
+kibana_major_version = elk_info['kibana_major_version']
+kibana_repo_uri = elk_info['kibana_repo_uri']
 
-create_ssl_cert(elk_info[:http_ssl])
+create_ssl_cert(elk_info['http_ssl'])
 
-group 'kibana' do
-  append true
+apt_repository 'kibana' do
+  uri kibana_repo_uri
+  components ['stable', 'main']
+  keyserver 'ha.pool.sks-keyservers.net'
+  key '46095ACC8548582C1A2699A9D27D666CD88E42B4'
 end
 
-user 'kibana' do
-  supports manage_home: true
-  gid 'kibana'
-  shell '/bin/false'
-  home '/opt/kibana'
+include_recipe "mh-opsworks-recipes::update-package-repo"
+pin_package("kibana", "#{kibana_major_version}.*")
+install_package("kibana")
+
+execute 'configure kibana to start on boot' do
+  command "sudo update-rc.d kibana defaults 95 10"
 end
 
-cookbook_file "/etc/init.d/kibana" do
-  source "kibana-4.x-init"
-  owner 'root'
-  group 'root'
-  mode '755'
-end
-
-cookbook_file "/etc/default/kibana" do
-  source "kibana-4.x-default"
-  owner 'root'
-  group 'root'
-  mode '644'
-end
-
-remote_file download_path do
-  source "https://download.elastic.co/kibana/kibana/kibana-#{kibana_version}-linux-x64.tar.gz"
-  checksum kibana_checksum
-  notifies :run, "bash[install_kibana]", :immediately
-end
-
-bash "install_kibana" do
-  code <<-EOH
-    tar -xz --strip-components=1 -C /opt/kibana -f #{download_path}
-    chown -R kibana: /opt/kibana
-    update-rc.d kibana defaults 96 9
-  EOH
-  action :nothing
-end
 

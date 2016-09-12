@@ -6,6 +6,14 @@
   Add new custom metric script for feeding jvm stats to cloudwatch.
   
         ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin, Workers, Engage" recipes="mh-opsworks-recipes::install-custom-metrics"
+        
+* *REQUIRES MANUAL CHEF RECIPE RUNS*
+  Updates to ELK pipeline components and apt pinning of package major versions. Config
+  support and new cron entry for `mh-user-action-harvester` `load_episodes` command.
+  
+  Manual recipe run should come after any MH release/deploy and an `update_chef_recipes`.
+  
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Analytics" recipes="mh-opsworks-recipes:install-elasticsearch,mh-opsworks-recipes::install-logstash-kibana,mh-opsworks-recipes::install-ua-harvester"
 
 ## 1.11.0 - 9/8/2016
 

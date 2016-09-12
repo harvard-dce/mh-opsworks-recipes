@@ -6,35 +6,39 @@
 ::Chef::Resource::RubyBlock.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
 elk_info = get_elk_info
+::Chef::Log.debug(elk_info)
 
-es_major_version = elk_info[:es_major_version]
-es_version = elk_info[:es_version]
-es_cluster_name = elk_info[:es_cluster_name]
-data_path = elk_info[:es_data_path]
+es_major_version = elk_info['es_major_version']
+es_repo_uri = elk_info['es_repo_uri']
+curator_major_version = elk_info['curator_major_version']
+curator_repo_uri = elk_info['curator_repo_uri']
+es_cluster_name = elk_info['es_cluster_name']
+data_path = elk_info['es_data_path']
 es_heap_size = xmx_ram_for_this_node(0.5)
 es_host = node[:opsworks][:instance][:private_ip]
 region = node[:opsworks][:instance][:region]
 stack_name = stack_shortname
-enable_snapshots = elk_info[:es_enable_snapshots]
-es_repo_bucket = "#{stack_name}-snapshots"
+enable_snapshots = elk_info['es_enable_snapshots']
+es_snapshot_bucket = "#{stack_name}-snapshots"
 
 apt_repository 'elasticsearch' do
-  uri "http://packages.elasticsearch.org/elasticsearch/#{es_major_version}/debian"
+  uri es_repo_uri
   components ['stable', 'main']
   keyserver 'ha.pool.sks-keyservers.net'
   key '46095ACC8548582C1A2699A9D27D666CD88E42B4'
 end
 
 apt_repository 'curator' do
-  uri "http://packages.elastic.co/curator/3/debian"
+  uri curator_repo_uri
   components ['stable', 'main']
   keyserver 'ha.pool.sks-keyservers.net'
   key '46095ACC8548582C1A2699A9D27D666CD88E42B4'
 end
 
 include_recipe "mh-opsworks-recipes::update-package-repo"
-install_package("elasticsearch=#{es_version}")
-install_package("python-elasticsearch-curator")
+pin_package("elasticsearch", "#{es_major_version}.*")
+pin_package("python-elasticsearch-curator", "#{curator_major_version}.*")
+install_package("openjdk-7-jdk openjdk-7-jre elasticsearch python-elasticsearch-curator")
 
 service 'elasticsearch' do
   supports :restart => true
@@ -115,26 +119,28 @@ directory "template_dir" do
   mode '755'
 end
 
-cookbook_file "useractions_template" do
-  path "/etc/elasticsearch/templates/useractions.json"
-  source "useractions.json"
-  owner 'root'
-  group 'root'
-  mode '644'
-end
+['useractions', 'episodes'].each do |template_name|
+  cookbook_file "#{template_name}_template" do
+    path "/etc/elasticsearch/templates/#{template_name}.json"
+    source "#{template_name}.json"
+    owner 'root'
+    group 'root'
+    mode '644'
+  end
 
-http_request "put_template" do
-  url "http://#{es_host}:9200/_template/dce-useractions"
-  message lazy { ::File.read("/etc/elasticsearch/templates/useractions.json") }
-  action :put
-  retries 2
-  retry_delay 30
+  http_request "put_template" do
+    url "http://#{es_host}:9200/_template/dce-#{template_name}"
+    message lazy { ::File.read("/etc/elasticsearch/templates/#{template_name}.json") }
+    action :put
+    retries 2
+    retry_delay 30
+  end
 end
 
 if enable_snapshots
   ruby_block 'create snapshot bucket' do
     block do
-      command = %Q(aws s3 mb s3://#{es_repo_bucket} --region #{region})
+      command = %Q(aws s3 mb s3://#{es_snapshot_bucket} --region #{region})
       Chef::Log.info command
       execute_command(command)
     end
@@ -146,7 +152,7 @@ if enable_snapshots
       {
         "type": "s3",
         "settings": {
-          "bucket": "#{es_repo_bucket}",
+          "bucket": "#{es_snapshot_bucket}",
           "region": "#{region}"
         }
       }
@@ -166,5 +172,6 @@ if enable_snapshots
     command %Q(curator --host #{es_host} snapshot --prefix "daily." --include_global_state False --repository s3_daily indices --regex '^[^\.].*$' 2>&1 | logger -t info)
     path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   end
-
 end
+
+execute 'service elasticsearch restart'
