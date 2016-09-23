@@ -10,6 +10,7 @@ usr_name = get_capture_agent_manager_usr_name
 install_package("nginx")
 
 install_nginx_logrotate_customizations
+configure_nginx_cloudwatch_logs
 
 ssl_info = node.fetch(:ca_ssl, get_dummy_cert)
 if cert_defined(ssl_info)

@@ -92,6 +92,14 @@ module MhOpsworksRecipes
       engage_node? || admin_node? || worker_node?
     end
 
+    def analytics_node?
+      node[:opsworks][:instance][:hostname].match(/^analytics/)
+    end
+
+    def utility_node?
+      node[:opsworks][:instance][:hostname].match(/^utility/)
+    end
+
     def get_db_seed_file
       node.fetch(:db_seed_file, 'dce-config/docs/scripts/ddl/mysql5.sql')
     end
@@ -114,6 +122,10 @@ module MhOpsworksRecipes
         group "root"
         mode "644"
       end
+    end
+
+    def nginx_log_root_dir
+      node.fetch(:nginx_log_root_dir, '/var/log')
     end
 
     def get_live_stream_name
@@ -455,6 +467,42 @@ module MhOpsworksRecipes
           'autoscale_pause_cycles' => 1,
           'autoscale_strategies' => []
         }.merge(node.fetch(:moscaler, {}))
+    end
+
+    def configure_cloudwatch_log(log_name, log_file, datetime_format)
+      stack_name = stack_shortname
+      log_group_name = stack_name + "_" + log_name
+      retention_days = node.fetch(:cwlogs_retention_days, '30')
+      region = node.fetch(:region, 'us-east-1')
+
+      execute 'create log group' do
+        command %Q|aws logs create-log-group --region #{region} --log-group-name #{log_group_name}|
+        ignore_failure true
+      end
+
+      execute 'set log group retention policy' do
+        command %Q|aws logs put-retention-policy --region #{region} --log-group-name #{log_group_name} --retention-in-days #{retention_days}|
+      end
+
+      template "/var/awslogs/etc/config/#{log_name}.conf" do
+        source 'cwlog_stream.conf.erb'
+        owner 'root'
+        group 'root'
+        mode 0644
+        variables ({
+            :log_name => log_name,
+            :hostname => node[:opsworks][:instance][:hostname],
+            :stack_name => stack_name,
+            :log_file => log_file,
+            :datetime_format => datetime_format
+        })
+        notifies :restart, 'service[awslogs]', :delayed
+      end
+    end
+
+    def configure_nginx_cloudwatch_logs
+      configure_cloudwatch_log("nginx-access", "#{ nginx_log_root_dir }/nginx/access.log", "%d/%b/%Y:%H:%M:%S %z")
+      configure_cloudwatch_log("nginx-error", "#{ nginx_log_root_dir }/nginx/error.log", "%d/%b/%Y:%H:%M:%S %z")
     end
   end
 

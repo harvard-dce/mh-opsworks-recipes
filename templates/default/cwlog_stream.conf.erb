@@ -1,0 +1,6 @@
+<%= '[' + @log_name + ']' %>
+log_stream_name = <%= @hostname %>
+log_group_name = <%= @stack_name + '_' + @log_name %>
+file = <%= @log_file %>
+datetime_format = <%= @datetime_format %>
+initial_position = end_of_file

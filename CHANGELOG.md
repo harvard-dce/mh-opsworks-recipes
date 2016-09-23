@@ -4,7 +4,15 @@
 
 * explicitly set the `$HOME` env variable when pip-installing the ca manager dependencies.
 * remove submodule init during Matterhorn code deploy (MATT-2173)
-
+* *REQUIRES EDITS TO CLUSTER CONFIG* *REQUIRES MANUAL CHEF RECIPE RUN*
+  New recipe, `install-cwlogs`, that installs and configures the AWS Cloudwatch Log Agent.
+  `mh-opsworks-recipe::install-cwlogs` should be added to the `setup` list of the
+  Admin, Engage and Workers (and Analytics/Utility, if present) layers.
+  
+  Manual recipe run should come after any MH release/deploy and an `update_chef_recipes`.
+  
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin,Engage,Workers,Utility,Analytics" recipes="mh-opsworks-recipes::install-cwlogs"
+        
 ## 1.12.0 - 10/7/2016
 
 * Akamai account limit hack. See MATT-2182.

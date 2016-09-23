@@ -54,3 +54,5 @@ cookbook_file "capture-agent-manager-logrotate.conf" do
   mode "644"
 end
 
+configure_cloudwatch_log("capture-agent-manager", "/home/capture_agent_manager/logs/*.log", "%Y-%m-%d %H:%M:%S")
+

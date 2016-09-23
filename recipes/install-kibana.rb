@@ -8,6 +8,7 @@ install_package('nginx')
 install_package('apache2-utils')
 
 install_nginx_logrotate_customizations
+configure_nginx_cloudwatch_logs
 
 elk_info = get_elk_info
 

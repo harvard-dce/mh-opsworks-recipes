@@ -963,6 +963,19 @@ recipe(
 * configured logrotate file for capture-agent-manager app log
 '
 )
+recipe(
+    'mh-opsworks-recipes::install-cwlogs',
+    'Installs the AWS Cloudwatch Log Agent and configures some basic log streams
+
+=== attributes
+* MhOpsworksRecipes::RecipeHelpers.configure_cloudwatch_log
+* MhOpsworksRecipes::RecipeHelpers.configure_nginx_cloudwatch_logs
+
+=== effects
+* installs the cloudwatch log agent
+* creates log stream configurations for syslog, matterhorn.log and nginx logs on appropriate nodes
+'
+)
 
 depends 'nfs', '~> 2.1.0'
 depends 'apt', '~> 2.9.2'
