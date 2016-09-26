@@ -65,7 +65,6 @@ deploy_revision "matterhorn" do
   deploy_to matterhorn_repo_root
   repo repo_url
   revision git_data.fetch(:revision, 'master')
-  enable_submodules true
 
   user 'matterhorn'
   group 'matterhorn'
