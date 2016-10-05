@@ -77,6 +77,14 @@ module MhOpsworksRecipes
       node[:opsworks][:instance][:hostname].match(/^(db-master|all-in-one|local-support)/)
     end
 
+    def worker_node?
+      node[:opsworks][:instance][:hostname].match(/^worker/)
+    end
+
+    def mh_node?
+      engage_node? || admin_node? || worker_node?
+    end
+
     def get_db_seed_file
       node.fetch(:db_seed_file, 'dce-config/docs/scripts/ddl/mysql5.sql')
     end

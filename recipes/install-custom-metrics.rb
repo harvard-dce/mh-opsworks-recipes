@@ -49,6 +49,13 @@ cookbook_file "instances_started_ok_metric.sh" do
   mode "755"
 end
 
+cookbook_file "jvm_metrics.sh" do
+  path "/usr/local/bin/jvm_metrics.sh"
+  owner "root"
+  group "root"
+  mode "755"
+end
+
 cron_d 'disk_metrics' do
   user 'custom_metrics'
   minute '*/2'
@@ -106,6 +113,15 @@ if admin_node?
     user 'root'
     minute '*'
     command %Q(/usr/local/bin/mysql_available_metric.sh "#{aws_instance_id}" 2>&1 | logger -t info)
+    path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  end
+end
+
+if mh_node?
+  cron_d "felix_jvm_metrics" do
+    user "root"
+    minute "*/2"
+    command %Q(/usr/local/bin/jvm_metrics.sh "#{aws_instance_id}" felix 2>&1 | logger -t info)
     path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   end
 end

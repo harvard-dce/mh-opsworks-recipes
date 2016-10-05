@@ -2,6 +2,11 @@
 
 ## TO BE RELEASED
 
+* *REQUIRES MANUAL CHEF RECIPE RUN*
+  Add new custom metric script for feeding jvm stats to cloudwatch.
+  
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin, Workers, Engage" recipes="mh-opsworks-recipes::install-custom-metrics"
+
 ## 1.11.0 - 9/8/2016
 
 * `moscaler_release` now defaults to "master"
