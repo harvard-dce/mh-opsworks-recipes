@@ -2,6 +2,10 @@
 
 ## TO BE RELEASED
 
+## 1.12.0 - 10/7/2016
+
+* Akamai account limit hack. See MATT-2182.
+
 * *REQUIRES MANUAL CHEF RECIPE RUN*
   Add new custom metric script for feeding jvm stats to cloudwatch.
   
