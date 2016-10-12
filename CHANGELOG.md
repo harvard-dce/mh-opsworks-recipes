@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* explicitly set the `$HOME` env variable when pip-installing the ca manager dependencies.
+
 ## 1.12.0 - 10/7/2016
 
 * Akamai account limit hack. See MATT-2182.

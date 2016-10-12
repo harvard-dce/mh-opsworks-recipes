@@ -44,6 +44,7 @@ end
 execute "install capture_agent_manager dependencies" do
   command %Q|/home/#{usr_name}/sites/#{app_name}/venv/bin/pip install -r /home/#{usr_name}/sites/#{app_name}/requirements.txt|
   user usr_name
+  environment ({ "HOME" => "/home/#{usr_name}" })
 end
 
 cookbook_file "capture-agent-manager-logrotate.conf" do
