@@ -3,6 +3,7 @@
 ## TO BE RELEASED
 
 * explicitly set the `$HOME` env variable when pip-installing the ca manager dependencies.
+* remove submodule init during Matterhorn code deploy (MATT-2173)
 
 ## 1.12.0 - 10/7/2016
 
