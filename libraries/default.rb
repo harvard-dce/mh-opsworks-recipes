@@ -501,8 +501,8 @@ module MhOpsworksRecipes
     end
 
     def configure_nginx_cloudwatch_logs
-      configure_cloudwatch_log("nginx-access", "#{ nginx_log_root_dir }/nginx/access.log", "%d/%b/%Y:%H:%M:%S %z")
-      configure_cloudwatch_log("nginx-error", "#{ nginx_log_root_dir }/nginx/error.log", "%d/%b/%Y:%H:%M:%S %z")
+      configure_cloudwatch_log("nginx-access", "/var/log/nginx/access.log", "%d/%b/%Y:%H:%M:%S %z")
+      configure_cloudwatch_log("nginx-error", "/var/log/nginx/error.log", "%d/%b/%Y:%H:%M:%S %z")
     end
   end
 
