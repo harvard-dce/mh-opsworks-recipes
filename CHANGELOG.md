@@ -2,16 +2,21 @@
 
 ## TO BE RELEASED
 
+## 1.13.0 - 10/20/2016
+
 * explicitly set the `$HOME` env variable when pip-installing the ca manager dependencies.
 * remove submodule init during Matterhorn code deploy (MATT-2173)
+* update CA hack: byerly-013 now points to new prod akami stream id
 * *REQUIRES EDITS TO CLUSTER CONFIG* *REQUIRES MANUAL CHEF RECIPE RUN*
   New recipe, `install-cwlogs`, that installs and configures the AWS Cloudwatch Log Agent.
   `mh-opsworks-recipe::install-cwlogs` should be added to the `setup` list of the
   Admin, Engage and Workers (and Analytics/Utility, if present) layers.
   
-  Manual recipe run should come after any MH release/deploy and an `update_chef_recipes`.
+  Manual recipe runs should come after any MH release/deploy and an `update_chef_recipes`.
   
-        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin,Engage,Workers,Utility,Analytics" recipes="mh-opsworks-recipes::install-cwlogs"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin,Engage,Workers" recipes="mh-opsworks-recipes::install-cwlogs"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Analytics" recipes="mh-opsworks-recipes::install-cwlogs,mh-opsworks-recipes::install-elasticsearch,mh-opsworks-recipes::install-kibana"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Utility" recipes="mh-opsworks-recipes::install-cwlogs,mh-opsworks-recipes::install-capture-agent-manager,mh-opsworks-recipes::configure-capture-agent-manager-nginx-proxy"
         
 ## 1.12.0 - 10/7/2016
 
