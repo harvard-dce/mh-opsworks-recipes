@@ -1,0 +1,19 @@
+# User obtained when registering with the IBM Watson Speech-to_text service 
+ibm.watson.user=<%= @ibm_watson_username %>
+
+# Password obtained when registering with the IBM Watson Speech-to_text service 
+ibm.watson.psw=<%= @ibm_watson_psw %>
+
+# Workflow to be executed when results are ready to be attached to media package.
+#workflow=DCE-attach-watson-transcription
+  
+# Interval the workflow dispatcher runs to start workflows to attach transcripts to the media package
+# after the transcription job is completed.
+# (in seconds) Default is 1 minute.
+#workflow.dispatch.interval=60
+ 
+# How long it should wait to check jobs after their start date + track duration has passed.
+# The default is 10 minutes. This is only used if we didn't get a callback from the
+# ibm watson speech-to-text service.
+# (in seconds)
+#completion.check.buffer=600

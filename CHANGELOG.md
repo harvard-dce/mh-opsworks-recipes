@@ -2,6 +2,11 @@
 
 ## TO BE RELEASED
 
+## 1.15.0 - 11/18/2016
+
+* *REQUIRES EDITS TO CLUSTER CONFIG*
+  Configuration for the new Matterhorn ibm watson transcription service (service credentials).
+
 ## 1.14.1 - 11/03/2016
 
 * add `retries` to setting of cloudwatch log retention to avoid race condition

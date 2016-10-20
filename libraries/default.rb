@@ -219,6 +219,15 @@ module MhOpsworksRecipes
       )
     end
 
+    def get_ibm_watson_user_info
+      node.fetch(
+        :ibm_watson_service_auth, {
+          user: 'admin',
+          pass: 'password'
+        }
+      )
+    end
+    
     def get_s3_distribution_bucket_name
       node[:s3_distribution_bucket_name]
     end
@@ -883,6 +892,18 @@ module MhOpsworksRecipes
         variables({
           region: region,
           s3_file_archive_bucket_name: s3_file_archive_bucket_name
+        })
+      end
+    end
+
+    def install_ibm_watson_transcription_service_config(current_deploy_root, ibm_watson_username, ibm_watson_psw)
+      template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.transcription.ibm.watson.IBMWatsonTranscriptionService.properties| do
+        source 'edu.harvard.dce.transcription.ibm.watson.IBMWatsonTranscriptionService.properties.erb'
+        owner 'matterhorn'
+        group 'matterhorn'
+        variables({
+          ibm_watson_username: ibm_watson_username,
+          ibm_watson_psw: ibm_watson_psw  
         })
       end
     end

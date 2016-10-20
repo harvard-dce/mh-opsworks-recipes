@@ -28,6 +28,11 @@ s3_distribution_bucket_name = get_s3_distribution_bucket_name
 # S3 file archive service, also needs the aws region
 s3_file_archive_bucket_name = get_s3_file_archive_bucket_name
 
+# IBM Watson service credentials
+ibm_watson_user_info = get_ibm_watson_user_info
+ibm_watson_username = ibm_watson_user_info[:user]
+ibm_watson_psw = ibm_watson_user_info[:pass]
+
 capture_agent_monitor_url = node.fetch(
   :capture_agent_monitor_url, 'http://example.com/monitor_url'
 )
@@ -103,6 +108,7 @@ deploy_revision "matterhorn" do
     install_live_streaming_service_config(most_recent_deploy, live_stream_name)
     install_otherpubs_service_config(most_recent_deploy, matterhorn_repo_root, auth_host)
     install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name)
+    install_ibm_watson_transcription_service_config(most_recent_deploy, ibm_watson_username, ibm_watson_psw) 
     install_published_event_details_email(most_recent_deploy, public_hostname)
     configure_newrelic(most_recent_deploy, newrelic_app_name, :admin)  # All in one installation will use admin newrelic key
 
