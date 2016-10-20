@@ -384,19 +384,30 @@ recipe(
 '
 )
 recipe(
-  'mh-opsworks-recipes::install-ua-harvester',
-  'installs the user analytics harvester as part of the ELK analytics
+    'mh-opsworks-recipes::install-ua-harvester',
+    'installs the user analytics harvester as part of the ELK analytics
 
 === Attributes
 * MhOpsworksRecipes::RecipeHelpers.get_elk_info
 * MhOpsworksRecipes::RecipeHelpers.get_rest_auth_info
 
 === Effects
-* Install python and run-one packages
+* Install python, redis and run-one packages
 * Create a ua_harvester user
 * git checkout and install {mh-user-action-harvester}[https://github.com/harvard-dce/mh-user-action-harvester.git]
 * set up a cron job to harvest actions every 2 minutes
 * create an sqs queue for analytics processing
+'
+)
+recipe(
+  'mh-opsworks-recipes::configure-ua-harvester',
+  'generates the .env configuration file for the useraction harvester
+
+=== Attributes
+* MhOpsworksRecipes::RecipeHelpers.get_elk_info
+
+=== Effects
+* generates the .env config file
 '
 )
 recipe(
@@ -647,21 +658,6 @@ Ubuntu uses dash (instead of bash) as the default non-interactive shell. It is s
 
 === Effects
 * sets bash instead of dash as the default non-interactive shell
-'
-)
-recipe(
-  'mh-opsworks-recipes::configure-logstash-kibana',
-  'Configure logstash and kibana to work together
-
-This is part of the recipes that install our user analytics.
-
-=== Attributes
-* MhOpsworksRecipes::RecipeHelpers.get_elk_info primarily
-
-=== Effects
-* Start the logstash service
-* Start the kibana service
-* Glue various services to the elasticsearch instance
 '
 )
 recipe(

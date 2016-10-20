@@ -3,19 +3,10 @@
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
-include_recipe "mh-opsworks-recipes::update-package-repo"
-install_package('nginx')
-install_package('apache2-utils')
-
-install_nginx_logrotate_customizations
-configure_nginx_cloudwatch_logs
-
 elk_info = get_elk_info
-
+es_host = node[:opsworks][:instance][:private_ip]
 kibana_major_version = elk_info['kibana_major_version']
 kibana_repo_uri = elk_info['kibana_repo_uri']
-
-create_ssl_cert(elk_info['http_ssl'])
 
 apt_repository 'kibana' do
   uri kibana_repo_uri
@@ -28,8 +19,18 @@ include_recipe "mh-opsworks-recipes::update-package-repo"
 pin_package("kibana", "#{kibana_major_version}.*")
 install_package("kibana")
 
-execute 'configure kibana to start on boot' do
-  command "sudo update-rc.d kibana defaults 95 10"
+service 'kibana' do
+  action :enable
+  supports :restart => true
 end
 
-
+template '/opt/kibana/config/kibana.yml' do
+  source 'kibana.yml.erb'
+  user 'kibana'
+  group 'kibana'
+  mode '644'
+  variables({
+    elasticsearch_host: es_host
+  })
+  notifies :restart, 'service[kibana]', :immediately
+end

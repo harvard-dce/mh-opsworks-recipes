@@ -2,6 +2,16 @@
 
 ## TO BE RELEASED
 
+* *REQUIRES EDITS TO CLUSTER CONFIG*
+  Refactoring of analytics node recipes:
+    * move `install-ua-harvester` to `setup` list (after `install-elasticsearch`)
+    * remove `configure-logstash-kibana` from `configure` list
+    * add `configure-ua-harvester` to `configure` list
+* *REQUIRES MANUAL RECIPE RUN*
+  Adding redis service to analytics node for useraction harvest caching of episode data
+  
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Analytics" recipes="mh-opsworks-recipes::install-ua-harvester"
+
 ## 1.13.0 - 10/20/2016
 
 * explicitly set the `$HOME` env variable when pip-installing the ca manager dependencies.

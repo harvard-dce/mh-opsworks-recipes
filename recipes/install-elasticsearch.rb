@@ -6,8 +6,6 @@
 ::Chef::Resource::RubyBlock.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
 elk_info = get_elk_info
-::Chef::Log.debug(elk_info)
-
 es_major_version = elk_info['es_major_version']
 es_repo_uri = elk_info['es_repo_uri']
 curator_major_version = elk_info['curator_major_version']
@@ -42,8 +40,8 @@ install_package("openjdk-7-jdk openjdk-7-jre elasticsearch python-elasticsearch-
 configure_cloudwatch_log("elasticsearch", "/var/log/elasticsearch/*.log", "%Y-%m-%d %H:%M:%S")
 
 service 'elasticsearch' do
-  supports :restart => true
   action :enable
+  supports :restart => true
 end
 
 {
@@ -175,4 +173,3 @@ if enable_snapshots
   end
 end
 
-execute 'service elasticsearch restart'

@@ -1,30 +1,18 @@
 # Cookbook Name:: mh-opsworks-recipes
-# Recipe:: install-install-ua-harvester
+# Recipe:: install-ua-harvester
 
 include_recipe "mh-opsworks-recipes::update-package-repo"
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 ::Chef::Resource::RubyBlock.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
-engage_node = search(:node, 'role:engage').first
-admin_node = search(:node, 'role:admin').first
-
 elk_info = get_elk_info
 
 harvester_release = elk_info['harvester_release']
-rest_auth_info = get_rest_auth_info
 stack_name = stack_shortname
 sqs_queue_name = "#{stack_name}-user-actions"
 region = node[:opsworks][:instance][:region]
-es_host = node[:opsworks][:instance][:private_ip]
-loggly_info = node.fetch(:loggly, { token: '', url: '' })
-loggly_config = if loggly_info[:token] != ''
-                  %Q|LOGGLY_TOKEN=#{loggly_info[:token]}|
-                else
-                  ''
-                end
 
-install_package('python-pip')
-install_package('run-one')
+install_package('python-pip run-one redis-server')
 
 user "ua_harvester" do
   comment 'The ua_harvester user'
@@ -41,29 +29,12 @@ git "get the ua harvester" do
   user 'ua_harvester'
 end
 
-file '/home/ua_harvester/harvester/.env' do
-  owner 'ua_harvester'
-  group 'ua_harvester'
-  content %Q|
-AWS_DEFAULT_REGION="#{region}"
-MATTERHORN_REST_USER="#{rest_auth_info[:user]}"
-MATTERHORN_REST_PASS="#{rest_auth_info[:pass]}"
-MATTERHORN_ENGAGE_HOST="#{engage_node[:private_ip]}"
-MATTERHORN_ADMIN_HOST="#{admin_node[:private_ip]}"
-ELASTICSEARCH_HOST="#{es_host}"
-S3_HARVEST_TS_BUCKET="#{stack_name}-ua-harvester"
-S3_LAST_ACTION_TS_KEY="#{stack_name}-last-action-ts"
-SQS_QUEUE_NAME="#{sqs_queue_name}"
-LOGGLY_TAGS="#{stack_name}"
-#{loggly_config}
-|
-  mode '600'
-end
-
 bash 'install dependencies' do
   code 'cd /home/ua_harvester/harvester && pip install -r requirements.txt'
   user 'root'
 end
+
+include_recipe 'mh-opsworks-recipes::configure-ua-harvester'
 
 # fetch user action data from MH every 2m
 cron_d 'ua_harvester' do
@@ -88,4 +59,3 @@ ruby_block 'create sqs queue' do
     execute_command(command)
   end
 end
-

@@ -7,6 +7,24 @@ elk_info = get_elk_info
 http_auth = elk_info['http_auth']
 es_host = node[:opsworks][:instance][:private_ip]
 
+include_recipe "mh-opsworks-recipes::update-package-repo"
+install_package('nginx apache2-utils')
+
+install_nginx_logrotate_customizations
+configure_nginx_cloudwatch_logs
+
+create_ssl_cert(elk_info['http_ssl'])
+
+service 'nginx' do
+  action :nothing
+end
+
+bash "htpasswd" do
+  code <<-EOH
+    htpasswd -bc /etc/nginx/conf.d/kibana.htpasswd #{http_auth['user']} #{http_auth['pass']}
+  EOH
+end
+
 template %Q|/etc/nginx/sites-enabled/default| do
   source 'elk-nginx-proxy-conf.erb'
   manage_symlink_source true
@@ -16,13 +34,5 @@ template %Q|/etc/nginx/sites-enabled/default| do
   variables({
     elasticsearch_host: es_host
   })
+  notifies :restart, 'service[nginx]', :immediately
 end
-
-bash "htpasswd" do
-  code <<-EOH
-    htpasswd -bc /etc/nginx/conf.d/kibana.htpasswd #{http_auth['user']} #{http_auth['pass']}
-  EOH
-end
-
-execute 'service nginx reload'
-

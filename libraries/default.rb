@@ -475,6 +475,10 @@ module MhOpsworksRecipes
       retention_days = node.fetch(:cwlogs_retention_days, '30')
       region = node.fetch(:region, 'us-east-1')
 
+      service 'awslogs' do
+        action :nothing
+      end
+
       execute 'create log group' do
         command %Q|aws logs create-log-group --region #{region} --log-group-name #{log_group_name}|
         ignore_failure true
