@@ -3,7 +3,7 @@
 
 execute 'fix any half-configured packages' do
   environment 'DEBIAN_FRONTEND' => 'noninteractive'
-  command 'dpkg --configure -a'
+  command 'dpkg --configure -a --force-confdef --force-confold'
   timeout 30
   retries 5
   retry_delay 15
