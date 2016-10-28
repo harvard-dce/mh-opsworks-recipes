@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## 1.14.0 - 10/28/2016
+
 * *REQUIRES EDITS TO CLUSTER CONFIG*
   Refactoring of analytics node recipes:
     * move `install-ua-harvester` to `setup` list (after `install-elasticsearch`)
