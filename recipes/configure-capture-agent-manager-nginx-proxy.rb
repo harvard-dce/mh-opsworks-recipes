@@ -6,16 +6,12 @@ include_recipe "mh-opsworks-recipes::update-package-repo"
 
 app_name = get_capture_agent_manager_app_name
 usr_name = get_capture_agent_manager_usr_name
+ca_info = get_capture_agent_manager_info
 
-install_package("nginx")
+create_ssl_cert(ca_info[:http_ssl])
 
-install_nginx_logrotate_customizations
-configure_nginx_cloudwatch_logs
-
-ssl_info = node.fetch(:ca_ssl, get_dummy_cert)
-if cert_defined(ssl_info)
-  create_ssl_cert(ssl_info)
-  certificate_exists = true
+service 'nginx' do
+  action :nothing
 end
 
 directory "/etc/nginx/proxy-includes" do
@@ -25,15 +21,20 @@ end
 
 template "/etc/nginx/sites-enabled/default" do
   source "nginx-proxy-ssl-only.erb"
+  owner 'root'
+  group 'root'
+  mode '644'
   manage_symlink_source true
 end
 
 template "/etc/nginx/proxy-includes/capture-agent-manager.conf" do
   source "nginx-proxy-capture-agent-manager.conf.erb"
+  owner 'root'
+  group 'root'
+  mode '644'
   variables({
     capture_agent_manager: app_name,
     capture_agent_manager_usr_name: usr_name
   })
+  notifies :restart, 'service[nginx]', :immediately
 end
-
-execute "service nginx reload"
