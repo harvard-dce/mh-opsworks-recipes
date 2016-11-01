@@ -439,7 +439,8 @@ module MhOpsworksRecipes
         capture_agent_manager_git_revision: 'master',
         capture_agent_manager_database_usr: 'usr',
         capture_agent_manager_database_pwd: 'pwd',
-        http_ssl: get_dummy_cert
+        http_ssl: get_dummy_cert,
+        api_path: '/api'
       }.merge(from_cluster_config)
     end
 

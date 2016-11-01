@@ -4,7 +4,16 @@
     }
 
     location /static {
-    alias /home/<%= @capture_agent_manager_usr_name %>/sites/<%= @capture_agent_manager %>/<%= @capture_agent_manager %>/static;
+        alias /home/<%= @capture_agent_manager_usr_name %>/sites/<%= @capture_agent_manager %>/<%= @capture_agent_manager %>/static;
         autoindex on;
     }
+
+    <% if @htpasswd_file %>
+    location <%= @api_path %> {
+      proxy_buffering off;
+      proxy_pass http://localhost:8000<%= @api_path %>;
+      auth_basic <%= defined?(@realm) ? @realm : "Restricted" %>;
+      auth_basic_user_file <%= @htpasswd_file %>;
+    }
+    <% end %>
 
