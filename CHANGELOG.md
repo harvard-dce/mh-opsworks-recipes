@@ -2,6 +2,9 @@
 
 ## TO BE RELEASED
 
+* add `retries` to setting of cloudwatch log retention to avoid race condition
+  when previous log group creation is still processing
+
 ## 1.14.0 - 10/28/2016
 
 * *REQUIRES EDITS TO CLUSTER CONFIG*

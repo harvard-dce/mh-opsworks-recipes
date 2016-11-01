@@ -486,6 +486,8 @@ module MhOpsworksRecipes
 
       execute 'set log group retention policy' do
         command %Q|aws logs put-retention-policy --region #{region} --log-group-name #{log_group_name} --retention-in-days #{retention_days}|
+        retries 3
+        retry_delay 10
       end
 
       template "/var/awslogs/etc/config/#{log_name}.conf" do
