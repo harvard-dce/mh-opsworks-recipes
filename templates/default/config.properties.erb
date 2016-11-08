@@ -210,6 +210,14 @@ org.opencastproject.textanalyzer.tesseract.path=/usr/bin/tesseract
 # Email address of the server's admin.
 org.opencastproject.admin.email=admin@localhost
 
+# Location of the temporary directory to build zip archives. Defaults to
+# ${org.opencastproject.storage.dir}/archive-tmp
+org.opencastproject.workflow.handler.ZipWorkflowOperationHandler.tmpdir=<%= @shared_storage_root %>/zip-tmp
+
+# Location of the temporary directory to build zip for republishings. Defaults to
+# ${org.opencastproject.storage.dir}/dce-tmp
+edu.harvard.dce.operation.handler.RepublishRecordingWorkflowOperationHandler.tmpdir=<%= @shared_storage_root %>/dce-republish-tmp 
+
 org.opencastproject.captureagent_monitor_url=<%= @capture_agent_monitor_url %>
 
 #DCE Phoebe - to fetch any config use: /info/configuration/<config name>.json

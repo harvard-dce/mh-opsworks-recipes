@@ -6,6 +6,7 @@
 
 * *REQUIRES EDITS TO CLUSTER CONFIG*
   Configuration for the new Matterhorn ibm watson transcription service (service credentials).
+* Changed location of temporary zip files to Zadara to avoid cross-device link errors. Zip operations are executed when republishing and failing a workflow. 
 
 ## 1.14.1 - 11/03/2016
 
