@@ -486,6 +486,7 @@ module MhOpsworksRecipes
 
       execute 'create log group' do
         command %Q|aws logs create-log-group --region #{region} --log-group-name #{log_group_name}|
+        ignore_failure true
       end
 
       execute 'set log group retention policy' do
