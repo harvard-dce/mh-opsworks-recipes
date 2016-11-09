@@ -23,8 +23,10 @@ export LDAP_BIND_DN="#{capture_agent_manager_info[:ldap_bind_dn]}"
 export LDAP_BIND_PASSWD="#{capture_agent_manager_info[:ldap_bind_passwd]}"
 export LOG_CONFIG="#{capture_agent_manager_info[:log_config]}"
 export FLASK_SECRET="#{capture_agent_manager_info[:capture_agent_manager_secret_key]}"
-export DATABASE_USR="#{capture_agent_manager_info[:capture_agent_manager_database_usr]}"
-export DATABASE_PWD="#{capture_agent_manager_info[:capture_agent_manager_database_pwd]}"
+export CADASH_REST_API_USER="#{capture_agent_manager_info["capture_agent_manager_rest_api_user"]}"
+export CADASH_REST_API_PASSWD="#{capture_agent_manager_info["capture_agent_manager_rest_api_passwd"]}"
+export DB_NAME="#{capture_agent_manager_info[:capture_agent_manager_database_name]}"
+export DB_DIR="#{capture_agent_manager_info[:capture_agent_manager_database_dir]}"
 |
   mode "600"
 end

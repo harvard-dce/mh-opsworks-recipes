@@ -54,4 +54,6 @@ execute "install capture_agent_manager dependencies" do
 end
 
 install_nginx_logrotate_customizations
-configure_nginx_cloudwatch_logs
+if on_aws?
+  configure_nginx_cloudwatch_logs
+end
