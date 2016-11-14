@@ -8,6 +8,8 @@
   Configuration for the new Matterhorn ibm watson transcription service (service credentials).
 * Changed location of temporary zip files to Zadara to avoid cross-device link errors. Zip operations are executed when republishing and failing a workflow. 
 * MATT-2215 add threshold config params to log connection durations in hudce-auth and leg-otherpubs (sys web msg)
+* *REQUIRES MANUAL RECIPE RUN*
+  Enable dynamic scripting in `elasticsearch.yml`
 
 ## 1.14.1 - 11/03/2016
 
