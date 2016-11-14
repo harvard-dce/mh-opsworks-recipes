@@ -102,11 +102,13 @@ deploy_revision "matterhorn" do
     install_multitenancy_config(most_recent_deploy, public_hostname, public_hostname)
     remove_felix_fileinstall(most_recent_deploy)
     install_smtp_config(most_recent_deploy)
+    install_default_tenant_config(most_recent_deploy, public_hostname, private_hostname)
     install_auth_service(
       most_recent_deploy, auth_host, auth_redirect_location, auth_activated
     )
     install_live_streaming_service_config(most_recent_deploy, live_stream_name)
     install_otherpubs_service_config(most_recent_deploy, matterhorn_repo_root, auth_host)
+    install_otherpubs_service_series_impl_config(most_recent_deploy)
     install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name)
     install_ibm_watson_transcription_service_config(most_recent_deploy, ibm_watson_username, ibm_watson_psw) 
     install_published_event_details_email(most_recent_deploy, public_hostname)
@@ -116,7 +118,6 @@ deploy_revision "matterhorn" do
     initialize_database(most_recent_deploy)
 
     configure_usertracking(most_recent_deploy, user_tracking_authhost)
-    install_otherpubs_service_config(most_recent_deploy, matterhorn_repo_root, auth_host)
     install_aws_s3_distribution_service_config(most_recent_deploy, region, s3_distribution_bucket_name)
     install_matterhorn_images_properties(most_recent_deploy)
     # /all-in-one SPECIFIC

@@ -89,6 +89,7 @@ deploy_revision "matterhorn" do
     install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_engage_hostname)
     remove_felix_fileinstall(most_recent_deploy)
     install_smtp_config(most_recent_deploy)
+    install_default_tenant_config(most_recent_deploy, public_engage_hostname, private_hostname)
     install_auth_service(
       most_recent_deploy, auth_host, auth_redirect_location, auth_activated
     )
@@ -100,6 +101,7 @@ deploy_revision "matterhorn" do
     set_service_registry_dispatch_interval(most_recent_deploy)
     configure_usertracking(most_recent_deploy, user_tracking_authhost)
     install_otherpubs_service_config(most_recent_deploy, matterhorn_repo_root, auth_host)
+    install_otherpubs_service_series_impl_config(most_recent_deploy)
     install_aws_s3_distribution_service_config(most_recent_deploy, region, s3_distribution_bucket_name)
     # /ENGAGE SPECIFIC
 
