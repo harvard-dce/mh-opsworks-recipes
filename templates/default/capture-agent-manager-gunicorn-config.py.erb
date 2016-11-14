@@ -1,3 +1,5 @@
 name = "<%= @name %>"
 workers = <%= @workers %>
 preload_app = True
+errorlog = "/home/<%= @user %>/sites/<%= @name %>/error_log.log"
+accesslog = "/home/<%= @user %>/sites/<%= @name %>/access_log.log"
