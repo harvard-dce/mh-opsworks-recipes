@@ -59,6 +59,7 @@ template "gunicorn config file" do
   variables ({
     name: app_name,
     workers: 3,
+    user: usr_name
   })
   notifies :restart, 'service[capture-agent-manager-gunicorn]', :immediately
 end
