@@ -437,8 +437,6 @@ module MhOpsworksRecipes
         ldap_bind_passwd: 'pwd',
         capture_agent_manager_git_repo: 'https://github.com/harvard-dce/cadash',
         capture_agent_manager_git_revision: 'master',
-        capture_agent_manager_rest_api_user: 'usr',
-        capture_agent_manager_rest_api_passwd: 'pwd',
         capture_agent_manager_database_name: 'db',
         capture_agent_manager_database_dir: '/home/capture_agent_manager/sites/cadash',
         http_ssl: get_dummy_cert,
