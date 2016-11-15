@@ -479,6 +479,11 @@ module MhOpsworksRecipes
     end
 
     def configure_cloudwatch_log(log_name, log_file, datetime_format)
+
+      unless on_aws?
+        return
+      end
+
       stack_name = stack_shortname
       log_group_name = stack_name + "_" + log_name
       retention_days = node.fetch(:cwlogs_retention_days, '30')

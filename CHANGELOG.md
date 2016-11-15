@@ -7,6 +7,8 @@
 * added additional packages needed to compile mo-scaler required python packages
 * Force reinstallation of elasticsearch plugins to avoid version mismatches.
 
+* skip cloudwatch log setup for local clusters
+
 ## 1.15.0 - 11/18/2016
 
 * *REQUIRES EDITS TO CLUSTER CONFIG*
