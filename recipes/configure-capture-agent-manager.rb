@@ -5,6 +5,7 @@ app_name = get_capture_agent_manager_app_name
 usr_name = get_capture_agent_manager_usr_name
 capture_agent_manager_info = get_capture_agent_manager_info
 log_level = capture_agent_manager_info.fetch(:capture_agent_manager_gunicorn_log_level, 'INFO')
+db_name = stack_shortname
 
 
 file "dotenv file" do
@@ -23,7 +24,7 @@ export LDAP_BIND_DN="#{capture_agent_manager_info[:ldap_bind_dn]}"
 export LDAP_BIND_PASSWD="#{capture_agent_manager_info[:ldap_bind_passwd]}"
 export LOG_CONFIG="#{capture_agent_manager_info[:log_config]}"
 export FLASK_SECRET="#{capture_agent_manager_info[:capture_agent_manager_secret_key]}"
-export DB_NAME="#{stack_shortname}"
+export DB_NAME="#{db_name}"
 export DB_DIR="/home/#{usr_name}/db"
 |
   mode "600"
