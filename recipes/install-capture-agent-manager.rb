@@ -6,7 +6,7 @@
 include_recipe "mh-opsworks-recipes::update-package-repo"
 
 install_package("python-dev python-virtualenv python-pip " \
-                "libpq-dev libffi-dev nginx apache2-utils")
+                "libpq-dev libffi-dev nginx apache2-utils redis-server")
 
 
 capture_agent_manager_info = get_capture_agent_manager_info
