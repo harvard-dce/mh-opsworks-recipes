@@ -438,7 +438,8 @@ module MhOpsworksRecipes
         capture_agent_manager_git_repo: 'https://github.com/harvard-dce/cadash',
         capture_agent_manager_git_revision: 'master',
         capture_agent_manager_database_name: 'db',
-        capture_agent_manager_database_dir: '/home/capture_agent_manager/sites/cadash',
+        capture_agent_manager_database_s3_bucket: 'ca-settings',
+        http_auth: {},
         http_ssl: get_dummy_cert,
         api_path: '/api'
       }.merge(from_cluster_config)
@@ -453,7 +454,17 @@ module MhOpsworksRecipes
       ca_info = get_capture_agent_manager_info
       ca_info[:capture_agent_manager_usr_name]
     end
-    
+
+    def get_capture_agent_manager_database_filepath
+      ca_info = get_capture_agent_manager_info
+      %Q(/home/#{ca_info[:capture_agent_manager_usr_name]}/db/#{stack_shortname})
+    end
+
+    def get_capture_agent_manager_database_s3_resource
+      ca_info = get_capture_agent_manager_info
+      %Q(s3://#{ca_info[:capture_agent_manager_database_s3_bucket]}/#{stack_shortname})
+    end
+
     def get_moscaler_info
       {
           'moscaler_type' => 'disabled',
