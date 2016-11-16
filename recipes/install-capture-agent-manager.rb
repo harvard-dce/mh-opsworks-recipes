@@ -6,9 +6,8 @@
 include_recipe "mh-opsworks-recipes::update-package-repo"
 
 install_package("python-dev python-virtualenv python-pip " \
-                "libpq-dev libffi-dev nginx apache2-utils")
-
-install_package("redis-server sqlite3 lisqlite3-dev")
+                "libpq-dev libffi-dev nginx apache2-utils " \
+                "redis-server sqlite3 lisqlite3-dev")
 
 capture_agent_manager_info = get_capture_agent_manager_info
 app_name = get_capture_agent_manager_app_name
@@ -57,4 +56,18 @@ end
 install_nginx_logrotate_customizations
 if on_aws?
   configure_nginx_cloudwatch_logs
+end
+
+database_s3_resource = get_capture_agent_manager_database_s3_resource
+database_filepath = get_capture_agent_manager_database_filepath
+execute "pull db file from s3" do
+  command %Q(aws s3 cp #{database_s3_resource} - | sqlite3 #{database_filepath})
+  creates database_filepath
+end
+
+cron_d "db backup" do
+  minute "0"
+  hour "3"
+  user "root"
+  command %Q(sqlite3 #{database_filepath} .dump | aws s3 cp - #  #{database_s3_resource})
 end
