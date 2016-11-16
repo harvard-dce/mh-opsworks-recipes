@@ -65,6 +65,7 @@ execute "pull db file from s3" do
   creates database_filepath
 end
 
+# TODO: checar permissions for s3
 cron_d "db backup" do
   minute "0"
   hour "3"
