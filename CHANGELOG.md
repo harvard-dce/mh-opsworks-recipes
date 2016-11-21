@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* added additional packages needed to compile mo-scaler required python packages
+
 ## 1.15.0 - 11/18/2016
 
 * *REQUIRES EDITS TO CLUSTER CONFIG*

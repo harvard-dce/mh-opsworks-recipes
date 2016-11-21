@@ -4,7 +4,7 @@
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 include_recipe "mh-opsworks-recipes::update-package-repo"
 
-install_package('python-pip run-one git')
+install_package('python-pip run-one git python-dev libffi-dev')
 
 moscaler_attributes = get_moscaler_info
 Chef::Log.info moscaler_attributes
