@@ -3,6 +3,7 @@
 ## TO BE RELEASED
 
 * added additional packages needed to compile mo-scaler required python packages
+* Force reinstallation of elasticsearch plugins to avoid version mismatches.
 
 ## 1.15.0 - 11/18/2016
 

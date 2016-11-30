@@ -47,9 +47,15 @@ end
 {
   "kopf" => "lmenezes/elasticsearch-kopf/2.0",
   "cloud-aws" => "cloud-aws"
-}.each do |dir_name, install_name|
-  execute "install #{install_name} plugin" do
-    not_if { ::Dir.exist?("/usr/share/elasticsearch/plugins/#{dir_name}") }
+}.each do |plugin_name, install_name|
+  execute "uninstall existing #{plugin_name} plugin" do
+    only_if { ::Dir.exist?("/usr/share/elasticsearch/plugins/#{plugin_name}") }
+    command "/usr/share/elasticsearch/bin/plugin remove #{plugin_name}"
+    timeout 10
+    retries 5
+    retry_delay 10
+  end
+  execute "install #{plugin_name} plugin" do
     command "/usr/share/elasticsearch/bin/plugin install -b #{install_name}"
     timeout 30
     retries 5
