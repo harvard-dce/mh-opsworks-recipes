@@ -1,7 +1,9 @@
 # CHANGELOG
 
-## TO BE RELEASED
+## v1.16.0 - 12/8/2016
 
+* *REQUIRES EDITS TO EXISTING CLUSTER CONFIG*
+  Update the prod DNS certificate, see Confluence release notes
 * added additional packages needed to compile mo-scaler required python packages
 * Force reinstallation of elasticsearch plugins to avoid version mismatches.
 
