@@ -6,6 +6,8 @@ timezone = node.fetch(:timezone, 'America/New_York')
 # need to create a service stub to notify
 service 'rsyslog' do
   action :nothing
+  supports :restart => true
+  provider Chef::Provider::Service::Upstart
 end
 
 execute 'set timezone' do

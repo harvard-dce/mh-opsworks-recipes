@@ -1,13 +1,15 @@
 # CHANGELOG
 
+## TO BE RELEASED
+
+* skip cloudwatch log setup for local clusters; fix rsyslog restart (MATT-2238)
+
 ## v1.16.0 - 12/8/2016
 
 * *REQUIRES EDITS TO EXISTING CLUSTER CONFIG*
   Update the prod DNS certificate, see Confluence release notes
 * added additional packages needed to compile mo-scaler required python packages
 * Force reinstallation of elasticsearch plugins to avoid version mismatches.
-
-* skip cloudwatch log setup for local clusters
 
 ## 1.15.0 - 11/18/2016
 
