@@ -972,6 +972,20 @@ recipe(
 * creates log stream configurations for syslog, matterhorn.log and nginx logs on appropriate nodes
 '
 )
+recipe(
+    'mh-opsworks-recipes::install-crowdstrike',
+    'Installs the CrowdStrike Falcon Sensor software. Because security.
+
+=== attributes
+none
+
+=== effects
+* installs a stand-alone .deb file from our mh-opsworks-shared-assets bucket
+* installs to /opt/CrowdStrike
+* includes apt package dependencies: auditd, libauparse0
+* auditd log rotation is configured in /etc/audit.conf (which is modiified by the CrowdStrike package)
+'
+)
 
 depends 'nfs', '~> 2.1.0'
 depends 'apt', '~> 2.9.2'

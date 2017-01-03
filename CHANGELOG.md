@@ -3,7 +3,12 @@
 ## TO BE RELEASED
 
 * skip cloudwatch log setup for local clusters; fix rsyslog restart (MATT-2238)
+* *REQUIRES MANUAL RECIPE RUN* Crowdstrike falcon host installation.
+  The following command is an example of what would be run on the prod cluster. For dev clusters,
+  adjust the `layers` list according to what nodes are present.
 
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin,Engage,Utility,Storage,Analytics" recipes="mh-opsworks-recipes::install-crowdstrike"
+        
 ## v1.16.0 - 12/8/2016
 
 * *REQUIRES EDITS TO EXISTING CLUSTER CONFIG*
