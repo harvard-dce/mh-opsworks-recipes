@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## v1.17.0 - 01/10/2017
+
 * skip cloudwatch log setup for local clusters; fix rsyslog restart (MATT-2238)
 * *REQUIRES MANUAL RECIPE RUN* Crowdstrike falcon host installation.
   The following command is an example of what would be run on the prod cluster. For dev clusters,
