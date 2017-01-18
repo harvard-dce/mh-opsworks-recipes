@@ -10,6 +10,7 @@
   get_shared_storage_root + '/inbox-archive-retrieve',
   get_shared_storage_root + '/inbox-hold-for-append',
   get_shared_storage_root + '/inbox-republish',
+  get_shared_storage_root + '/inbox-republish-trim',
   get_shared_storage_root + '/archive'
 ].each do |matterhorn_directory|
   directory matterhorn_directory do
