@@ -2,6 +2,20 @@
 
 ## TO BE RELEASED
 
+* *REQUIRES EDITS TO EXISTING CLUSTER CONFIG*
+* MATT-2046 Enable the vanilla Opencast LTI endpoint, requires new lit_oauth custom_json
+* replace with the iCommons token from the private file (or create a new one from the iCommons APi webpage)
+* replace with the consumerkey and shared secret from the private file
+"stack": {
+    "chef": {
+    "custom_json": {
+      "icommons_api_token": "replace-with-an-icommons-api-token-or-manually-create-series-mappings",
+      "lti_oauth": {
+        "consumerkey": "dce_lti_oauth_consumer_key",
+        "sharedsecret": "dce_lti_oauth_sharedsecret"
+      },
+    ...
+
 ## v1.17.0 - 01/10/2017
 
 * update CA hack: 53chur-l01 now points to new prod akami stream id (same as byerly)

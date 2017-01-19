@@ -1,0 +1,11 @@
+# Configuration for DCE Other Series Service
+
+# For series dereferencing between Canvas (iCommons) and DCE Matterhorn
+# Used by the LTI publication listing tool
+
+# Comma separated list of other hosts for seriesId dereferencing
+otherpubs.series.hosts=Canvas
+
+# Config properties to retrieve series from other host (post fix with host name)
+otherpubs.series.url.Canvas=https://icommons-rest-api.tlt.harvard.edu/api/course/v2/course_instances/
+otherpubs.series.token.Canvas=<%= @icommons_api_token %>

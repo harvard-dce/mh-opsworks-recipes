@@ -657,6 +657,19 @@ module MhOpsworksRecipes
       end
     end
 
+    def install_otherpubs_service_series_impl_config(current_deploy_root)
+
+      template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.otherseries.service.OtherSeriesServiceImpl.properties| do
+        icommons_api_token = node.fetch(:icommons_api_token, 'replace-with-an-icommons-api-token-or-manually-create-series-mappings')
+        source 'edu.harvard.dce.otherseries.service.OtherSeriesServiceImpl.properties.erb'
+        owner 'matterhorn'
+        group 'matterhorn'
+        variables({
+          icommons_api_token: icommons_api_token
+        })
+      end
+    end
+
     def set_service_registry_dispatch_interval(current_deploy_root)
       template %Q|#{current_deploy_root}/etc/services/org.opencastproject.serviceregistry.impl.ServiceRegistryJpaImpl.properties| do
         source 'ServiceRegistryJpaImpl.properties.erb'
@@ -818,6 +831,29 @@ module MhOpsworksRecipes
           engage_hostname: engage_hostname
         })
       end
+    end
+
+    def install_default_tenant_config(current_deploy_root, public_dns_name, private_dns_name)
+      lti_oauth_info = get_lti_auth_info
+      template %Q|#{current_deploy_root}/etc/security/mh_default_org.xml| do
+        source 'mh_default_org.xml.erb'
+        owner 'matterhorn'
+        group 'matterhorn'
+        variables({
+          lti_oauth: lti_oauth_info,
+          unproxied_name: public_dns_name,
+          proxy_name: public_dns_name
+        })
+      end
+    end
+
+    def get_lti_auth_info
+      node.fetch(:lti_oauth,
+        {
+          consumer: 'consumerkey',
+          secret: 'sharedsecret'
+        }
+      )
     end
 
     def install_smtp_config(current_deploy_root)
