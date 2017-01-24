@@ -2,6 +2,10 @@
 
 ## TO BE RELEASED
 
+* *REQUIRES EDITS TO CLUSTER CONFIG* 
+  include auth key when deploying mh auth properties file. `auth_key` value must be
+  added to prod cluster config prior to deployment.
+
 ## v1.18.0 - 01/19/2017
 
 * *REQUIRES EDITS TO EXISTING CLUSTER CONFIG*
