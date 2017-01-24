@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## v1.18.0 - 01/19/2017
+
 * *REQUIRES EDITS TO EXISTING CLUSTER CONFIG*
 * MATT-2046 Enable the vanilla Opencast LTI endpoint, requires new lit_oauth custom_json
 * replace with the iCommons token from the private file (or create a new one from the iCommons APi webpage)
