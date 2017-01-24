@@ -949,7 +949,7 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_auth_service(current_deploy_root, auth_host, redirect_location, auth_activated = 'true')
+    def install_auth_service(current_deploy_root, auth_host, redirect_location, auth_key, auth_activated = 'true')
       template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.properties| do
         source 'edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.properties.erb'
         owner 'matterhorn'
@@ -957,7 +957,8 @@ module MhOpsworksRecipes
         variables({
           auth_host: auth_host,
           redirect_location: redirect_location,
-          auth_activated: auth_activated
+          auth_activated: auth_activated,
+          auth_key: auth_key
         })
       end
     end

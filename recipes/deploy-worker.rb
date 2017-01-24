@@ -28,6 +28,7 @@ live_stream_name = get_live_stream_name
 
 auth_host = node.fetch(:auth_host, 'example.com')
 auth_redirect_location = node.fetch(:auth_redirect_location, 'http://example.com/some/url')
+auth_key = node.fetch(:auth_key, '')
 
 auth_activated = node.fetch(:auth_activated, 'true')
 
@@ -82,7 +83,7 @@ deploy_revision "matterhorn" do
     remove_felix_fileinstall(most_recent_deploy)
     install_smtp_config(most_recent_deploy)
     install_auth_service(
-      most_recent_deploy, auth_host, auth_redirect_location, auth_activated
+      most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated
     )
     install_live_streaming_service_config(most_recent_deploy, live_stream_name)
     install_published_event_details_email(most_recent_deploy, public_engage_hostname)

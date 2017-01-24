@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* include auth key when deploying mh auth properties file
+
 ## v1.18.0 - 01/19/2017
 
 * *REQUIRES EDITS TO EXISTING CLUSTER CONFIG*
