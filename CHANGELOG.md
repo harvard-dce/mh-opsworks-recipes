@@ -3,6 +3,7 @@
 ## TO BE RELEASED
 
 * include auth key when deploying mh auth properties file
+* MATT-2245 Enable DCE annot property endpoint
 
 ## v1.18.0 - 01/19/2017
 

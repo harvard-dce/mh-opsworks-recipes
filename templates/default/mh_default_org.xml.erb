@@ -64,9 +64,15 @@
     <!-- MATT-2094 Annotation endpoint: access depends on which endpoint is used -->
     <!-- Reading annotations, security is done in REST endpoint -->
     <sec:intercept-url pattern="/annotation/annotations*" method="GET" access="ROLE_ANONYMOUS" />
-    <!-- Can annotate?, role annonimous -->
+    <!-- Can annotate?, role anonymous -->
     <sec:intercept-url pattern="/annotation/canAnnotate*" method="GET" access="ROLE_ANONYMOUS" />
-    <!-- Read specific annotation, role  admin only -->
+    <!-- MATT-2245-annotation-pseudo-names -->
+    <!-- Reading annotation property, security is done in REST endpoint -->    
+    <sec:intercept-url pattern="/annotation/property*" method="GET" access="ROLE_ANONYMOUS" />
+    <!-- Updating annotation property, security is done in REST endpoint -->    
+    <sec:intercept-url pattern="/annotation/property*" method="POST" access="ROLE_ANONYMOUS" />
+    <!-- MATT-2245 (end) -->
+    <!-- Read specific annotation, role admin only -->
     <sec:intercept-url pattern="/annotation/**" method="GET" access="ROLE_ADMIN" />
     <!-- Adding annotation, security is done in REST endpoint -->
     <sec:intercept-url pattern="/annotation/" method="PUT" access="ROLE_ANONYMOUS" />
