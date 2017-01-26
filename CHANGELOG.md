@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* MATT-2245 Enable DCE annot property endpoint
+
 ## v1.18.0 - 01/19/2017
 
 * *REQUIRES EDITS TO EXISTING CLUSTER CONFIG*
