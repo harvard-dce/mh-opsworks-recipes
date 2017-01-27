@@ -42,6 +42,7 @@ live_stream_name = get_live_stream_name
 auth_host = node.fetch(:auth_host, 'example.com')
 auth_redirect_location = node.fetch(:auth_redirect_location, 'http://example.com/some/url')
 auth_activated = node.fetch(:auth_activated, 'true')
+auth_key = node.fetch(:auth_key, '')
 
 git_data = node[:deploy][:matterhorn][:scm]
 
@@ -97,7 +98,7 @@ deploy_revision "matterhorn" do
     install_smtp_config(most_recent_deploy)
     install_default_tenant_config(most_recent_deploy, public_admin_hostname, private_hostname)
     install_auth_service(
-      most_recent_deploy, auth_host, auth_redirect_location, auth_activated
+      most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated
     )
     install_live_streaming_service_config(most_recent_deploy, live_stream_name)
     # Admin Specific

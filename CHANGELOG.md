@@ -2,7 +2,13 @@
 
 ## TO BE RELEASED
 
+
+## v1.19.0 - EST 01/30/2017
+
 * MATT-2245 Enable DCE annot property endpoint
+* *REQUIRES EDITS TO CLUSTER CONFIG* 
+  include auth key when deploying mh auth properties file. `auth_key` value must be
+  added to prod cluster config prior to deployment.
 
 ## v1.18.0 - 01/19/2017
 
