@@ -2,8 +2,11 @@
 
 ## TO BE RELEASED
 
+## v1.20.0 - 02/06/2017
 
-## v1.19.0 - EST 01/30/2017
+* MATT-1929 Create inbox for republish with re-trimming. 
+
+## v1.19.0 - 01/30/2017
 
 * MATT-2245 Enable DCE annot property endpoint
 * *REQUIRES EDITS TO CLUSTER CONFIG* 
