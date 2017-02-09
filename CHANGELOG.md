@@ -2,6 +2,10 @@
 
 ## TO BE RELEASED
 
+## TBR: v1.21.0 - 02/13/2017
+
+* MATT-2231 login for annots summary path
+
 ## v1.20.0 - 02/06/2017
 
 * MATT-1929 Create inbox for republish with re-trimming. 

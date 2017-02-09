@@ -20,3 +20,6 @@ bin/*
 
 doc/
 .yardoc/
+
+.DS_Store
+
