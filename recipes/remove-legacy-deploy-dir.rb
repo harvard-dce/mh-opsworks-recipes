@@ -1,7 +1,7 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: remove-legacy-deploy-dir
 
-legacy_deploy_root = node.fetch(:legacy_deploy_root, '/opt/matterhorn')
+legacy_deploy_root = node.fetch(:legacy_deploy_root, '/opt/opencast')
 
 ['/releases', '/shared'].each do |subdir|
   directory %Q|#{legacy_deploy_root}#{subdir}| do

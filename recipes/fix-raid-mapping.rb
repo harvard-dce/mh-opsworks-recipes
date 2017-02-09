@@ -1,4 +1,4 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: fix-raid-mapping
 
 # Fix RAID array boot-time mapping bug: http://ubuntuforums.org/showthread.php?t=1764861&page=2

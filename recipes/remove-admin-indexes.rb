@@ -1,4 +1,4 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: remove-admin-indexes
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
@@ -15,7 +15,7 @@ if dev_or_testing_cluster?
 
   if do_it && admin_node?
     execute 'remove admin solr indexes' do
-      user 'matterhorn'
+      user 'opencast'
       command %Q|/usr/local/bin/remove-solr-indexes.sh -x -p #{local_workspace_root}|
     end
   end

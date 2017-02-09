@@ -6,7 +6,7 @@ instance_id="$1"
 metric_name="MySQLServerAvailable"
 value=0
 
-if mysql matterhorn -e 'select * from mh_organization order by id limit 1' &> /dev/null; then
+if mysql opencast -e 'select * from mh_organization order by id limit 1' &> /dev/null; then
   value=1
 else
   value=0

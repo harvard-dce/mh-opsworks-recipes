@@ -1,7 +1,7 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: create-alerts-from-opsworks-metrics
 
-include_recipe "mh-opsworks-recipes::install-awscli"
+include_recipe "oc-opsworks-recipes::install-awscli"
 ::Chef::Resource::RubyBlock.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
 ruby_block "add alarms" do

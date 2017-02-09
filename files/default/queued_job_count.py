@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 """
-Outputs the number of Matterhorn jobs with 'QUEUED' status. See --help for options.
-e.g., ./queued_job_count.py -u foo -p bar http://matterhorn.example.edu
+Outputs the number of Opencast jobs with 'QUEUED' status. See --help for options.
+e.g., ./queued_job_count.py -u foo -p bar http://opencast.example.edu
 """
 
 from pyhorn import MHClient
@@ -40,9 +40,9 @@ def main(args):
 if __name__ == '__main__':
 
     parser = ArgumentParser()
-    parser.add_argument('host', help='Matterhorn host (including scheme)')
-    parser.add_argument('-u','--username', help='Matterhorn system user')
-    parser.add_argument('-p','--password', help='Matterhorn system user password')
+    parser.add_argument('host', help='Opencast host (including scheme)')
+    parser.add_argument('-u','--username', help='Opencast system user')
+    parser.add_argument('-p','--password', help='Opencast system user password')
     parser.add_argument('-t','--type', action='append', help="Operation types to care about")
 
     args = parser.parse_args()

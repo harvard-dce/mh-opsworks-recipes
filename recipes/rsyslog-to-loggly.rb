@@ -1,4 +1,4 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: rsyslog-to-loggly
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)

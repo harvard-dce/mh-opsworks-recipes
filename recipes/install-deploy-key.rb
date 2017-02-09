@@ -1,21 +1,21 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: install-deploy-key
 
-git_data = node[:deploy][:matterhorn][:scm]
+git_data = node[:deploy][:opencast][:scm]
 
 ssh_key = git_data.fetch(:ssh_key, '')
 
 if ! git_data[:ssh_key].empty?
-  file '/home/matterhorn/.ssh/id_rsa' do
-    owner 'matterhorn'
-    group 'matterhorn'
+  file '/home/opencast/.ssh/id_rsa' do
+    owner 'opencast'
+    group 'opencast'
     content git_data[:ssh_key]
     mode '0600'
   end
 
-  file '/home/matterhorn/.ssh/config' do
-    owner 'matterhorn'
-    group 'matterhorn'
+  file '/home/opencast/.ssh/config' do
+    owner 'opencast'
+    group 'opencast'
     content %q|
 Host *
   IdentityFile ~/.ssh/id_rsa

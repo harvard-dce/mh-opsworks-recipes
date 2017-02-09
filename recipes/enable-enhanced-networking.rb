@@ -1,9 +1,9 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: enable-enhanced-networking
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
-include_recipe "mh-opsworks-recipes::install-awscli"
+include_recipe "oc-opsworks-recipes::install-awscli"
 install_package('dkms')
 bucket_name = get_shared_asset_bucket_name
 dkms_version = node.fetch(:ixgbevf_version, "2.16.4")

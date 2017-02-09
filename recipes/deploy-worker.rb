@@ -1,10 +1,10 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: deploy-worker
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 Chef::Provider::Deploy::Revision.send(:include, MhOpsworksRecipes::DeployHelpers)
 
-matterhorn_repo_root = node[:matterhorn_repo_root]
+opencast_repo_root = node[:opencast_repo_root]
 local_workspace_root = get_local_workspace_root
 storage_info = get_storage_info
 shared_storage_root = get_shared_storage_root
@@ -26,13 +26,15 @@ cloudfront_url = get_cloudfront_url
 live_streaming_url = get_live_streaming_url
 live_stream_name = get_live_stream_name
 
+activemq_bind_host = node.fetch(:activemq_bind_host, '0.0.0.0')
+
 auth_host = node.fetch(:auth_host, 'example.com')
 auth_redirect_location = node.fetch(:auth_redirect_location, 'http://example.com/some/url')
 auth_key = node.fetch(:auth_key, '')
 
 auth_activated = node.fetch(:auth_activated, 'true')
 
-git_data = node[:deploy][:matterhorn][:scm]
+git_data = node[:deploy][:opencast][:scm]
 
 public_engage_hostname = get_public_engage_hostname
 public_admin_hostname = get_public_admin_hostname
@@ -42,21 +44,21 @@ database_connection = get_database_connection
 
 repo_url = git_repo_url(git_data)
 
-include_recipe "mh-opsworks-recipes::create-matterhorn-directories"
+include_recipe "oc-opsworks-recipes::create-opencast-directories"
 
-allow_matterhorn_user_to_restart_daemon_via_sudo
+allow_opencast_user_to_restart_daemon_via_sudo
 
 deploy_action = get_deploy_action
 
 newrelic_app_name = alarm_name_prefix
 
-deploy_revision "matterhorn" do
-  deploy_to matterhorn_repo_root
+deploy_revision "opencast" do
+  deploy_to opencast_repo_root
   repo repo_url
   revision git_data.fetch(:revision, 'master')
 
-  user 'matterhorn'
-  group 'matterhorn'
+  user 'opencast'
+  group 'opencast'
 
   migrate false
   symlinks({})
@@ -72,37 +74,38 @@ deploy_revision "matterhorn" do
 
     # Copy in the configs as distributed in the git repo
     # Some services will be further tweaked by templates
-    copy_files_into_place_for(:worker, most_recent_deploy)
-    copy_configs_for_load_service(most_recent_deploy)
-    copy_services_into_place(most_recent_deploy)
+#    copy_files_into_place_for(:worker, most_recent_deploy)
+#    copy_configs_for_load_service(most_recent_deploy)
+#    copy_services_into_place(most_recent_deploy)
 
-    install_init_scripts(most_recent_deploy, matterhorn_repo_root)
-    install_matterhorn_conf(most_recent_deploy, matterhorn_repo_root, 'worker')
-    install_matterhorn_log_management
-    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_engage_hostname)
-    remove_felix_fileinstall(most_recent_deploy)
-    install_smtp_config(most_recent_deploy)
-    install_auth_service(
-      most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated
-    )
-    install_live_streaming_service_config(most_recent_deploy, live_stream_name)
-    install_published_event_details_email(most_recent_deploy, public_engage_hostname)
-    configure_newrelic(most_recent_deploy, newrelic_app_name, :workers)
+    install_init_scripts(most_recent_deploy, opencast_repo_root)
+#    install_opencast_conf(most_recent_deploy, opencast_repo_root, 'worker')
+    install_opencast_log_configuration(most_recent_deploy)
+    install_opencast_log_management
+#    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_engage_hostname)
+#    remove_felix_fileinstall(most_recent_deploy)
+#    install_smtp_config(most_recent_deploy)
+#    install_auth_service(
+#      most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated
+#    )
+#    install_live_streaming_service_config(most_recent_deploy, live_stream_name)
+#    install_published_event_details_email(most_recent_deploy, public_engage_hostname)
+#    configure_newrelic(most_recent_deploy, newrelic_app_name, :workers)
 
     # WORKER SPECIFIC
     set_service_registry_dispatch_interval(most_recent_deploy)
     # /WORKER SPECIFIC
 
-    if using_local_distribution?
-      update_properties_files_for_local_distribution(most_recent_deploy)
-    end
+#    if using_local_distribution?
+#      update_properties_files_for_local_distribution(most_recent_deploy)
+#    end
 
-    template %Q|#{most_recent_deploy}/etc/config.properties| do
-      source 'config.properties.erb'
-      owner 'matterhorn'
-      group 'matterhorn'
+    template %Q|#{most_recent_deploy}/etc/custom.properties| do
+      source 'custom.properties.erb'
+      owner 'opencast'
+      group 'opencast'
       variables({
-        matterhorn_backend_http_port: 8080,
+        opencast_backend_http_port: 8080,
         hostname: private_hostname,
         local_workspace_root: local_workspace_root,
         shared_storage_root: shared_storage_root,
@@ -119,18 +122,19 @@ deploy_revision "matterhorn" do
         job_maxload: 4,
         stack_name: stack_name,
         workspace_cleanup_period: 0,
+        activemq_bind_host: activemq_bind_host
       })
     end
   end
 end
 
-include_recipe 'mh-opsworks-recipes::register-matterhorn-to-boot'
+include_recipe 'oc-opsworks-recipes::register-opencast-to-boot'
 
-unless node[:dont_start_matterhorn_automatically]
-  service 'matterhorn' do
+unless node[:dont_start_opencast_automatically]
+  service 'opencast' do
     action :start
     supports restart: true, start: true, stop: true, status: true
   end
 end
 
-include_recipe "mh-opsworks-recipes::monitor-matterhorn-daemon"
+include_recipe "oc-opsworks-recipes::monitor-opencast-daemon"
