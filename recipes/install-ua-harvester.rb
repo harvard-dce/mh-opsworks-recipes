@@ -1,7 +1,7 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: install-ua-harvester
 
-include_recipe "mh-opsworks-recipes::update-package-repo"
+include_recipe "oc-opsworks-recipes::update-package-repo"
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 ::Chef::Resource::RubyBlock.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
@@ -34,7 +34,7 @@ bash 'install dependencies' do
   user 'root'
 end
 
-include_recipe 'mh-opsworks-recipes::configure-ua-harvester'
+include_recipe 'oc-opsworks-recipes::configure-ua-harvester'
 
 # fetch user action data from MH every 2m
 cron_d 'ua_harvester' do

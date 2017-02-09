@@ -1,8 +1,8 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: install-crowdstrike
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
-include_recipe "mh-opsworks-recipes::update-package-repo"
+include_recipe "oc-opsworks-recipes::update-package-repo"
 
 bucket_name = get_shared_asset_bucket_name
 crowdstrike_deb = node.fetch(:crowdstrike_deb, 'falcon-sensor_2.0.22-1202_amd64.deb')
@@ -11,7 +11,7 @@ crowdstrike_version = node.fetch(:crowdstrike_version, '2.0.0022.1202')
 
 if on_aws?
   install_package("auditd libauparse0")
-  include_recipe "mh-opsworks-recipes::install-awscli"
+  include_recipe "oc-opsworks-recipes::install-awscli"
   download_command="/usr/local/bin/aws s3 cp s3://#{bucket_name}/#{crowdstrike_deb} ."
 
   bash 'install crowdstrike falcon host pacakge' do

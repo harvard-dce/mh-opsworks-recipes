@@ -1,33 +1,33 @@
 #!/bin/sh
 #
-# matterhorn   Start/Stop the Opencast Matterhorn system
+# opencast   Start/Stop the Opencast Opencast system
 #
 # chkconfig:   - 60 40
-# description: Matterhorn is a free, open-source platform to support the \
+# description: Opencast is a free, open-source platform to support the \
 #              management of educational audio and video content. Institutions \
-#              will use Matterhorn to produce lecture recordings, manage \
+#              will use Opencast to produce lecture recordings, manage \
 #              existing video, serve designated distribution channels, and \
 #              provide user interfaces to engage students with educational \
 #              videos.
 
 ### BEGIN INIT INFO
-# Provides: matterhorn
+# Provides: opencast
 # Required-Start: $local_fs $remote_fs $syslog $network
 # Required-Stop:
 # Default-Start: 2 3 4 5
 # Default-Stop: 0 1 6
-# Short-Description: run matterhorn
-# Description: Matterhorn is a free, open-source platform to support the
+# Short-Description: run opencast
+# Description: Opencast is a free, open-source platform to support the
 #              management of educational audio and video content. Institutions
-#              will use Matterhorn to produce lecture recordings, manage
+#              will use Opencast to produce lecture recordings, manage
 #              existing video, serve designated distribution channels, and
 #              provide user interfaces to engage students with educational
 #              videos.
 ### END INIT INFO
 
-matterhorn="<%= @matterhorn_executable %>"
-prog="matterhorn"
-lockfile=/var/lock/subsys/matterhorn
+opencast="<%= @opencast_executable %>"
+prog="opencast"
+lockfile=/var/lock/subsys/opencast
 [ -d "/var/lock/subsys" ] || lockfile="/var/lock/LCK.${prog}"
 pidfile="/var/run/${prog}.pid"
 
@@ -52,29 +52,29 @@ failed() {
 
 start() {
 
-# If you don't want to boot matterhorn automatically after instance boot, set
-# "dont_start_matterhorn_automatically" to "true" in your stack's custom_json.
-# *THIS WILL KEEP YOU FROM BOOTING MATTERHORN ENTIRELY UNTIL YOU UNSET THE VARIABLE
+# If you don't want to boot opencast automatically after instance boot, set
+# "dont_start_opencast_automatically" to "true" in your stack's custom_json.
+# *THIS WILL KEEP YOU FROM BOOTING OPENCAST ENTIRELY UNTIL YOU UNSET THE VARIABLE
 # AND UPDATE YOUR CHEF RECIPES TO UPDATE YOUR JSON METADATA*. Use with caution.
 #
-if [ $(/usr/sbin/opsworks-agent-cli get_json | /usr/bin/jq '.dont_start_matterhorn_automatically' | grep 'true') ];
+if [ $(/usr/sbin/opsworks-agent-cli get_json | /usr/bin/jq '.dont_start_opencast_automatically' | grep 'true') ];
 then
-  echo "Not starting because dont_start_matterhorn_automatically is set in the stack's custom_json"
+  echo "Not starting because dont_start_opencast_automatically is set in the stack's custom_json"
   exit 0;
 fi
 
 	smsg="Starting $prog: "
 	echo -n $smsg
 
-	# Start matterhorn and create a lockfile
-	( flock -n 9 && $matterhorn --daemon ) 9> $lockfile
+	# Start opencast and create a lockfile
+	( flock -n 9 && $opencast --daemon ) 9> $lockfile
 	retval=$?
 
-	# If we failed with retval=1 matterhorn might be already up and running. In
+	# If we failed with retval=1 opencast might be already up and running. In
 	# that case we still want to return a success:
 	[ $retval -eq 1 ] && rh_status_q && echo && exit 1
 
-	# If we failed to start matterhorn but a lock was created, we want to remove
+	# If we failed to start opencast but a lock was created, we want to remove
 	# the file (flock does not remove the file automatically):
 	[ ! $retval -eq 0 ] && rm -f $lockfile
 
@@ -99,7 +99,7 @@ fi
 stop() {
 	smsg="Stopping $prog: "
 	echo -n $smsg
-	[ -f $lockfile ] && $matterhorn --quit
+	[ -f $lockfile ] && $opencast --quit
 	retval=$?
 	if [ $retval -eq 0 ]
 	then

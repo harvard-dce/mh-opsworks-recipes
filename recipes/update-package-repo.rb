@@ -1,4 +1,4 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: update-package-repo
 
 execute 'fix any half-configured packages' do

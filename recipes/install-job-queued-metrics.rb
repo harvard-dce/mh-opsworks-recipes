@@ -1,4 +1,4 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: install-job-queued-metrics
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
@@ -29,7 +29,7 @@ cookbook_file "queued_job_count_metric.sh" do
   mode "755"
 end
 
-cron_d 'matterhorn_jobs_queued' do
+cron_d 'opencast_jobs_queued' do
   user 'custom_metrics'
   minute '*'
   command %Q(/usr/local/bin/queued_job_count_metric.sh "#{aws_instance_id}" "http://#{private_admin_hostname}/" "#{rest_auth_info[:user]}" "#{rest_auth_info[:pass]}" 2>&1 | logger -t info)

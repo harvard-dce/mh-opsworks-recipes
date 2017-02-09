@@ -1,4 +1,4 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: install-kibana
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
@@ -15,7 +15,7 @@ apt_repository 'kibana' do
   key '46095ACC8548582C1A2699A9D27D666CD88E42B4'
 end
 
-include_recipe "mh-opsworks-recipes::update-package-repo"
+include_recipe "oc-opsworks-recipes::update-package-repo"
 pin_package("kibana", "#{kibana_major_version}.*")
 install_package("kibana")
 

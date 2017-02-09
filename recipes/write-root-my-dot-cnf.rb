@@ -1,10 +1,10 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: write-root-my-dot-cnf
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
 is_db_node = database_node?
-db_info = node[:deploy][:matterhorn][:database]
+db_info = node[:deploy][:opencast][:database]
 
 host = db_info[:host]
 username = db_info[:username]

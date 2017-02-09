@@ -59,13 +59,13 @@ source "$shared_files_path/seed_cluster_hostnames.txt"
 
 if ! $do_it; then
   echo
-  echo "Usage: modify-database-after-loading-seed-data.sh -x -p <full path to shared matterhorn files> --engage_ip <value> --engage_host <value> --admin_ip <value> --admin_host <value> --cloudfront_domain <value> --wowza_edge_url <value>"
+  echo "Usage: modify-database-after-loading-seed-data.sh -x -p <full path to shared opencast files> --engage_ip <value> --engage_host <value> --admin_ip <value> --admin_host <value> --cloudfront_domain <value> --wowza_edge_url <value>"
   echo
   echo "This uses the cluster hostname manifest from the seed file and the current target"
   echo "cluster hostnames to modify the database after it's been loaded from the seeds"
   echo
   echo "-x	Actually do the thing"
-  echo "-p or --path	Full path to the shared matterhorn files on nfs"
+  echo "-p or --path	Full path to the shared opencast files on nfs"
   echo "--engage_ip	The engage IP of the target cluster"
   echo "--engage_host	The engage hostname of the target cluster"
   echo "--admin_ip	The admin IP of the target cluster"
@@ -80,12 +80,12 @@ fi
 # executes a series of mysql update statements to prepare mh database to
 # be moved from source cluster to target cluster
 #
-# - assumes matterhorn is stopped and haven't accessed the db yet
+# - assumes opencast is stopped and haven't accessed the db yet
 #
 
 
 # uncomment if not already defined in environment
-#MYSQL_MH_USER=matterhorn
+#MYSQL_MH_USER=opencast
 #MYSQL_MH_PASSWD=password
 
 # production values!
@@ -129,7 +129,7 @@ for statement in "${mh_episode_engage_ip_statement}" "${mh_episode_engage_host_s
 do
     echo "EXECUTING STATEMENT: ${statement}"
     echo
-    mysql -e "${statement}" matterhorn
+    mysql -e "${statement}" opencast
     echo
 done
 

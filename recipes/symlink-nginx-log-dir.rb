@@ -1,11 +1,11 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: symlink-nginx-log-dir
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
 install_package('rsync')
 
-new_root = node[:nginx_log_root_dir] || node[:matterhorn_repo_root]
+new_root = node[:nginx_log_root_dir] || node[:opencast_repo_root]
 old_root = node[:old_nginx_log_root_dir] || '/var/log/'
 
 # says "if the dir exists and is a symlink"

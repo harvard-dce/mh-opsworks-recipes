@@ -1,9 +1,9 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: nfs-client
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 ::Chef::Resource::RubyBlock.send(:include, MhOpsworksRecipes::RecipeHelpers)
-include_recipe 'mh-opsworks-recipes::create-metrics-dependencies'
+include_recipe 'oc-opsworks-recipes::create-metrics-dependencies'
 
 storage_info = get_storage_info
 
@@ -28,7 +28,7 @@ directory '/etc/auto.master.d' do
   mode '755'
 end
 
-file '/etc/auto.matterhorn' do
+file '/etc/auto.opencast' do
   action :create
   owner 'root'
   group 'root'
@@ -36,12 +36,12 @@ file '/etc/auto.matterhorn' do
   content %Q|#{export_root} -fstype=nfs4 #{storage_hostname}:#{nfs_server_export_root}\n|
 end
 
-file '/etc/auto.master.d/matterhorn.autofs' do
+file '/etc/auto.master.d/opencast.autofs' do
   action :create
   owner 'root'
   group 'root'
   mode '640'
-  content "/- /etc/auto.matterhorn -t 3600 -n 1"
+  content "/- /etc/auto.opencast -t 3600 -n 1"
 end
 
 # Only restart if we don't have an active mount
@@ -57,8 +57,8 @@ execute 'warm directory' do
 end
 
 directory shared_storage_root do
-  owner 'matterhorn'
-  group 'matterhorn'
+  owner 'opencast'
+  group 'opencast'
   mode '755'
   recursive true
 end

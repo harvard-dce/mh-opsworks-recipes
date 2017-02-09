@@ -1,9 +1,10 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: install-cwlogs
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
 region = node[:opsworks][:instance][:region]
+shared_assets_bucket = get_shared_asset_bucket_name
 
 service 'awslogs' do
   action :nothing
@@ -23,7 +24,7 @@ directory '/opt/aws/cloudwatch' do
 end
 
 remote_file '/opt/aws/cloudwatch/awslogs-agent-setup.py' do
-  source 'https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py'
+  source %Q|https://s3.amazonaws.com/#{ shared_assets_bucket }/awslogs-agent-setup.py|
   mode '0755'
 end
 
@@ -48,7 +49,7 @@ if admin_node?
 end
 
 if mh_node?
-  configure_cloudwatch_log("matterhorn", "#{ get_log_directory }/matterhorn.log", "%Y-%m-%d %H:%M:%S")
+  configure_cloudwatch_log("opencast", "#{ get_log_directory }/opencast.log", "%Y-%m-%d %H:%M:%S")
 end
 
 if engage_node? || admin_node?

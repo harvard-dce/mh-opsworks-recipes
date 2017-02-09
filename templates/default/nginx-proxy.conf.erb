@@ -19,7 +19,7 @@ server {
 
   location / {
     proxy_buffering off;
-    proxy_pass http://127.0.0.1:<%= @matterhorn_backend_http_port %>;
+    proxy_pass http://127.0.0.1:<%= @opencast_backend_http_port %>;
   }
 
   include /etc/nginx/proxy-includes/*.conf;
