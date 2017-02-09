@@ -9,7 +9,7 @@ package "maven2" do
   ignore_failure true
 end
 
-packages = %Q|autofs5 curl dkms gzip jq libglib2.0-dev maven mediainfo mysql-client openjdk-7-jdk openjdk-7-jre postfix python-pip rsyslog-gnutls run-one tesseract-ocr|
+packages = %Q|autofs5 curl dkms gzip jq libglib2.0-dev maven mysql-client activemq openjdk-7-jdk openjdk-7-jre postfix python-pip rsyslog-gnutls run-one tesseract-ocr|
 install_package(packages)
 
 include_recipe 'mh-opsworks-recipes::install-nodejs'
