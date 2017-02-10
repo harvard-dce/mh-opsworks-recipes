@@ -2,7 +2,7 @@
 
 ## TO BE RELEASED
 
-## TBR: v1.21.0 - 02/13/2017
+## v1.21.0 - 02/13/2017
 
 * MATT-2231 login for annots summary path
 
