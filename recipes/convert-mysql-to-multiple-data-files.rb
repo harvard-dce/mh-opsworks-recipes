@@ -1,10 +1,10 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: convert-mysql-to-multiple-data-files
 
 require 'find'
 require 'mixlib/shellout'
 
-db_info = node[:deploy][:matterhorn][:database]
+db_info = node[:deploy][:opencast][:database]
 host = db_info[:host]
 username = db_info[:username]
 password = db_info[:password]
@@ -24,7 +24,7 @@ unless File.exists?("#{datadir}#{database_name}")
     owner 'root'
     group 'root'
     mode '0600'
-    content %Q|# Do not remove this, it's part of the mh-opsworks-recipes::convert-mysql-to-multiple-data-files recipe
+    content %Q|# Do not remove this, it's part of the oc-opsworks-recipes::convert-mysql-to-multiple-data-files recipe
 [mysqld]
 innodb_file_per_table
     |

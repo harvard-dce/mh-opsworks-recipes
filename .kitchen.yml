@@ -16,60 +16,60 @@ platforms:
 suites:
   - name: default
     run_list:
-      - recipe[mh-opsworks-recipes::install-mh-base-packages]
-      - recipe[mh-opsworks-recipes::install-utils]
+      - recipe[oc-opsworks-recipes::install-oc-base-packages]
+      - recipe[oc-opsworks-recipes::install-utils]
 
   - name: nodejs
     run_list:
-      - recipe[mh-opsworks-recipes::install-nodejs]
+      - recipe[oc-opsworks-recipes::install-nodejs]
 
   - name: utils
     run_list:
-      - recipe[mh-opsworks-recipes::install-utils]
+      - recipe[oc-opsworks-recipes::install-utils]
 
   - name: user-creation
     run_list:
-      - recipe[mh-opsworks-recipes::create-matterhorn-user]
+      - recipe[oc-opsworks-recipes::create-opencast-user]
 
   - name: storage-server
     run_list:
-      - recipe[mh-opsworks-recipes::nfs-export]
+      - recipe[oc-opsworks-recipes::nfs-export]
 
   - name: ffmpeg
     run_list:
-      - recipe[mh-opsworks-recipes::install-ffmpeg]
+      - recipe[oc-opsworks-recipes::install-ffmpeg]
     attributes:
       vagrant_environment: true
 
   - name: nginx-proxy
     run_list:
-      - recipe[mh-opsworks-recipes::configure-nginx-proxy]
+      - recipe[oc-opsworks-recipes::configure-nginx-proxy]
 
   - name: nginx-engage-proxy
     run_list:
-      - recipe[mh-opsworks-recipes::configure-engage-nginx-proxy]
+      - recipe[oc-opsworks-recipes::configure-engage-nginx-proxy]
 
   - name: sh-to-bash
     run_list:
-      - recipe[mh-opsworks-recipes::set-bash-as-default-shell]
+      - recipe[oc-opsworks-recipes::set-bash-as-default-shell]
 
   - name: set-timezone
     run_list:
-      - recipe[mh-opsworks-recipes::set-timezone]
+      - recipe[oc-opsworks-recipes::set-timezone]
 
   - name: populate-maven-cache
     run_list:
-      - recipe[mh-opsworks-recipes::populate-maven-cache]
+      - recipe[oc-opsworks-recipes::populate-maven-cache]
     attributes:
       vagrant_environment: true
 
   - name: install-awscli
     run_list:
-      - recipe[mh-opsworks-recipes::install-awscli]
+      - recipe[oc-opsworks-recipes::install-awscli]
 
   - name: install-ec2-scaling-manager
     run_list:
-      - recipe[mh-opsworks-recipes::install-ec2-scaling-manager]
+      - recipe[oc-opsworks-recipes::install-ec2-scaling-manager]
     attributes:
       opsworks:
         stack:
@@ -77,7 +77,7 @@ suites:
 
   - name: modified-install-ec2-scaling-manager
     run_list:
-      - recipe[mh-opsworks-recipes::install-ec2-scaling-manager]
+      - recipe[oc-opsworks-recipes::install-ec2-scaling-manager]
     attributes:
       moscaler:
         offpeak_instances: 10

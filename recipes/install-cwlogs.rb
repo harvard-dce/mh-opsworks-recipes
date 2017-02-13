@@ -1,4 +1,4 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: install-cwlogs
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
@@ -48,7 +48,7 @@ if admin_node?
 end
 
 if mh_node?
-  configure_cloudwatch_log("matterhorn", "#{ get_log_directory }/matterhorn.log", "%Y-%m-%d %H:%M:%S")
+  configure_cloudwatch_log("opencast", "#{ get_log_directory }/opencast.log", "%Y-%m-%d %H:%M:%S")
 end
 
 if engage_node? || admin_node?

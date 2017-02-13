@@ -1,8 +1,8 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: install-ffmpeg
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
-include_recipe "mh-opsworks-recipes::update-package-repo"
+include_recipe "oc-opsworks-recipes::update-package-repo"
 
 # The list of libraries that've been built against the ffmpeg binary (and are
 # therefore required for it to function fully)  was generated on the build
@@ -18,7 +18,7 @@ ffmpeg_version = node.fetch(:ffmpeg_version, '2.7.2')
 ffmpeg_archive = %Q|ffmpeg-#{ffmpeg_version}-static.tgz|
 
 if on_aws?
-  include_recipe "mh-opsworks-recipes::install-awscli"
+  include_recipe "oc-opsworks-recipes::install-awscli"
   download_command="/usr/local/bin/aws s3 cp s3://#{bucket_name}/#{ffmpeg_archive} ."
 else
   download_command="wget https://s3.amazonaws.com/#{bucket_name}/#{ffmpeg_archive}"

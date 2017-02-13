@@ -35,5 +35,5 @@ if [ -z "$file_path" ]; then
   exit 1
 fi
 
-/usr/bin/mysql -e 'drop database matterhorn; create database matterhorn'
-/usr/bin/mysql matterhorn < "$file_path"
+/usr/bin/mysql -e 'drop database opencast; create database opencast'
+/usr/bin/mysql opencast < "$file_path"

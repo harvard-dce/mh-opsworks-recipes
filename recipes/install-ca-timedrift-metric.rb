@@ -1,4 +1,4 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: install-ca-timedrift-metric
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)

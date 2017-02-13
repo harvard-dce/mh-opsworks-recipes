@@ -1,12 +1,12 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: deploy-database
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 Chef::Provider::Deploy::Revision.send(:include, MhOpsworksRecipes::DeployHelpers)
 
-matterhorn_repo_root = node[:matterhorn_repo_root]
+opencast_repo_root = node[:opencast_repo_root]
 db_seed_file = get_db_seed_file
-db_info = node[:deploy][:matterhorn][:database]
+db_info = node[:deploy][:opencast][:database]
 
 host = db_info[:host]
 username = db_info[:username]
@@ -14,18 +14,18 @@ password = db_info[:password]
 port = db_info[:port]
 database_name = db_info[:database]
 
-git_data = node[:deploy][:matterhorn][:scm]
+git_data = node[:deploy][:opencast][:scm]
 repo_url = git_repo_url(git_data)
 
 deploy_action = get_deploy_action
 
-deploy_revision "matterhorn" do
-  deploy_to matterhorn_repo_root
+deploy_revision "opencast" do
+  deploy_to opencast_repo_root
   repo repo_url
   revision git_data.fetch(:revision, 'master')
 
-  user 'matterhorn'
-  group 'matterhorn'
+  user 'opencast'
+  group 'opencast'
 
   migrate false
   symlinks({})

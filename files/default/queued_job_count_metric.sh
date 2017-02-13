@@ -7,7 +7,7 @@ admin_hostname="$2"
 username="$3"
 password="$4"
 
-metric_name="MatterhornJobsQueued"
+metric_name="OpencastJobsQueued"
 
 queued_jobs=$(/usr/local/bin/queued_job_count.py -u "$username" -p "$password" "$admin_hostname")
 

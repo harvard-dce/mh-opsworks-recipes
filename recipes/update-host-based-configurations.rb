@@ -1,12 +1,12 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: update-host-based-configurations
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::DeployHelpers)
 
-matterhorn_repo_root = node[:matterhorn_repo_root]
+opencast_repo_root = node[:opencast_repo_root]
 
-production_deploy_root = matterhorn_repo_root + '/current'
+production_deploy_root = opencast_repo_root + '/current'
 
 public_engage_hostname = get_public_engage_hostname
 public_admin_hostname = get_public_admin_hostname

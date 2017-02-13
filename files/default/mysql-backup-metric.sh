@@ -11,7 +11,7 @@ cd "$backup_root_dir"
 
 metric_name="MySQLDatabaseBackupIsFresh"
 
-if (find -type f -name 'mysql-matterhorn*.gz' -mmin -1500 | egrep '.*' > /dev/null) ; then
+if (find -type f -name 'mysql-opencast*.gz' -mmin -1500 | egrep '.*' > /dev/null) ; then
   # File is there and it's less than (25 * 60) = 1500 minutes old
   result=1
 else

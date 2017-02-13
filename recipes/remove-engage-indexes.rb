@@ -1,4 +1,4 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: remove-engage-indexes
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
@@ -15,7 +15,7 @@ if dev_or_testing_cluster?
 
   if do_it && engage_node?
     execute 'remove engage solr indexes' do
-      user 'matterhorn'
+      user 'opencast'
       command %Q|/usr/local/bin/remove-solr-indexes.sh -x -p #{local_workspace_root}|
     end
   end

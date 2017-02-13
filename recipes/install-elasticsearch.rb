@@ -1,4 +1,4 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: install-elasticsearch
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
@@ -33,7 +33,7 @@ apt_repository 'curator' do
   key '46095ACC8548582C1A2699A9D27D666CD88E42B4'
 end
 
-include_recipe "mh-opsworks-recipes::update-package-repo"
+include_recipe "oc-opsworks-recipes::update-package-repo"
 pin_package("elasticsearch", "#{es_major_version}.*")
 pin_package("python-elasticsearch-curator", "#{curator_major_version}.*")
 install_package("openjdk-7-jdk openjdk-7-jre elasticsearch python-elasticsearch-curator")

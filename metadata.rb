@@ -1,19 +1,19 @@
-name             'mh-opsworks-recipes'
+name             'oc-opsworks-recipes'
 maintainer       'Dan Collis-Puro'
 maintainer_email 'dan@collispuro.net'
 license          'All rights reserved'
-description      'Installs/Configures mh-opsworks-recipes'
-long_description 'Installs/Configures mh-opsworks-recipes'
+description      'Installs/Configures oc-opsworks-recipes'
+long_description 'Installs/Configures oc-opsworks-recipes'
 version          '0.1.0'
-issues_url       'http://github.com/harvard-dce/mh-opsworks-recipes/issues' if respond_to?(:issues_url)
-source_url       'http://github.com/harvard-dce/mh-opsworks-recipes/'if respond_to?(:source_url)
+issues_url       'http://github.com/harvard-dce/oc-opsworks-recipes/issues' if respond_to?(:issues_url)
+source_url       'http://github.com/harvard-dce/oc-opsworks-recipes/'if respond_to?(:source_url)
 
 recipe(
-  'mh-opsworks-recipe::default',
+  'oc-opsworks-recipes::default',
   'This cookbook does nothing by default'
 )
 recipe(
-  'mh-opsworks-recipes::nfs-client',
+  'oc-opsworks-recipes::nfs-client',
   'Sets up an instance to connect to an NFS export.
 
 === Attributes
@@ -27,7 +27,7 @@ recipe(
 '
 )
 recipe(
-  'mh-opsworks-recipes::nfs-export',
+  'oc-opsworks-recipes::nfs-export',
   'Sets up an instance to export a directory via nfs
 
 === Attributes
@@ -36,11 +36,11 @@ recipe(
 === Effects
 * install nfs server packages
 * configure /etc/exports with the directory and cidr block from the config
-* ensure the export is owned by the matterhorn user
+* ensure the export is owned by the opencast user
 '
 )
 recipe(
-  'mh-opsworks-recipes::deploy-admin',
+  'oc-opsworks-recipes::deploy-admin',
   'Sets up an instance to be an admin node
 
 See the chef "deploy_revision" resource to understand how our deploys work.
@@ -51,14 +51,14 @@ See the chef "deploy_revision" resource to understand how our deploys work.
 === Effects
 * does a maven build with the admin profile
 * configures after a successful build
-* restarts matterhorn if it is not running already
-* runs mh-opsworks-recipes::monitor-matterhorn-daemon to install cloudwatch
+* restarts opencast if it is not running already
+* runs oc-opsworks-recipes::monitor-opencast-daemon to install cloudwatch
   metrics and alarms
-* registers the matterhorn service to start on instance boot
+* registers the opencast service to start on instance boot
 '
 )
 recipe(
-  'mh-opsworks-recipes::set-timezone',
+  'oc-opsworks-recipes::set-timezone',
   'Sets the timezone on a node
 
 === Attributes
@@ -69,7 +69,7 @@ recipe(
 '
 )
 recipe(
-  'mh-opsworks-recipes::install-utils',
+  'oc-opsworks-recipes::install-utils',
   'Installs utility packages useful on all nodes for debugging
 
 === Attributes
@@ -82,7 +82,7 @@ recipe(
 '
 )
 recipe(
-  'mh-opsworks-recipes::remove-alarms',
+  'oc-opsworks-recipes::remove-alarms',
   'Removes cloudwatch alarms associated with an instance
 
 This should be run during the opsworks "shutdown" lifecycle events
@@ -96,19 +96,19 @@ This should be run during the opsworks "shutdown" lifecycle events
 '
 )
 recipe(
-  'mh-opsworks-recipes::deploy-worker',
+  'oc-opsworks-recipes::deploy-worker',
   'Sets up an instance to be a worker node
 
 See the deploy-admin docs for more info.'
 )
 recipe(
-  'mh-opsworks-recipes::deploy-engage',
+  'oc-opsworks-recipes::deploy-engage',
   'Sets up an instance to be the engage node
 
 See the deploy-admin docs for more info.'
 )
 recipe(
-  'mh-opsworks-recipes::install-kibana',
+  'oc-opsworks-recipes::install-kibana',
   'Sets up a node to work as a Kibana analytics instance
 
 You should add a layer as defined in
@@ -124,7 +124,7 @@ That layer will use this recipe to install kibana.
 '
 )
 recipe(
-  'mh-opsworks-recipes::install-ffmpeg',
+  'oc-opsworks-recipes::install-ffmpeg',
   'Install our custom build of ffmpeg to the node
 
 This installs our custom ffmpeg build created by
@@ -144,7 +144,7 @@ docs in the ffmpeg-build project above.
 '
 )
 recipe(
-  'mh-opsworks-recipes::install-awscli',
+  'oc-opsworks-recipes::install-awscli',
   'Installs the commandline aws-cli client
 
 The default version is <tt>1.10.5</tt>. You can install whatever version you
@@ -159,12 +159,12 @@ want by setting the parameter below.
 '
 )
 recipe(
-  'mh-opsworks-recipes::load-seed-data',
+  'oc-opsworks-recipes::load-seed-data',
   'loads seed database and files as part of the cluster seed functionality
 
 This downloads a cluster seed from aws, extracts the files and loads and
 applies local modifications to the database. It is run by the
-<tt>cluster:apply_seed_file</tt> rake task in mh-opsworks.
+<tt>cluster:apply_seed_file</tt> rake task in oc-opsworks.
 
 This should only be run on development clusters, as defined by
 MhOpsworksRecipes::RecipeHelpers.dev_or_testing_cluster?
@@ -181,7 +181,7 @@ MhOpsworksRecipes::RecipeHelpers.dev_or_testing_cluster?
 '
 )
 recipe(
-  'mh-opsworks-recipes::install-nodejs',
+  'oc-opsworks-recipes::install-nodejs',
   'installs static binaries of nodejs and npm
 
 This installs the official static binaries of nodejs and npm to
@@ -196,13 +196,13 @@ This installs the official static binaries of nodejs and npm to
 '
 )
 recipe(
-  'mh-opsworks-recipes::reset-database',
-  'resets the matterhorn database a clean post-first-deploy state
+  'oc-opsworks-recipes::reset-database',
+  'resets the opencast database a clean post-first-deploy state
 
 This should only be run on development clusters, as defined by
 MhOpsworksRecipes::RecipeHelpers.dev_or_testing_cluster?.
 
-This is part of the cluster seed infrastructure implemented in mh-opsworks.
+This is part of the cluster seed infrastructure implemented in oc-opsworks.
 
 === Attributes
 * <tt>node[:db_seed_file]</tt>, defaults to <tt>dce-config/docs/scripts/ddl/mysql5.sql</tt>
@@ -213,7 +213,7 @@ This is part of the cluster seed infrastructure implemented in mh-opsworks.
 '
 )
 recipe(
-  'mh-opsworks-recipes::deploy-database',
+  'oc-opsworks-recipes::deploy-database',
   'deploys the default database seed to this node
 
 Only used in local opsworks clusters where we are not using RDS.
@@ -226,33 +226,33 @@ Only used in local opsworks clusters where we are not using RDS.
 '
 )
 recipe(
-  'mh-opsworks-recipes::stop-matterhorn',
-  'stops matterhorn via the matterhorn service config
+  'oc-opsworks-recipes::stop-opencast',
+  'stops opencast via the opencast service config
 
 === Attributes
 * none
 
 === Effects
-* matterhorn is stopped
+* opencast is stopped
 '
 
 )
 recipe(
-  'mh-opsworks-recipes::start-matterhorn',
-  'start matterhorn via the matterhorn service config
+  'oc-opsworks-recipes::start-opencast',
+  'start opencast via the opencast service config
 
 === Attributes
-* <tt>node[:dont_start_matterhorn_automatically]</tt> if set to true will abort starting matterhorn
+* <tt>node[:dont_start_opencast_automatically]</tt> if set to true will abort starting opencast
 
 === Effects
-* matterhorn is started
+* opencast is started
 '
 )
 recipe(
-  'mh-opsworks-recipes::install-logstash',
+  'oc-opsworks-recipes::install-logstash',
   'Sets up logstash on a node
 
-See also <tt>mh-opsworks-recipes::install-kibana</tt>. This installs the
+See also <tt>oc-opsworks-recipes::install-kibana</tt>. This installs the
 logstash part of our analytics layer.
 
 === Attributes
@@ -265,7 +265,7 @@ logstash part of our analytics layer.
 '
 )
 recipe(
-  'mh-opsworks-recipes::fix-raid-mapping',
+  'oc-opsworks-recipes::fix-raid-mapping',
   'fix RAID mapping of ebs volumes
 
 Fixes {this bug}[https://github.com/aws/opsworks-cookbooks/issues/188] which is
@@ -281,11 +281,11 @@ apparently still a thing. It should be run on all nodes.
 '
 )
 recipe(
-  'mh-opsworks-recipes::deploy-all-in-one',
+  'oc-opsworks-recipes::deploy-all-in-one',
   'FIXME: deploys an all-in-one node.'
 )
 recipe(
-  'mh-opsworks-recipes::rsyslog-to-loggly',
+  'oc-opsworks-recipes::rsyslog-to-loggly',
   'installs and configures rsyslog to send logs to loggly.com
 
 === Attributes
@@ -298,31 +298,31 @@ recipe(
   '
 )
 recipe(
-  'mh-opsworks-recipes::install-deploy-key',
-  'Installs a private deploy ssh key for the matterhorn user
+  'oc-opsworks-recipes::install-deploy-key',
+  'Installs a private deploy ssh key for the opencast user
 
 === Attributes
-* <tt>node[:deploy][:matterhorn][:scm]</tt>, which comes from the opsworks app configuration
+* <tt>node[:deploy][:opencast][:scm]</tt>, which comes from the opsworks app configuration
 
 === Effects
-* the private key is put into <tt>/home/matterhorn/.ssh/</tt>
-* a basic ssh config is installed to <tt>/home/matterhorn/.ssh/config</tt>
+* the private key is put into <tt>/home/opencast/.ssh/</tt>
+* a basic ssh config is installed to <tt>/home/opencast/.ssh/config</tt>
 '
 )
 recipe(
-  'mh-opsworks-recipes::restart-matterhorn',
-  'restarts the matterhorn service
+  'oc-opsworks-recipes::restart-opencast',
+  'restarts the opencast service
 
 === Attributes
-* <tt>node[:dont_start_matterhorn_automatically]</tt> if set to true will abort starting matterhorn
+* <tt>node[:dont_start_opencast_automatically]</tt> if set to true will abort starting opencast
 
 === Effects
-* matterhorn will be restarted
+* opencast will be restarted
 '
 )
 recipe(
-  'mh-opsworks-recipes::maintenance-mode-on',
-  'Sets matterhorn maintenance mode on for this node
+  'oc-opsworks-recipes::maintenance-mode-on',
+  'Sets opencast maintenance mode on for this node
 
 === Attributes
 * none
@@ -333,7 +333,7 @@ recipe(
 '
 )
 recipe(
-  'mh-opsworks-recipes::update-package-repo',
+  'oc-opsworks-recipes::update-package-repo',
   'Updates the package repo to ensure we have the latest package lists
 
 === Attributes
@@ -345,7 +345,7 @@ recipe(
 '
 )
 recipe(
-  'mh-opsworks-recipes::create-mysql-alarms',
+  'oc-opsworks-recipes::create-mysql-alarms',
   'create cloudwatch metrics and alarms against the RDS instance
 
 === Attributes
@@ -357,12 +357,12 @@ recipe(
 '
 )
 recipe(
-  'mh-opsworks-recipes::populate-maven-cache',
+  'oc-opsworks-recipes::populate-maven-cache',
   'Download and extract a maven cache seed
 
 This grabs and extracts a tarball containing a maven cache from the shared
 asset bucket. This speeds up builds greatly on new nodes.  You can update the
-seed via the <tt>admin:republish_maven_cache</tt> rake task in mh-opsworks.
+seed via the <tt>admin:republish_maven_cache</tt> rake task in oc-opsworks.
 
 === Attributes
 * MhOpsworksRecipes::RecipeHelpers.get_shared_asset_bucket_name
@@ -372,8 +372,8 @@ seed via the <tt>admin:republish_maven_cache</tt> rake task in mh-opsworks.
 '
 )
 recipe(
-  'mh-opsworks-recipes::maintenance-mode-off',
-  'Sets matterhorn maintenance mode off for this node
+  'oc-opsworks-recipes::maintenance-mode-off',
+  'Sets opencast maintenance mode off for this node
 
 === Attributes
 * none
@@ -384,7 +384,7 @@ recipe(
 '
 )
 recipe(
-    'mh-opsworks-recipes::install-ua-harvester',
+    'oc-opsworks-recipes::install-ua-harvester',
     'installs the user analytics harvester as part of the ELK analytics
 
 === Attributes
@@ -400,7 +400,7 @@ recipe(
 '
 )
 recipe(
-  'mh-opsworks-recipes::configure-ua-harvester',
+  'oc-opsworks-recipes::configure-ua-harvester',
   'generates the .env configuration file for the useraction harvester
 
 === Attributes
@@ -411,13 +411,13 @@ recipe(
 '
 )
 recipe(
-  'mh-opsworks-recipes::remove-admin-indexes',
+  'oc-opsworks-recipes::remove-admin-indexes',
   'Remove solr indexes on the admin node
 
 Remove the solr indexes from the admin node as part of resetting a cluster to a
 pristine state.
 
-This is part of the cluster seed infrastructure implemented in mh-opsworks.
+This is part of the cluster seed infrastructure implemented in oc-opsworks.
 
 === Attributes
 * none. Can only be run on a dev or testing cluster as defined by MhOpsworksRecipes::RecipeHelpers.dev_or_testing_cluster?
@@ -427,18 +427,18 @@ This is part of the cluster seed infrastructure implemented in mh-opsworks.
 '
 )
 recipe(
-  'mh-opsworks-recipes::remove-engage-indexes',
+  'oc-opsworks-recipes::remove-engage-indexes',
   'Remove solr indexes on the engage node.
 
-See <tt>mh-opsworks-recipes::remove-admin-indexes</tt>.
+See <tt>oc-opsworks-recipes::remove-admin-indexes</tt>.
 '
 )
 recipe(
-  'mh-opsworks-recipes::install-mysql-backups',
+  'oc-opsworks-recipes::install-mysql-backups',
   'Install mysql backups and metrics / alarms related to backup freshness
 
 This runs as root and authenticates to mysql via the /root/.my.cnf written by
-<tt>mh-opsworks-recipes::write-root-my-dot-cnf</tt>.
+<tt>oc-opsworks-recipes::write-root-my-dot-cnf</tt>.
 
 === Attributes
 * MhOpsworksRecipes::RecipeHelpers.get_storage_info
@@ -450,10 +450,10 @@ This runs as root and authenticates to mysql via the /root/.my.cnf written by
 '
 )
 recipe(
-  'mh-opsworks-recipes::install-elasticsearch',
+  'oc-opsworks-recipes::install-elasticsearch',
   'install elasticsearch as part of the ELK user analytics stack
 
-See mh-opsworks-recipes::install-kibana and the other ELK-related recipes for
+See oc-opsworks-recipes::install-kibana and the other ELK-related recipes for
 more info.
 
 === Attributes
@@ -469,19 +469,19 @@ more info.
 '
 )
 recipe(
-  'mh-opsworks-recipes::write-root-my-dot-cnf',
+  'oc-opsworks-recipes::write-root-my-dot-cnf',
   'write a /root/.my.cnf on the node that connects to the database
   
 === Attributes
-* <tt>node[:deploy][:matterhorn][:database]</tt>, the default opsworks database attributes
+* <tt>node[:deploy][:opencast][:database]</tt>, the default opsworks database attributes
 
 === Effects
 * Installs a <tt>/root/.my.cnf</tt> file that connects the root user on this
-  node to the default matterhorn MySQL instance.
+  node to the default opencast MySQL instance.
 '
 )
 recipe(
-  'mh-opsworks-recipes::symlink-nginx-log-dir',
+  'oc-opsworks-recipes::symlink-nginx-log-dir',
   'Copies contents and symlinks /var/log/nginx to an alternate directory
 
 === Attributes
@@ -498,7 +498,7 @@ recipe(
 '
 )
 recipe(
-  'mh-opsworks-recipes::configure-nginx-proxy',
+  'oc-opsworks-recipes::configure-nginx-proxy',
   'A basic nginx proxy configuration
 
 === Attributes
@@ -513,19 +513,19 @@ recipe(
 '
 )
 recipe(
-  'mh-opsworks-recipes::create-matterhorn-user',
-  'Creates the matterhorn user
+  'oc-opsworks-recipes::create-opencast-user',
+  'Creates the opencast user
 
 === Attributes
 * none
 
 === Effects
-* Creates a matterhorn group and user
-* Creates the <tt>/home/matterhorn/.ssh</tt> directory
+* Creates a opencast group and user
+* Creates the <tt>/home/opencast/.ssh</tt> directory
 '
 )
 recipe(
-  'mh-opsworks-recipes::install-custom-metrics',
+  'oc-opsworks-recipes::install-custom-metrics',
   'Installs metrics for disk, RAID sync, mysql availability, load, memory and others
 
 === Attributes
@@ -538,7 +538,7 @@ recipe(
 '
 )
 recipe(
-  'mh-opsworks-recipes::clean-up-package-cache',
+  'oc-opsworks-recipes::clean-up-package-cache',
   'Cleans up the cached dpkgs to save disk space
 
 === Attributes
@@ -549,16 +549,16 @@ recipe(
 '
 )
 recipe(
-  'mh-opsworks-recipes::install-logstash-kibana',
+  'oc-opsworks-recipes::install-logstash-kibana',
   'Installs kibana and logstash
 
-This runs <tt>mh-opsworks-recipes::install-kibana</tt> and
-<tt>mh-opsworks-recipes::install-logstash</tt>
+This runs <tt>oc-opsworks-recipes::install-kibana</tt> and
+<tt>oc-opsworks-recipes::install-logstash</tt>
 '
 )
 recipe(
-  'mh-opsworks-recipes::remove-legacy-deploy-dir',
-  'Allows you to remove a legacy deploy dir when changing where matterhorn is deployed
+  'oc-opsworks-recipes::remove-legacy-deploy-dir',
+  'Allows you to remove a legacy deploy dir when changing where opencast is deployed
 
 === Attributes
 * <tt>node[:legacy_deploy_root]</tt>
@@ -569,19 +569,19 @@ recipe(
 '
 )
 recipe(
-  'mh-opsworks-recipes::install-mh-base-packages',
-  'Install base packages for matterhorn nodes
+  'oc-opsworks-recipes::install-oc-base-packages',
+  'Install base packages for opencast nodes
 
 === Attributes
 * none
 
 === Effects
 * Installs openjdk, python, etc.
-* Installs nodejs via <tt>mh-opsworks-recipes::install-nodejs</tt>
+* Installs nodejs via <tt>oc-opsworks-recipes::install-nodejs</tt>
 '
 )
 recipe(
-  'mh-opsworks-recipes::create-cluster-seed-file',
+  'oc-opsworks-recipes::create-cluster-seed-file',
   'Creates a cluster seed from the current cluster to be applied to a different cluster
 
 === Attributes
@@ -596,7 +596,7 @@ MhOpsworksRecipes::RecipeHelpers.dev_or_testing_cluster?
 '
 )
 recipe(
-  'mh-opsworks-recipes::enable-postfix-smarthost',
+  'oc-opsworks-recipes::enable-postfix-smarthost',
   'Enables a postfix smarthost through a configured SES endpoint
 
 This allows you to send email directly over the SMTP server on localhost via
@@ -613,8 +613,8 @@ the postfix smarthost.
 '
 )
 recipe(
-  'mh-opsworks-recipes::create-file-uploader-user',
-  'Creates a system to allow for the direct upload of files into the matterhorn inbox
+  'oc-opsworks-recipes::create-file-uploader-user',
+  'Creates a system to allow for the direct upload of files into the opencast inbox
 
 === Attributes
 * <tt>node[:file_uploader_public_ssh_key]</tt>
@@ -627,15 +627,15 @@ recipe(
 * Creates a <tt>file_uploader</tt> user
 * Installs a "forced command" ssh key that allows the <tt>file_uploader</tt>
   use to upload via rsync to the <tt>rsync_uploads</tt> dir
-* Install a cron job to move uploads into the matterhorn inbox
+* Install a cron job to move uploads into the opencast inbox
 * Install a cron job to remove stale unfinished uploads
 '
 )
 recipe(
-  'mh-opsworks-recipes::monitor-matterhorn-daemon',
-  'Add metrics and alarms to monitor the status of the matterhorn daemon
+  'oc-opsworks-recipes::monitor-opencast-daemon',
+  'Add metrics and alarms to monitor the status of the opencast daemon
 
-Installs metrics, alarms, and cron jobs that monitoring the matterhorn daemon
+Installs metrics, alarms, and cron jobs that monitoring the opencast daemon
 if we are on aws
 
 === Attributes
@@ -644,11 +644,11 @@ if we are on aws
 === Effects
 * Install a metric script
 * Install a cron job to run it
-* Create a cloudwatch alarm hitched up to the matterhorn availability metric
+* Create a cloudwatch alarm hitched up to the opencast availability metric
 '
 )
 recipe(
-  'mh-opsworks-recipes::set-bash-as-default-shell',
+  'oc-opsworks-recipes::set-bash-as-default-shell',
   'Sets bash (instead of dash) as the default shell
 
 Ubuntu uses dash (instead of bash) as the default non-interactive shell. It is supposedly fully bash compatible but - surprise! Nope.
@@ -661,7 +661,7 @@ Ubuntu uses dash (instead of bash) as the default non-interactive shell. It is s
 '
 )
 recipe(
-  'mh-opsworks-recipes::configure-elk-nginx-proxy',
+  'oc-opsworks-recipes::configure-elk-nginx-proxy',
   'Sets up an nginx proxy that allows connections to elasticsearch on the local network
 
 === Attributes
@@ -673,7 +673,7 @@ recipe(
 '
 )
 recipe(
-  'mh-opsworks-recipes::enable-enhanced-networking',
+  'oc-opsworks-recipes::enable-enhanced-networking',
   'Compile and install an updated network driver to enable full nic speed
 
 This downloads resources from the <tt>shared_asset_bucket</tt> and uses them to
@@ -690,8 +690,8 @@ already have the driver installed, nothing happens.
 '
 )
 recipe(
-  'mh-opsworks-recipes::install-job-queued-metrics',
-  'Install a matterhorn jobs queued metric. Part of the experimental horizontal scaling feature
+  'oc-opsworks-recipes::install-job-queued-metrics',
+  'Install a opencast jobs queued metric. Part of the experimental horizontal scaling feature
 
 This uses pyhorn and some logic to count the number of queued jobs, and then
 spins up workers when we see jobs starting to stack up.
@@ -704,13 +704,13 @@ spins up workers when we see jobs starting to stack up.
 '
 )
 recipe(
-  'mh-opsworks-recipes::remove-all-matterhorn-files',
-  'Removes all matterhorn files on shared storage and distributed to s3
+  'oc-opsworks-recipes::remove-all-opencast-files',
+  'Removes all opencast files on shared storage and distributed to s3
 
 This removes all files from the clusters shared nfs mount and distributed to
 s3.  You probably should not use this directly.
 
-This is part of the cluster seed infrastructure implemented in mh-opsworks.
+This is part of the cluster seed infrastructure implemented in oc-opsworks.
 
 This should only be run on development clusters, as defined by
 MhOpsworksRecipes::RecipeHelpers.dev_or_testing_cluster?
@@ -723,7 +723,7 @@ MhOpsworksRecipes::RecipeHelpers.dev_or_testing_cluster?
 '
 )
 recipe(
-  'mh-opsworks-recipes::install-moscaler',
+  'oc-opsworks-recipes::install-moscaler',
   'Installs the mo-scaler horizontal scaling manager
 
 Depending on `custom_json` settings, will configure mo-scaler using either a time-based
@@ -740,7 +740,7 @@ scaling strategy or one of the auto-scaling methods.
 '
 )
 recipe(
-  'mh-opsworks-recipes::create-metrics-dependencies',
+  'oc-opsworks-recipes::create-metrics-dependencies',
   'Installs shared code used by all cloudwatch metrics scripts
 
 === Attributes
@@ -752,11 +752,11 @@ recipe(
 '
 )
 recipe(
-  'mh-opsworks-recipes::register-matterhorn-to-boot',
+  'oc-opsworks-recipes::register-opencast-to-boot',
   'FIXME'
 )
 recipe(
-  'mh-opsworks-recipes::configure-engage-nginx-proxy',
+  'oc-opsworks-recipes::configure-engage-nginx-proxy',
   'Configure the nginx proxy on the engage node
 
 === Attributes
@@ -768,8 +768,8 @@ recipe(
 '
 )
 recipe(
-  'mh-opsworks-recipes::create-matterhorn-directories',
-  'Creates the base directories for matterhorn
+  'oc-opsworks-recipes::create-opencast-directories',
+  'Creates the base directories for opencast
 
 This ensure the base directories on this node are created with the correct
 permissions both for our local workspace and on the nfs shared directory
@@ -778,11 +778,11 @@ permissions both for our local workspace and on the nfs shared directory
 * <tt>MhOpsworksRecipes::RecipeHelpers.get_local_workspace_root</tt> and others related to file paths
 
 === Effects
-* Creates the directories and ensures they are owned by the matterhorn user.
+* Creates the directories and ensures they are owned by the opencast user.
 '
 )
 recipe(
-  'mh-opsworks-recipes::update-nginx-config-for-ganglia',
+  'oc-opsworks-recipes::update-nginx-config-for-ganglia',
   'Updates the nginx proxy (probably on the admin node) to link <tt>/ganglia</tt> to the ganglia node
 
 This runs during the "configure" lifecycle event.
@@ -796,12 +796,12 @@ This runs during the "configure" lifecycle event.
 '
 )
 recipe(
-  'mh-opsworks-recipes::update-host-based-configurations',
-  'Updates matterhorn nodes with the public admin and engage hostnames
+  'oc-opsworks-recipes::update-host-based-configurations',
+  'Updates opencast nodes with the public admin and engage hostnames
 
 This is probably no longer necessary. It updates the public engage and admin
 hostnames during the configuration lifecycle event, the idea being that we
-would spin up all nodes simultaneously and then start matterhorn at the end.
+would spin up all nodes simultaneously and then start opencast at the end.
 
 === Attributes
 * MhOpsworksRecipes::DeployHelpers.install_multitenancy_config
@@ -813,7 +813,7 @@ would spin up all nodes simultaneously and then start matterhorn at the end.
 '
 )
 recipe(
-  'mh-opsworks-recipes::create-alerts-from-opsworks-metrics',
+  'oc-opsworks-recipes::create-alerts-from-opsworks-metrics',
   'Creates alerts for nodes from custom and built-in cloudwatch metrics
 
 This is run during the setup phase of the opsworks lifecycle and adds
@@ -829,23 +829,23 @@ instance size (load) while others are simply percentages (disk, nfs).
 '
 )
 recipe(
-  'mh-opsworks-recipes::convert-mysql-to-multiple-data-files',
+  'oc-opsworks-recipes::convert-mysql-to-multiple-data-files',
   'Converts MySQL innodb to use a file per table rather than one big one
 
 This is not relevant for RDS database and is only useful for a self-hosted
 MySQL database. It should be run during the setup lifecycle event.
 
 === Attributes
-* <tt>node[:deploy][:matterhorn][:database]</tt>, the default opsworks database attributes
+* <tt>node[:deploy][:opencast][:database]</tt>, the default opsworks database attributes
 
 === Effects
 * MySQL is converted to use a single file per innodb table
 * This only happens if the database install is brand new and the main
-  matterhorn database has not been created.
+  opencast database has not been created.
 '
 )
 recipe(
-  'mh-opsworks-recipes::create-squid-proxy-for-storage-cluster',
+  'oc-opsworks-recipes::create-squid-proxy-for-storage-cluster',
   'Create a squid proxy to use for zadara s3 backups
 
 This is used as a bridge between our zadara controller and the s3 bucket used
@@ -853,7 +853,7 @@ for s3-backed snapshot storage.
 
 {More information
 here}[https://support.zadarastorage.com/entries/69891364-Setup-Backup-To-S3-B2S3-Through-a-Proxy-In-Your-AWS-VPC]
-and README.zadara.md in mh-opsworks.
+and README.zadara.md in oc-opsworks.
 
 === Attributes
 * MhOpsworksRecipes::RecipeHelpers.get_storage_hostname
@@ -865,7 +865,7 @@ and README.zadara.md in mh-opsworks.
 '
 )
 recipe(
-  'mh-opsworks-recipes::configure-capture-agent-manager-gunicorn',
+  'oc-opsworks-recipes::configure-capture-agent-manager-gunicorn',
   'Sets up start script for gunicorn with capture-agent-manager app
 
 This is relevant for the utility node, where the capture-agent-manager `cadash`
@@ -882,7 +882,7 @@ should run.
 '
 )
 recipe(
-  'mh-opsworks-recipes::configure-capture-agent-manager-nginx-proxy',
+  'oc-opsworks-recipes::configure-capture-agent-manager-nginx-proxy',
   'Sets up an nginx proxy that allows connections to flask-gunicorn apps via https-only
 
 === attributes
@@ -895,7 +895,7 @@ recipe(
 '
 )
 recipe(
-  'mh-opsworks-recipes::configure-capture-agent-manager-supervisor',
+  'oc-opsworks-recipes::configure-capture-agent-manager-supervisor',
   'Installs and sets up supervisor for gunicorn apps to run as service-daemon
 
 === attributes
@@ -908,7 +908,7 @@ recipe(
 '
 )
 recipe(
-  'mh-opsworks-recipes::create-capture-agent-manager-directories',
+  'oc-opsworks-recipes::create-capture-agent-manager-directories',
   'Creates directories(logs, app, etc) for capture-agent-manager flask-gunicorn app
 
 === attributes
@@ -919,7 +919,7 @@ recipe(
 '
 )
 recipe(
-  'mh-opsworks-recipes::create-capture-agent-manager-user',
+  'oc-opsworks-recipes::create-capture-agent-manager-user',
   'Create user and group to run capture-agent-manager flask-gunicorn app as
 
 === attributes
@@ -931,7 +931,7 @@ recipe(
 '
 )
 recipe(
-  'mh-opsworks-recipes::install-capture-agent-manager-packages',
+  'oc-opsworks-recipes::install-capture-agent-manager-packages',
   'Installs packages specific to the capture-agent-manager
 
 === attributes
@@ -944,7 +944,7 @@ none
 '
 )
 recipe(
-  'mh-opsworks-recipes::install-capture-agent-manager',
+  'oc-opsworks-recipes::install-capture-agent-manager',
   'Sets up flask-gunicorn app for capture-agent-manager
 
 === attributes
@@ -960,7 +960,7 @@ recipe(
 '
 )
 recipe(
-    'mh-opsworks-recipes::install-cwlogs',
+    'oc-opsworks-recipes::install-cwlogs',
     'Installs the AWS Cloudwatch Log Agent and configures some basic log streams
 
 === attributes
@@ -969,18 +969,18 @@ recipe(
 
 === effects
 * installs the cloudwatch log agent
-* creates log stream configurations for syslog, matterhorn.log and nginx logs on appropriate nodes
+* creates log stream configurations for syslog, opencast.log and nginx logs on appropriate nodes
 '
 )
 recipe(
-    'mh-opsworks-recipes::install-crowdstrike',
+    'oc-opsworks-recipes::install-crowdstrike',
     'Installs the CrowdStrike Falcon Sensor software. Because security.
 
 === attributes
 none
 
 === effects
-* installs a stand-alone .deb file from our mh-opsworks-shared-assets bucket
+* installs a stand-alone .deb file from our oc-opsworks-shared-assets bucket
 * installs to /opt/CrowdStrike
 * includes apt package dependencies: auditd, libauparse0
 * auditd log rotation is configured in /etc/audit.conf (which is modiified by the CrowdStrike package)

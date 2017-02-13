@@ -1,4 +1,4 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: install-nodejs
 
 clear_cache = node.fetch(:clear_npm_cache, false)

@@ -1,10 +1,10 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: deploy-all-in-one
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 Chef::Provider::Deploy::Revision.send(:include, MhOpsworksRecipes::DeployHelpers)
 
-matterhorn_repo_root = node[:matterhorn_repo_root]
+opencast_repo_root = node[:opencast_repo_root]
 local_workspace_root = get_local_workspace_root
 storage_info = get_storage_info
 shared_storage_root = get_shared_storage_root
@@ -50,7 +50,7 @@ auth_redirect_location = node.fetch(:auth_redirect_location, 'http://example.com
 auth_activated = node.fetch(:auth_activated, 'true')
 auth_key = node.fetch(:auth_key, '')
 
-git_data = node[:deploy][:matterhorn][:scm]
+git_data = node[:deploy][:opencast][:scm]
 
 public_hostname = node[:opsworks][:instance][:public_dns_name]
 private_hostname = node[:opsworks][:instance][:private_dns_name]
@@ -59,21 +59,21 @@ database_connection = get_database_connection
 
 repo_url = git_repo_url(git_data)
 
-include_recipe "mh-opsworks-recipes::create-matterhorn-directories"
+include_recipe "oc-opsworks-recipes::create-opencast-directories"
 
-allow_matterhorn_user_to_restart_daemon_via_sudo
+allow_opencast_user_to_restart_daemon_via_sudo
 
 deploy_action = get_deploy_action
 
 newrelic_app_name = alarm_name_prefix
 
-deploy_revision "matterhorn" do
-  deploy_to matterhorn_repo_root
+deploy_revision "opencast" do
+  deploy_to opencast_repo_root
   repo repo_url
   revision git_data.fetch(:revision, 'master')
 
-  user 'matterhorn'
-  group 'matterhorn'
+  user 'opencast'
+  group 'opencast'
 
   migrate false
   symlinks({})
@@ -97,9 +97,9 @@ deploy_revision "matterhorn" do
 
     copy_workflows_into_place_for_admin(most_recent_deploy)
 
-    install_init_scripts(most_recent_deploy, matterhorn_repo_root)
-    install_matterhorn_conf(most_recent_deploy, matterhorn_repo_root, 'all-in-one')
-    install_matterhorn_log_management
+    install_init_scripts(most_recent_deploy, opencast_repo_root)
+    install_opencast_conf(most_recent_deploy, opencast_repo_root, 'all-in-one')
+    install_opencast_log_management
     install_multitenancy_config(most_recent_deploy, public_hostname, public_hostname)
     remove_felix_fileinstall(most_recent_deploy)
     install_smtp_config(most_recent_deploy)
@@ -108,7 +108,7 @@ deploy_revision "matterhorn" do
       most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated
     )
     install_live_streaming_service_config(most_recent_deploy, live_stream_name)
-    install_otherpubs_service_config(most_recent_deploy, matterhorn_repo_root, auth_host)
+    install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host)
     install_otherpubs_service_series_impl_config(most_recent_deploy)
     install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name)
     install_ibm_watson_transcription_service_config(most_recent_deploy, ibm_watson_username, ibm_watson_psw) 
@@ -120,7 +120,7 @@ deploy_revision "matterhorn" do
 
     configure_usertracking(most_recent_deploy, user_tracking_authhost)
     install_aws_s3_distribution_service_config(most_recent_deploy, region, s3_distribution_bucket_name)
-    install_matterhorn_images_properties(most_recent_deploy)
+    install_opencast_images_properties(most_recent_deploy)
     # /all-in-one SPECIFIC
 
     if using_local_distribution?
@@ -129,10 +129,10 @@ deploy_revision "matterhorn" do
 
     template %Q|#{most_recent_deploy}/etc/config.properties| do
       source 'config.properties.erb'
-      owner 'matterhorn'
-      group 'matterhorn'
+      owner 'opencast'
+      group 'opencast'
       variables({
-        matterhorn_backend_http_port: 8080,
+        opencast_backend_http_port: 8080,
         hostname: private_hostname,
         local_workspace_root: local_workspace_root,
         shared_storage_root: shared_storage_root,
@@ -154,11 +154,11 @@ deploy_revision "matterhorn" do
   end
 end
 
-unless node[:dont_start_matterhorn_after_deploy]
-  service 'matterhorn' do
+unless node[:dont_start_opencast_after_deploy]
+  service 'opencast' do
     action :start
     supports restart: true, start: true, stop: true, status: true
   end
 end
 
-include_recipe "mh-opsworks-recipes::monitor-matterhorn-daemon"
+include_recipe "oc-opsworks-recipes::monitor-opencast-daemon"

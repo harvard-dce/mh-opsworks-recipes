@@ -1,8 +1,8 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: create-cluster-seed-file
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
-include_recipe "mh-opsworks-recipes::install-awscli"
+include_recipe "oc-opsworks-recipes::install-awscli"
 do_it = node.fetch(:do_it, false)
 shared_storage_root = get_shared_storage_root
 

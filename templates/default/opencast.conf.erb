@@ -1,28 +1,28 @@
 ###
-# This is the Opencast Matterhorn service configuration file.
+# This is the Opencast Opencast service configuration file.
 ###
 
 ##
-# Opencast Matterhorn directory
-# The default value is "/usr/share/matterhorn"
-MATTERHORN="<%= @matterhorn_root %>"
+# Opencast Opencast directory
+# The default value is "/usr/share/opencast"
+OPENCAST="<%= @opencast_root %>"
 
 ##
-# Matterhorn node profile
+# Opencast node profile
 # possible values are admin|engage|worker|all-in-one|hotload
 # it's replaced during setup
-MATTERHORN_NODE_PROFILE="<%= @node_profile %>"
+OPENCAST_NODE_PROFILE="<%= @node_profile %>"
 
 ##
 # Capture-Agent directory
-# The default value is "$MATTERHORN/capture-agent"
-#CA=$MATTERHORN/capture-agent
+# The default value is "$OPENCAST/capture-agent"
+#CA=$OPENCAST/capture-agent
 
 ##
-# This tells matterhorn to run as a specific user.
+# This tells opencast to run as a specific user.
 # Make shure this user exists and has the appropriate rights.
-# The default value is "matterhorn"
-MATTERHORN_USER="matterhorn"
+# The default value is "opencast"
+OPENCAST_USER="opencast"
 
 ##
 # Enable this if this machine is a CA.
@@ -31,9 +31,9 @@ MATTERHORN_USER="matterhorn"
 IS_CA="false"
 
 ##
-# Set the Matterhorn logfile directory
-# The default value is "/var/log/matterhorn"
-LOGDIR="<%= @matterhorn_log_directory %>"
+# Set the Opencast logfile directory
+# The default value is "/var/log/opencast"
+LOGDIR="<%= @opencast_log_directory %>"
 
 ##
 # Set the logging level
@@ -62,13 +62,13 @@ DEBUG_SUSPEND="n"
 
 ##
 # Configuration directory
-# The default value is "/etc/matterhorn"
-FELIX_CONFIG_DIR="${MATTERHORN}/etc"
+# The default value is "/etc/opencast"
+FELIX_CONFIG_DIR="${OPENCAST}/etc"
 
 ##
 # Felix work directory
 # The default value is "/var/lib/mmaterhorn"
-FELIX_WORK_DIR="${MATTERHORN}/work"
+FELIX_WORK_DIR="${OPENCAST}/work"
 
 ##
 # Felix cache directory
