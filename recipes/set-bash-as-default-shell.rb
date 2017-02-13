@@ -1,4 +1,4 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: set-bash-as-default-shell
 
 execute 'set sh to bash and not dash' do

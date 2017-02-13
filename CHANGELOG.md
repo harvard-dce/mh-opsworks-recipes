@@ -136,7 +136,7 @@
   The following command is an example of what would be run on the prod cluster. For dev clusters,
   adjust the `layers` list according to what nodes are present.
 
-        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin,Engage,Utility,Storage,Analytics" recipes="mh-opsworks-recipes::install-crowdstrike"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin,Engage,Utility,Storage,Analytics" recipes="oc-opsworks-recipes::install-crowdstrike"
         
 ## v1.16.0 - 12/8/2016
 
@@ -169,7 +169,7 @@
 * *REQUIRES MANUAL RECIPE RUN*
   Adding redis service to analytics node for useraction harvest caching of episode data
   
-        ./bin/rake stack:commands:execute_recipes_on_layers layers="Analytics" recipes="mh-opsworks-recipes::install-ua-harvester"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Analytics" recipes="oc-opsworks-recipes::install-ua-harvester"
 
 ## 1.13.0 - 10/20/2016
 
@@ -183,9 +183,9 @@
   
   Manual recipe runs should come after any MH release/deploy and an `update_chef_recipes`.
   
-        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin,Engage,Workers" recipes="mh-opsworks-recipes::install-cwlogs"
-        ./bin/rake stack:commands:execute_recipes_on_layers layers="Analytics" recipes="mh-opsworks-recipes::install-cwlogs,mh-opsworks-recipes::install-elasticsearch,mh-opsworks-recipes::install-kibana"
-        ./bin/rake stack:commands:execute_recipes_on_layers layers="Utility" recipes="mh-opsworks-recipes::install-cwlogs,mh-opsworks-recipes::install-capture-agent-manager,mh-opsworks-recipes::configure-capture-agent-manager-nginx-proxy"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin,Engage,Workers" recipes="oc-opsworks-recipes::install-cwlogs"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Analytics" recipes="oc-opsworks-recipes::install-cwlogs,oc-opsworks-recipes::install-elasticsearch,oc-opsworks-recipes::install-kibana"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Utility" recipes="oc-opsworks-recipes::install-cwlogs,oc-opsworks-recipes::install-capture-agent-manager,oc-opsworks-recipes::configure-capture-agent-manager-nginx-proxy"
         
 ## 1.12.0 - 10/7/2016
 
@@ -194,7 +194,7 @@
 * *REQUIRES MANUAL CHEF RECIPE RUN*
   Add new custom metric script for feeding jvm stats to cloudwatch.
   
-        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin, Workers, Engage" recipes="mh-opsworks-recipes::install-custom-metrics"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin, Workers, Engage" recipes="oc-opsworks-recipes::install-custom-metrics"
         
 * *REQUIRES MANUAL CHEF RECIPE RUNS*
   Updates to ELK pipeline components and apt pinning of package major versions. Config
@@ -202,7 +202,7 @@
   
   Manual recipe run should come after any MH release/deploy and an `update_chef_recipes`.
   
-        ./bin/rake stack:commands:execute_recipes_on_layers layers="Analytics" recipes="mh-opsworks-recipes:install-elasticsearch,mh-opsworks-recipes::install-logstash-kibana,mh-opsworks-recipes::install-ua-harvester"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Analytics" recipes="oc-opsworks-recipes:install-elasticsearch,oc-opsworks-recipes::install-logstash-kibana,oc-opsworks-recipes::install-ua-harvester"
 
 ## 1.11.0 - 9/8/2016
 
@@ -210,16 +210,16 @@
 * *REQUIRES MANUAL CHEF RECIPE RUN* 
   Additional helpful utils to be installed by default
   
-        ./bin/rake stack:commands:execute_recipes_on_layers recipes="mh-opsworks-recipes::install-utils"
+        ./bin/rake stack:commands:execute_recipes_on_layers recipes="oc-opsworks-recipes::install-utils"
 * prevent autofs restart only if existing mount matches the storage hostname. this
   enables use of the `nfs-client` recipe for switching storage nodes or zadara vpsas
 * *REQURES EDITS TO THE CLUSTER CONFIG* *REQUIRES MANUAL CHEF RECIPE RUNS*:
   Capture agent time drift metrics generation via utility node. Update the cluster config
   to include the `ca_private_ssh_key` value in the `caputure_agent_manager` custom json
-  block, add the `mh-opsworks-recipes::install-capture-agent-timedrift-metric` recipe
+  block, add the `oc-opsworks-recipes::install-capture-agent-timedrift-metric` recipe
   to the utility node's setup phase, then manually run:
 
-        ./bin/rake stack:commands:execute_recipes_on_layers layers="Utility" recipes="mh-opsworks-recipes::install-ca-timedrift-metric"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Utility" recipes="oc-opsworks-recipes::install-ca-timedrift-metric"
 
 ## 1.10.0 - 8/12/2016
 
@@ -227,7 +227,7 @@
   Changes to moscaler configuration deployment. Updated config will be detailed in the MH release notes.
   After an `update_chef_recipes` do a manual recipe exec:
 
-        ./bin/rake stack:commands:execute_recipes_on_layers layers="Ganglia" recipes="mh-opsworks-recipes::install-moscaler"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Ganglia" recipes="oc-opsworks-recipes::install-moscaler"
         
 * *REQURES EDITS TO THE CLUSTER CONFIG* *REQUIRES MANUAL CHEF RECIPE RUNS*:
   Fixes to the recipe/script that provides the MatterhornJobsQueue metric. Cluster config
@@ -235,7 +235,7 @@
   After an `update_chef_recipes` do
   a manual recipe exec:
 
-        ./bin/rake stack:commands:execute_recipes_on_layers layers="Ganglia" recipes="mh-opsworks-recipes::install-job-queued-metrics"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Ganglia" recipes="oc-opsworks-recipes::install-job-queued-metrics"
 
 ## 1.9.0 - 7/21/2016
 
@@ -295,12 +295,12 @@ all-in-one deployment will use admin key.
   utility node
 
         ./bin/rake stack:commands:execute_recipes_on_layers layers="Utility"
-        recipes="mh-opsworks-recipes::create-capture-agent-manager-user,mh-opsworks-recipes::create-capture-agent-manager-directories,mh-opsworks-recipes:install-capture-agent-manager-packages,mh-opsworks-recipes:install-capture-agent-manager,mh-opsworks-recipes:configure-capture-agent-manager-gunicorn,mh-opsworks-recipes:configure-capture-agent-manager-nginx-proxy,mh-opsworks-recipes:configure-capture-agent-manager-supervisor"
+        recipes="oc-opsworks-recipes::create-capture-agent-manager-user,oc-opsworks-recipes::create-capture-agent-manager-directories,oc-opsworks-recipes:install-capture-agent-manager-packages,oc-opsworks-recipes:install-capture-agent-manager,oc-opsworks-recipes:configure-capture-agent-manager-gunicorn,oc-opsworks-recipes:configure-capture-agent-manager-nginx-proxy,oc-opsworks-recipes:configure-capture-agent-manager-supervisor"
 
 
 ## 1.3.3 - 5/19/2016
 
-* Fix `mh-opsworks-recipes::install-ec2-scaling-manager` to correctly update
+* Fix `oc-opsworks-recipes::install-ec2-scaling-manager` to correctly update
   the cron jobs when run. Implement basic serverspec tests to ensure the
   default attributes and a run with customized attributes works. Nothing to
   run.
@@ -340,34 +340,34 @@ all-in-one deployment will use admin key.
   Using the mh-opsworks tooling will propagate the `custom_json` change and
   ensure matterhorn can start properly.
 
-        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin, Workers, Engage" recipes="mh-opsworks-recipes::install-mh-base-packages"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin, Workers, Engage" recipes="oc-opsworks-recipes::install-mh-base-packages"
 
 ## 1.3.0 - 4/7/2016
 
 * *REQUIRES MANUAL CHEF RECIPES RUNS* *MUST BE RUN BEFORE THE DEPLOY*  Update the
   version of node on the cluster to work around an npm / gzipping bug.
 
-        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin, Workers, Engage" recipes="mh-opsworks-recipes::install-mh-base-packages"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin, Workers, Engage" recipes="oc-opsworks-recipes::install-mh-base-packages"
 
 * *REQUIRES MANUAL CHEF RECIPE RUNS* Hang more alarms on database metrics to catch
   problems relating to disk IO. Lower the CPU threshold.  This can be done any
   time before or after a deploy.
 
         # This is currently on the "Ganglia" layer in prod,
-        ./bin/rake stack:commands:execute_recipes_on_layers layers="Ganglia" recipes="mh-opsworks-recipes::create-mysql-alarms"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Ganglia" recipes="oc-opsworks-recipes::create-mysql-alarms"
 
 * *REQUIRES MANUAL CHEF RECIPE RUNS* Add a metric and alarm to check if
   instances fail to start up. This can be done any time before or after a
   deploy.
 
-        ./bin/rake stack:commands:execute_recipes_on_layers recipes="mh-opsworks-recipes::install-custom-metrics,mh-opsworks-recipes::create-alerts-from-opsworks-metrics"
+        ./bin/rake stack:commands:execute_recipes_on_layers recipes="oc-opsworks-recipes::install-custom-metrics,oc-opsworks-recipes::create-alerts-from-opsworks-metrics"
 
 * *OPTIONAL EDITS TO THE CLUSTER CONFIG* *REQUIRES MANUAL CHEF RECIPE RUNS*:
   Recipes, etc for setting up Analytics layer/node. See README.analytics.md in
   mh-opsworks for setup instructions.
   The manual recipe run can be executed any time after a successful deploy.
 
-        ./bin/rake stack:commands:execute_recipes_on_layers layers="Engage" recipes="mh-opsworks-recipes::configure-engage-nginx-proxy"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Engage" recipes="oc-opsworks-recipes::configure-engage-nginx-proxy"
 
 ## 1.2.0 - 3/23/2016
 
@@ -382,7 +382,7 @@ all-in-one deployment will use admin key.
   Updated loggly TLS certificate. Manual recipe run can be executed any time
   after a successful deploy.
 
-        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin, Workers, Engage" recipes="mh-opsworks-recipes::rsyslog-to-loggly"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin, Workers, Engage" recipes="oc-opsworks-recipes::rsyslog-to-loggly"
 
 ## 1.1.6 - 3/3/2016
 
@@ -401,14 +401,14 @@ all-in-one deployment will use admin key.
   easily be moved into a separate subdirectory under /opt/matterhorn.  The manual
   recipe run below can be run at any time after a successful deploy.
 
-        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin, Workers, Engage" recipes="mh-opsworks-recipes::remove-legacy-deploy-dir"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin, Workers, Engage" recipes="oc-opsworks-recipes::remove-legacy-deploy-dir"
 
 * *REQUIRES MANUAL CHEF RECIPE RUNS*: Open up nginx logs to be world-readable
   by default. This happens post daily log rotation
 
         # After the recipes have been updated. . .
-        ./bin/rake stack:commands:execute_recipes_on_layers recipes="mh-opsworks-recipes::configure-nginx-proxy" layers="Admin, Workers"
-        ./bin/rake stack:commands:execute_recipes_on_layers recipes="mh-opsworks-recipes::configure-engage-nginx-proxy" layers="Engage"
+        ./bin/rake stack:commands:execute_recipes_on_layers recipes="oc-opsworks-recipes::configure-nginx-proxy" layers="Admin, Workers"
+        ./bin/rake stack:commands:execute_recipes_on_layers recipes="oc-opsworks-recipes::configure-engage-nginx-proxy" layers="Engage"
 
 ## 1.1.5 - 2/25/2016
 
@@ -423,7 +423,7 @@ all-in-one deployment will use admin key.
   name, make it red so that users know they're working in production.  This is
   not tied to deployment and can be run at any time
 
-        ./bin/rake stack:commands:execute_recipes_on_instances recipes="mh-opsworks-recipes::set-bash-as-default-shell"
+        ./bin/rake stack:commands:execute_recipes_on_instances recipes="oc-opsworks-recipes::set-bash-as-default-shell"
 
 * *REQUIRES MANUAL CHEF RECIPE RUNS*: This recipe can be run at any time and
   is deploy independent.  Switch to daily mysql backups as a way of having a
@@ -434,7 +434,7 @@ all-in-one deployment will use admin key.
   your mysql backups on before running the command below:
 
         # This is currently on the "Ganglia" layer in prod,
-        ./bin/rake stack:commands:execute_recipes_on_layers layers="Ganglia" recipes="mh-opsworks-recipes::install-mysql-backups"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Ganglia" recipes="oc-opsworks-recipes::install-mysql-backups"
 
 * Ignore 401s in newrelic logging.
 
@@ -444,7 +444,7 @@ all-in-one deployment will use admin key.
   /opt/matterhorn/nginx. This should be registered into the engage layer's
   `setup` recipes and run whenever. It does not have to be run during a deploy.
 
-        ./bin/rake stack:commands:execute_recipes_on_instances recipes="mh-opsworks-recipes::symlink-nginx-log-dir" hostnames="engage1"
+        ./bin/rake stack:commands:execute_recipes_on_instances recipes="oc-opsworks-recipes::symlink-nginx-log-dir" hostnames="engage1"
 
   Remove the `/var/log/nginx_old` directory after you've manually confirmed logs
   are going to the right place.
@@ -457,13 +457,13 @@ all-in-one deployment will use admin key.
   for matterhorn 1.6.x
 
     # Right before the deploy. . .
-        ./bin/rake stack:commands:update_chef_recipes stack:commands:execute_recipes_on_layers layers="Admin, Workers, Engage" recipes="mh-opsworks-recipes::install-mh-base-packages"
+        ./bin/rake stack:commands:update_chef_recipes stack:commands:execute_recipes_on_layers layers="Admin, Workers, Engage" recipes="oc-opsworks-recipes::install-mh-base-packages"
 
 * *REQUIRES MANUAL CHEF RECIPE RUNS* Install a cloudwatch metric and alarm to
   track nfs mount space available. Does not require anything to be done during
   a deployment.
 
-        ./bin/rake stack:commands:execute_recipes_on_layers recipes="mh-opsworks-recipes::install-custom-metrics,mh-opsworks-recipes::create-alerts-from-opsworks-metrics"
+        ./bin/rake stack:commands:execute_recipes_on_layers recipes="oc-opsworks-recipes::install-custom-metrics,oc-opsworks-recipes::create-alerts-from-opsworks-metrics"
 
 * Install awscli directly, without the awscli recipe. Simplifies dependencies
   significantly. Does not require manual chef recipe runs, it'll run
@@ -499,7 +499,7 @@ all-in-one deployment will use admin key.
 
         # This is currently on the "Ganglia" layer in prod,
         # the value below is for dev clusters.
-        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin" recipes="mh-opsworks-recipes::install-mysql-backups"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin" recipes="oc-opsworks-recipes::install-mysql-backups"
 * *REQUIRES OPTIONAL CHEF RECIPE RUNS*  Installs the `file_uploader` user onto
   the instance of your choice. This allows you to use an rsync backchannel for
   uploads directly to the matterhorn inbox in combination with a couple cron jobs
@@ -509,7 +509,7 @@ all-in-one deployment will use admin key.
   relative to a deployment.
 
         # The current value for the admin node
-        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin" recipes="mh-opsworks-recipes::create-file-uploader-user"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin" recipes="oc-opsworks-recipes::create-file-uploader-user"
 
 ## 1.1.0 - 1/28/2016
 
@@ -521,16 +521,16 @@ all-in-one deployment will use admin key.
   overriding the default. The recipes can be run whenever.
 
         # After the recipes have been updated. . .
-        ./bin/rake stack:commands:execute_recipes_on_layers recipes="mh-opsworks-recipes::configure-nginx-proxy" layers="Admin, Workers"
-        ./bin/rake stack:commands:execute_recipes_on_layers recipes="mh-opsworks-recipes::configure-engage-nginx-proxy" layers="Engage"
+        ./bin/rake stack:commands:execute_recipes_on_layers recipes="oc-opsworks-recipes::configure-nginx-proxy" layers="Admin, Workers"
+        ./bin/rake stack:commands:execute_recipes_on_layers recipes="oc-opsworks-recipes::configure-engage-nginx-proxy" layers="Engage"
 
 * *REQUIRES MANUAL CHEF RECIPE RUNS* Remove the "ok-action" alarms - they are
   too chatty and not useful. These recipe runs can happen post-deploy.
 
-        ./bin/rake stack:commands:execute_recipes_on_layers recipes="mh-opsworks-recipes::create-alerts-from-opsworks-metrics"
-        ./bin/rake stack:commands:execute_recipes_on_layers layers="Ganglia" recipes="mh-opsworks-recipes::create-mysql-alarms"
-        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin" recipes="mh-opsworks-recipes::install-mysql-backups"
-        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin,Workers,Engage,Utility,Asset Server" recipes="mh-opsworks-recipes::nfs-client"
+        ./bin/rake stack:commands:execute_recipes_on_layers recipes="oc-opsworks-recipes::create-alerts-from-opsworks-metrics"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Ganglia" recipes="oc-opsworks-recipes::create-mysql-alarms"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin" recipes="oc-opsworks-recipes::install-mysql-backups"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin,Workers,Engage,Utility,Asset Server" recipes="oc-opsworks-recipes::nfs-client"
 
   Be sure to double-check all layers and recipe combinations.
 

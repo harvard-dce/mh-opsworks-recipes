@@ -1,4 +1,4 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: set-timezone
 
 timezone = node.fetch(:timezone, 'America/New_York')

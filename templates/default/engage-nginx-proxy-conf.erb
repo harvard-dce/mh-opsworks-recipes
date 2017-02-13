@@ -34,13 +34,13 @@ server {
   }
 
   location /usertracking {
-    proxy_pass http://127.0.0.1:<%= @matterhorn_backend_http_port %>/usertracking;
+    proxy_pass http://127.0.0.1:<%= @opencast_backend_http_port %>/usertracking;
     access_log /var/log/nginx/session_uid.log session_uid;
     access_log /var/log/nginx/access.log request_time;
   }
 
   location / {
-    proxy_pass http://127.0.0.1:<%= @matterhorn_backend_http_port %>;
+    proxy_pass http://127.0.0.1:<%= @opencast_backend_http_port %>;
   }
 }
 
@@ -72,10 +72,10 @@ server {
   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
   proxy_buffering off;
 
-  # Ask matterhorn to redirect to HTTPS
+  # Ask opencast to redirect to HTTPS
   proxy_set_header X-Forwarded-SSL on;
   # Rewrite outgoing redirects to be HTTPS
-  proxy_redirect http://matterhorn.dce.harvard.edu/ https://matterhorn.dce.harvard.edu/;
+  proxy_redirect http://opencast.dce.harvard.edu/ https://opencast.dce.harvard.edu/;
 
   client_max_body_size 102400m;
   gzip on;
@@ -89,13 +89,13 @@ server {
   }
 
   location /usertracking {
-    proxy_pass http://127.0.0.1:<%= @matterhorn_backend_http_port %>/usertracking;
+    proxy_pass http://127.0.0.1:<%= @opencast_backend_http_port %>/usertracking;
     access_log /var/log/nginx/session_uid.log session_uid;
     access_log /var/log/nginx/access.log request_time;
   }
 
   location / {
-    proxy_pass http://127.0.0.1:<%= @matterhorn_backend_http_port %>;
+    proxy_pass http://127.0.0.1:<%= @opencast_backend_http_port %>;
   }
 }
 <% end %>

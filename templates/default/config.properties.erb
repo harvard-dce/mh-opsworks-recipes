@@ -1,11 +1,11 @@
 ###########################################
-### Matterhorn configuration properties ###
+### Opencast configuration properties ###
 ###########################################
 
 # The HTTP server port.  If you set this to port 80, you need to run Matterhorn as root. Alternatively, if you want
 # users to access Matterhorn on port 80 but do not want to run as root, keep the default port (8080) and use an Apache
 # HTTPD server with mod_proxy to forward port 80 traffic to Matterhorn on port 8080.
-org.osgi.service.http.port=<%= @matterhorn_backend_http_port %>
+org.osgi.service.http.port=<%= @opencast_backend_http_port %>
 
 # Whether Matterhorn itself should handle HTTPS traffic.  Even if you set this to 'false',you can still use an Apache
 # HTTPD server as a proxy to handle SSL)
@@ -14,7 +14,7 @@ org.osgi.service.http.secure.enabled=false
 # The secure server port to use if running Matterhorn itself with HTTPS (as opposed to a proxy handling HTTPS).
 #org.osgi.service.http.port.secure=8443
 
-# The internal URL of this matterhorn installation, used by Matterhorn to locate services running on this instance and
+# The internal URL of this opencast installation, used by Matterhorn to locate services running on this instance and
 # for inter-node communication in distributed setups involving more than one Matterhorn node.
 #
 # Note that while the server.url is the public url of this instance, there is the actual public url of an individual
@@ -69,15 +69,15 @@ org.opencastproject.security.demo.loadusers=true
 # "com.sun.jndi.ldap" package.
 #org.osgi.framework.system.packages.extra=com.sun.jndi.ldap,com.sun.net.ssl.internal.ssl
 
-# The base URL of the streaming server (ususally "rtmp://<SERVER_URL>/matterhorn-engage").
+# The base URL of the streaming server (ususally "rtmp://<SERVER_URL>/opencast-engage").
 # ${org.opencastproject.server.url} can not be used, because the streaming server does not use the HTTP protocol.
 # Streaming is not included in the default workflow, since the Red5 streaming server is a 3rd party component that
 # requires separate installation.
 # 
 # NO LONGER USED
-# org.opencastproject.streaming.url=rtmp://some-old-engage-server-maybe/matterhorn-engage
+# org.opencastproject.streaming.url=rtmp://some-old-engage-server-maybe/opencast-engage
 
-# The directory where the matterhorn streaming app for Red5 stores the streams
+# The directory where the opencast streaming app for Red5 stores the streams
 org.opencastproject.streaming.directory=${org.opencastproject.shared_storage.dir}/streams
 
 # The directory to store media, metadata, and attachments for download from the engage tool
@@ -107,7 +107,7 @@ org.opencastproject.db.ddl.script.generation=false
 org.opencastproject.db.vendor=MySQL
 
 # Matterhorn comes with the jdbc drivers for MySQL (com.mysql.jdbc.Driver) and PostgreSQL (org.postgresql.Driver). To
-# add other jdbcDrivers to the Matterhorn runtime, rebuild the matterhorn-db module with your desired drivers.
+# add other jdbcDrivers to the Matterhorn runtime, rebuild the opencast-db module with your desired drivers.
 org.opencastproject.db.jdbc.driver=com.mysql.jdbc.Driver
 
 # The jdbc connection url, username, and password

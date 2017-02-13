@@ -20,7 +20,7 @@ log4j.appender.file.layout=org.apache.log4j.PatternLayout
 log4j.appender.file.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %5p (%C{1}:%L) - %m%n
 log4j.appender.file.maxFileSize=10MB
 log4j.appender.file.maxBackupIndex=4
-log4j.appender.file.File=${opencast.logdir}/matterhorn.log
+log4j.appender.file.File=${opencast.logdir}/opencast.log
 log4j.logger.edu.harvard.dce=DEBUG
 log4j.appender.file.DatePattern='.'yyyy-MM-dd
 
@@ -30,4 +30,4 @@ log4j.appender.SYSLOG.SyslogHost=localhost
 log4j.appender.SYSLOG.Facility=local3
 log4j.appender.SYSLOG.Header=true
 log4j.appender.SYSLOG.layout=org.apache.log4j.EnhancedPatternLayout
-log4j.appender.SYSLOG.layout.ConversionPattern=matterhorn %p %t %c{1}.%M - %m %throwable%n
+log4j.appender.SYSLOG.layout.ConversionPattern=opencast %p %t %c{1}.%M - %m %throwable%n

@@ -1,11 +1,11 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: populate-maven-cache
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 bucket_name = get_shared_asset_bucket_name
 
 if on_aws?
-  include_recipe "mh-opsworks-recipes::install-awscli"
+  include_recipe "oc-opsworks-recipes::install-awscli"
   download_command = "aws s3 cp s3://#{bucket_name}/maven_cache.tgz ."
 else
   download_command =  "wget https://s3.amazonaws.com/#{bucket_name}/maven_cache.tgz"

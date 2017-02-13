@@ -1,7 +1,7 @@
 DEPENDENCIES
   apt (~> 2.9.2)
   cron (~> 1.6.1)
-  mh-opsworks-recipes
+  oc-opsworks-recipes
     path: .
     metadata: true
   nfs (~> 2.1.0)
@@ -20,7 +20,7 @@ GRAPH
   homebrew (2.1.0)
     build-essential (>= 2.1.2)
   line (0.6.3)
-  mh-opsworks-recipes (0.1.0)
+  oc-opsworks-recipes (0.1.0)
     apt (~> 2.9.2)
     cron (~> 1.6.1)
     nfs (~> 2.1.0)

@@ -1,4 +1,4 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: create-file_uploader-user
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
@@ -50,7 +50,7 @@ end
 cron_d "move_rsync_uploads_into_place" do
   user "root"
   minute "*"
-  command %Q(cd #{rsync_upload_dir} && /usr/bin/run-one find ./ -type f ! -name '.*' -print0 | xargs -0 -I {} sh -c 'chown matterhorn.matterhorn "{}"; mv "{}" #{shared_storage_root}/inbox/;')
+  command %Q(cd #{rsync_upload_dir} && /usr/bin/run-one find ./ -type f ! -name '.*' -print0 | xargs -0 -I {} sh -c 'chown opencast.opencast "{}"; mv "{}" #{shared_storage_root}/inbox/;')
   path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 end
 

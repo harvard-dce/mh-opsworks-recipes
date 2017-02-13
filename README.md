@@ -1,4 +1,4 @@
-# mh-opsworks-recipes [![Build Status](https://secure.travis-ci.org/harvard-dce/mh-opsworks-recipes.png?branch=master)](https://travis-ci.org/harvard-dce/mh-opsworks-recipes)
+# oc-opsworks-recipes [![Build Status](https://secure.travis-ci.org/harvard-dce/oc-opsworks-recipes.png?branch=master)](https://travis-ci.org/harvard-dce/oc-opsworks-recipes)
 
 A custom cookbook in support of [mh-opsworks](https://github.com/harvard-dce/mh-opsworks).
 
@@ -18,8 +18,8 @@ opsworks](https://aws.amazon.com/opsworks/)
 
 First, satisfy the requirements above. Then:
 
-        git clone https://github.com/harvard-dce/mh-opsworks-recipes/
-        cd mh-opsworks-recipes
+        git clone https://github.com/harvard-dce/oc-opsworks-recipes/
+        cd oc-opsworks-recipes
         bundle
 
 You should now have [test-kitchen](http://kitchen.ci) and the vagrant tooling
@@ -62,7 +62,7 @@ after changing them - just run `./bin/generate_docs.sh` manually.
   [foodcritic](http://www.foodcritic.io) to lint your recipes for best
   practices. See `.foodcritic`  for config and information on tests we skip.
   We also run these tests via travis
-  [here](https://travis-ci.org/harvard-dce/mh-opsworks-recipes)
+  [here](https://travis-ci.org/harvard-dce/oc-opsworks-recipes)
 * Run your kitchen tests
 
         kitchen test <your test suite>
@@ -87,7 +87,7 @@ after changing them - just run `./bin/generate_docs.sh` manually.
   version, following [semver](http://semver.org).
 * Rebase develop onto master (just to be sure).
 * Cut an RC tag and link that into your staging cluster. Annotate the tag to
-  reference the matterhorn tag this is meant to work with.
+  reference the opencast tag this is meant to work with.
 * QA. When QA passes,
 * Merge the RC tag into master,
 * Tag the release on master based on the RC tag

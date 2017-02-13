@@ -1,7 +1,7 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: install-mysql-backups
 
-include_recipe "mh-opsworks-recipes::install-awscli"
+include_recipe "oc-opsworks-recipes::install-awscli"
 ::Chef::Resource::RubyBlock.send(:include, MhOpsworksRecipes::RecipeHelpers)
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 

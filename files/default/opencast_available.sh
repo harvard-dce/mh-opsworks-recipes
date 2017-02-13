@@ -3,8 +3,8 @@
 . /usr/local/bin/custom_metrics_shared.sh
 
 instance_id="$1"
-matterhorn_port="$2"
-metric_name="MatterhornAvailable"
+opencast_port="$2"
+metric_name="OpencastAvailable"
 test_string="j_username"
 value=0
 if $(/usr/bin/curl -s -L http://localhost/ | grep -q "$test_string"); then
