@@ -1,5 +1,5 @@
-# Cookbook Name:: mh-opsworks-recipes
-# Recipe:: create-matterhorn-directories
+# Cookbook Name:: oc-opsworks-recipes
+# Recipe:: create-opencast-directories
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
@@ -12,10 +12,10 @@
   get_shared_storage_root + '/inbox-republish',
   get_shared_storage_root + '/inbox-republish-trim',
   get_shared_storage_root + '/archive'
-].each do |matterhorn_directory|
-  directory matterhorn_directory do
-    owner 'matterhorn'
-    group 'matterhorn'
+].each do |opencast_directory|
+  directory opencast_directory do
+    owner 'opencast'
+    group 'opencast'
     mode '755'
     recursive true
   end

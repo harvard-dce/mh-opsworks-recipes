@@ -40,10 +40,10 @@ done
 
 if ! $do_it; then
   echo
-  echo "Usage: load-seed-data.sh -x -p <full path to shared matterhorn files> -b <shared asset bucket name> -s <seed file name>"
+  echo "Usage: load-seed-data.sh -x -p <full path to shared opencast files> -b <shared asset bucket name> -s <seed file name>"
   echo
   echo " -x	Actually load the seed data"
-  echo " -p	the full path to the root directory of the matterhorn files, probably on the shared workspace"
+  echo " -p	the full path to the root directory of the opencast files, probably on the shared workspace"
   echo " -b	the bucket name that contains the seed file"
   echo " -s	the seed file name"
   echo " -n	the s3 distribution bucket for this cluster"
@@ -75,5 +75,5 @@ rm "$seed_file"
 
 aws s3 sync ./s3_contents/ s3://"$s3_distribution_bucket" --delete
 
-/usr/bin/mysql -e 'drop database matterhorn; create database matterhorn;'
-/usr/bin/mysql matterhorn < "$shared_files_path/mysql_seed_backup/matterhorn.mysql"
+/usr/bin/mysql -e 'drop database opencast; create database opencast;'
+/usr/bin/mysql opencast < "$shared_files_path/mysql_seed_backup/opencast.mysql"

@@ -1,4 +1,4 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: update-nginx-config-for-ganglia
 
 (private_ganglia_hostname, ganglia_attributes) = node[:opsworks][:layers]['monitoring-master'][:instances].first

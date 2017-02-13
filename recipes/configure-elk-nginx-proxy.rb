@@ -1,4 +1,4 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: configure-elk-nginx-proxy
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
@@ -7,7 +7,7 @@ elk_info = get_elk_info
 http_auth = elk_info['http_auth']
 es_host = node[:opsworks][:instance][:private_ip]
 
-include_recipe "mh-opsworks-recipes::update-package-repo"
+include_recipe "oc-opsworks-recipes::update-package-repo"
 install_package('nginx apache2-utils')
 
 install_nginx_logrotate_customizations

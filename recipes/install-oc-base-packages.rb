@@ -1,8 +1,8 @@
-# Cookbook Name:: mh-opsworks-recipes
-# Recipe:: install-mh-base-packages
+# Cookbook Name:: oc-opsworks-recipes
+# Recipe:: install-oc-base-packages
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
-include_recipe "mh-opsworks-recipes::update-package-repo"
+include_recipe "oc-opsworks-recipes::update-package-repo"
 
 package "maven2" do
   action :purge

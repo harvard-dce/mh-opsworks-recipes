@@ -1,10 +1,10 @@
 #!/bin/sh
 
-prog="matterhorn"
+prog="opencast"
 config="<%= @main_config_file %>"
 pidfile="/var/run/${prog}.pid"
 <% if @enable_newrelic %>
-NEW_RELIC_JAR="<%= @matterhorn_root %>/lib/ext/newrelic/newrelic.jar"
+NEW_RELIC_JAR="<%= @opencast_root %>/lib/ext/newrelic/newrelic.jar"
 NEWRELIC_CONFIG="-Dnewrelic.config.file=<%= @felix_config_dir %>/newrelic.yml"
 <% end %>
 
@@ -13,7 +13,7 @@ kill_attempts=20
 # Time in seconds to sleep between each try
 kill_attempts_sleep=1
 # The time to wait before the SIGKILL is hence (attempts * attempts_sleep)
-# seconds. Do not set this value to low. A “normal” fresh Matterhorn needs
+# seconds. Do not set this value to low. A “normal” fresh Opencast needs
 # about seven seconds before its complete shutdown.
 
 # Remove all files from the felix cache (bundle configuration, …)
@@ -25,7 +25,7 @@ clean_felix_cache() {
 	fi
 }
 
-stop_matterhorn() {
+stop_opencast() {
 	[ ! -f $pidfile ] && return
 	pid=`cat $pidfile`
 	attempts=1
@@ -50,52 +50,52 @@ then
 	echo "Usage: $0 [ --daemon | --interactive | --quit | --help ]"
 	echo ''
 	echo 'OPTIONS:'
-	echo '  --daemon       Run matterhorn as _unmanaged_ daemon.'
+	echo '  --daemon       Run opencast as _unmanaged_ daemon.'
 	echo '                 Consider using the SysV init script.'
-	echo '  --interactive  Run matterhorn in interactive mode.'
-	echo '  --quit         Stop a previously started matterhorn.'
+	echo '  --interactive  Run opencast in interactive mode.'
+	echo '  --quit         Stop a previously started opencast.'
 	echo '  --help         Show this message.'
 	exit 0
 fi
 
-# Only root is allowed to start Matterhorn
+# Only root is allowed to start Opencast
 [ `id -u` -ne 0 ] && echo "User '`id -un`' has insufficient privilege" && exit 4
 
 
-# Stop Matterhorn if --quit is given
-[ "$1" == "--quit" ] && stop_matterhorn && exit 0
+# Stop Opencast if --quit is given
+[ "$1" == "--quit" ] && stop_opencast && exit 0
 
-# Check if Matterhorn is already running
+# Check if Opencast is already running
 [ -f $pidfile ] && ps p "`cat $pidfile`" &> /dev/null && \
-	echo "Matterhorn already running" && exit 0
+	echo "Opencast already running" && exit 0
 
 # Create the pidfile as quickly as possible after we are shure the user wants
-# to start matterhorn and after the existence of a pidfile and the associated
-# process was checked. As matterhorn itself is not running at the moment and
+# to start opencast and after the existence of a pidfile and the associated
+# process was checked. As opencast itself is not running at the moment and
 # the file should contain a pid to check for we use for now the pid of this
 # script:
 echo $$ > $pidfile
 
 
 ###
-# The following is for the actual Matterhorn start
+# The following is for the actual Opencast start
 ##
 
 # Load default configuration
-MATTERHORN="<%= @matterhorn_root %>"
-CA=$MATTERHORN/capture-agent
-MATTERHORN_USER=matterhorn
-LOGDIR="<%= @matterhorn_log_directory %>"
+OPENCAST="<%= @opencast_root %>"
+CA=$OPENCAST/capture-agent
+OPENCAST_USER=opencast
+LOGDIR="<%= @opencast_log_directory %>"
 LOGLEVEL="WARN"
 ECLIPSE_LOGLEVEL="SEVERE"
 [ -z $DEBUG ] && DEBUG=false
 DEBUG_PORT="8000"
 DEBUG_SUSPEND="n"
 FELIX_CONFIG_DIR="<%= @felix_config_dir %>"
-FELIX_WORK_DIR="<%= @matterhorn_root %>"
-FELIX_CACHE_DIR="<%= @matterhorn_root %>/tmp/felix-cache"
+FELIX_WORK_DIR="<%= @opencast_root %>"
+FELIX_CACHE_DIR="<%= @opencast_root %>/tmp/felix-cache"
 ADD_OPTS=""
-if [ -f $MATTERHORN/lib/matterhorn/matterhorn-capture-agent-impl*.jar ]
+if [ -f $OPENCAST/lib/opencast/opencast-capture-agent-impl*.jar ]
 then
 	IS_CA=true
 else
@@ -105,12 +105,12 @@ fi
 # Load configuration files
 [ -e $config ] && . $config
 
-MATTERHORN_NODE_PROFILE=${MATTERHORN_NODE_PROFILE:-hotload}
+OPENCAST_NODE_PROFILE=${OPENCAST_NODE_PROFILE:-hotload}
 
-FELIX="-Dfelix.home=$MATTERHORN"
+FELIX="-Dfelix.home=$OPENCAST"
 FELIX="${FELIX} -Dfelix.work=$FELIX_WORK_DIR"
 FELIX="${FELIX} -Dfelix.config.properties=file:${FELIX_CONFIG_DIR}/config.properties"
-FELIX="${FELIX} -Dfelix.system.properties=file:${FELIX_CONFIG_DIR}/profiles/${MATTERHORN_NODE_PROFILE}.properties"
+FELIX="${FELIX} -Dfelix.system.properties=file:${FELIX_CONFIG_DIR}/profiles/${OPENCAST_NODE_PROFILE}.properties"
 FELIX="${FELIX} -Dfelix.fileinstall.dir=$FELIX_CONFIG_DIR/load"
 
 LOGGING="-Dopencast.logdir=$LOGDIR"
@@ -162,24 +162,24 @@ MATTERHORN_OPTS="$NEWRELIC $GOSH $DEBUG $FELIX $GRAPHICS $JAVA $LOGGING $DISABLE
 # Execute Capture-Agent device configuration
 $IS_CA && $CA/device_config.sh
 
-# Make sure matterhorn bundles are reloaded
+# Make sure opencast bundles are reloaded
 clean_felix_cache
 
 if [ "$1" == "--daemon" ]
 then
-	# cd to $MATTERHORN since some services use relative paths in configs
+	# cd to $OPENCAST since some services use relative paths in configs
 	# and trust felix is started from felix.home
-  sudo -u $MATTERHORN_USER sh -c "cd $MATTERHORN; java $MATTERHORN_OPTS -jar $MATTERHORN/bin/felix.jar \
+  sudo -u $OPENCAST_USER sh -c "cd $OPENCAST; java $OPENCAST_OPTS -jar $OPENCAST/bin/felix.jar \
           $FELIX_CACHE_DIR &> /dev/null & echo \$!" > $pidfile || ( rm -f $pidfile && exit 2 )
 else
 	# we set the pid to the process id of this scripts a in this case
-	# matterhorn runs synchronous and the pid will indicate that
-	# matterhorn is alive
+	# opencast runs synchronous and the pid will indicate that
+	# opencast is alive
 	echo $$ > $pidfile
 	set -o monitor
-	pushd $MATTERHORN &> /dev/null
-	sudo -u $MATTERHORN_USER \
-		java $MATTERHORN_OPTS -jar $MATTERHORN/bin/felix.jar \
+	pushd $OPENCAST &> /dev/null
+	sudo -u $OPENCAST_USER \
+		java $OPENCAST_OPTS -jar $OPENCAST/bin/felix.jar \
 		$FELIX_CACHE_DIR
 	rm -f $pidfile
 	popd &> /dev/null

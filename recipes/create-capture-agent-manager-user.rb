@@ -1,4 +1,4 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: create-capture-agent-manager-user
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)

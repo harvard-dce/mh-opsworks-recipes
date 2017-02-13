@@ -1,4 +1,4 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: configure-capture-agent-manager-gunicorn
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)

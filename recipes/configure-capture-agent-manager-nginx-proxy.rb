@@ -1,7 +1,7 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: configure-capture-agent-manager-nginx-proxy
 
-include_recipe "mh-opsworks-recipes::update-package-repo"
+include_recipe "oc-opsworks-recipes::update-package-repo"
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
 app_name = get_capture_agent_manager_app_name

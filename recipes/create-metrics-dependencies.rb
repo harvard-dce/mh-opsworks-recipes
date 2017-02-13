@@ -1,7 +1,7 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: create-metrics-dependencies
 
-include_recipe "mh-opsworks-recipes::install-awscli"
+include_recipe "oc-opsworks-recipes::install-awscli"
 
 user "custom_metrics" do
   comment 'The custom metrics reporting user'

@@ -1,8 +1,8 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: install-custom-metrics
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
-include_recipe "mh-opsworks-recipes::create-metrics-dependencies"
+include_recipe "oc-opsworks-recipes::create-metrics-dependencies"
 
 aws_instance_id = node[:opsworks][:instance][:aws_instance_id]
 stack_id = node[:opsworks][:stack][:id]

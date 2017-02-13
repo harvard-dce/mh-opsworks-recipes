@@ -78,11 +78,11 @@ org.opencastproject.security.internal.url.signing.duration=60
 # "com.sun.jndi.ldap" package.
 #org.osgi.framework.system.packages.extra=com.sun.jndi.ldap,com.sun.net.ssl.internal.ssl
 
-# The base URL of the streaming server (ususally "rtmp://<SERVER_URL>/matterhorn-engage").
+# The base URL of the streaming server (ususally "rtmp://<SERVER_URL>/opencast-engage").
 # ${org.opencastproject.server.url} can not be used, because the streaming server does not use the HTTP protocol.
 # Streaming is not included in the default workflow, since the Red5 streaming server is a 3rd party component that
 # requires separate installation.
-#org.opencastproject.streaming.url=rtmp://localhost/matterhorn-engage
+#org.opencastproject.streaming.url=rtmp://localhost/opencast-engage
 
 # The directory where Opencast stores the streams
 #org.opencastproject.streaming.directory=${org.opencastproject.storage.dir}/streams
@@ -119,7 +119,7 @@ org.opencastproject.db.ddl.script.generation=false
 org.opencastproject.db.vendor=MySQL
 
 # Opencast comes with the jdbc drivers for MySQL (com.mysql.jdbc.Driver) and PostgreSQL (org.postgresql.Driver). To add
-# other jdbcDrivers to the Opencast runtime, rebuild the matterhorn-db module with your desired drivers.
+# other jdbcDrivers to the Opencast runtime, rebuild the opencast-db module with your desired drivers.
 org.opencastproject.db.jdbc.driver=com.mysql.jdbc.Driver
 
 # The jdbc connection url, username, and password
@@ -216,12 +216,12 @@ org.opencastproject.textanalyzer.tesseract.path=/usr/bin/tesseract
 # The default are no additional options.
 #org.opencastproject.textanalyzer.tesseract.options=-l eng -psm 3
 
-# Path to the hunspell binary used by the matterhorn-dictionary-hunspell
+# Path to the hunspell binary used by the opencast-dictionary-hunspell
 # module. The default ist just "hunspell" which requires hunspell to be in the
 # search path.
 #org.opencastproject.dictionary.hunspell.binary=/opt/hunspell/hunspell
 
-# Command to use for filtering text by the matterhorn-dictionary-hunspell
+# Command to use for filtering text by the opencast-dictionary-hunspell
 # module. The command is appended to the hunspell binary path. It should filter
 # the text from stdin and print the recognized words to stdout. Usually this
 # should be a combination of "-G" and a list of dictionaries. The default is to

@@ -12,7 +12,7 @@ module MhOpsworksRecipes
     end
 
     def get_database_connection
-      node[:deploy][:matterhorn][:database]
+      node[:deploy][:opencast][:database]
     end
 
     def get_memory_limit
@@ -44,7 +44,7 @@ module MhOpsworksRecipes
     end
 
     def get_shared_asset_bucket_name
-      node.fetch(:shared_asset_bucket_name, 'mh-opsworks-shared-assets')
+      node.fetch(:shared_asset_bucket_name, 'oc-opsworks-shared-assets')
     end
 
     def get_cluster_seed_bucket_name
@@ -282,7 +282,7 @@ module MhOpsworksRecipes
         command = %Q|/usr/bin/curl -s --digest -u "#{rest_auth_info[:user]}:#{rest_auth_info[:pass]}" -H "X-Requested-Auth: Digest" -F host=http://#{hostname} -F maintenance=#{mode} http://#{private_admin_hostname}/services/maintenance|
         # Chef::Log.info "command: #{command}"
         execute "toggle maintenance mode to #{mode}" do
-          user 'matterhorn'
+          user 'opencast'
           command command
           retries 5
           retry_delay 30
@@ -330,21 +330,21 @@ module MhOpsworksRecipes
 
     def get_local_workspace_root
       node.fetch(
-        :local_workspace_root, '/var/matterhorn-workspace'
+        :local_workspace_root, '/var/opencast-workspace'
       )
     end
 
     def get_log_directory
       node.fetch(
-        :matterhorn_log_directory, '/var/log/matterhorn'
+        :opencast_log_directory, '/var/log/opencast'
       )
     end
 
-    def allow_matterhorn_user_to_restart_daemon_via_sudo
-      file '/etc/sudoers.d/matterhorn' do
+    def allow_opencast_user_to_restart_daemon_via_sudo
+      file '/etc/sudoers.d/opencast' do
         owner 'root'
         group 'root'
-        content %Q|matterhorn ALL=NOPASSWD:/etc/init.d/matterhorn\n|
+        content %Q|opencast ALL=NOPASSWD:/etc/init.d/opencast\n|
         mode '0600'
       end
     end
@@ -635,8 +635,8 @@ module MhOpsworksRecipes
     def install_published_event_details_email(current_deploy_root, engage_hostname)
       template %Q|#{current_deploy_root}/etc/email/publishedEventDetails| do
         source 'publishedEventDetails.erb'
-        owner 'matterhorn'
-        group 'matterhorn'
+        owner 'opencast'
+        group 'opencast'
         variables({
           engage_hostname: engage_hostname
         })
@@ -646,8 +646,8 @@ module MhOpsworksRecipes
     def configure_usertracking(current_deploy_root, user_tracking_authhost)
       template %Q|#{current_deploy_root}/etc/services/org.opencastproject.usertracking.impl.UserTrackingServiceImpl.properties| do
         source 'UserTrackingServiceImpl.properties.erb'
-        owner 'matterhorn'
-        group 'matterhorn'
+        owner 'opencast'
+        group 'opencast'
         variables({
           user_tracking_authhost: user_tracking_authhost
         })
@@ -660,8 +660,8 @@ module MhOpsworksRecipes
       episode_default_storage_dir = %Q|#{current_deploy_root}/etc/default_data|
 
       directory episode_default_storage_dir  do
-        owner 'matterhorn'
-        group 'matterhorn'
+        owner 'opencast'
+        group 'opencast'
         mode '755'
         recursive true
       end
@@ -676,16 +676,16 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_otherpubs_service_config(current_deploy_root, matterhorn_repo_root, auth_host)
+    def install_otherpubs_service_config(current_deploy_root, opencast_repo_root, auth_host)
       download_episode_defaults_json_file(current_deploy_root)
 
       template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.otherpubs.service.OtherpubsService.properties| do
         source 'edu.harvard.dce.otherpubs.service.OtherpubsService.properties.erb'
-        owner 'matterhorn'
-        group 'matterhorn'
+        owner 'opencast'
+        group 'opencast'
         variables({
           auth_host: auth_host,
-          matterhorn_repo_root: matterhorn_repo_root
+          opencast_repo_root: opencast_repo_root
         })
       end
     end
@@ -695,8 +695,8 @@ module MhOpsworksRecipes
       template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.otherseries.service.OtherSeriesServiceImpl.properties| do
         icommons_api_token = node.fetch(:icommons_api_token, 'replace-with-an-icommons-api-token-or-manually-create-series-mappings')
         source 'edu.harvard.dce.otherseries.service.OtherSeriesServiceImpl.properties.erb'
-        owner 'matterhorn'
-        group 'matterhorn'
+        owner 'opencast'
+        group 'opencast'
         variables({
           icommons_api_token: icommons_api_token
         })
@@ -706,8 +706,8 @@ module MhOpsworksRecipes
     def set_service_registry_dispatch_interval(current_deploy_root)
       template %Q|#{current_deploy_root}/etc/services/org.opencastproject.serviceregistry.impl.ServiceRegistryJpaImpl.properties| do
         source 'ServiceRegistryJpaImpl.properties.erb'
-        owner 'matterhorn'
-        group 'matterhorn'
+        owner 'opencast'
+        group 'opencast'
         variables({
           dispatch_interval: 0
         })
@@ -717,19 +717,19 @@ module MhOpsworksRecipes
     def install_matterhorn_log_management
       compress_after_days = 7
       delete_after_days = 180
-      log_dir = node.fetch(:matterhorn_log_directory, '/var/log/matterhorn')
+      log_dir = node.fetch(:opencast_log_directory, '/var/log/opencast')
 
-      cron_d 'compress_matterhorn_logs' do
-        user 'matterhorn'
+      cron_d 'compress_opencast_logs' do
+        user 'opencast'
         predefined_value '@daily'
-        command %Q(find #{log_dir} -maxdepth 1 -type f -name 'matterhorn.log.2*' -not -name '*.gz' -mtime #{compress_after_days} -exec /bin/gzip {} \\;)
+        command %Q(find #{log_dir} -maxdepth 1 -type f -name 'opencast.log.2*' -not -name '*.gz' -mtime #{compress_after_days} -exec /bin/gzip {} \\;)
         path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
       end
 
-      cron_d 'delete_matterhorn_logs' do
-        user 'matterhorn'
+      cron_d 'delete_opencast_logs' do
+        user 'opencast'
         predefined_value '@daily'
-        command %Q(find #{log_dir} -maxdepth 1 -type f -name 'matterhorn.log.2*.gz' -mtime #{delete_after_days} -delete)
+        command %Q(find #{log_dir} -maxdepth 1 -type f -name 'opencast.log.2*.gz' -mtime #{delete_after_days} -delete)
         path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
       end
     end
@@ -755,7 +755,7 @@ module MhOpsworksRecipes
     end
 
     def initialize_database(current_deploy_root)
-      db_info = node[:deploy][:matterhorn][:database]
+      db_info = node[:deploy][:opencast][:database]
       db_seed_file = node.fetch(:db_seed_file, 'dce-config/docs/scripts/ddl/mysql5.sql')
 
       host = db_info[:host]
@@ -800,7 +800,7 @@ module MhOpsworksRecipes
             editor = Chef::Util::FileEdit.new(current_deploy_root + '/etc/profiles/' + properties_file)
             editor.search_file_replace(
               /mh-harvard-dce-distribution-service-aws-s3/,
-              "matterhorn-distribution-service-download"
+              "opencast-distribution-service-download"
             )
             editor.write_file
           end
@@ -821,10 +821,10 @@ module MhOpsworksRecipes
 
       start_check_sleep_seconds = enable_yourkit_agent? ? 30 : 20
 
-      template %Q|/etc/init.d/matterhorn| do
-        source 'matterhorn-init-script.erb'
-        owner 'matterhorn'
-        group 'matterhorn'
+      template %Q|/etc/init.d/opencast| do
+        source 'opencast-init-script.erb'
+        owner 'opencast'
+        group 'opencast'
         mode '755'
         variables({
           matterhorn_executable: matterhorn_repo_root + '/current/bin/matterhorn',
@@ -832,10 +832,10 @@ module MhOpsworksRecipes
         })
       end
 
-      template %Q|#{current_deploy_root}/bin/matterhorn| do
-        source 'matterhorn-harness.erb'
-        owner 'matterhorn'
-        group 'matterhorn'
+      template %Q|#{current_deploy_root}/bin/opencast| do
+        source 'opencast-harness.erb'
+        owner 'opencast'
+        group 'opencast'
         mode '755'
         variables({
           java_xmx_ram: java_xmx_ram,
@@ -852,18 +852,18 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_matterhorn_conf(current_deploy_root, matterhorn_repo_root, node_profile)
-      log_dir = node.fetch(:matterhorn_log_directory, '/var/log/matterhorn')
+    def install_opencast_conf(current_deploy_root, opencast_repo_root, node_profile)
+      log_dir = node.fetch(:opencast_log_directory, '/var/log/opencast')
       java_debug_enabled = node.fetch(:java_debug_enabled, 'true')
 
-      template %Q|#{current_deploy_root}/etc/matterhorn.conf| do
-        source 'matterhorn.conf.erb'
-        owner 'matterhorn'
-        group 'matterhorn'
+      template %Q|#{current_deploy_root}/etc/opencast.conf| do
+        source 'opencast.conf.erb'
+        owner 'opencast'
+        group 'opencast'
         variables({
-          matterhorn_root: matterhorn_repo_root + '/current',
+          opencast_root: opencast_repo_root + '/current',
           node_profile: node_profile,
-          matterhorn_log_directory: log_dir,
+          opencast_log_directory: log_dir,
           java_debug_enabled: java_debug_enabled
         })
       end
@@ -872,8 +872,8 @@ module MhOpsworksRecipes
     def install_multitenancy_config(current_deploy_root, admin_hostname, engage_hostname)
       template %Q|#{current_deploy_root}/etc/load/org.opencastproject.organization-mh_default_org.cfg| do
         source 'mh_default_org.cfg.erb'
-        owner 'matterhorn'
-        group 'matterhorn'
+        owner 'opencast'
+        group 'opencast'
         variables({
           hostname: admin_hostname,
           admin_hostname: admin_hostname,
@@ -886,8 +886,8 @@ module MhOpsworksRecipes
       lti_oauth_info = get_lti_auth_info
       template %Q|#{current_deploy_root}/etc/security/mh_default_org.xml| do
         source 'mh_default_org.xml.erb'
-        owner 'matterhorn'
-        group 'matterhorn'
+        owner 'opencast'
+        group 'opencast'
         variables({
           lti_oauth: lti_oauth_info,
           unproxied_name: public_dns_name,
@@ -911,8 +911,8 @@ module MhOpsworksRecipes
 
       template %Q|#{current_deploy_root}/etc/services/org.opencastproject.kernel.mail.SmtpService.properties| do
         source 'org.opencastproject.kernel.mail.SmtpService.properties.erb'
-        owner 'matterhorn'
-        group 'matterhorn'
+        owner 'opencast'
+        group 'opencast'
         variables({
           default_email_sender: default_email_sender,
         })
@@ -938,7 +938,7 @@ module MhOpsworksRecipes
 
     def configure_newrelic(current_deploy_root, node_name, layer_name)
       if enable_newrelic_layer?(layer_name)
-            log_dir = node.fetch(:matterhorn_log_directory, '/var/log/matterhorn')
+            log_dir = node.fetch(:opencast_log_directory, '/var/log/opencast')
             newrelic_layers = node.fetch(:newrelic,{})
             newrelic_layer = newrelic_layers.fetch(layer_name,{})
             newrelic_key = newrelic_layer[:key]
@@ -946,8 +946,8 @@ module MhOpsworksRecipes
             environment_name = node[:opsworks][:stack][:name]
             template %Q|#{current_deploy_root}/etc/newrelic.yml| do
               source 'newrelic.yml.erb'
-              owner 'matterhorn'
-              group 'matterhorn'
+              owner 'opencast'
+              group 'opencast'
               variables({
                 newrelic_key: newrelic_key,
                 node_name: node_name,
@@ -961,8 +961,8 @@ module MhOpsworksRecipes
     def install_live_streaming_service_config(current_deploy_root,live_stream_name)
       template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.live.impl.LiveServiceImpl.properties| do
         source 'edu.harvard.dce.live.impl.LiveServiceImpl.properties.erb'
-        owner 'matterhorn'
-        group 'matterhorn'
+        owner 'opencast'
+        group 'opencast'
         variables({
           live_stream_name: live_stream_name
         })
@@ -972,8 +972,8 @@ module MhOpsworksRecipes
     def install_aws_s3_distribution_service_config(current_deploy_root, region, s3_distribution_bucket_name)
       template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.distribution.aws.s3.AwsS3DistributionServiceImpl.properties| do
         source 'edu.harvard.dce.distribution.aws.s3.AwsS3DistributionServiceImpl.properties.erb'
-        owner 'matterhorn'
-        group 'matterhorn'
+        owner 'opencast'
+        group 'opencast'
         variables({
           region: region,
           s3_distribution_bucket_name: s3_distribution_bucket_name
@@ -984,8 +984,8 @@ module MhOpsworksRecipes
     def install_aws_s3_file_archive_service_config(current_deploy_root, region, s3_file_archive_bucket_name)
       template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.episode.aws.s3.AwsS3ArchiveElementStore.properties| do
         source 'edu.harvard.dce.episode.aws.s3.AwsS3ArchiveElementStore.properties.erb'
-        owner 'matterhorn'
-        group 'matterhorn'
+        owner 'opencast'
+        group 'opencast'
         variables({
           region: region,
           s3_file_archive_bucket_name: s3_file_archive_bucket_name
@@ -996,8 +996,8 @@ module MhOpsworksRecipes
     def install_ibm_watson_transcription_service_config(current_deploy_root, ibm_watson_username, ibm_watson_psw)
       template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.transcription.ibm.watson.IBMWatsonTranscriptionService.properties| do
         source 'edu.harvard.dce.transcription.ibm.watson.IBMWatsonTranscriptionService.properties.erb'
-        owner 'matterhorn'
-        group 'matterhorn'
+        owner 'opencast'
+        group 'opencast'
         variables({
           ibm_watson_username: ibm_watson_username,
           ibm_watson_psw: ibm_watson_psw  
@@ -1018,8 +1018,8 @@ module MhOpsworksRecipes
     def install_auth_service(current_deploy_root, auth_host, redirect_location, auth_key, auth_activated = 'true')
       template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.properties| do
         source 'edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.properties.erb'
-        owner 'matterhorn'
-        group 'matterhorn'
+        owner 'opencast'
+        group 'opencast'
         variables({
           auth_host: auth_host,
           redirect_location: redirect_location,
@@ -1058,8 +1058,8 @@ module MhOpsworksRecipes
         source_file = %Q|#{current_deploy_root}/#{file_config[:src]}|
         destination_file = %Q|#{current_deploy_root}/#{file_config[:dest]}|
         file destination_file do
-          owner 'matterhorn'
-          group 'matterhorn'
+          owner 'opencast'
+          group 'opencast'
           mode '644'
           content lazy { ::File.read(source_file) }
           action :create
@@ -1083,7 +1083,7 @@ module MhOpsworksRecipes
       if skip_unit_tests.to_s == 'false'
         retry_this_many = 0
       end
-      execute 'maven build for matterhorn' do
+      execute 'maven build for opencast' do
         command %Q|cd #{current_deploy_root} && MAVEN_OPTS='-Xms256m -Xmx960m -XX:PermSize=64m -XX:MaxPermSize=256m' mvn clean install -DdeployTo="#{current_deploy_root}" -Dmaven.test.skip=#{skip_unit_tests} #{build_profiles[node_profile.to_sym]}|
         retries retry_this_many
         retry_delay 30
@@ -1091,7 +1091,7 @@ module MhOpsworksRecipes
     end
 
     def remove_felix_fileinstall(current_deploy_root)
-      file %Q|#{current_deploy_root}/etc/load/org.apache.felix.fileinstall-matterhorn.cfg| do
+      file %Q|#{current_deploy_root}/etc/load/org.apache.felix.fileinstall-opencast.cfg| do
         action :delete
       end
     end

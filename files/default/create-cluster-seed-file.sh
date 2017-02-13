@@ -77,16 +77,16 @@ done
 
 if ! $do_it; then
   echo
-  echo "Usage: create-cluster-seed-file.sh -x -p <full path to shared matterhorn files>"
+  echo "Usage: create-cluster-seed-file.sh -x -p <full path to shared opencast files>"
   echo
-  echo "This creates a tarball at <shared matterhorn file path>/<your seed cluster name>.tgz"
-  echo "of the mysql data and matterhorn-generated files necessary to recreate"
+  echo "This creates a tarball at <shared opencast file path>/<your seed cluster name>.tgz"
+  echo "of the mysql data and opencast-generated files necessary to recreate"
   echo "this cluster in another environment. This is not meant as a backup, it is tooling"
   echo "to make automated testing easier. After the seed file is created, it is uploaded"
   echo "to the bucket defined as --upload_s3_bucket in the options."
   echo
   echo " -x	Actually create the seed file"
-  echo " -p or --path	the full path to the root directory of the matterhorn files, probably on the shared workspace"
+  echo " -p or --path	the full path to the root directory of the opencast files, probably on the shared workspace"
   echo " --source_engage_ip	 the engage IP of the seed cluster"
   echo " --source_engage_host	 the external engage hostname of the seed cluster"
   echo " --source_admin_ip	 the external admin IP of the seed cluster"
@@ -108,7 +108,7 @@ cluster_seed_file_path="$cluster_seed_path/${base_cluster_seed_name}.tgz"
 /bin/mkdir -p "$cluster_seed_path"
 /bin/mkdir -p "$db_backup_path"
 
-/usr/bin/mysqldump --single-transaction --extended-insert --disable-keys --quick --set-charset --skip-comments matterhorn > "$db_backup_path/matterhorn.mysql"
+/usr/bin/mysqldump --single-transaction --extended-insert --disable-keys --quick --set-charset --skip-comments opencast > "$db_backup_path/opencast.mysql"
 
 aws s3 sync s3://"$source_s3_bucket" "$s3_backup_path"
 
