@@ -1,0 +1,52 @@
+# Root logger configuration.  This defines the default values to be used.  They may be overwritten by more specific
+# settings below.
+log4j.rootLogger=WARN, out, osgi:*, SYSLOG
+log4j.throwableRenderer=org.apache.log4j.OsgiThrowableRenderer
+
+# Loglevel configuration for all opencast modules. Usually, INFO is a quite sane log level. If you need a different
+# detail level of logs, you can adjust this to: ERROR, WARN, INFO, DEBUG, TRACE.
+log4j.logger.org.opencastproject=<%= @opencast_log_level %>
+log4j.logger.edu.harvard.dce=<%= @dce_log_level %>
+
+# You can specify different log levels for different packages/modules by specifying their package component names. For
+# example, to raise the log level to DEBUG for the rest endpoints contained in the kernel module, set:
+# log4j.logger.org.opencastproject.kernel.rest=DEBUG
+
+# Suppress some specific, confusing warning messages
+log4j.logger.org.ops4j.pax.web.service.jetty.internal=ERROR
+log4j.logger.org.ops4j.pax.url.mvn.internal=ERROR
+log4j.logger.org.apache.cxf.bus=ERROR
+log4j.logger.org.apache.solr.core.JmxMonitoredMap=ERROR
+
+# DCE-added
+log4j.logger.org.opencastproject.ingest.scanner.Ingestor=INFO
+log4j.logger.org.opencastproject.kernel.rest.JsonpFilter=INFO
+log4j.logger.org.opencastproject.kernel.security.TrustedAnonymousAuthenticationFilter=INFO
+log4j.logger.org.springframework.security.web.authentication.AnonymousAuthenticationFilter=INFO
+log4j.logger.org.opencastproject.kernel.security.TrustedHttpClientImpl=INFO
+log4j.logger.org.opencastproject.kernel.http.impl.HttpClientImpl=INFO
+
+# Console appender not used by default
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%d{ISO8601} | %-5.5p | (%C{1}:%L) - %m%n
+
+# File appender
+log4j.appender.out=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.out.layout=org.apache.log4j.PatternLayout
+log4j.appender.out.layout.ConversionPattern=%d{ISO8601} | %-5.5p | (%C{1}:%L) - %m%n
+log4j.appender.out.file=<%= @opencast_log_directory %>/opencast.log
+log4j.appender.out.maxFileSize=10MB
+log4j.appender.out.maxBackupIndex=4
+log4j.appender.out.append=true
+log4j.appender.out.encoding=UTF-8
+log4j.appender.out.DatePattern='.'yyyy-MM-dd
+
+# Syslog
+log4j.appender.SYSLOG=org.apache.log4j.net.SyslogAppender
+log4j.appender.SYSLOG.SyslogHost=localhost
+log4j.appender.SYSLOG.Facility=local3
+log4j.appender.SYSLOG.Header=true
+log4j.appender.SYSLOG.layout=org.apache.log4j.EnhancedPatternLayout
+log4j.appender.SYSLOG.layout.ConversionPattern=opencast %p %t %c{1}.%M - %m %throwable%n
+

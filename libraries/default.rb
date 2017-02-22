@@ -44,7 +44,7 @@ module MhOpsworksRecipes
     end
 
     def get_shared_asset_bucket_name
-      node.fetch(:shared_asset_bucket_name, 'oc-opsworks-shared-assets')
+      node.fetch(:shared_asset_bucket_name, 'mh-opsworks-shared-assets')
     end
 
     def get_cluster_seed_bucket_name
@@ -689,6 +689,22 @@ module MhOpsworksRecipes
       end
     end
 
+    def install_opencast_log_configuration(current_deploy_root)
+      oc_log_dir = node.fetch(:opencast_log_directory, '/var/log/opencast')
+      oc_log_level = node.fetch(:opencast_log_level, 'INFO')
+      dce_log_level = node.fetch(:dce_log_level, 'DEBUG')
+      template %Q|#{current_deploy_root}/etc/org.ops4j.pax.logging.cfg| do
+        source 'org.ops4j.pax.logging.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables ({
+            opencast_log_directory: oc_log_dir,
+            opencast_log_level: oc_log_level,
+            dce_log_level: dce_log_level
+        })
+      end
+    end
+
     def install_opencast_log_management
       compress_after_days = 7
       delete_after_days = 180
@@ -774,31 +790,33 @@ module MhOpsworksRecipes
 
     def install_init_scripts(current_deploy_root, opencast_repo_root)
       log_dir = node.fetch(:opencast_log_directory, '/var/log/opencast')
+      java_home = node['java']['java_home']
       xmx_ram_ratio = xmx_ram_ratio_for_this_node
       java_xmx_ram = xmx_ram_for_this_node(xmx_ram_ratio)
 
       template %Q|/etc/init.d/opencast| do
-        source 'opencast-init-script.erb'
+        source 'etc-init.d-opencast.erb'
         owner 'opencast'
         group 'opencast'
         mode '755'
         variables({
-          opencast_executable: opencast_repo_root + '/current/bin/opencast'
+          opencast_root: current_deploy_root
         })
       end
 
-      template %Q|#{current_deploy_root}/bin/opencast| do
-        source 'opencast-harness.erb'
+      template %Q|#{current_deploy_root}/bin/setenv| do
+        source 'opencast-setenv.erb'
         owner 'opencast'
         group 'opencast'
         mode '755'
         variables({
           java_xmx_ram: java_xmx_ram,
-          main_config_file: %Q|#{opencast_repo_root}/current/etc/opencast.conf|,
-          opencast_root: opencast_repo_root + '/current',
-          felix_config_dir: opencast_repo_root + '/current/etc',
-          opencast_log_directory: log_dir,
-          enable_newrelic: enable_newrelic?
+          java_home: java_home
+#          main_config_file: %Q|#{opencast_repo_root}/current/etc/opencast.conf|,
+#          opencast_root: opencast_repo_root + '/current',
+#          felix_config_dir: opencast_repo_root + '/current/etc',
+#          opencast_log_directory: log_dir,
+#          enable_newrelic: enable_newrelic?
         })
       end
     end
@@ -1006,21 +1024,23 @@ module MhOpsworksRecipes
       # node_modules or issues while maven pulls down artifacts,
       # run this in a begin/rescue block and retry a build immediately
       # after failure a few times before permanently failing
-      build_profiles = {
-        admin: '-Padmin,dist-stub,engage-stub,worker-stub,workspace,serviceregistry',
-        ingest: '-Pingest-standalone',
-        worker: '-Pworker-standalone,serviceregistry,workspace',
-        engage: '-Pengage-standalone,dist,serviceregistry,workspace'
-      }
-      skip_unit_tests = node.fetch(:skip_java_unit_tests, 'true')
       retry_this_many = 3
-      if skip_unit_tests.to_s == 'false'
+
+      if node.fetch(:skip_java_unit_tests, 'true').downcase == 'true'
         retry_this_many = 0
+        skip_unit_tests = '-DskipTests'
+      else
+        skip_unit_tests = ''
       end
+
       execute 'maven build for opencast' do
-        command %Q|cd #{current_deploy_root} && MAVEN_OPTS='-Xms256m -Xmx960m -XX:PermSize=64m -XX:MaxPermSize=256m' mvn clean install -DdeployTo="#{current_deploy_root}" -Dmaven.test.skip=#{skip_unit_tests} #{build_profiles[node_profile.to_sym]}|
+        command %Q|cd #{current_deploy_root} && mvn clean install #{skip_unit_tests} -P#{node_profile.to_s}|
         retries retry_this_many
         retry_delay 30
+      end
+
+      execute 'copy build' do
+        command %Q|cd #{current_deploy_root} && rsync -a build/opencast-dist-#{node_profile.to_s}-*/* .|
       end
     end
 

@@ -9,10 +9,14 @@
 # tenant, which is configured in etc/load/org.opencastproject.organization-<tenant id>.cfg with the default tenant id
 # being "mh_default_org".
 #
-# #DCE http.port? use 8080 for now?
 # Also note that if this felix installation is proxied behind an Apache HTTPD reverse proxy, and communication is meant
 # to go through that proxy, then server.url should point to the proxy's port (usually 80).
 org.opencastproject.server.url=http://<%= @hostname %>
+
+# This property specifies the comma separated list of addresses used to for opencast to listen to.  (e.g. localhost or
+# localhost,10.0.0.1). Host names or IP addresses can be used. Default value is "0.0.0.0".
+# Comment this out to make Opencast listen to all hosts.
+#org.ops4j.pax.web.listening.addresses=127.0.0.1
 
 # The url of the remote service registry.  This is used in cases where there is no direct connection to the service
 # registry database such as capture agens running in protected environments. This is typically true for capture agents
@@ -22,13 +26,11 @@ org.opencastproject.server.url=http://<%= @hostname %>
 
 # The base URL to use for publishing job locations. If left commented out, the local server URL will be used.  Set this
 # if you intend to support swapping servers with different IPs or host names.
-org.opencastproject.jobs.url=${org.opencastproject.server.url}
+#org.opencastproject.jobs.url=${org.opencastproject.server.url}
 
 # Whether to accept a job whose load exceeds the host’s max load
 # Default: true
 #org.opencastproject.job.load.acceptexceeding=true
-
-org.opencastproject.shared_storage.dir=<%= @shared_storage_root %>
 
 # The directory where the system will store its processed files (including temporary files).  This directory should
 # be persistent between reboots (i.e., not /tmp)
@@ -74,15 +76,11 @@ org.opencastproject.security.internal.url.signing.duration=60
 # Default: false
 #org.opencastproject.security.demo.loadusers=false
 
-# To enable the LDAP user provider, you must uncomment this line, and run on a JVM that provides the
-# "com.sun.jndi.ldap" package.
-#org.osgi.framework.system.packages.extra=com.sun.jndi.ldap,com.sun.net.ssl.internal.ssl
-
-# The base URL of the streaming server (ususally "rtmp://<SERVER_URL>/opencast-engage").
+# The base URL of the streaming server (ususally "rtmp://<SERVER_URL>/matterhorn-engage").
 # ${org.opencastproject.server.url} can not be used, because the streaming server does not use the HTTP protocol.
 # Streaming is not included in the default workflow, since the Red5 streaming server is a 3rd party component that
 # requires separate installation.
-#org.opencastproject.streaming.url=rtmp://localhost/opencast-engage
+#org.opencastproject.streaming.url=rtmp://localhost/matterhorn-engage
 
 # The directory where Opencast stores the streams
 #org.opencastproject.streaming.directory=${org.opencastproject.storage.dir}/streams
@@ -98,11 +96,17 @@ org.opencastproject.security.internal.url.signing.duration=60
 #org.opencastproject.streaming.flvcompatibility=true
 
 # The directory to store media, metadata, and attachments for download from the engage tool
-org.opencastproject.download.directory=${org.opencastproject.shared_storage.dir}/downloads
+org.opencastproject.download.directory=${org.opencastproject.storage.dir}/downloads
 
-# #DCE Add cloudfront/s3 settings later
 # The base URL for media downloads.
-org.opencastproject.download.url=${org.opencastproject.server.url}/static
+<% if @cloudfront_url %>
+    org.opencastproject.download.url=https://<%= @cloudfront_url %>
+<% elsif @s3_distribution_bucket_name.to_s != '' %>
+    # Distribute directly from the s3 bucket.
+    org.opencastproject.download.url=https://<%= @s3_distribution_bucket_name %>.s3.amazonaws.com/
+<% else %>
+    org.opencastproject.download.url=${org.opencastproject.server.url}/static
+<% end %>
 
 # Relational Database configuration.  By default, Opencast uses an embedded H2 database.  A standalone database server
 # is recommended for production systems.  If you run the ddl script for your db vendor (see docs/scripts/ddl/) manually,
@@ -111,7 +115,7 @@ org.opencastproject.db.ddl.generation=false
 
 # Enable ddl script generation.  This is used by developers to update the ddl scripts, and should not be enabled in
 # production.
-org.opencastproject.db.ddl.script.generation=false
+#org.opencastproject.db.ddl.script.generation=false
 
 # db.vendor can be any of the values listed at under the "eclipselink.target-database" section of
 # http://www.eclipse.org/eclipselink/documentation/2.4/jpa/extensions/p_target_database.htm#target-database
@@ -119,7 +123,7 @@ org.opencastproject.db.ddl.script.generation=false
 org.opencastproject.db.vendor=MySQL
 
 # Opencast comes with the jdbc drivers for MySQL (com.mysql.jdbc.Driver) and PostgreSQL (org.postgresql.Driver). To add
-# other jdbcDrivers to the Opencast runtime, rebuild the opencast-db module with your desired drivers.
+# other jdbcDrivers to the Opencast runtime, rebuild the matterhorn-db module with your desired drivers.
 org.opencastproject.db.jdbc.driver=com.mysql.jdbc.Driver
 
 # The jdbc connection url, username, and password
@@ -127,20 +131,18 @@ org.opencastproject.db.jdbc.url=jdbc:mysql://<%= @database[:host] %>/<%= @databa
 org.opencastproject.db.jdbc.user=<%= @database[:username] %>
 org.opencastproject.db.jdbc.pass=<%= @database[:password] %>
 
-# #DCE Add user name/psw later
 # This configures the connection to the Active MQ broker so that we can send and receive messages.
 # There are many settings for specifying the broker url: http://activemq.apache.org/activemq-4-connection-uris.html
 # Including with failover support details here: http://activemq.apache.org/failover-transport-reference.html
 # Default (url): failover://(tcp://127.0.0.1:61616)?initialReconnectDelay=2000&maxReconnectAttempts=2
 # Default (username/password): None
-#activemq.broker.url=failover://(tcp://127.0.0.1:61616)?initialReconnectDelay=2000&maxReconnectAttempts=2
+activemq.broker.url=failover://(tcp://<%= @activemq_bind_host %>:61616)?initialReconnectDelay=2000&maxReconnectAttempts=2
 #activemq.broker.username=admin
 #activemq.broker.password=password
 
 # Default directory to use for embedded solr indexes.
 # If not set, ${karaf.data}/solr-indexes will be used.
 #org.opencastproject.solr.dir=${karaf.data}/solr-indexes
-org.opencastproject.solr.dir=${org.opencastproject.storage.dir}
 
 # Directory to store the embedded solr indices.  This should be a persistent and stable directory.
 # Default: ${org.opencastproject.solr.dir}/{archive, search, series, scheduler, workflow}
@@ -161,17 +163,17 @@ org.opencastproject.solr.dir=${org.opencastproject.storage.dir}
 #org.opencastproject.workflow.solr.url=http://localhost:8983/solr/
 
 # The path to the archive repository
-org.opencastproject.episode.rootdir=${org.opencastproject.shared_storage.dir}/archive
+org.opencastproject.episode.rootdir=${org.opencastproject.storage.dir}/archive
 
 # The path to the repository of files used during media processing.
-org.opencastproject.file.repo.path=${org.opencastproject.shared_storage.dir}/files
+org.opencastproject.file.repo.path=${org.opencastproject.storage.dir}/files
 
 # The base URL of the file server.  When using a shared filesystem between servers, set all servers to use the same URL.
 # Only then will hard linking between the working file repository and the workspace be enabled to prevent downloads.
-#org.opencastproject.file.repo.url=<%= @admin_url %>
+org.opencastproject.file.repo.url=<%= @admin_url %>
 
 # The path to the working files (recommend using fast, transient storage)
-org.opencastproject.workspace.rootdir=${org.opencastproject.shared_storage.dir}/workspace
+org.opencastproject.workspace.rootdir=${org.opencastproject.storage.dir}/workspace
 
 # The scheduled period in seconds, at which a workspace cleanup operation is performed.
 # 86400 seconds equals 24 hours.
@@ -201,27 +203,26 @@ org.opencastproject.workflow.default.definition=ng-schedule-and-upload
 
 # Path to the ffmpeg binary. Its name is sufficient if the binary is in the
 # system path (default: ffmpeg)
-org.opencastproject.composer.ffmpeg.path=/usr/local/bin/ffmpeg
+#org.opencastproject.composer.ffmpeg.path=/opt/ffmpeg/ffmpeg
 
-# #DCE ???
 # Path to the ffprobe binary. Its name is sufficient if the binary is in the
 # system path (default: ffprobe)
 #org.opencastproject.inspection.ffprobe.path=/opt/ffmpeg/ffprobe
 
 # Path to the tesseract binary used by the text analyzer. Its name is
 # sufficient if the binary is in the system path (default: tesseract)
-org.opencastproject.textanalyzer.tesseract.path=/usr/bin/tesseract
+#org.opencastproject.textanalyzer.tesseract.path=/opt/tesseract/tesseract
 
 # Additional options for Tesseract like language or page segmentation mode.
 # The default are no additional options.
 #org.opencastproject.textanalyzer.tesseract.options=-l eng -psm 3
 
-# Path to the hunspell binary used by the opencast-dictionary-hunspell
+# Path to the hunspell binary used by the matterhorn-dictionary-hunspell
 # module. The default ist just "hunspell" which requires hunspell to be in the
 # search path.
 #org.opencastproject.dictionary.hunspell.binary=/opt/hunspell/hunspell
 
-# Command to use for filtering text by the opencast-dictionary-hunspell
+# Command to use for filtering text by the matterhorn-dictionary-hunspell
 # module. The command is appended to the hunspell binary path. It should filter
 # the text from stdin and print the recognized words to stdout. Usually this
 # should be a combination of "-G" and a list of dictionaries. The default is to
@@ -246,7 +247,7 @@ org.opencastproject.workflow.handler.workflow.ZipWorkflowOperationHandler.tmpdir
 org.opencastproject.dataloader.csv=${karaf.etc}/dataimport
 
 # The location to store uploaded static files such as images and videos.
-org.opencastproject.staticfiles.rootdir=${org.opencastproject.shared_storage.dir}/staticfiles
+org.opencastproject.staticfiles.rootdir=${org.opencastproject.storage.dir}/staticfiles
 
 # True means to use a webserver to serve the static files but this will not secure
 # any of the files using user or organization security. If false it uses
@@ -257,7 +258,6 @@ org.opencastproject.staticfiles.webserver.enabled=false
 # for the uploaded static file. If not set Opencast uses endpoints to serve and secure the files.
 org.opencastproject.staticfiles.webserver.url=${org.opencastproject.server.url}/staticfiles/
 
-# #DCE Check this....
 # This is the maximum allowable size in bytes for a file to be uploaded. If the property is missing or set to 0 it is
 # disabled.
 # Default is 1000000000 which is 1GB.
@@ -289,10 +289,5 @@ karaf.shutdown.pid.file=${karaf.data}/pid
 # the shut down procedure.
 karaf.shutdown.command = 3500d4e3-ce93-4ae3-abb4-5e90cef4deb
 
-# Add #DCE specific configuration here:
-#DCE Email address to send notifications to
-edu.harvard.dce.notification.email=dev-notify@lists.dce.harvard.edu
-
-#DCE Cluster name 
+#DCE Cluster name
 edu.harvard.dce.cluster.name=<%= @stack_name %>
-
