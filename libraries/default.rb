@@ -44,7 +44,7 @@ module MhOpsworksRecipes
     end
 
     def get_shared_asset_bucket_name
-      node.fetch(:shared_asset_bucket_name, 'oc-opsworks-shared-assets')
+      node.fetch(:shared_asset_bucket_name, 'mh-opsworks-shared-assets')
     end
 
     def get_cluster_seed_bucket_name
@@ -822,7 +822,7 @@ module MhOpsworksRecipes
       start_check_sleep_seconds = enable_yourkit_agent? ? 30 : 20
 
       template %Q|/etc/init.d/opencast| do
-        source 'opencast-init-script.erb'
+        source 'etc-init.d-opencast.erb'
         owner 'opencast'
         group 'opencast'
         mode '755'
@@ -832,8 +832,8 @@ module MhOpsworksRecipes
         })
       end
 
-      template %Q|#{current_deploy_root}/bin/opencast| do
-        source 'opencast-harness.erb'
+      template %Q|#{current_deploy_root}/bin/setenv| do
+        source 'opencast-setenv.erb'
         owner 'opencast'
         group 'opencast'
         mode '755'
@@ -1072,21 +1072,23 @@ module MhOpsworksRecipes
       # node_modules or issues while maven pulls down artifacts,
       # run this in a begin/rescue block and retry a build immediately
       # after failure a few times before permanently failing
-      build_profiles = {
-        admin: '-Padmin,dist-stub,engage-stub,worker-stub,workspace,serviceregistry',
-        ingest: '-Pingest-standalone',
-        worker: '-Pworker-standalone,serviceregistry,workspace',
-        engage: '-Pengage-standalone,dist,serviceregistry,workspace'
-      }
-      skip_unit_tests = node.fetch(:skip_java_unit_tests, 'true')
       retry_this_many = 3
-      if skip_unit_tests.to_s == 'false'
+
+      if node.fetch(:skip_java_unit_tests, 'true').downcase == 'true'
         retry_this_many = 0
+        skip_unit_tests = '-DskipTests'
+      else
+        skip_unit_tests = ''
       end
+
       execute 'maven build for opencast' do
-        command %Q|cd #{current_deploy_root} && MAVEN_OPTS='-Xms256m -Xmx960m -XX:PermSize=64m -XX:MaxPermSize=256m' mvn clean install -DdeployTo="#{current_deploy_root}" -Dmaven.test.skip=#{skip_unit_tests} #{build_profiles[node_profile.to_sym]}|
+        command %Q|cd #{current_deploy_root} && mvn clean install #{skip_unit_tests} -P#{node_profile.to_s}|
         retries retry_this_many
         retry_delay 30
+      end
+
+      execute 'copy build' do
+        command %Q|cd #{current_deploy_root} && rsync -a build/opencast-dist-#{node_profile.to_s}-*/* .|
       end
     end
 
