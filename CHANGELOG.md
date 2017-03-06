@@ -2,6 +2,11 @@
 
 ## TO BE RELEASED
 
+* *REQUIRES MANUAL RECIPE RUN* Add $request_time value to nginx access log events
+  Manual recipe run should come after deploy and an `update_chef_recipes`.
+
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin,Engage" recipes="mh-opsworks-recipes::configure-nginx-proxy"
+
 ## v1.21.0 - 02/13/2017
 
 * MATT-2231 login for annots summary path
