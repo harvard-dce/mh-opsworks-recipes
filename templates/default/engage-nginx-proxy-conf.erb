@@ -36,7 +36,7 @@ server {
   location /usertracking {
     proxy_pass http://127.0.0.1:<%= @matterhorn_backend_http_port %>/usertracking;
     access_log /var/log/nginx/session_uid.log session_uid;
-    access_log /var/log/nginx/access.log;
+    access_log /var/log/nginx/access.log request_time;
   }
 
   location / {
@@ -91,7 +91,7 @@ server {
   location /usertracking {
     proxy_pass http://127.0.0.1:<%= @matterhorn_backend_http_port %>/usertracking;
     access_log /var/log/nginx/session_uid.log session_uid;
-    access_log /var/log/nginx/access.log;
+    access_log /var/log/nginx/access.log request_time;
   }
 
   location / {

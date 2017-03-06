@@ -1,3 +1,8 @@
+log_format request_time '$remote_addr - $remote_user [$time_local] '
+                        '"$request" $status $bytes_sent '
+                        '"$http_referer" "$http_user_agent" '
+                        '$request_time $upstream_response_time';
+
 server {
   listen 80 default_server;
   listen [::]:80 default_server ipv6only=on;
@@ -21,6 +26,8 @@ server {
     proxy_buffering off;
     proxy_pass http://127.0.0.1:<%= @matterhorn_backend_http_port %>;
   }
+
+  access_log /var/log/nginx/access.log request_time;
 
   include /etc/nginx/proxy-includes/*.conf;
 }
