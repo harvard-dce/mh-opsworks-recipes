@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## v1.21.1 - 03/10/2017
+
 * *REQUIRES MANUAL RECIPE RUN* Add $request_time value to nginx access log events
   Manual recipe run should come after deploy and an `update_chef_recipes`.
 
