@@ -2,6 +2,13 @@
 
 ## TO BE RELEASED
 
+## v1.21.2-hotfix - 03/13/2017
+
+* hotfix to address nginx proxy config mixup. The previous manual recipe run instructions should have been:
+
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin" recipes="mh-opsworks-recipes::configure-nginx-proxy"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Engage" recipes="mh-opsworks-recipes::configure-engage-nginx-proxy"
+
 ## v1.21.1 - 03/10/2017
 
 * *REQUIRES MANUAL RECIPE RUN* Add $request_time value to nginx access log events
