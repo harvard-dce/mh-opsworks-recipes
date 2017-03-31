@@ -26,6 +26,7 @@ s3_file_archive_bucket_name = get_s3_file_archive_bucket_name
 ibm_watson_user_info = get_ibm_watson_user_info
 ibm_watson_username = ibm_watson_user_info[:user]
 ibm_watson_psw = ibm_watson_user_info[:pass]
+ibm_watson_transcript_bucket = get_ibm_watson_transcript_bucket_name
 
 capture_agent_monitor_url = node.fetch(
   :capture_agent_monitor_url, 'http://example.com/monitor_url'
@@ -106,6 +107,9 @@ deploy_revision "matterhorn" do
     install_otherpubs_service_series_impl_config(most_recent_deploy)
     install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name)
     install_ibm_watson_transcription_service_config(most_recent_deploy, ibm_watson_username, ibm_watson_psw)
+    unless ibm_watson_transcript_bucket.nil? or ibm_watson_transcript_bucket.empty?
+      setup_transcript_result_sync_to_s3(shared_storage_root, ibm_watson_transcript_bucket)
+    end
     install_published_event_details_email(most_recent_deploy, public_engage_hostname)
     configure_newrelic(most_recent_deploy, newrelic_app_name, :admin)
 

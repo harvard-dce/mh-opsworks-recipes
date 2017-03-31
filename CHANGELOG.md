@@ -3,6 +3,10 @@
 ## TO BE RELEASED
 
 * MI-63: remove nodejs install recipe as it is no longer needed
+* *REQUIRES EDITS TO CLUSTER CONFIG*
+  MI-62: create cron entry to sync ibm watson transcript results to s3. Prior to deployment, the `custom_json` block in cluster config should be updated with the name of the target s3 bucket:
+  
+        "ibm_watson_transcript_sync_bucket_name": "dce-ibm-watson-transcripts"
 
 ## v1.21.2-hotfix - 03/13/2017
 

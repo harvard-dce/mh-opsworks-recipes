@@ -227,7 +227,11 @@ module MhOpsworksRecipes
         }
       )
     end
-    
+
+    def get_ibm_watson_transcript_bucket_name
+      node[:ibm_watson_transcript_sync_bucket_name]
+    end
+
     def get_s3_distribution_bucket_name
       node[:s3_distribution_bucket_name]
     end
@@ -946,6 +950,16 @@ module MhOpsworksRecipes
           ibm_watson_username: ibm_watson_username,
           ibm_watson_psw: ibm_watson_psw  
         })
+      end
+    end
+
+    def setup_transcript_result_sync_to_s3(shared_storage_root, transcript_bucket_name)
+      transcript_path = shared_storage_root + '/files/collection/transcripts'
+      cron_d 'sync_transcripts_to_s3' do
+        user 'matterhorn'
+        predefined_value '@daily'
+        command %Q|cd #{transcript_path}; aws s3 sync --quiet . s3://#{transcript_bucket_name}|
+        path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
       end
     end
 
