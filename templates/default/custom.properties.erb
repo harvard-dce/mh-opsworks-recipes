@@ -41,7 +41,7 @@ org.opencastproject.storage.dir=<%= @local_workspace_root %>
 
 # The directory where the configuration files for the Elasticsearch indices are located. This directory should
 # be persistent between reboots (i.e., not /tmp)
-org.opencastproject.elasticsearch.config.dir=<%= @local_workspace_root %>/elastic-indexes
+org.opencastproject.elasticsearch.config.dir=${org.opencastproject.storage.dir}/elastic-indexes
 
 # The username and password for a system administrator account. If both `user` and `pass` are set, Opencast will create
 # or update that user when started up. If it is commented out, nothing will happen.
@@ -154,7 +154,7 @@ activemq.broker.url=failover://(tcp://<%= @activemq_bind_host %>:61616)?initialR
 
 # Default directory to use for embedded solr indexes.
 # If not set, ${karaf.data}/solr-indexes will be used.
-org.opencastproject.solr.dir=<%= @local_workspace_root %>/solr-indexes
+org.opencastproject.solr.dir=${org.opencastproject.storage.dir}/solr-indexes
 
 # Directory to store the embedded solr indices.  This should be a persistent and stable directory.
 # Default: ${org.opencastproject.solr.dir}/{archive, search, series, scheduler, workflow}
