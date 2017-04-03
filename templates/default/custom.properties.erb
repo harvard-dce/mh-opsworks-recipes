@@ -34,11 +34,14 @@ org.opencastproject.server.url=http://<%= @hostname %>
 
 # The directory where the system will store its processed files (including temporary files).  This directory should
 # be persistent between reboots (i.e., not /tmp)
+# #DCE This is the shared file system in a distributed environment
+org.opencastproject.shared_storage.dir=<%= @shared_storage_root %>
+# #DCE This is the local node storage e.g. solr indices
 org.opencastproject.storage.dir=<%= @local_workspace_root %>
 
 # The directory where the configuration files for the Elasticsearch indices are located. This directory should
 # be persistent between reboots (i.e., not /tmp)
-org.opencastproject.elasticsearch.config.dir=${karaf.etc}/index
+org.opencastproject.elasticsearch.config.dir=<%= @local_workspace_root %>/elastic-indexes
 
 # The username and password for a system administrator account. If both `user` and `pass` are set, Opencast will create
 # or update that user when started up. If it is commented out, nothing will happen.
@@ -83,7 +86,7 @@ org.opencastproject.security.internal.url.signing.duration=60
 #org.opencastproject.streaming.url=rtmp://localhost/matterhorn-engage
 
 # The directory where Opencast stores the streams
-#org.opencastproject.streaming.directory=${org.opencastproject.storage.dir}/streams
+#org.opencastproject.streaming.directory=${org.opencastproject.shared_storage.dir}/streams
 
 # The port to use for the streaming server, only used by a Wowza streaming server.
 #org.opencastproject.streaming.port=1935
@@ -96,7 +99,7 @@ org.opencastproject.security.internal.url.signing.duration=60
 #org.opencastproject.streaming.flvcompatibility=true
 
 # The directory to store media, metadata, and attachments for download from the engage tool
-org.opencastproject.download.directory=${org.opencastproject.storage.dir}/downloads
+org.opencastproject.download.directory=${org.opencastproject.shared_storage.dir}/downloads
 
 # The base URL for media downloads.
 <% if @cloudfront_url %>
@@ -151,7 +154,7 @@ activemq.broker.url=failover://(tcp://<%= @activemq_bind_host %>:61616)?initialR
 
 # Default directory to use for embedded solr indexes.
 # If not set, ${karaf.data}/solr-indexes will be used.
-#org.opencastproject.solr.dir=${karaf.data}/solr-indexes
+org.opencastproject.solr.dir=<%= @local_workspace_root %>/solr-indexes
 
 # Directory to store the embedded solr indices.  This should be a persistent and stable directory.
 # Default: ${org.opencastproject.solr.dir}/{archive, search, series, scheduler, workflow}
@@ -172,17 +175,17 @@ activemq.broker.url=failover://(tcp://<%= @activemq_bind_host %>:61616)?initialR
 #org.opencastproject.workflow.solr.url=http://localhost:8983/solr/
 
 # The path to the archive repository
-org.opencastproject.episode.rootdir=${org.opencastproject.storage.dir}/archive
+org.opencastproject.episode.rootdir=${org.opencastproject.shared_storage.dir}/archive
 
 # The path to the repository of files used during media processing.
-org.opencastproject.file.repo.path=${org.opencastproject.storage.dir}/files
+org.opencastproject.file.repo.path=${org.opencastproject.shared_storage.dir}/files
 
 # The base URL of the file server.  When using a shared filesystem between servers, set all servers to use the same URL.
 # Only then will hard linking between the working file repository and the workspace be enabled to prevent downloads.
 org.opencastproject.file.repo.url=<%= @admin_url %>
 
 # The path to the working files (recommend using fast, transient storage)
-org.opencastproject.workspace.rootdir=${org.opencastproject.storage.dir}/workspace
+org.opencastproject.workspace.rootdir=${org.opencastproject.shared_storage.dir}/workspace
 
 # The scheduled period in seconds, at which a workspace cleanup operation is performed.
 # 86400 seconds equals 24 hours.
@@ -256,7 +259,7 @@ org.opencastproject.workflow.handler.workflow.ZipWorkflowOperationHandler.tmpdir
 org.opencastproject.dataloader.csv=${karaf.etc}/dataimport
 
 # The location to store uploaded static files such as images and videos.
-org.opencastproject.staticfiles.rootdir=${org.opencastproject.storage.dir}/staticfiles
+org.opencastproject.staticfiles.rootdir=${org.opencastproject.shared_storage.dir}/staticfiles
 
 # True means to use a webserver to serve the static files but this will not secure
 # any of the files using user or organization security. If false it uses
