@@ -41,7 +41,7 @@ org.opencastproject.storage.dir=<%= @local_workspace_root %>
 
 # The directory where the configuration files for the Elasticsearch indices are located. This directory should
 # be persistent between reboots (i.e., not /tmp)
-org.opencastproject.elasticsearch.config.dir=${org.opencastproject.storage.dir}/elastic-indexes
+org.opencastproject.elasticsearch.config.dir=${karaf.etc}/index
 
 # The username and password for a system administrator account. If both `user` and `pass` are set, Opencast will create
 # or update that user when started up. If it is commented out, nothing will happen.
