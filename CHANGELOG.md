@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* MI-63: fetch the nodejs binary package from our shared assets s3 bucket
+
 ## v1.21.2-hotfix - 03/13/2017
 
 * hotfix to address nginx proxy config mixup. The previous manual recipe run instructions should have been:
