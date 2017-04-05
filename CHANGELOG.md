@@ -2,7 +2,7 @@
 
 ## TO BE RELEASED
 
-* MI-63: fetch the nodejs binary package from our shared assets s3 bucket
+* MI-63: remove nodejs install recipe as it is no longer needed
 
 ## v1.21.2-hotfix - 03/13/2017
 
