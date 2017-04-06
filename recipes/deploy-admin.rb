@@ -40,6 +40,8 @@ cloudfront_url = get_cloudfront_url
 live_streaming_url = get_live_streaming_url
 live_stream_name = get_live_stream_name
 
+activemq_bind_host = node.fetch(:activemq_bind_host, '0.0.0.0')
+
 auth_host = node.fetch(:auth_host, 'example.com')
 auth_redirect_location = node.fetch(:auth_redirect_location, 'http://example.com/some/url')
 auth_activated = node.fetch(:auth_activated, 'true')
@@ -85,14 +87,15 @@ deploy_revision "opencast" do
 
     # Copy in the configs as distributed in the git repo.
     # Some services will be further tweaked by templates
-    copy_files_into_place_for(:admin, most_recent_deploy)
-    copy_configs_for_load_service(most_recent_deploy)
-    copy_services_into_place(most_recent_deploy)
+#    copy_files_into_place_for(:admin, most_recent_deploy)
+#    copy_configs_for_load_service(most_recent_deploy)
+#    copy_services_into_place(most_recent_deploy)
 
-    copy_workflows_into_place_for_admin(most_recent_deploy)
+#    copy_workflows_into_place_for_admin(most_recent_deploy)
 
     install_init_scripts(most_recent_deploy, opencast_repo_root)
-    install_opencast_conf(most_recent_deploy, opencast_repo_root, 'admin')
+#    install_opencast_conf(most_recent_deploy, opencast_repo_root, 'admin')
+    install_opencast_log_configuration(most_recent_deploy)
     install_opencast_log_management
     install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_engage_hostname)
     remove_felix_fileinstall(most_recent_deploy)
@@ -121,8 +124,8 @@ deploy_revision "opencast" do
     initialize_database(most_recent_deploy)
     # /ADMIN SPECIFIC
 
-    template %Q|#{most_recent_deploy}/etc/config.properties| do
-      source 'config.properties.erb'
+    template %Q|#{most_recent_deploy}/etc/custom.properties| do
+      source 'custom.properties.erb'
       owner 'opencast'
       group 'opencast'
       variables({
