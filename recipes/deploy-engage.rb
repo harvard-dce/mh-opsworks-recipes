@@ -24,6 +24,8 @@ cloudfront_url = get_cloudfront_url
 live_streaming_url = get_live_streaming_url
 live_stream_name = get_live_stream_name
 
+activemq_bind_host = node.fetch(:activemq_bind_host, '0.0.0.0')
+
 auth_host = node.fetch(:auth_host, 'example.com')
 auth_redirect_location = node.fetch(:auth_redirect_location, 'http://example.com/some/url')
 auth_activated = node.fetch(:auth_activated, 'true')
@@ -76,42 +78,43 @@ deploy_revision "opencast" do
 
   before_symlink do
     most_recent_deploy = path_to_most_recent_deploy(new_resource)
-    maven_build_for(:engage, most_recent_deploy)
+    maven_build_for(:presentation, most_recent_deploy)
 
     # Copy in the configs as distributed in the git repo
     # Some services will be further tweaked by templates
-    copy_files_into_place_for(:engage, most_recent_deploy)
-    copy_configs_for_load_service(most_recent_deploy)
-    copy_services_into_place(most_recent_deploy)
+#    copy_files_into_place_for(:engage, most_recent_deploy)
+#    copy_configs_for_load_service(most_recent_deploy)
+#    copy_services_into_place(most_recent_deploy)
 
     install_init_scripts(most_recent_deploy, opencast_repo_root)
-    install_opencast_conf(most_recent_deploy, opencast_repo_root, 'engage')
+#    install_opencast_conf(most_recent_deploy, opencast_repo_root, 'engage')
+    install_opencast_log_configuration(most_recent_deploy)
     install_opencast_log_management
-    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_engage_hostname)
-    remove_felix_fileinstall(most_recent_deploy)
-    install_smtp_config(most_recent_deploy)
-    install_default_tenant_config(most_recent_deploy, public_engage_hostname, private_hostname)
-    install_auth_service(
-      most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated
-    )
-    install_live_streaming_service_config(most_recent_deploy, live_stream_name)
-    install_published_event_details_email(most_recent_deploy, public_engage_hostname)
-    configure_newrelic(most_recent_deploy, newrelic_app_name, :engage)
+#    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_engage_hostname)
+#    remove_felix_fileinstall(most_recent_deploy)
+#    install_smtp_config(most_recent_deploy)
+#    install_default_tenant_config(most_recent_deploy, public_engage_hostname, private_hostname)
+#    install_auth_service(
+#      most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated
+#    )
+#    install_live_streaming_service_config(most_recent_deploy, live_stream_name)
+#    install_published_event_details_email(most_recent_deploy, public_engage_hostname)
+#    configure_newrelic(most_recent_deploy, newrelic_app_name, :engage)
 
     # ENGAGE SPECIFIC
-    set_service_registry_dispatch_interval(most_recent_deploy)
-    configure_usertracking(most_recent_deploy, user_tracking_authhost)
-    install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host)
-    install_otherpubs_service_series_impl_config(most_recent_deploy)
-    install_aws_s3_distribution_service_config(most_recent_deploy, region, s3_distribution_bucket_name)
+#    set_service_registry_dispatch_interval(most_recent_deploy)
+#    configure_usertracking(most_recent_deploy, user_tracking_authhost)
+#    install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host)
+#    install_otherpubs_service_series_impl_config(most_recent_deploy)
+#    install_aws_s3_distribution_service_config(most_recent_deploy, region, s3_distribution_bucket_name)
     # /ENGAGE SPECIFIC
 
-    if using_local_distribution?
-      update_properties_files_for_local_distribution(most_recent_deploy)
-    end
+#    if using_local_distribution?
+#      update_properties_files_for_local_distribution(most_recent_deploy)
+#    end
 
-    template %Q|#{most_recent_deploy}/etc/config.properties| do
-      source 'config.properties.erb'
+    template %Q|#{most_recent_deploy}/etc/custom.properties| do
+      source 'custom.properties.erb'
       owner 'opencast'
       group 'opencast'
       variables({
@@ -132,6 +135,7 @@ deploy_revision "opencast" do
         job_maxload: nil,
         stack_name: stack_name,
         workspace_cleanup_period: 0,
+        activemq_bind_host: activemq_bind_host
       })
     end
   end
