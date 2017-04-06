@@ -101,7 +101,7 @@ module MhOpsworksRecipes
     end
 
     def get_db_seed_file
-      node.fetch(:db_seed_file, 'dce-config/docs/scripts/ddl/mysql5.sql')
+      node.fetch(:db_seed_file, 'docs/scripts/ddl/mysql5.sql')
     end
 
     def get_deploy_action

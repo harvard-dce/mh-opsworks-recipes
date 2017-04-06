@@ -159,11 +159,11 @@ deploy_revision "opencast" do
   end
 end
 
-#unless node[:dont_start_opencast_after_deploy]
-#  service 'opencast' do
-#    action :start
-#    supports restart: true, start: true, stop: true, status: true
-#  end
-#end
-#
-#include_recipe "oc-opsworks-recipes::monitor-opencast-daemon"
+unless node[:dont_start_opencast_after_deploy]
+  service 'opencast' do
+    action :start
+    supports restart: true, start: true, stop: true, status: true
+  end
+end
+
+include_recipe "oc-opsworks-recipes::monitor-opencast-daemon"
