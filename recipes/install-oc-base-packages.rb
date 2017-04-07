@@ -17,6 +17,14 @@ end
 
 include_recipe 'java'
 include_recipe 'maven'
+
+# this is a workaround for a bug on ubuntu 14.04: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1406483
+# alternatively we could purge and reinstall the ca-certificates-java package but this works and is simpler
+execute 'update-ca-certificates' do
+  command '/usr/sbin/update-ca-certificates -f'
+  not_if 'test -e /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/cacerts'
+end
+
 include_recipe 'activemq'
 include_recipe 'oc-opsworks-recipes::install-nodejs'
 include_recipe "oc-opsworks-recipes::clean-up-package-cache"
