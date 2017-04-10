@@ -772,7 +772,7 @@ module MhOpsworksRecipes
 
     def initialize_database(current_deploy_root)
       db_info = node[:deploy][:opencast][:database]
-      db_seed_file = node.fetch(:db_seed_file, 'dce-config/docs/scripts/ddl/mysql5.sql')
+      db_seed_file = node.fetch(:db_seed_file, 'docs/scripts/ddl/mysql5.sql')
 
       host = db_info[:host]
       username = db_info[:username]
