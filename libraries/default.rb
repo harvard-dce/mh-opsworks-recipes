@@ -542,10 +542,6 @@ module MhOpsworksRecipes
             src: 'dce-config/email/metasynchDetails',
             dest: 'etc/email/metasynchDetails'
           },
-          {
-            src: 'dce-config/services/org.ops4j.pax.logging.properties',
-            dest: 'etc/services/org.ops4j.pax.logging.properties'
-          },
         ],
         worker: [
           {
@@ -568,10 +564,6 @@ module MhOpsworksRecipes
             src: 'dce-config/workflows/DCE-error-handler.xml',
             dest: 'etc/workflows/DCE-error-handler.xml',
           },
-          {
-            src: 'dce-config/services/org.ops4j.pax.logging.properties',
-            dest: 'etc/services/org.ops4j.pax.logging.properties'
-          },
         ],
         engage: [
           {
@@ -589,10 +581,6 @@ module MhOpsworksRecipes
           {
             src: 'dce-config/workflows/DCE-error-handler.xml',
             dest: 'etc/workflows/DCE-error-handler.xml',
-          },
-          {
-            src: 'dce-config/services/org.ops4j.pax.logging.properties',
-            dest: 'etc/services/org.ops4j.pax.logging.properties'
           },
         ]
       }
@@ -774,18 +762,18 @@ module MhOpsworksRecipes
     end
 
     def update_properties_files_for_local_distribution(current_deploy_root)
-      ruby_block "update engage hostname" do
-        block do
-          ['engage.properties', 'admin.properties', 'all-in-one.properties'].each do |properties_file|
-            editor = Chef::Util::FileEdit.new(current_deploy_root + '/etc/profiles/' + properties_file)
-            editor.search_file_replace(
-              /mh-harvard-dce-distribution-service-aws-s3/,
-              "opencast-distribution-service-download"
-            )
-            editor.write_file
-          end
-        end
-      end
+#      ruby_block "update engage hostname" do
+#        block do
+#          ['engage.properties', 'admin.properties', 'all-in-one.properties'].each do |properties_file|
+#            editor = Chef::Util::FileEdit.new(current_deploy_root + '/etc/profiles/' + properties_file)
+#            editor.search_file_replace(
+#              /mh-harvard-dce-distribution-service-aws-s3/,
+#              "opencast-distribution-service-download"
+#            )
+#            editor.write_file
+#          end
+#        end
+#      end
     end
 
     def install_init_scripts(current_deploy_root, opencast_repo_root)
@@ -839,8 +827,8 @@ module MhOpsworksRecipes
     end
 
     def install_multitenancy_config(current_deploy_root, admin_hostname, engage_hostname)
-      template %Q|#{current_deploy_root}/etc/load/org.opencastproject.organization-mh_default_org.cfg| do
-        source 'mh_default_org.cfg.erb'
+      template %Q|#{current_deploy_root}/etc/org.opencastproject.organization-mh_default_org.cfg| do
+        source 'org.opencastproject.organization-mh_default_org.cfg.erb'
         owner 'opencast'
         group 'opencast'
         variables({
@@ -878,7 +866,7 @@ module MhOpsworksRecipes
       smtp_auth = node.fetch(:smtp_auth, {})
       default_email_sender = smtp_auth.fetch(:default_email_sender, 'no-reply@localhost')
 
-      template %Q|#{current_deploy_root}/etc/services/org.opencastproject.kernel.mail.SmtpService.properties| do
+      template %Q|#{current_deploy_root}/etc/org.opencastproject.kernel.mail.SmtpService.properties| do
         source 'org.opencastproject.kernel.mail.SmtpService.properties.erb'
         owner 'opencast'
         group 'opencast'
@@ -921,8 +909,8 @@ module MhOpsworksRecipes
     end
 
     def install_live_streaming_service_config(current_deploy_root,live_stream_name)
-      template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.live.impl.LiveServiceImpl.properties| do
-        source 'edu.harvard.dce.live.impl.LiveServiceImpl.properties.erb'
+      template %Q|#{current_deploy_root}/etc/org.opencastproject.liveschedule.impl.LiveServiceImpl.cfg| do
+        source 'org.opencastproject.liveschedule.impl.LiveScheduleServiceImpl.cfg.erb'
         owner 'opencast'
         group 'opencast'
         variables({
@@ -932,8 +920,8 @@ module MhOpsworksRecipes
     end
 
     def install_aws_s3_distribution_service_config(current_deploy_root, region, s3_distribution_bucket_name)
-      template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.distribution.aws.s3.AwsS3DistributionServiceImpl.properties| do
-        source 'edu.harvard.dce.distribution.aws.s3.AwsS3DistributionServiceImpl.properties.erb'
+      template %Q|#{current_deploy_root}/etc/org.opencastproject.distribution.aws.s3.AwsS3DistributionServiceImpl.cfg| do
+        source 'org.opencastproject.distribution.aws.s3.AwsS3DistributionServiceImpl.cfg.erb'
         owner 'opencast'
         group 'opencast'
         variables({
@@ -944,31 +932,31 @@ module MhOpsworksRecipes
     end
 
     def install_aws_s3_file_archive_service_config(current_deploy_root, region, s3_file_archive_bucket_name)
-      template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.episode.aws.s3.AwsS3ArchiveElementStore.properties| do
-        source 'edu.harvard.dce.episode.aws.s3.AwsS3ArchiveElementStore.properties.erb'
-        owner 'opencast'
-        group 'opencast'
-        variables({
-          region: region,
-          s3_file_archive_bucket_name: s3_file_archive_bucket_name
-        })
-      end
+#      template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.episode.aws.s3.AwsS3ArchiveElementStore.properties| do
+#        source 'edu.harvard.dce.episode.aws.s3.AwsS3ArchiveElementStore.properties.erb'
+#        owner 'opencast'
+#        group 'opencast'
+#        variables({
+#          region: region,
+#          s3_file_archive_bucket_name: s3_file_archive_bucket_name
+#        })
+#      end
     end
 
     def install_ibm_watson_transcription_service_config(current_deploy_root, ibm_watson_username, ibm_watson_psw)
-      template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.transcription.ibm.watson.IBMWatsonTranscriptionService.properties| do
-        source 'edu.harvard.dce.transcription.ibm.watson.IBMWatsonTranscriptionService.properties.erb'
-        owner 'opencast'
-        group 'opencast'
-        variables({
-          ibm_watson_username: ibm_watson_username,
-          ibm_watson_psw: ibm_watson_psw  
-        })
-      end
+#      template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.transcription.ibm.watson.IBMWatsonTranscriptionService.properties| do
+#        source 'edu.harvard.dce.transcription.ibm.watson.IBMWatsonTranscriptionService.properties.erb'
+#        owner 'opencast'
+#        group 'opencast'
+#        variables({
+#          ibm_watson_username: ibm_watson_username,
+#          ibm_watson_psw: ibm_watson_psw  
+#        })
+#      end
     end
 
     def install_auth_service(current_deploy_root, auth_host, redirect_location, auth_key, auth_activated = 'true')
-      template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.cfg| do
+      template %Q|#{current_deploy_root}/etc/edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.cfg| do
         source 'edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.cfg.erb'
         owner 'opencast'
         group 'opencast'
@@ -989,17 +977,9 @@ module MhOpsworksRecipes
       end
     end
 
-    def copy_configs_for_load_service(current_deploy_root)
-      execute 'copy service configs' do
-        command %Q|find #{current_deploy_root}/dce-config/load -maxdepth 1 -type f -exec cp -t #{current_deploy_root}/etc/load {} +|
-        retries 3
-        retry_delay 10
-      end
-    end
-
-    def copy_services_into_place(current_deploy_root)
-      execute 'copy services' do
-        command %Q|find #{current_deploy_root}/dce-config/services -maxdepth 1 -type f -exec cp -t #{current_deploy_root}/etc/services {} +|
+    def copy_dce_configs(current_deploy_root)
+      execute 'copy dce configs' do
+        command %Q|find #{current_deploy_root}/dce-config/etc -maxdepth 1 -type f -exec cp -t #{current_deploy_root}/etc {} +|
         retries 3
         retry_delay 10
       end
@@ -1043,7 +1023,8 @@ module MhOpsworksRecipes
         command %Q|cd #{current_deploy_root} && rsync -a build/opencast-dist-#{node_profile.to_s}-*/* .|
       end
     end
-
+   
+    # Rute 4/11/2017: not sure what this does?
     def remove_felix_fileinstall(current_deploy_root)
       file %Q|#{current_deploy_root}/etc/load/org.apache.felix.fileinstall-opencast.cfg| do
         action :delete
