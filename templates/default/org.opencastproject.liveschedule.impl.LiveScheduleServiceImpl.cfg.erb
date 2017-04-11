@@ -1,0 +1,21 @@
+# Configuration for the Live Schedule Service
+
+# The same mime-type applies to all flavors and resolutions
+live.mimeType=video/x-flv
+
+# If a comma-separated list is informed, several resolutions will be generated for each flavor
+live.resolution=1920x540,960x270
+
+# Possible variable substitutions:
+# #{id} = media package id
+# #{flavor} = type-subtype of flavor
+# #{caName} = capture agent name
+# #{resolution} = video resolution e.g. 1920x1080
+#live.streamName=#{id}-#{flavor}.stream
+#live.streamName=#{caName}-#{flavor}.stream-#{resolution}
+live.stream-name=<%= @live_stream_name %>
+
+# The distribution service to use: download or aws.s3
+# Will be changed to S3 later...
+live.distributionService=download
+
