@@ -96,8 +96,7 @@ deploy_revision "opencast" do
 #    copy_files_into_place_for(:admin, most_recent_deploy)
 #    copy_files_into_place_for(:worker, most_recent_deploy)
 #    copy_files_into_place_for(:engage, most_recent_deploy)
-#    copy_configs_for_load_service(most_recent_deploy)
-#    copy_services_into_place(most_recent_deploy)
+    copy_dce_configs(most_recent_deploy)
 #    copy_workflows_into_place_for_admin(most_recent_deploy)
 
     install_init_scripts(most_recent_deploy, opencast_repo_root)
@@ -111,7 +110,7 @@ deploy_revision "opencast" do
     install_auth_service(
       most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated
     )
-#    install_live_streaming_service_config(most_recent_deploy, live_stream_name)
+    install_live_streaming_service_config(most_recent_deploy, live_stream_name)
 #    install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host)
 #    install_otherpubs_service_series_impl_config(most_recent_deploy)
 #    install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name)
