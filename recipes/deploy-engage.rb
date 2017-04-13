@@ -24,8 +24,6 @@ cloudfront_url = get_cloudfront_url
 live_streaming_url = get_live_streaming_url
 live_stream_name = get_live_stream_name
 
-activemq_bind_host = node.fetch(:activemq_bind_host, '0.0.0.0')
-
 auth_host = node.fetch(:auth_host, 'example.com')
 auth_redirect_location = node.fetch(:auth_redirect_location, 'http://example.com/some/url')
 auth_activated = node.fetch(:auth_activated, 'true')
@@ -43,6 +41,8 @@ s3_distribution_bucket_name = get_s3_distribution_bucket_name
 git_data = node[:deploy][:opencast][:scm]
 public_engage_hostname = get_public_engage_hostname_on_engage
 private_hostname = node[:opsworks][:instance][:private_dns_name]
+
+activemq_bind_host = '0.0.0.0'
 
 public_admin_hostname = get_public_admin_hostname
 
@@ -89,7 +89,7 @@ deploy_revision "opencast" do
 #    install_opencast_conf(most_recent_deploy, opencast_repo_root, 'engage')
     install_opencast_log_configuration(most_recent_deploy)
     install_opencast_log_management
-#    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_engage_hostname)
+    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_engage_hostname)
 #    remove_felix_fileinstall(most_recent_deploy)
 #    install_smtp_config(most_recent_deploy)
     install_default_tenant_config(most_recent_deploy, public_engage_hostname, private_hostname)
