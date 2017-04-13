@@ -18,6 +18,15 @@ end
 include_recipe 'java'
 include_recipe 'maven'
 
+# create symlink in common system path as deploy operations don't seem to source
+# The $PATH settings the maven cookbook creates in '/etc/profile.d/maven.sh'
+# Note: this is a feature of later versions of the maven cookbook
+if node['maven']['setup_bin']
+  link '/usr/bin/mvn' do
+    to "#{node['maven']['m2_home']}/bin/mvn"
+  end
+end
+
 # this is a workaround for a bug on ubuntu 14.04: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1406483
 # alternatively we could purge and reinstall the ca-certificates-java package but this works and is simpler
 execute 'update-ca-certificates' do
