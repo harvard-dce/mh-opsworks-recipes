@@ -101,7 +101,7 @@ module MhOpsworksRecipes
     end
 
     def get_db_seed_file
-      node.fetch(:db_seed_file, 'docs/scripts/ddl/mysql5.sql')
+      node.fetch(:db_seed_file, 'dce-config/docs/scripts/ddl/mysql5.sql')
     end
 
     def get_deploy_action
@@ -760,7 +760,7 @@ module MhOpsworksRecipes
 
     def initialize_database(current_deploy_root)
       db_info = node[:deploy][:opencast][:database]
-      db_seed_file = node.fetch(:db_seed_file, 'docs/scripts/ddl/mysql5.sql')
+      db_seed_file = node.fetch(:db_seed_file, 'dce-config/docs/scripts/ddl/mysql5.sql')
 
       host = db_info[:host]
       username = db_info[:username]
@@ -964,7 +964,7 @@ module MhOpsworksRecipes
     end
 
     def install_live_streaming_service_config(current_deploy_root,live_stream_name)
-      template %Q|#{current_deploy_root}/etc/org.opencastproject.liveschedule.impl.LiveServiceImpl.cfg| do
+      template %Q|#{current_deploy_root}/etc/org.opencastproject.liveschedule.impl.LiveScheduleServiceImpl.cfg| do
         source 'org.opencastproject.liveschedule.impl.LiveScheduleServiceImpl.cfg.erb'
         owner 'opencast'
         group 'opencast'
@@ -1030,6 +1030,21 @@ module MhOpsworksRecipes
           redirect_location: redirect_location,
           auth_activated: auth_activated,
           auth_key: auth_key
+        })
+      end
+    end
+
+    def install_elasticsearch_index_config(current_deploy_root,index_name)
+      local_workspace_root = get_local_workspace_root
+      log_dir = get_log_directory
+
+      template %Q|#{current_deploy_root}/etc/index/#{index_name}/settings.yml| do
+        source 'settings-#{index_name}.yml.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          elasticsearch_data: local_workspace_root 
+          elasticsearch_log: log_dir 
         })
       end
     end
