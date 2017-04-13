@@ -45,8 +45,6 @@ cloudfront_url = get_cloudfront_url
 live_streaming_url = get_live_streaming_url
 live_stream_name = get_live_stream_name
 
-activemq_bind_host = node.fetch(:activemq_bind_host, '0.0.0.0')
-
 auth_host = node.fetch(:auth_host, 'example.com')
 auth_redirect_location = node.fetch(:auth_redirect_location, 'http://example.com/some/url')
 auth_activated = node.fetch(:auth_activated, 'true')
@@ -56,6 +54,8 @@ git_data = node[:deploy][:opencast][:scm]
 
 public_hostname = node[:opsworks][:instance][:public_dns_name]
 private_hostname = node[:opsworks][:instance][:private_dns_name]
+
+activemq_bind_host = private_hostname 
 
 database_connection = get_database_connection
 
@@ -103,7 +103,9 @@ deploy_revision "opencast" do
 #    install_opencast_conf(most_recent_deploy, opencast_repo_root, 'all-in-one')
     install_opencast_log_configuration(most_recent_deploy)
     install_opencast_log_management
-#    install_multitenancy_config(most_recent_deploy, public_hostname, public_hostname)
+    install_multitenancy_config(most_recent_deploy, public_hostname, public_hostname)
+    install_elasticsearch_index_config(most_recent_deploy,'adminui')
+    install_elasticsearch_index_config(most_recent_deploy,'externalapi')
 #    remove_felix_fileinstall(most_recent_deploy)
 #    install_smtp_config(most_recent_deploy)
     install_default_tenant_config(most_recent_deploy, public_hostname, private_hostname)
