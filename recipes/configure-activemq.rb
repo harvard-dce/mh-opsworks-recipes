@@ -13,5 +13,6 @@ template activemq_config do
   variables({
       activemq_bind_host: activemq_bind_host
   })
-  notifies :restart, 'service[activemq]' if node['activemq']['enabled']
 end
+
+exec 'service activemq restart'
