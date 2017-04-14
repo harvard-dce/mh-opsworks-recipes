@@ -970,15 +970,15 @@ module MhOpsworksRecipes
     end
 
     def install_elasticsearch_index_config(current_deploy_root,index_name)
-      local_workspace_root = get_local_workspace_root
-      log_dir = get_log_directory
+      local_workspace_root = node.fetch(:local_workspace_root, '/var/opencast-workspace')
+      log_dir = node.fetch(:opencast_log_directory, '/var/log/opencast')
 
       template %Q|#{current_deploy_root}/etc/index/#{index_name}/settings.yml| do
-        source 'settings-#{index_name}.yml.erb'
+        source %Q|settings-#{index_name}.yml.erb|
         owner 'opencast'
         group 'opencast'
         variables({
-          elasticsearch_data: local_workspace_root 
+          elasticsearch_data: local_workspace_root, 
           elasticsearch_log: log_dir 
         })
       end
