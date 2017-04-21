@@ -107,10 +107,10 @@ deploy_revision "opencast" do
 #    install_multitenancy_config(most_recent_deploy, public_hostname, public_hostname)
 #    remove_felix_fileinstall(most_recent_deploy)
 #    install_smtp_config(most_recent_deploy)
-#    install_default_tenant_config(most_recent_deploy, public_hostname, private_hostname)
-#    install_auth_service(
-#      most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated
-#    )
+    install_default_tenant_config(most_recent_deploy, public_hostname, private_hostname)
+    install_auth_service(
+      most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated
+    )
 #    install_live_streaming_service_config(most_recent_deploy, live_stream_name)
 #    install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host)
 #    install_otherpubs_service_series_impl_config(most_recent_deploy)
