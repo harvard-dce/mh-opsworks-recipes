@@ -13,11 +13,6 @@
 # to go through that proxy, then server.url should point to the proxy's port (usually 80).
 org.opencastproject.server.url=http://<%= @hostname %>
 
-# This property specifies the comma separated list of addresses used to for opencast to listen to.  (e.g. localhost or
-# localhost,10.0.0.1). Host names or IP addresses can be used. Default value is "0.0.0.0".
-# Comment this out to make Opencast listen to all hosts.
-#org.ops4j.pax.web.listening.addresses=127.0.0.1
-
 # The url of the remote service registry.  This is used in cases where there is no direct connection to the service
 # registry database such as capture agens running in protected environments. This is typically true for capture agents
 # and should be set to the url of a server running the actual implementation of the service registry and the path to
@@ -48,7 +43,10 @@ org.opencastproject.elasticsearch.config.dir=${karaf.etc}/index
 # WARNING: Commenting this out later or renaming the user will *not* remove already created user.
 org.opencastproject.security.admin.user=<%= @admin_auth[:user] %>
 org.opencastproject.security.admin.pass=<%= @admin_auth[:pass] %>
-org.opencastproject.security.admin.roles=ROLE_ADMIN,ROLE_USER,ROLE_OAUTH_USER
+org.opencastproject.security.admin.roles=ROLE_ADMIN,ROLE_OAUTH_USER
+
+# Optional custom roles which can used in ACLs and granted to users or groups (comma-separated list of role names)
+#org.opencastproject.security.custom.roles=ROLE_ONE, ROLE_TWO, ROLE_THREE
 
 # The username and password to present to other Opencast servers when calling their REST endpoints.  The remote server
 # must contain matching values.
@@ -184,6 +182,14 @@ org.opencastproject.file.repo.path=${org.opencastproject.shared_storage.dir}/fil
 # Only then will hard linking between the working file repository and the workspace be enabled to prevent downloads.
 org.opencastproject.file.repo.url=<%= @admin_url %>
 
+#org.opencastproject.file.repo.url=${org.opencastproject.server.url}
+
+# The mount point of the OAI-PMH servlet.
+# Please make sure that the path configured is accessible without any login (see security.xml)
+# This setting is configured here and not in the OAI-PMH server's config since it is shared amongst several
+# OAI-PMH related components.
+org.opencastproject.oaipmh.mountpoint=/oaipmh
+
 # The path to the working files (recommend using fast, transient storage)
 org.opencastproject.workspace.rootdir=${org.opencastproject.shared_storage.dir}/workspace
 
@@ -279,6 +285,14 @@ org.opencastproject.staticfiles.upload.max.size=1000000000
 # Capture agents which have not sent status updates for this period will be marked as offline.
 # Default: 120 minutes (2 hours)
 #org.opencastproject.capture.admin.timeout=120
+
+# The size of the user directory cache.
+# Default: 200
+#org.opencastproject.userdirectory.cache.size=200
+
+# The expiry time of entries in the user directory cache, in minutes
+# Default: 1 minute
+#org.opencastproject.userdirectory.cache.expiry=1
 
 # The place for Karaf to put the lock file ensuring that Opencast is not run twice at the same time.
 karaf.lock.dir=${karaf.data}
