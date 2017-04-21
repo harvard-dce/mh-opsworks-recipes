@@ -85,9 +85,9 @@ deploy_revision "opencast" do
 #    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_engage_hostname)
 #    remove_felix_fileinstall(most_recent_deploy)
 #    install_smtp_config(most_recent_deploy)
-#    install_auth_service(
-#      most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated
-#    )
+    install_auth_service(
+      most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated
+    )
 #    install_live_streaming_service_config(most_recent_deploy, live_stream_name)
 #    install_published_event_details_email(most_recent_deploy, public_engage_hostname)
 #    configure_newrelic(most_recent_deploy, newrelic_app_name, :workers)
