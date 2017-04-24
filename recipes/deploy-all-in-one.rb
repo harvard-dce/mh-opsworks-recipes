@@ -96,7 +96,7 @@ deploy_revision "opencast" do
 #    copy_files_into_place_for(:admin, most_recent_deploy)
 #    copy_files_into_place_for(:worker, most_recent_deploy)
 #    copy_files_into_place_for(:engage, most_recent_deploy)
-    copy_dce_configs(most_recent_deploy)
+#    copy_dce_configs(most_recent_deploy)
 #    copy_workflows_into_place_for_admin(most_recent_deploy)
 
     install_init_scripts(most_recent_deploy, opencast_repo_root)

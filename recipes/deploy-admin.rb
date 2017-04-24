@@ -87,7 +87,7 @@ deploy_revision "opencast" do
     # Copy in the configs as distributed in the git repo.
     # Some services will be further tweaked by templates
 #    copy_files_into_place_for(:admin, most_recent_deploy)
-    copy_dce_configs(most_recent_deploy)
+#    copy_dce_configs(most_recent_deploy)
 
 #    copy_workflows_into_place_for_admin(most_recent_deploy)
 
