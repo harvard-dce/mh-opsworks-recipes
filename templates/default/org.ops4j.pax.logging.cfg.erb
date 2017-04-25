@@ -36,8 +36,6 @@ log4j.appender.out=org.apache.log4j.DailyRollingFileAppender
 log4j.appender.out.layout=org.apache.log4j.PatternLayout
 log4j.appender.out.layout.ConversionPattern=%d{ISO8601} | %-5.5p | (%C{1}:%L) - %m%n
 log4j.appender.out.file=<%= @opencast_log_directory %>/opencast.log
-log4j.appender.out.maxFileSize=10MB
-log4j.appender.out.maxBackupIndex=4
 log4j.appender.out.append=true
 log4j.appender.out.encoding=UTF-8
 log4j.appender.out.DatePattern='.'yyyy-MM-dd
