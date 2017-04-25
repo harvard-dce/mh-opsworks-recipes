@@ -6,7 +6,7 @@ instance_id="$1"
 app_name="$2"
 namespace="Java/$app_name"
 
-proc_id=`jps | grep $app_name | cut -d ' ' -f 1`
+proc_id=`jps -l | grep $app_name | cut -d ' ' -f 1`
 data=`jstat -gcutil $proc_id | tail -1 | tr -s ' ' | cut -c2-100`
 
 echo $data | while read survivor0 survivor1 eden oldgen perm younggc younggctime fullgc fullgctime totalgctime
