@@ -43,6 +43,18 @@ failed() {
 }
 
 start() {
+
+   # If you don't want to boot matterhorn automatically after instance boot, set
+   # "dont_start_matterhorn_automatically" to "true" in your stack's custom_json.
+   # *THIS WILL KEEP YOU FROM BOOTING MATTERHORN ENTIRELY UNTIL YOU UNSET THE VARIABLE
+   # AND UPDATE YOUR CHEF RECIPES TO UPDATE YOUR JSON METADATA*. Use with caution.
+   #
+   if [ $(/usr/sbin/opsworks-agent-cli get_json | /usr/bin/jq '.dont_start_matterhorn_automatically' | grep 'true') ];
+   then
+     echo "Not starting because dont_start_matterhorn_automatically is set in the stack's custom_json"
+     exit 0;
+   fi
+
    smsg="Starting $prog: "
    echo -n "$smsg"
 
@@ -57,6 +69,19 @@ start() {
    # If we failed to start Opencast but a lock was created, we want to remove
    # the file (flock does not remove the file automatically):
    [ ! $retval -eq 0 ] && rm -f $lockfile
+
+   # Attempt to restart the daemon until it actually looks like it's
+   # started correctly
+   sleep 20
+   if [ "$attempts" -lt "$max_start_attempts" ]; then
+     if ! $(/usr/bin/curl -s -L http://localhost/ | grep -q "$test_string"); then
+       attempts=$[$attempts + 1]
+       restart
+     fi
+   else
+     retval=1
+     smsg="Daemon did not start after $max_start_attempts attempts"
+   fi
 
    [ $retval -eq 0 ] && success "$smsg" || failed "$smsg"
    return $retval

@@ -121,7 +121,7 @@ if mh_node?
   cron_d "felix_jvm_metrics" do
     user "root"
     minute "*/2"
-    command %Q(/usr/local/bin/jvm_metrics.sh "#{aws_instance_id}" felix 2>&1 | logger -t info)
+    command %Q(/usr/local/bin/jvm_metrics.sh "#{aws_instance_id}" karaf 2>&1 | logger -t info)
     path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   end
 end
