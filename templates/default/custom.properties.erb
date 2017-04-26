@@ -251,7 +251,8 @@ org.opencastproject.workflow.default.definition=ng-schedule-and-upload
 #org.opencastproject.sox.path=/opt/sox/sox
 
 # Email address of the server's admin.
-org.opencastproject.admin.email=admin@localhost
+# #DCE Used when sending notification emails (transcription errors, etc)
+org.opencastproject.admin.email=dev-notify@lists.dce.harvard.edu
 
 # Location of the temporary directory to build zip archives.
 # Default: ${org.opencastproject.storage.dir}/tmp/zip
@@ -317,5 +318,6 @@ karaf.shutdown.command = 3500d4e3-ce93-4ae3-abb4-5e90cef4deb
 
 org.opencastproject.live.streaming.url=<%= @live_streaming_url %>
 
-#DCE Cluster name
-edu.harvard.dce.cluster.name=<%= @stack_name %>
+# An optional name to identify this environment when sending email notifications
+org.opencastproject.environment.name=<%= @stack_name %>
+

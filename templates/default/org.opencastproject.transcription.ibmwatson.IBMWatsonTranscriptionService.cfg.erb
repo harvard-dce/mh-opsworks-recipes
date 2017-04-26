@@ -1,3 +1,6 @@
+# Change enabled to true to enable this service. 
+enabled=true
+
 # User obtained when registering with the IBM Watson Speech-to_text service 
 ibm.watson.user=<%= @ibm_watson_username %>
 
@@ -17,3 +20,12 @@ ibm.watson.psw=<%= @ibm_watson_psw %>
 # ibm watson speech-to-text service.
 # (in seconds)
 #completion.check.buffer=600
+
+# How long to keep result files in the working file repository in days.
+# The default is 7 days.
+#cleanup.results.days=7
+
+# Email to send notifications of errors. If not informed, the value from
+# org.opencastproject.admin.email in custom.properties will be used.
+#notification.email=
+
