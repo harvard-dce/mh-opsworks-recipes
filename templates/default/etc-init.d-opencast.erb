@@ -31,6 +31,12 @@ user="opencast"
 lockfile=/var/lock/subsys/${prog}
 [ -d "/var/lock/subsys" ] || lockfile="/var/lock/LCK.${prog}"
 
+# Used in the "restart until the daemon is actually working" feature
+# now included in start()
+test_string="j_username"
+max_start_attempts=10
+attempts=0
+
 # Load configuration files
 [ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog
 
@@ -72,7 +78,7 @@ start() {
 
    # Attempt to restart the daemon until it actually looks like it's
    # started correctly
-   sleep 20
+   sleep 120
    if [ "$attempts" -lt "$max_start_attempts" ]; then
      if ! $(/usr/bin/curl -s -L http://localhost/ | grep -q "$test_string"); then
        attempts=$[$attempts + 1]
