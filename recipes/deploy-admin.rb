@@ -87,10 +87,10 @@ deploy_revision "opencast" do
 
     # Copy in the configs as distributed in the git repo.
     # Some services will be further tweaked by templates
-#    copy_files_into_place_for(:admin, most_recent_deploy)
+    copy_files_into_place_for(:admin, most_recent_deploy)
 #    copy_dce_configs(most_recent_deploy)
 
-#    copy_workflows_into_place_for_admin(most_recent_deploy)
+    copy_workflows_into_place_for_admin(most_recent_deploy)
 
     install_init_scripts(most_recent_deploy, opencast_repo_root)
 #    install_opencast_conf(most_recent_deploy, opencast_repo_root, 'admin')
@@ -110,11 +110,11 @@ deploy_revision "opencast" do
 #    install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host)
 #    install_otherpubs_service_series_impl_config(most_recent_deploy)
 #    install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name)
-#    install_ibm_watson_transcription_service_config(most_recent_deploy, ibm_watson_username, ibm_watson_psw)
-#    unless ibm_watson_transcript_bucket.nil? or ibm_watson_transcript_bucket.empty?
-#      setup_transcript_result_sync_to_s3(shared_storage_root, ibm_watson_transcript_bucket)
-#    end
-#    install_published_event_details_email(most_recent_deploy, public_engage_hostname)
+    install_ibm_watson_transcription_service_config(most_recent_deploy, ibm_watson_username, ibm_watson_psw)
+    unless ibm_watson_transcript_bucket.nil? or ibm_watson_transcript_bucket.empty?
+      setup_transcript_result_sync_to_s3(shared_storage_root, ibm_watson_transcript_bucket)
+    end
+    install_published_event_details_email(most_recent_deploy, public_engage_hostname)
 #    configure_newrelic(most_recent_deploy, newrelic_app_name, :admin)
 
 #    if using_local_distribution?

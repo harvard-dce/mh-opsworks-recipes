@@ -52,7 +52,7 @@ server=<%= @hostname %>
 #
 # Value: <integer port number>
 #
-port=8080
+port=-1
 
 # Identifier of the Administrative role.
 #
@@ -140,7 +140,8 @@ prop.org.opencastproject.engage.ui.url=http://<%= @engage_hostname %>
 # Value: <a complete url with scheme and port>
 # Default: ${org.opencastproject.server.url}
 #
-#prop.org.opencastproject.assetmanager.url=http://localhost:8080
+#DCE External host name
+prop.org.opencastproject.assetmanager.url=http://<%= @admin_hostname %>
 
 # Path to the logo that is displayed in the upper left part of the
 # media module page.
