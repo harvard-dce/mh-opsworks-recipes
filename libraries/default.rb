@@ -540,59 +540,26 @@ module MhOpsworksRecipes
     def files_for(node_profile)
       files = {
         admin: [
-          {
-            src: 'dce-config/email/errorDetails',
-            dest: 'etc/email/errorDetails'
-          },
-          {
-            src: 'dce-config/email/eventDetails',
-            dest: 'etc/email/eventDetails'
-          },
-          {
-            src: 'dce-config/email/metasynchDetails',
-            dest: 'etc/email/metasynchDetails'
-          },
+#          {
+#            src: 'dce-config/email/errorDetails',
+#            dest: 'etc/email/errorDetails'
+#          },
+#          {
+#            src: 'dce-config/email/eventDetails',
+#            dest: 'etc/email/eventDetails'
+#          },
+#          {
+#            src: 'dce-config/email/metasynchDetails',
+#            dest: 'etc/email/metasynchDetails'
+#          },
         ],
         worker: [
-          {
-            src: 'dce-config/email/errorDetails',
-            dest: 'etc/email/errorDetails'
-          },
-          {
-            src: 'dce-config/email/eventDetails',
-            dest: 'etc/email/eventDetails'
-          },
-          {
-            src: 'dce-config/email/metasynchDetails',
-            dest: 'etc/email/metasynchDetails'
-          },
           {
             src: 'dce-config/encoding/DCE-h264-movies.properties',
             dest: 'etc/encoding/DCE-h264-movies.properties'
           },
-          {
-            src: 'dce-config/workflows/DCE-error-handler.xml',
-            dest: 'etc/workflows/DCE-error-handler.xml',
-          },
         ],
-        engage: [
-          {
-            src: 'dce-config/email/errorDetails',
-            dest: 'etc/email/errorDetails'
-          },
-          {
-            src: 'dce-config/email/eventDetails',
-            dest: 'etc/email/eventDetails'
-          },
-          {
-            src: 'dce-config/email/metasynchDetails',
-            dest: 'etc/email/metasynchDetails'
-          },
-          {
-            src: 'dce-config/workflows/DCE-error-handler.xml',
-            dest: 'etc/workflows/DCE-error-handler.xml',
-          },
-        ]
+        engage: []
       }
       files.fetch(node_profile.to_sym, [])
     end
@@ -954,15 +921,15 @@ module MhOpsworksRecipes
     end
 
     def install_ibm_watson_transcription_service_config(current_deploy_root, ibm_watson_username, ibm_watson_psw)
-#      template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.transcription.ibm.watson.IBMWatsonTranscriptionService.properties| do
-#        source 'edu.harvard.dce.transcription.ibm.watson.IBMWatsonTranscriptionService.properties.erb'
-#        owner 'opencast'
-#        group 'opencast'
-#        variables({
-#          ibm_watson_username: ibm_watson_username,
-#          ibm_watson_psw: ibm_watson_psw  
-#        })
-#      end
+      template %Q|#{current_deploy_root}/etc/org.opencastproject.transcription.ibmwatson.IBMWatsonTranscriptionService.cfg| do
+        source 'org.opencastproject.transcription.ibmwatson.IBMWatsonTranscriptionService.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          ibm_watson_username: ibm_watson_username,
+          ibm_watson_psw: ibm_watson_psw  
+        })
+      end
     end
 
     def install_auth_service(current_deploy_root, auth_host, redirect_location, auth_key, auth_activated = 'true')
