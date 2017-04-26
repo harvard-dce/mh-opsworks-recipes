@@ -83,7 +83,7 @@ deploy_revision "opencast" do
 
     # Copy in the configs as distributed in the git repo
     # Some services will be further tweaked by templates
-#    copy_files_into_place_for(:engage, most_recent_deploy)
+    copy_files_into_place_for(:engage, most_recent_deploy)
 #    copy_dce_configs(most_recent_deploy)
 
     install_init_scripts(most_recent_deploy, opencast_repo_root)
