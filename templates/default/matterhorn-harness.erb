@@ -145,7 +145,19 @@ NEWRELIC="-javaagent:${NEW_RELIC_JAR} $NEWRELIC_CONFIG"
 NEWRELIC=""
 <% end %>
 
-MATTERHORN_OPTS="$NEWRELIC $GOSH $DEBUG $FELIX $GRAPHICS $JAVA $LOGGING $JMX $DISABLE_PHONEHOME $ADD_OPTS"
+<% if @enable_yourkit_agent %>
+YOURKIT="-agentpath:<%= @yourkit_dir %>/libyjpagent.so=dir=<%= @yourkit_dir %>,onlylocal"
+<% end %>
+
+GC="-Xloggc:${LOGDIR}/gcnormal.log -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps"
+GC="${GC} -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCApplicationConcurrentTime -XX:+PrintHeapAtGC"
+GC="${GC} -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=20 -XX:GCLogFileSize=32M"
+
+<% if @enable_G1GC %>
+GC="${GC} -XX:+UseG1GC"
+<% end %>
+
+MATTERHORN_OPTS="$NEWRELIC $GOSH $DEBUG $FELIX $GRAPHICS $JAVA $LOGGING $DISABLE_PHONEHOME $JMX $GC $YOURKIT $ADD_OPTS"
 
 # Execute Capture-Agent device configuration
 $IS_CA && $CA/device_config.sh
