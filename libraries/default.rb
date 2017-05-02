@@ -802,7 +802,10 @@ module MhOpsworksRecipes
           matterhorn_root: matterhorn_repo_root + '/current',
           felix_config_dir: matterhorn_repo_root + '/current/etc',
           matterhorn_log_directory: log_dir,
-          enable_newrelic: enable_newrelic?
+          enable_newrelic: enable_newrelic?,
+          enable_G1GC: enable_G1GC?,
+          enable_yourkit_agent: enable_yourkit_agent?,
+          yourkit_dir: matterhorn_repo_root + '/yourkit'
         })
       end
     end
@@ -883,6 +886,13 @@ module MhOpsworksRecipes
        nr_layers.key?(layer_name)
     end
 
+    def enable_yourkit_agent?
+      node[:enable_yourkit_agent]
+    end
+
+    def enable_G1GC?
+       node[:enable_G1GC] and node[:opsworks][:instance][:hostname].match(/^(admin|engage)/)
+    end
 
     def configure_newrelic(current_deploy_root, node_name, layer_name)
       if enable_newrelic_layer?(layer_name)

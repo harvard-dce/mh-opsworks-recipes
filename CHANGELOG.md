@@ -4,7 +4,16 @@
 
 * redirect output from MH start-on-boot cron entry to syslog to prevent
   unnecessary emails
+* Allow enabling of G1 Garbage Collection method and YourKit profiler agent. Both are off by default. To enable, add either/both of the following attributes respectively to the cluster config's custom json:
 
+```
+    ...
+    "enable_G1GC": true,
+    ...
+    "enable_yourkit_agent": true,
+    ...
+```
+    
 # v1.22.0 - 04/21/2017
 
 * MI-63: remove nodejs install recipe as it is no longer needed
