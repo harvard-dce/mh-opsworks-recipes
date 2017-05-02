@@ -295,7 +295,7 @@ org.opencastproject.staticfiles.upload.max.size=1000000000
 #org.opencastproject.userdirectory.cache.expiry=1
 
 # The place for Karaf to put the lock file ensuring that Opencast is not run twice at the same time.
-karaf.lock.dir=${karaf.data}
+karaf.lock.dir=/var/lock/opencast
 
 # Setting or deactivating the remote shutdown port in Apache Karaf. Commenting this out will make Karaf listen to a
 # random shutdown port on localhost, announcing it via ${karaf.shutdown.port.file}. Setting this to -1 will deactivate
@@ -304,12 +304,12 @@ karaf.lock.dir=${karaf.data}
 
 # Specifies the location of the port file for Opencast. It is used by the shutdown script to send the shutdown command
 # to the main process.
-karaf.shutdown.port.file=${karaf.data}/karaf.port
+karaf.shutdown.port.file=/var/run/opencast/karaf.port
 
 # Specifies the location of the PID file for Opencast. It is used by the shutdown script to synchronously shut down
 # Opencast as it will wait for the process with the given process id. Removing this will cause the network port to be
 # used as fallback.
-karaf.pid.file=${karaf.data}/karaf.pid
+karaf.pid.file=/var/run/opencast/karaf.pid
 
 # Command for shutting down Opencast. If the shutdown port is enabled, Opencast will listen for this command to initiate
 # the shut down procedure.
