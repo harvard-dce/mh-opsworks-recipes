@@ -11,7 +11,9 @@
   get_shared_storage_root + '/inbox-hold-for-append',
   get_shared_storage_root + '/inbox-republish',
   get_shared_storage_root + '/inbox-republish-trim',
-  get_shared_storage_root + '/archive'
+  get_shared_storage_root + '/archive',
+  '/var/run/opencast',
+  '/var/lock/opencast'
 ].each do |opencast_directory|
   directory opencast_directory do
     owner 'opencast'
