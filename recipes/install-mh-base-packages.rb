@@ -12,4 +12,5 @@ end
 packages = %Q|autofs5 curl dkms gzip jq libglib2.0-dev maven mediainfo mysql-client openjdk-7-jdk openjdk-7-jre postfix python-pip rsyslog-gnutls run-one tesseract-ocr|
 install_package(packages)
 
+include_recipe "mh-opsworks-recipes::install-yourkit-agent"
 include_recipe "mh-opsworks-recipes::clean-up-package-cache"
