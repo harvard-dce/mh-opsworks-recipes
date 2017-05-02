@@ -659,8 +659,8 @@ module MhOpsworksRecipes
     end
 
     def set_service_registry_dispatch_interval(current_deploy_root)
-      template %Q|#{current_deploy_root}/etc/services/org.opencastproject.serviceregistry.impl.ServiceRegistryJpaImpl.properties| do
-        source 'ServiceRegistryJpaImpl.properties.erb'
+      template %Q|#{current_deploy_root}/etc/org.opencastproject.serviceregistry.impl.ServiceRegistryJpaImpl.cfg| do
+        source 'org.opencastproject.serviceregistry.impl.ServiceRegistryJpaImpl.cfg.erb'
         owner 'opencast'
         group 'opencast'
         variables({

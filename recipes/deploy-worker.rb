@@ -94,7 +94,7 @@ deploy_revision "opencast" do
     # WORKER SPECIFIC
     #TODO - this should probably be checked into the repo
 #    install_opencast_images_properties(most_recent_deploy)
-#    set_service_registry_dispatch_interval(most_recent_deploy)
+    set_service_registry_dispatch_interval(most_recent_deploy)
     # /WORKER SPECIFIC
 
 #    if using_local_distribution?
