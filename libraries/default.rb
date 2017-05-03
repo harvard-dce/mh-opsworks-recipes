@@ -160,6 +160,16 @@ module MhOpsworksRecipes
       admin_hostname
     end
 
+    def get_private_admin_hostname
+      (private_admin_hostname, admin_attributes) = node[:opsworks][:layers][:admin][:instances].first
+
+      admin_private_dns = 'UNKNOWN'
+      if admin_attributes
+        admin_private_dns = admin_attributes[:private_dns_name]
+      end
+      admin_private_dns
+    end
+
     def get_base_media_download_domain(engage_hostname)
       uri = URI(get_base_media_download_url(engage_hostname))
       uri.host
