@@ -37,8 +37,9 @@ git_data = node[:deploy][:opencast][:scm]
 public_engage_hostname = get_public_engage_hostname
 public_admin_hostname = get_public_admin_hostname
 private_hostname = node[:opsworks][:instance][:private_dns_name]
+private_admin_hostname = get_private_admin_hostname
 
-activemq_bind_host = '0.0.0.0'
+activemq_bind_host = private_admin_hostname 
 
 database_connection = get_database_connection
 
