@@ -78,7 +78,7 @@ deploy_revision "opencast" do
   create_dirs_before_symlink([])
   purge_before_symlink([])
   symlink_before_migrate({})
-  keep_releases 10
+  keep_releases 5
   action deploy_action
 
   before_symlink do
