@@ -34,8 +34,11 @@ lockfile=/var/lock/subsys/${prog}
 # Used in the "restart until the daemon is actually working" feature
 # now included in start()
 test_string="j_username"
-max_start_attempts=10
+max_sleep_attempts=10
+max_start_attempts=3
 attempts=0
+sleep_attempts=0
+sleeptime=10
 
 # Load configuration files
 [ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog
@@ -78,19 +81,34 @@ start() {
 
    # Attempt to restart the daemon until it actually looks like it's
    # started correctly
-   sleep 120
-   if [ "$attempts" -lt "$max_start_attempts" ]; then
-     if ! $(/usr/bin/curl -s -L http://localhost/ | grep -q "$test_string"); then
-       attempts=$[$attempts + 1]
-       restart
+   started=0;
+   # sleep attempts first
+   while [ "$sleep_attempts" -lt "$max_sleep_attempts" ] && [ "$started" -eq 0 ]; do
+     sleep $sleeptime
+     foundLoginPage= $(/usr/bin/curl -s -L http://localhost/ | grep -q "$test_string");
+     if ! $foundLoginPage; then
+       echo "$(date) could not find $test_string at localhost, waiting another $sleeptime seconds "
+       sleep_attempts=$[$sleep_attempts + 1]
+     else
+       echo "$(date) Found $test_string at localhost"
+       started=1;
      fi
-   else
+   done
+   # if sleeping didn't work, try a restart
+   if [ "$attempts" -lt "$max_start_attempts" ] && [ "$started" -eq 0 ] ; then
+     sleep_attempts=0
+     attempts=$[$attempts + 1]
+     smsg="Daemon did not start after $sleep_attempts sleep attempts, trying a restart"
+     restart
+   fi
+
+   if [ "$attempts" -ge "$max_start_attempts" ] && [ "$started" -eq 0 ] ; then
      retval=1
-     smsg="Daemon did not start after $max_start_attempts attempts"
    fi
 
    [ $retval -eq 0 ] && success "$smsg" || failed "$smsg"
    return $retval
+
 }
 
 stop() {
