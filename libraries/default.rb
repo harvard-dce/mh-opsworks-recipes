@@ -714,11 +714,22 @@ module MhOpsworksRecipes
     end
 
     def xmx_ram_ratio_for_this_node
-      if node[:opsworks][:instance][:hostname].match(/^admin/)
-        # 80% of the RAM for matterhorn
-        0.8
-      else
+      # ratio of xmx (max heap) to total available ram
+      # this is just the max allowed, not how much is initially allocated
+      if node[:opsworks][:instance][:hostname].match(/^worker/)
         0.25
+      else
+        0.8
+      end
+    end
+
+    def xmx_xms_ratio_for_this_node
+      # ratio of xms (initial heap) to xmx (max heap)
+      # this reserves/allocates initial heap size
+      if node[:opsworks][:instance][:hostname].match(/^engage/)
+        0.5
+      else
+        0.10
       end
     end
 
@@ -778,8 +789,16 @@ module MhOpsworksRecipes
 
     def install_init_scripts(current_deploy_root, matterhorn_repo_root)
       log_dir = node.fetch(:matterhorn_log_directory, '/var/log/matterhorn')
+
       xmx_ram_ratio = xmx_ram_ratio_for_this_node
       java_xmx_ram = xmx_ram_for_this_node(xmx_ram_ratio)
+      java_xms_ram = java_xmx_ram * xmx_xms_ratio_for_this_node
+
+      xms_ram_ratio = xmx_xms_ratio_for_this_node
+      # round(-1) will round to nearest divisible by 10 so we get an even number
+      java_xms_ram = [(java_xmx_ram * xms_ram_ratio).to_i.round(-1), 2048].max
+
+      start_check_sleep_seconds = enable_yourkit_agent? ? 30 : 20
 
       template %Q|/etc/init.d/matterhorn| do
         source 'matterhorn-init-script.erb'
@@ -787,7 +806,8 @@ module MhOpsworksRecipes
         group 'matterhorn'
         mode '755'
         variables({
-          matterhorn_executable: matterhorn_repo_root + '/current/bin/matterhorn'
+          matterhorn_executable: matterhorn_repo_root + '/current/bin/matterhorn',
+          start_check_sleep_seconds: start_check_sleep_seconds
         })
       end
 
@@ -798,6 +818,7 @@ module MhOpsworksRecipes
         mode '755'
         variables({
           java_xmx_ram: java_xmx_ram,
+          java_xms_ram: java_xms_ram,
           main_config_file: %Q|#{matterhorn_repo_root}/current/etc/matterhorn.conf|,
           matterhorn_root: matterhorn_repo_root + '/current',
           felix_config_dir: matterhorn_repo_root + '/current/etc',

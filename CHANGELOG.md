@@ -13,7 +13,8 @@
     "enable_yourkit_agent": true,
     ...
 ```
-    
+* set JVM `-Xxms` value based on ratio to`-Xxmx` depending on node type
+
 # v1.22.0 - 04/21/2017
 
 * MI-63: remove nodejs install recipe as it is no longer needed

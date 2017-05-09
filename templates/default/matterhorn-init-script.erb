@@ -80,7 +80,7 @@ fi
 
   # Attempt to restart the daemon until it actually looks like it's
   # started correctly
-  sleep 20
+  sleep <%= @start_check_sleep_seconds %>
   if [ "$attempts" -lt "$max_start_attempts" ]
     then
       if ! $(/usr/bin/curl -s -L http://localhost/ | grep -q "$test_string"); then
