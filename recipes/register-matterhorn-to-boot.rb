@@ -8,5 +8,5 @@ cron_d 'start_matterhorn_at_boot' do
   # frustrating.
   path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games'
   predefined_value '@reboot'
-  command '/etc/init.d/matterhorn start'
+  command '/etc/init.d/matterhorn start 2>&1 | /usr/bin/logger -t info'
 end
