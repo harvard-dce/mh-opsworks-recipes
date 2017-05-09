@@ -2,6 +2,9 @@
 
 ## TO BE RELEASED
 
+* redirect output from MH start-on-boot cron entry to syslog to prevent
+  unnecessary emails
+
 # v1.22.0 - 04/21/2017
 
 * MI-63: remove nodejs install recipe as it is no longer needed
