@@ -717,8 +717,19 @@ module MhOpsworksRecipes
       if node[:opsworks][:instance][:hostname].match(/^admin/)
         # 80% of the RAM for matterhorn
         0.8
+      elsif node[:opsworks][:instance][:hostname].match(/^engage/)
+        0.5
       else
         0.25
+      end
+    end
+
+    def xmx_xms_ratio_for_this_node
+      if node[:opsworks][:instance][:hostname].match(/^engage/)
+        # set xmx/xms to same value on engage
+        1
+      else
+        0.5
       end
     end
 
@@ -780,6 +791,7 @@ module MhOpsworksRecipes
       log_dir = node.fetch(:matterhorn_log_directory, '/var/log/matterhorn')
       xmx_ram_ratio = xmx_ram_ratio_for_this_node
       java_xmx_ram = xmx_ram_for_this_node(xmx_ram_ratio)
+      java_xms_ram = java_xmx_ram * xmx_xms_ratio_for_this_node
 
       template %Q|/etc/init.d/matterhorn| do
         source 'matterhorn-init-script.erb'
@@ -798,6 +810,7 @@ module MhOpsworksRecipes
         mode '755'
         variables({
           java_xmx_ram: java_xmx_ram,
+          java_xms_ram: java_xms_ram,
           main_config_file: %Q|#{matterhorn_repo_root}/current/etc/matterhorn.conf|,
           matterhorn_root: matterhorn_repo_root + '/current',
           felix_config_dir: matterhorn_repo_root + '/current/etc',
