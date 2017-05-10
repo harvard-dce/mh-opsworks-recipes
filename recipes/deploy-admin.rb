@@ -16,7 +16,8 @@ capture_agent_query_url = node.fetch(
   :capture_agent_query_url, 'http://example.com'
 )
 
-s3_distribution_bucket_name = get_s3_distribution_bucket_name
+using_local_distribution = is_using_local_distribution?
+
 # S3 file archive service
 region = node.fetch(:region, 'us-east-1')
 s3_file_archive_bucket_name = get_s3_file_archive_bucket_name
@@ -36,7 +37,6 @@ live_monitor_url = node.fetch(
   :live_monitor_url, 'rtmp://example.com/live/#{caName}-presenter.delivery.stream-960x270_1_200@xyz'
 )
 
-cloudfront_url = get_cloudfront_url
 live_streaming_url = get_live_streaming_url
 live_stream_name = get_live_stream_name
 
@@ -138,8 +138,6 @@ deploy_revision "opencast" do
         admin_auth: admin_user_info,
         database: database_connection,
         engage_hostname: public_engage_hostname,
-        cloudfront_url: cloudfront_url,
-        s3_distribution_bucket_name: s3_distribution_bucket_name,
         capture_agent_monitor_url: capture_agent_monitor_url,
         live_streaming_url: live_streaming_url,
         live_monitor_url: live_monitor_url,

@@ -16,13 +16,10 @@ capture_agent_query_url = node.fetch(
   :capture_agent_query_url, 'http://example.com'
 )
 
-s3_distribution_bucket_name = get_s3_distribution_bucket_name
-
 capture_agent_monitor_url = node.fetch(
   :capture_agent_monitor_url, 'http://example.com/monitor_url'
 )
 
-cloudfront_url = get_cloudfront_url
 live_streaming_url = get_live_streaming_url
 live_stream_name = get_live_stream_name
 
@@ -96,10 +93,6 @@ deploy_revision "opencast" do
     set_service_registry_dispatch_interval(most_recent_deploy)
     # /WORKER SPECIFIC
 
-#    if using_local_distribution?
-#      update_properties_files_for_local_distribution(most_recent_deploy)
-#    end
-
     template %Q|#{most_recent_deploy}/etc/custom.properties| do
       source 'custom.properties.erb'
       owner 'opencast'
@@ -115,8 +108,6 @@ deploy_revision "opencast" do
         admin_auth: admin_user_info,
         database: database_connection,
         engage_hostname: public_engage_hostname,
-        cloudfront_url: cloudfront_url,
-        s3_distribution_bucket_name: s3_distribution_bucket_name,
         capture_agent_monitor_url: capture_agent_monitor_url,
         live_streaming_url: live_streaming_url,
         job_maxload: 4,
