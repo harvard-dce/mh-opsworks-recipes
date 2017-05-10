@@ -12,6 +12,9 @@ rest_auth_info = get_rest_auth_info
 admin_user_info = get_admin_user_info
 stack_name = stack_shortname
 
+public_hostname = node[:opsworks][:instance][:public_dns_name]
+private_hostname = node[:opsworks][:instance][:private_dns_name]
+
 capture_agent_query_url = node.fetch(
   :capture_agent_query_url, 'http://example.com'
 )
@@ -20,9 +23,14 @@ capture_agent_query_url = node.fetch(
 user_tracking_authhost = node.fetch(
   :user_tracking_authhost, 'http://example.com'
 )
+
+using_local_distribution = is_using_local_distribution?
+
 # S3 distribution service
+enable_s3 = !using_local_distribution
 region = node.fetch(:region, 'us-east-1')
 s3_distribution_bucket_name = get_s3_distribution_bucket_name
+s3_distribution_base_url=get_base_media_download_url(public_hostname)
 ## /all-in-one specific
 
 # S3 file archive service, also needs the aws region
@@ -41,7 +49,6 @@ live_monitor_url = node.fetch(
   :live_monitor_url, 'http://example.com/monitor_url'
 )
 
-cloudfront_url = get_cloudfront_url
 live_streaming_url = get_live_streaming_url
 live_stream_name = get_live_stream_name
 
@@ -52,8 +59,6 @@ auth_key = node.fetch(:auth_key, '')
 
 git_data = node[:deploy][:opencast][:scm]
 
-public_hostname = node[:opsworks][:instance][:public_dns_name]
-private_hostname = node[:opsworks][:instance][:private_dns_name]
 
 activemq_bind_host = private_hostname 
 
@@ -124,12 +129,13 @@ deploy_revision "opencast" do
     initialize_database(most_recent_deploy)
 
 #    configure_usertracking(most_recent_deploy, user_tracking_authhost)
-#    install_aws_s3_distribution_service_config(most_recent_deploy, region, s3_distribution_bucket_name)
+    install_aws_s3_distribution_service_config(most_recent_deploy, enable_s3, region, s3_distribution_bucket_name, s3_distribution_base_url)
+#    install_opencast_images_properties(most_recent_deploy)
     # /all-in-one SPECIFIC
 
-#    if using_local_distribution?
-#      update_properties_files_for_local_distribution(most_recent_deploy)
-#    end
+    if using_local_distribution
+      update_workflows_for_local_distribution(most_recent_deploy)
+    end
 
     template %Q|#{most_recent_deploy}/etc/custom.properties| do
       source 'custom.properties.erb'
@@ -146,8 +152,6 @@ deploy_revision "opencast" do
         admin_auth: admin_user_info,
         database: database_connection,
         engage_hostname: public_hostname,
-        cloudfront_url: cloudfront_url,
-        s3_distribution_bucket_name: s3_distribution_bucket_name,
         capture_agent_monitor_url: capture_agent_monitor_url,
         live_streaming_url: live_streaming_url,
         live_monitor_url: live_monitor_url,
