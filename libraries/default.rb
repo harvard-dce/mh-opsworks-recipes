@@ -534,6 +534,11 @@ module MhOpsworksRecipes
       configure_cloudwatch_log("nginx-access", "/var/log/nginx/access.log", "%d/%b/%Y:%H:%M:%S %z")
       configure_cloudwatch_log("nginx-error", "/var/log/nginx/error.log", "%d/%b/%Y:%H:%M:%S %z")
     end
+
+    def is_using_local_distribution?
+      node[:vagrant_environment] || ( ! node[:cloudfront_url] && ! node[:s3_distribution_bucket_name] )
+    end
+
   end
 
   module DeployHelpers
@@ -734,23 +739,19 @@ module MhOpsworksRecipes
       end
     end
 
-    def using_local_distribution?
-      ! node[:cloudfront_url] && ! node[:s3_distribution_bucket_name]
-    end
-
-    def update_properties_files_for_local_distribution(current_deploy_root)
-#      ruby_block "update engage hostname" do
-#        block do
-#          ['engage.properties', 'admin.properties', 'all-in-one.properties'].each do |properties_file|
-#            editor = Chef::Util::FileEdit.new(current_deploy_root + '/etc/profiles/' + properties_file)
-#            editor.search_file_replace(
-#              /mh-harvard-dce-distribution-service-aws-s3/,
-#              "opencast-distribution-service-download"
-#            )
-#            editor.write_file
-#          end
-#        end
-#      end
+    def update_workflows_for_local_distribution(current_deploy_root)
+      ruby_block "update workflows for local distribution" do
+        block do
+          Dir[current_deploy_root + '/etc/workflows/DCE*.xml'].each do |wf_file|
+            editor = Chef::Util::FileEdit.new(wf_file)
+            editor.search_file_replace(
+              /publish-aws/,
+              "publish-engage"
+            )
+            editor.write_file
+          end
+        end
+      end
     end
 
     def install_init_scripts(current_deploy_root, opencast_repo_root)
@@ -896,14 +897,16 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_aws_s3_distribution_service_config(current_deploy_root, region, s3_distribution_bucket_name)
+    def install_aws_s3_distribution_service_config(current_deploy_root, enable, region, s3_distribution_bucket_name, s3_distribution_base_url)
       template %Q|#{current_deploy_root}/etc/org.opencastproject.distribution.aws.s3.AwsS3DistributionServiceImpl.cfg| do
         source 'org.opencastproject.distribution.aws.s3.AwsS3DistributionServiceImpl.cfg.erb'
         owner 'opencast'
         group 'opencast'
         variables({
+          enable: enable,
           region: region,
-          s3_distribution_bucket_name: s3_distribution_bucket_name
+          s3_distribution_bucket_name: s3_distribution_bucket_name,
+          s3_distribution_base_url: s3_distribution_base_url 
         })
       end
     end
