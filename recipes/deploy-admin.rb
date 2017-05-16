@@ -107,8 +107,8 @@ deploy_revision "opencast" do
 #    )
     install_live_streaming_service_config(most_recent_deploy, live_stream_name)
 #    # Admin Specific
-#    install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host)
-#    install_otherpubs_service_series_impl_config(most_recent_deploy)
+    install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host)
+    install_otherpubs_service_series_impl_config(most_recent_deploy)
 #    install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name)
     install_ibm_watson_transcription_service_config(most_recent_deploy, ibm_watson_username, ibm_watson_psw)
     unless ibm_watson_transcript_bucket.nil? or ibm_watson_transcript_bucket.empty?
