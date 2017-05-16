@@ -118,8 +118,8 @@ deploy_revision "opencast" do
       most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated
     )
     install_live_streaming_service_config(most_recent_deploy, live_stream_name)
-#    install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host)
-#    install_otherpubs_service_series_impl_config(most_recent_deploy)
+    install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host)
+    install_otherpubs_service_series_impl_config(most_recent_deploy)
 #    install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name)
     install_ibm_watson_transcription_service_config(most_recent_deploy, ibm_watson_username, ibm_watson_psw)
     install_published_event_details_email(most_recent_deploy, public_hostname)

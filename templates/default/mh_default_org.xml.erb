@@ -369,7 +369,8 @@
 
         <!-- 2-legged oauth is used by trusted 3rd party applications, including LTI producers. -->
         <!-- If you do not plan to use OAuth, comment this out. -->
-        <!-- <ref bean="oauthProtectedResourceFilter" /> -->
+        <!-- #DCE OPC-9 -->
+        <ref bean="oauthProtectedResourceFilter" />
       </list>
     </property>
   </bean>
@@ -469,7 +470,7 @@
   <!-- ####################### -->
 
   <!-- This is required for LTI. If you plan to use LTI, uncomment this and set
-       custom values for consumerkey and consumersecret: - - >
+       custom values for consumerkey and consumersecret: -->
   <bean name="oAuthConsumerDetailsService" class="org.opencastproject.kernel.security.OAuthSingleConsumerDetailsService">
     <constructor-arg index="0" ref="userDetailsService" />
     <constructor-arg index="1" value="<%= @lti_oauth[:consumerkey] %>" />
@@ -478,11 +479,11 @@
   </bean>
 
   <bean name="oauthProtectedResourceFilter" class="org.opencastproject.kernel.security.LtiProcessingFilter">
-    < ! - - start #DCE MATT-2046 proxy workaround params, comment these out if external and internal URLs match
-    The arg 0 is the String urlSentByLtiClient, the arg 1 is String urlUsedByProxyServer - - >
+    <!-- start #DCE MATT-2046 proxy workaround params, comment these out if external and internal URLs match
+    The arg 0 is the String urlSentByLtiClient, the arg 1 is String urlUsedByProxyServer -->
     <constructor-arg index="0" value = "https://<%= @proxy_name %>/lti" />
     <constructor-arg index="1" value = "http://<%= @unproxied_name %>/lti" />
-    < ! - - end MATT-2046 proxy workaround params - - >
+    <!-- end MATT-2046 proxy workaround params -->
     <property name="consumerDetailsService" ref="oAuthConsumerDetailsService" />
     <property name="tokenServices">
       <bean class="org.springframework.security.oauth.provider.token.InMemoryProviderTokenServices" />
@@ -493,7 +494,7 @@
     <property name="authHandler">
       <bean class="org.opencastproject.kernel.security.LtiLaunchAuthenticationHandler">
         <constructor-arg index="0" ref="userDetailsService" />
-        < ! - - Uncomment to allow the included keys to be trusted to provide known user details - - >
+        <!-- Uncomment to allow the included keys to be trusted to provide known user details - - >
         <constructor-arg index="1" ref="securityService" />
         <constructor-arg index="2">
           <list>
@@ -501,11 +502,11 @@
             <value>trustedKey2</value>
           </list>
         </constructor-arg>
-        <! - - end of include keys to be a trusted provider- - >
+        <! - - end of include keys to be a trusted provider -->
       </bean>
     </property>
   </bean>
-  < ! - - end of OAuth LTI edits -->
+  <!-- end of OAuth LTI edits -->
 
   <!-- ###################### -->
   <!-- # Shibboleth Support # -->
