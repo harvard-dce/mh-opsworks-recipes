@@ -4,7 +4,7 @@
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 include_recipe "oc-opsworks-recipes::update-package-repo"
 
-packages = %Q|autofs5 curl dkms gzip jq libglib2.0-dev mysql-client postfix python-pip rsyslog-gnutls run-one tesseract-ocr|
+packages = %Q|autofs5 curl dkms gzip jq libglib2.0-dev mysql-client postfix python-pip python-dev rsyslog-gnutls run-one tesseract-ocr|
 install_package(packages)
 
 # remove any existing maven install

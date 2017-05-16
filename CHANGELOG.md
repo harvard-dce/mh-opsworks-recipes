@@ -2,6 +2,46 @@
 
 ## TO BE RELEASED
 
+* redirect output from MH start-on-boot cron entry to syslog to prevent
+  unnecessary emails
+* Allow enabling of G1 Garbage Collection method and YourKit profiler agent. Both are off by default. To enable, add either/both of the following attributes respectively to the cluster config's custom json:
+
+```
+    ...
+    "enable_G1GC": true,
+    ...
+    "enable_yourkit_agent": true,
+    ...
+```
+* set JVM `-Xxms` value based on ratio to`-Xxmx` depending on node type
+* fetch `awslogs-agent-setup.py` cloudwatch logs setup script from shared assets bucket to ensure working/tested version
+
+# v1.22.0 - 04/21/2017
+
+* MI-63: remove nodejs install recipe as it is no longer needed
+* *REQUIRES EDITS TO CLUSTER CONFIG*
+  MI-62: create cron entry to sync ibm watson transcript results to s3. Prior to deployment, the `custom_json` block in cluster config should be updated with the name of the target s3 bucket:
+  
+        "ibm_watson_transcript_sync_bucket_name": "dce-ibm-watson-transcripts"
+
+## v1.21.2-hotfix - 03/13/2017
+
+* hotfix to address nginx proxy config mixup. The previous manual recipe run instructions should have been:
+
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin" recipes="mh-opsworks-recipes::configure-nginx-proxy"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Engage" recipes="mh-opsworks-recipes::configure-engage-nginx-proxy"
+
+## v1.21.1 - 03/10/2017
+
+* *REQUIRES MANUAL RECIPE RUN* Add $request_time value to nginx access log events
+  Manual recipe run should come after deploy and an `update_chef_recipes`.
+
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin,Engage" recipes="mh-opsworks-recipes::configure-nginx-proxy"
+
+## v1.21.0 - 02/13/2017
+
+* MATT-2231 login for annots summary path
+
 ## v1.20.0 - 02/06/2017
 
 * MATT-1929 Create inbox for republish with re-trimming. 
