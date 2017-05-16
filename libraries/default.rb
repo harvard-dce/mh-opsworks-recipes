@@ -641,8 +641,8 @@ module MhOpsworksRecipes
     def install_otherpubs_service_config(current_deploy_root, opencast_repo_root, auth_host)
       download_episode_defaults_json_file(current_deploy_root)
 
-      template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.otherpubs.service.OtherpubsService.properties| do
-        source 'edu.harvard.dce.otherpubs.service.OtherpubsService.properties.erb'
+      template %Q|#{current_deploy_root}/etc/edu.harvard.dce.otherpubs.OtherPubsServiceImpl.cfg| do
+        source 'edu.harvard.dce.otherpubs.OtherPubsServiceImpl.cfg.erb'
         owner 'opencast'
         group 'opencast'
         variables({
@@ -654,9 +654,9 @@ module MhOpsworksRecipes
 
     def install_otherpubs_service_series_impl_config(current_deploy_root)
 
-      template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.otherseries.service.OtherSeriesServiceImpl.properties| do
+      template %Q|#{current_deploy_root}/etc/edu.harvard.dce.otherseries.OtherSeriesServiceImpl.cfg| do
         icommons_api_token = node.fetch(:icommons_api_token, 'replace-with-an-icommons-api-token-or-manually-create-series-mappings')
-        source 'edu.harvard.dce.otherseries.service.OtherSeriesServiceImpl.properties.erb'
+        source 'edu.harvard.dce.otherseries.OtherSeriesServiceImpl.cfg.erb'
         owner 'opencast'
         group 'opencast'
         variables({
