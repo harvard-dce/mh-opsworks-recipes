@@ -14,6 +14,7 @@
     ...
 ```
 * set JVM `-Xxms` value based on ratio to`-Xxmx` depending on node type
+* fetch `awslogs-agent-setup.py` cloudwatch logs setup script from shared assets bucket to ensure working/tested version
 
 # v1.22.0 - 04/21/2017
 

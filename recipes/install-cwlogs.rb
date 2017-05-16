@@ -4,6 +4,7 @@
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
 region = node[:opsworks][:instance][:region]
+shared_assets_bucket = get_shared_asset_bucket_name
 
 service 'awslogs' do
   action :nothing
@@ -23,7 +24,7 @@ directory '/opt/aws/cloudwatch' do
 end
 
 remote_file '/opt/aws/cloudwatch/awslogs-agent-setup.py' do
-  source 'https://s3.amazonaws.com/aws-cloudwatch/downloads/latest/awslogs-agent-setup.py'
+  source %Q|https://s3.amazonaws.com/#{ shared_assets_bucket }/awslogs-agent-setup.py|
   mode '0755'
 end
 
