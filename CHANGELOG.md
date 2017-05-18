@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## v1.23.0 - 05/18/2017
+
 * redirect output from MH start-on-boot cron entry to syslog to prevent
   unnecessary emails
 * Allow enabling of G1 Garbage Collection method and YourKit profiler agent. Both are off by default. To enable, add either/both of the following attributes respectively to the cluster config's custom json:
@@ -16,7 +18,7 @@
 * set JVM `-Xxms` value based on ratio to`-Xxmx` depending on node type
 * fetch `awslogs-agent-setup.py` cloudwatch logs setup script from shared assets bucket to ensure working/tested version
 
-# v1.22.0 - 04/21/2017
+## v1.22.0 - 04/21/2017
 
 * MI-63: remove nodejs install recipe as it is no longer needed
 * *REQUIRES EDITS TO CLUSTER CONFIG*
