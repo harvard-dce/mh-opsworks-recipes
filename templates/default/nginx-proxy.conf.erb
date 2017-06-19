@@ -16,8 +16,11 @@ server {
   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
   client_max_body_size 102400m;
+
   # upload service file chunks are 100mb
   client_body_buffer_size 101m;
+  client_body_temp_path <%= @body_temp_path %>;
+
   gzip on;
 
   location / {

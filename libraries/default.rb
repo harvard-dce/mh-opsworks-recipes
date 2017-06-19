@@ -350,6 +350,11 @@ module MhOpsworksRecipes
       )
     end
 
+    def get_nginx_body_temp_path
+      %Q|#{get_shared_storage_root}/nginx/body-temp|
+    end
+
+
     def allow_opencast_user_to_restart_daemon_via_sudo
       file '/etc/sudoers.d/opencast' do
         owner 'root'
