@@ -143,6 +143,7 @@ deploy_revision "matterhorn" do
         live_monitor_url: live_monitor_url,
         job_maxload: nil,
         stack_name: stack_name,
+        workspace_cleanup_period: 86400,
       })
     end
   end

@@ -163,7 +163,8 @@ org.opencastproject.file.repo.url=<%= @admin_url %>
 org.opencastproject.workspace.rootdir=${org.opencastproject.shared_storage.dir}/workspace
 
 # The scheduled period in seconds, at which a workspace cleanup operation is performed
-org.opencastproject.workspace.cleanup.period=86400
+# org.opencastproject.workspace.cleanup.period=86400
+org.opencastproject.workspace.cleanup.period=<%= @workspace_cleanup_period %>
 
 # The maximum age a file must reach in seconds before a deletion of the file in the workspace cleanup operation is performed
 org.opencastproject.workspace.cleanup.max.age=2592000

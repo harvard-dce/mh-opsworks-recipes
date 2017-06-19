@@ -131,6 +131,7 @@ deploy_revision "matterhorn" do
         live_streaming_url: live_streaming_url,
         job_maxload: nil,
         stack_name: stack_name,
+        workspace_cleanup_period: 0,
       })
     end
   end
