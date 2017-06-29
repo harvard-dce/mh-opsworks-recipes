@@ -31,7 +31,7 @@ directory '/etc/nginx/proxy-includes' do
 end
 
 # same permissions as nginx logs
-directory  %Q|body_temp_path| do
+directory  %Q|#{body_temp_path}| do
   action :create
   owner 'www-data'
   group 'admin'
