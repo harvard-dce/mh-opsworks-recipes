@@ -2,6 +2,11 @@
 
 ## TO BE RELEASED
 
+* *REQUIRES MANUAL RECIPE RUN*
+  bump evaluation period from 5m to 10m on RDS cpu and queue depth alarms. These metrics are occasionally experiencing short (<= 5m) spikes which appear to be benign but are triggering the alarms.
+
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Ganglia" recipes="mh-opsworks-recipes::create-mysql-alarms"
+        
 ## v1.23.0 - 05/18/2017
 
 * redirect output from MH start-on-boot cron entry to syslog to prevent

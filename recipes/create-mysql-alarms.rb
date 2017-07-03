@@ -23,7 +23,7 @@ ruby_block "fire alarms for MySQL RDS metrics" do
 
     # CPU utilization over 25 for 5 1 minute periods
     upper_cpu_percent = 25
-    command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{rds_name}_cpu_usage_high" --alarm-description "MySQL RDS cpu utilization is high" --metric-name CPUUtilization --namespace AWS/RDS --statistic Maximum --period 60 --threshold #{upper_cpu_percent} --comparison-operator GreaterThanThreshold --dimensions Name=DBInstanceIdentifier,Value=#{rds_name} --evaluation-periods 5 --alarm-actions "#{topic_arn}")
+    command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{rds_name}_cpu_usage_high" --alarm-description "MySQL RDS cpu utilization is high" --metric-name CPUUtilization --namespace AWS/RDS --statistic Maximum --period 60 --threshold #{upper_cpu_percent} --comparison-operator GreaterThanThreshold --dimensions Name=DBInstanceIdentifier,Value=#{rds_name} --evaluation-periods 10 --alarm-actions "#{topic_arn}")
     Chef::Log.info command
     execute_command(command)
 
@@ -44,7 +44,7 @@ ruby_block "fire alarms for MySQL RDS metrics" do
     # Queue depth is over 2 for 5 1 minute periods. This means IO processes are stacking
     # up and EBS is getting swamped.
     disk_queue_depth_over = 2
-    command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{rds_name}_queue_depth_high" --alarm-description "MySQL RDS EBS queue depth is high" --metric-name DiskQueueDepth --namespace AWS/RDS --statistic Maximum --period 60 --threshold #{disk_queue_depth_over} --comparison-operator GreaterThanThreshold --dimensions Name=DBInstanceIdentifier,Value=#{rds_name} --evaluation-periods 5 --alarm-actions "#{topic_arn}")
+    command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{rds_name}_queue_depth_high" --alarm-description "MySQL RDS EBS queue depth is high" --metric-name DiskQueueDepth --namespace AWS/RDS --statistic Maximum --period 60 --threshold #{disk_queue_depth_over} --comparison-operator GreaterThanThreshold --dimensions Name=DBInstanceIdentifier,Value=#{rds_name} --evaluation-periods 10 --alarm-actions "#{topic_arn}")
     Chef::Log.info command
     execute_command(command)
   end
