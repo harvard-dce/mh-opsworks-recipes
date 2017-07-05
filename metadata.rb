@@ -986,6 +986,17 @@ none
 * auditd log rotation is configured in /etc/audit.conf (which is modiified by the CrowdStrike package)
 '
 )
+recipe(
+    'mh-opsworks-recipes::exec-dist-upgrade',
+    'Executes an apt-get dist-upgrade, necessary for installing kernel updates
+
+=== attributes
+none
+
+=== effects
+* performs an apt-get dist-upgrade
+'
+)
 
 depends 'nfs', '~> 2.1.0'
 depends 'apt', '~> 2.9.2'

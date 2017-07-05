@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* add new recipe for executing `apt-get dist-upgrade` to facilitate kernel package updates
+
 ## v1.23.1 - 07/25/2017
 
 * don't install yourkit on non-mh nodes
