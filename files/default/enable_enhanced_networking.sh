@@ -14,6 +14,10 @@ cd /root/build_tmp
 
 aws s3 cp s3://$bucket_name/ixgbevf-$dkms_version.tar.gz .
 tar zxf ixgbevf-$dkms_version.tar.gz
+
+# this shouldn't be needed except in some odd development scenario
+rm -Rf /usr/src/ixgbevf-$dkms_version
+
 mv ixgbevf-$dkms_version /usr/src/
 cd /usr/src/ixgbevf-$dkms_version
 
@@ -29,9 +33,11 @@ DEST_MODULE_NAME[0]="ixgbevf"
 AUTOINSTALL="yes"
 ' >> /usr/src/"ixgbevf-${dkms_version}"/dkms.conf &&
 
-aws s3 cp s3://$bucket_name/patch-ubuntu_14.04.1-ixgbevf-$dkms_version-kcompat.h.patch .
-cd src
-patch -p5 < ../patch-ubuntu_14.04.1-ixgbevf-$dkms_version-kcompat.h.patch
+# again, probably only necessary in some edge dev case
+if dkms status | grep $dkms_version > /dev/null; then
+    dkms remove -m ixgbevf -v $dkms_version --all
+fi
+
 dkms add -m ixgbevf -v $dkms_version
 dkms build -m ixgbevf -v $dkms_version
 dkms install -m ixgbevf -v $dkms_version

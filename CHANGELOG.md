@@ -3,6 +3,7 @@
 ## TO BE RELEASED
 
 * add new recipe for executing `apt-get dist-upgrade` to facilitate kernel package updates
+* update to latest recommended version of ixgbevf enhanced networking driver
 
 ## v1.23.1 - 07/25/2017
 
