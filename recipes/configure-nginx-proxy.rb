@@ -30,13 +30,4 @@ directory '/etc/nginx/proxy-includes' do
   group 'root'
 end
 
-# same permissions as nginx logs
-directory  %Q|#{body_temp_path}| do
-  action :create
-  owner 'www-data'
-  group 'admin'
-  mode '755'
-  recursive true
-end
-
 execute 'service nginx reload'
