@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## v1.23.1 - 07/25/2017
+
 * don't install yourkit on non-mh nodes
 * *REQUIRES MANUAL RECIPE RUN*
   bump evaluation period from 5m to 10m on RDS cpu and queue depth alarms. These metrics are occasionally experiencing short (<= 5m) spikes which appear to be benign but are triggering the alarms.
