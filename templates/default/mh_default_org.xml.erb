@@ -37,7 +37,7 @@
 	     redirect to Paella. This should come before /engage/ui/** because the order matters! -->
     <sec:intercept-url pattern="/engage/ui/redirectToPaella.html" method="GET" access="ROLE_ADMIN" />
     <!-- #DCE KHD: MATT-2231 require login for annots summary -->
-    <sec:intercept-url pattern="/engage/ui/annots/**" access="ROLE_ADMIN" />
+    <sec:intercept-url pattern="/engage/ui/annots/**" access="ROLE_ADMIN, ROLE_OAUTH_USER" />
     <!-- Enable anonymous access to the engage player and the GET endpoints it requires -->
     <sec:intercept-url pattern="/engage/ui/**" access="ROLE_ANONYMOUS" />
     <!-- #DCE KHD: DCE paella player is at this path -->
@@ -74,8 +74,8 @@
     <!-- Updating annotation property, security is done in REST endpoint -->    
     <sec:intercept-url pattern="/annotation/property*" method="POST" access="ROLE_ANONYMOUS" />
     <!-- MATT-2245 (end) -->
-    <!-- Read specific annotation, role admin only -->
-    <sec:intercept-url pattern="/annotation/**" method="GET" access="ROLE_ADMIN" />
+    <!-- Read specific annotation, role admin and oauth user (extra auth on oauth performed in endpoint) -->
+    <sec:intercept-url pattern="/annotation/**" method="GET" access="ROLE_ADMIN, ROLE_OAUTH_USER" />
     <!-- Adding annotation, security is done in REST endpoint -->
     <sec:intercept-url pattern="/annotation/" method="PUT" access="ROLE_ANONYMOUS" />
     <!-- Updating annotation, role admin only -->
