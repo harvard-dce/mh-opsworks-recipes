@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## v1.24.0 - 08/10/2017
+
 * add new recipe for executing `apt-get dist-upgrade` to facilitate kernel package updates
 * update to latest recommended version of ixgbevf enhanced networking driver
 * MATT-2355: added deployment config property for enabling/disabling workspace cleanup
