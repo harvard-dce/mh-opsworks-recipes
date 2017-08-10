@@ -6,6 +6,7 @@
 * update to latest recommended version of ixgbevf enhanced networking driver
 * MATT-2355: added deployment config property for enabling/disabling workspace cleanup
 * MATT-2388: spring config changes related to social annotations reports
+* don't install yourkit by default on any nodes
 
 ## v1.23.1 - 07/25/2017
 
