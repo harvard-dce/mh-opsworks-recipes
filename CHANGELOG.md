@@ -2,6 +2,10 @@
 
 ## TO BE RELEASED
 
+## v1.25.0 - 08/17/2017
+
+* copy dce-config encodings engage-image.properties
+
 ## v1.24.0 - 08/10/2017
 
 * add new recipe for executing `apt-get dist-upgrade` to facilitate kernel package updates

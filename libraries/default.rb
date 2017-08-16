@@ -569,6 +569,10 @@ module MhOpsworksRecipes
             dest: 'etc/encoding/DCE-h264-movies.properties'
           },
           {
+            src: 'dce-config/encoding/engage-images.properties',
+            dest: 'etc/encoding/engage-images.properties'
+          },
+          {
             src: 'dce-config/workflows/DCE-error-handler.xml',
             dest: 'etc/workflows/DCE-error-handler.xml',
           },
