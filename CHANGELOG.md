@@ -4,6 +4,8 @@
 
 * Allow exit status of '255' on cloudwatch log group creation to get rid of errors due to ResourceAlreadyExistsException
 * cloudwatch logs agent install requires python-dev package
+* refactor of moscaler install to allow separate recipes for creating/removing cron_d resources.
+  this is to facilitate moscaler pause/resume rake tasks in `mh-opsworks`.
 
 ## v1.25.0 - 08/17/2017
 
