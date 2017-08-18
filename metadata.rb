@@ -997,6 +997,28 @@ none
 * performs an apt-get dist-upgrade
 '
 )
+recipe(
+    'mh-opsworks-recipes::moscaler-resume',
+    'Installs the moscaler cron entries
+
+=== attributes
+none
+
+=== effects
+* Installs the moscaler cron entries
+'
+)
+recipe(
+    'mh-opsworks-recipes::moscaler-pause',
+    'Removes the moscaler cron entries, effectively disabling moscaler
+
+=== attributes
+none
+
+=== effects
+* removes the moscaler cron entries
+'
+)
 
 depends 'nfs', '~> 2.1.0'
 depends 'apt', '~> 2.9.2'
