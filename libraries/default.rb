@@ -499,6 +499,7 @@ module MhOpsworksRecipes
 
       execute 'create log group' do
         command %Q|aws logs create-log-group --region #{region} --log-group-name #{log_group_name}|
+        returns [0, 255]
         ignore_failure true
       end
 
