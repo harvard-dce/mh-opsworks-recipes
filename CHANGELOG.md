@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* Allow exit status of '255' on cloudwatch log group creation to get rid of errors due to ResourceAlreadyExistsException
+
 ## v1.25.0 - 08/17/2017
 
 * copy dce-config encodings engage-image.properties
