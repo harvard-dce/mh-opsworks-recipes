@@ -50,6 +50,10 @@ if admin_node?
   configure_cloudwatch_log("mail", "/var/log/mail.log", "%b %d %H:%M:%S")
 end
 
+if utility_node?
+  configure_cloudwatch_log("squid", "/var/log/squid3/access.log", "")
+end
+
 if mh_node?
   configure_cloudwatch_log("matterhorn", "#{ get_log_directory }/matterhorn.log", "%Y-%m-%d %H:%M:%S")
 end
