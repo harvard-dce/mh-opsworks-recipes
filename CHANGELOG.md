@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## v1.26.0 - 08/24/2017
+
 * Allow exit status of '255' on cloudwatch log group creation to get rid of errors due to ResourceAlreadyExistsException
 * cloudwatch logs agent install requires python-dev package
 * refactor of moscaler install to allow separate recipes for creating/removing cron_d resources.
