@@ -3,36 +3,42 @@
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
+include_recipe "mh-opsworks-recipes::update-package-repo"
+
+install_package("python-dev python-virtualenv python-pip " \
+                "libpq-dev libffi-dev nginx apache2-utils " \
+                "redis-server sqlite3 libsqlite3-dev")
+
 capture_agent_manager_info = get_capture_agent_manager_info
 app_name = get_capture_agent_manager_app_name
 usr_name = get_capture_agent_manager_usr_name
+
+user usr_name do
+  comment "capture agent manager user"
+  system true
+  manage_home true
+  home "/home/#{usr_name}"
+  shell "/bin/false"
+end
+
+directory "/home/#{usr_name}/sites" do
+  owner usr_name
+  group usr_name
+  mode "755"
+  recursive true
+end
+
+directory "/home/#{usr_name}/.ssh" do
+  owner usr_name
+  group usr_name
+  mode "700"
+end
 
 git "git clone capture_agent_manager #{app_name}" do
   repository capture_agent_manager_info.fetch(:capture_agent_manager_git_repo)
   revision capture_agent_manager_info.fetch(:capture_agent_manager_git_revision)
   destination %Q|/home/#{usr_name}/sites/#{app_name}|
   user usr_name
-end
-
-file %Q|/home/#{usr_name}/sites/#{app_name}/#{app_name}.env| do
-  owner usr_name
-  group usr_name
-  content %Q|
-export CA_STATS_USER="#{capture_agent_manager_info[:ca_stats_user]}"
-export CA_STATS_PASSWD="#{capture_agent_manager_info[:ca_stats_passwd]}"
-export CA_STATS_JSON_URL="#{capture_agent_manager_info[:ca_stats_json_url]}"
-export EPIPEARL_USER="#{capture_agent_manager_info[:epipearl_user]}"
-export EPIPEARL_PASSWD="#{capture_agent_manager_info[:epipearl_passwd]}"
-export LDAP_HOST="#{capture_agent_manager_info[:ldap_host]}"
-export LDAP_BASE_SEARCH="#{capture_agent_manager_info[:ldap_base_search]}"
-export LDAP_BIND_DN="#{capture_agent_manager_info[:ldap_bind_dn]}"
-export LDAP_BIND_PASSWD="#{capture_agent_manager_info[:ldap_bind_passwd]}"
-export LOG_CONFIG="#{capture_agent_manager_info[:log_config]}"
-export FLASK_SECRET="#{capture_agent_manager_info[:capture_agent_manager_secret_key]}"
-export DATABASE_USR="#{capture_agent_manager_info[:capture_agent_manager_database_usr]}"
-export DATABASE_PWD="#{capture_agent_manager_info[:capture_agent_manager_database_pwd]}"
-|
-  mode "600"
 end
 
 execute "create virtualenv" do
@@ -47,12 +53,22 @@ execute "install capture_agent_manager dependencies" do
   environment ({ "HOME" => "/home/#{usr_name}" })
 end
 
-cookbook_file "capture-agent-manager-logrotate.conf" do
-  path %Q|/etc/logrotate.d/#{app_name}|
-  owner "root"
-  group "root"
-  mode "644"
+install_nginx_logrotate_customizations
+if on_aws?
+  configure_nginx_cloudwatch_logs
 end
 
-configure_cloudwatch_log("capture-agent-manager", "/home/capture_agent_manager/logs/*.log", "%Y-%m-%d %H:%M:%S")
+database_s3_resource = get_capture_agent_manager_database_s3_resource
+database_filepath = get_capture_agent_manager_database_filepath
+execute "pull db file from s3" do
+  command %Q(aws s3 cp #{database_s3_resource} - | sqlite3 #{database_filepath})
+  creates database_filepath
+end
 
+# TODO: checar permissions for s3
+cron_d "db backup" do
+  minute "0"
+  hour "3"
+  user "root"
+  command %Q(sqlite3 #{database_filepath} .dump | aws s3 cp - #  #{database_s3_resource})
+end

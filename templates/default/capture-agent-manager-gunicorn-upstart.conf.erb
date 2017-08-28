@@ -1,0 +1,19 @@
+description "Gunicorn for capture-agent-manager"
+
+start on (filesystem)
+stop on runlevel [016]
+respawn
+respawn limit 10 5
+
+setuid <%= @user %>
+setgid <%= @user %>
+chdir /home/<%= @user %>/sites/<%= @name %>
+
+env NAME="<%= @name %>"
+env APPDIR="/home/<%= @user %>/sites/<%= @name %>"
+
+script
+  source ${APPDIR}/${NAME}.env
+  exec ${APPDIR}/venv/bin/gunicorn -c ${APPDIR}/gunicorn_config.py ${NAME}.app:create_app\(\)
+end script
+

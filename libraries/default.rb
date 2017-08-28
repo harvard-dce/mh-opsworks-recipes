@@ -430,28 +430,32 @@ module MhOpsworksRecipes
     end
 
     def get_capture_agent_manager_info
-      node.fetch(
-        :capture_agent_manager, {
-          capture_agent_manager_app_name: 'cadash',
-          capture_agent_manager_usr_name: 'capture_agent_manager',
-          capture_agent_manager_secret_key: 'super_secret_key',
-          capture_agent_manager_gunicorn_log_level: 'debug',
-          log_config: '/home/capture_agent_manager/sites/cadash/logging.yaml',
-          ca_stats_user: 'usr',
-          ca_stats_passwd: 'pwd',
-          ca_stats_json_url: 'http://fake-ca-status.com/ca-status.json',
-          epipearl_user: 'usr',
-          epipearl_passwd: 'pwd',
-          ldap_host: 'ldap-hostname.some-domain.com',
-          ldap_base_search: 'dc=some-domain,dc=com',
-          ldap_bind_dn: 'cn=fake_usr,dc=some-domain,dc=com',
-          ldap_bind_passwd: 'pwd',
-          capture_agent_manager_git_repo: 'https://github.com/harvard-dce/cadash',
-          capture_agent_manager_git_revision: 'master',
-          capture_agent_manager_database_usr: 'usr',
-          capture_agent_manager_database_pwd: 'pwd'
-        }
-      )
+      # convert settings hash from cluster config from string keys to symbols to
+      # facilitate proper merging
+      from_cluster_config = node.fetch(:capture_agent_manager, {}).inject({}){|memo, (k,v)| memo[k.to_sym] = v; memo}
+      {
+        capture_agent_manager_app_name: 'cadash',
+        capture_agent_manager_usr_name: 'capture_agent_manager',
+        capture_agent_manager_secret_key: 'super_secret_key',
+        capture_agent_manager_gunicorn_log_level: 'debug',
+        log_config: '/home/capture_agent_manager/sites/cadash/logging.yaml',
+        ca_stats_user: 'usr',
+        ca_stats_passwd: 'pwd',
+        ca_stats_json_url: 'http://fake-ca-status.com/ca-status.json',
+        epipearl_user: 'usr',
+        epipearl_passwd: 'pwd',
+        ldap_host: 'ldap-hostname.some-domain.com',
+        ldap_base_search: 'dc=some-domain,dc=com',
+        ldap_bind_dn: 'cn=fake_usr,dc=some-domain,dc=com',
+        ldap_bind_passwd: 'pwd',
+        capture_agent_manager_git_repo: 'https://github.com/harvard-dce/cadash',
+        capture_agent_manager_git_revision: 'master',
+        capture_agent_manager_database_name: 'db',
+        capture_agent_manager_database_s3_bucket: 'ca-settings',
+        http_auth: {},
+        http_ssl: get_dummy_cert,
+        api_path: '/api'
+      }.merge(from_cluster_config)
     end
 
     def get_capture_agent_manager_app_name
@@ -463,7 +467,17 @@ module MhOpsworksRecipes
       ca_info = get_capture_agent_manager_info
       ca_info[:capture_agent_manager_usr_name]
     end
-    
+
+    def get_capture_agent_manager_database_filepath
+      ca_info = get_capture_agent_manager_info
+      %Q(/home/#{ca_info[:capture_agent_manager_usr_name]}/db/#{stack_shortname})
+    end
+
+    def get_capture_agent_manager_database_s3_resource
+      ca_info = get_capture_agent_manager_info
+      %Q(s3://#{ca_info[:capture_agent_manager_database_s3_bucket]}/#{stack_shortname})
+    end
+
     def get_moscaler_info
       {
           'moscaler_type' => 'disabled',
