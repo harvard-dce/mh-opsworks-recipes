@@ -5,6 +5,22 @@ This log is structured differently from the base `CHANGELOG.md`.
 * There is no **TO BE RELEASED** section
 * Entries should be headed with just a date; no version numbers
 
+## 07/12/2018
+
+* *REQUIRES MANUAL RECIPE RUN*
+  install latest stable nginx & disable `proxy_request_buffering` for admin nginx to allow direct streaming of uploads. 
+  For an existing cluster you can either reboot the cluster, or, if that's not desired, the various nginx recipes must be run:
+  ```bash
+    ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin" recipes="oc-opsworks-recipes::configure-nginx-proxy"
+  ```
+  ```bash
+    ./bin/rake stack:commands:execute_recipes_on_layers layers="Engage" recipes="oc-opsworks-recipes::configure-engage-nginx-proxy"
+  ```
+  If you have an analytics node:
+  ```bash
+    ./bin/rake stack:commands:execute_recipes_on_layers layers="Analytics" recipes="oc-opsworks-recipes::configure-elk-nginx-proxy"
+  ```
+
 ## 07/11/2018
 
 * *REQUIRES MANUAL RECIPE RUN* *REQUIRES EDITS TO CLUSTER CONFIG*

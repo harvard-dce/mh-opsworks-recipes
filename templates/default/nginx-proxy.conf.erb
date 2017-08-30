@@ -25,6 +25,7 @@ server {
 
   location / {
     proxy_buffering off;
+    proxy_request_buffering off;
     proxy_pass http://127.0.0.1:<%= @opencast_backend_http_port %>;
   }
 

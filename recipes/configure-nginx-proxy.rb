@@ -1,32 +1,20 @@
 # Cookbook Name:: oc-opsworks-recipes
 # Recipe:: configure-nginx-proxy
 
-include_recipe "oc-opsworks-recipes::update-package-repo"
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
-install_package('nginx')
+
+include_recipe "oc-opsworks-recipes::install-nginx"
 
 install_nginx_logrotate_customizations
 
 worker_procs = get_nginx_worker_procs
 
-template %Q|/etc/nginx/nginx.conf| do
-  source 'nginx.conf.erb'
-  variables({
-    worker_procs: worker_procs
-  })
+service 'nginx' do
+  action :nothing
 end
 
 # The template path variable cannot be a get, must be saved locally first
 body_temp_path = get_nginx_body_temp_path
-
-template %Q|/etc/nginx/sites-enabled/default| do
-  source 'nginx-proxy.conf.erb'
-  manage_symlink_source true
-  variables({
-    opencast_backend_http_port: 8080,
-    body_temp_path: body_temp_path
-  })
-end
 
 # create path for nginx to buffer large uploads, the get can be called directly
 directory get_nginx_body_temp_path do
@@ -42,4 +30,19 @@ directory '/etc/nginx/proxy-includes' do
   group 'root'
 end
 
-execute 'service nginx reload'
+template %Q|/etc/nginx/nginx.conf| do
+  source 'nginx.conf.erb'
+  variables({
+    worker_procs: worker_procs
+  })
+end
+
+template %Q|/etc/nginx/conf.d/default.conf| do
+  source 'nginx-proxy.conf.erb'
+  variables({
+    opencast_backend_http_port: 8080,
+    body_temp_path: body_temp_path
+  })
+  notifies :restart, 'service[nginx]', :immediately
+end
+

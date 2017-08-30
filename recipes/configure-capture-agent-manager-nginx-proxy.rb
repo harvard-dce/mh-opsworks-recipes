@@ -1,13 +1,12 @@
 # Cookbook Name:: oc-opsworks-recipes
 # Recipe:: configure-capture-agent-manager-nginx-proxy
 
-include_recipe "oc-opsworks-recipes::update-package-repo"
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
 app_name = get_capture_agent_manager_app_name
 usr_name = get_capture_agent_manager_usr_name
 
-install_package("nginx")
+include_recipe "oc-opsworks-recipes::install-nginx"
 
 install_nginx_logrotate_customizations
 configure_nginx_cloudwatch_logs
@@ -15,7 +14,6 @@ configure_nginx_cloudwatch_logs
 ssl_info = node.fetch(:ca_ssl, get_dummy_cert)
 if cert_defined(ssl_info)
   create_ssl_cert(ssl_info)
-  certificate_exists = true
 end
 
 directory "/etc/nginx/proxy-includes" do
@@ -25,6 +23,10 @@ end
 
 worker_procs = get_nginx_worker_procs
 
+service 'nginx' do
+  action :nothing
+end
+
 template %Q|/etc/nginx/nginx.conf| do
   source 'nginx.conf.erb'
   variables({
@@ -32,9 +34,8 @@ template %Q|/etc/nginx/nginx.conf| do
   })
 end
 
-template "/etc/nginx/sites-enabled/default" do
+template "/etc/nginx/conf.d/default.conf" do
   source "nginx-proxy-ssl-only.erb"
-  manage_symlink_source true
 end
 
 template "/etc/nginx/proxy-includes/capture-agent-manager.conf" do
@@ -43,6 +44,6 @@ template "/etc/nginx/proxy-includes/capture-agent-manager.conf" do
     capture_agent_manager: app_name,
     capture_agent_manager_usr_name: usr_name
   })
+  notifies :restart, 'service[nginx]', :immediately
 end
 
-execute "service nginx reload"

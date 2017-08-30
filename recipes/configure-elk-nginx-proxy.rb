@@ -7,8 +7,8 @@ elk_info = get_elk_info
 http_auth = elk_info['http_auth']
 es_host = node[:opsworks][:instance][:private_ip]
 
-include_recipe "oc-opsworks-recipes::update-package-repo"
-install_package('nginx apache2-utils')
+include_recipe "oc-opsworks-recipes::install-nginx"
+install_package('apache2-utils')
 
 install_nginx_logrotate_customizations
 configure_nginx_cloudwatch_logs
@@ -34,9 +34,8 @@ template %Q|/etc/nginx/nginx.conf| do
   })
 end
 
-template %Q|/etc/nginx/sites-enabled/default| do
+template %Q|/etc/nginx/conf.d/default.conf| do
   source 'elk-nginx-proxy-conf.erb'
-  manage_symlink_source true
   owner 'root'
   group 'root'
   mode '644'
