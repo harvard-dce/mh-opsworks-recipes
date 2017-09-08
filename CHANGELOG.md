@@ -3,6 +3,7 @@
 ## TO BE RELEASED
 
 * create cloudwatch log group for utility node's squid logs
+* nginx config performance improvements
 
 ## v1.26.0 - 08/24/2017
 

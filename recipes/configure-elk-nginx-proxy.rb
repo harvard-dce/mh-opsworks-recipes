@@ -25,6 +25,15 @@ bash "htpasswd" do
   EOH
 end
 
+worker_procs = get_nginx_worker_procs
+
+template %Q|/etc/nginx/nginx.conf| do
+  source 'nginx.conf.erb'
+  variables({
+    worker_procs: worker_procs
+  })
+end
+
 template %Q|/etc/nginx/sites-enabled/default| do
   source 'elk-nginx-proxy-conf.erb'
   manage_symlink_source true
