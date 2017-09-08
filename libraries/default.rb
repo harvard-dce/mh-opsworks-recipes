@@ -529,6 +529,15 @@ module MhOpsworksRecipes
       configure_cloudwatch_log("nginx-access", "/var/log/nginx/access.log", "%d/%b/%Y:%H:%M:%S %z")
       configure_cloudwatch_log("nginx-error", "/var/log/nginx/error.log", "%d/%b/%Y:%H:%M:%S %z")
     end
+
+    def get_nginx_worker_procs
+      number_of_cpus = execute_command(%Q(nproc)).chomp.to_i
+      if admin_node? || engage_node?
+        [(number_of_cpus / 2), 4].max
+      else
+        4
+      end
+    end
   end
 
   module DeployHelpers

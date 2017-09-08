@@ -23,6 +23,15 @@ directory "/etc/nginx/proxy-includes" do
   group "root"
 end
 
+worker_procs = get_nginx_worker_procs
+
+template %Q|/etc/nginx/nginx.conf| do
+  source 'nginx.conf.erb'
+  variables({
+    worker_procs: worker_procs
+  })
+end
+
 template "/etc/nginx/sites-enabled/default" do
   source "nginx-proxy-ssl-only.erb"
   manage_symlink_source true
