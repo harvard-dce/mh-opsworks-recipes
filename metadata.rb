@@ -1019,6 +1019,18 @@ none
 * removes the moscaler cron entries
 '
 )
+recipe(
+    'mh-opsworks-recipes::configure-capture-agent-cwlogs',
+    'Installs script for rsyncing capture agent logs and configures cloudwatch logs agent to monitor them.
+
+=== attributes
+none
+
+=== effects
+* installs script for rsyncing logs and configuring cloudwatch log agent
+* creates cron entry for executing script
+'
+)
 
 depends 'nfs', '~> 2.1.0'
 depends 'apt', '~> 2.9.2'

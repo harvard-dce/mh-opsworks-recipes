@@ -490,23 +490,11 @@ module MhOpsworksRecipes
 
       stack_name = stack_shortname
       log_group_name = stack_name + "_" + log_name
-      retention_days = node.fetch(:cwlogs_retention_days, '30')
-      region = node.fetch(:region, 'us-east-1')
+
+      create_log_group(log_group_name)
 
       service 'awslogs' do
         action :nothing
-      end
-
-      execute 'create log group' do
-        command %Q|aws logs create-log-group --region #{region} --log-group-name #{log_group_name}|
-        returns [0, 255]
-        ignore_failure true
-      end
-
-      execute 'set log group retention policy' do
-        command %Q|aws logs put-retention-policy --region #{region} --log-group-name #{log_group_name} --retention-in-days #{retention_days}|
-        retries 3
-        retry_delay 10
       end
 
       template "/var/awslogs/etc/config/#{log_name}.conf" do
@@ -523,6 +511,25 @@ module MhOpsworksRecipes
         })
         notifies :restart, 'service[awslogs]', :delayed
       end
+    end
+
+    def create_log_group(log_group_name)
+
+      region = node.fetch(:region, 'us-east-1')
+      retention_days = node.fetch(:cwlogs_retention_days, '30')
+
+      execute 'create log group' do
+        command %Q|aws logs create-log-group --region #{region} --log-group-name #{log_group_name}|
+        returns [0, 255]
+        ignore_failure true
+      end
+
+      execute 'set log group retention policy' do
+        command %Q|aws logs put-retention-policy --region #{region} --log-group-name #{log_group_name} --retention-in-days #{retention_days}|
+        retries 3
+        retry_delay 10
+      end
+
     end
 
     def configure_nginx_cloudwatch_logs

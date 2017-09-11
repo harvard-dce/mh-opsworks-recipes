@@ -11,6 +11,11 @@
         ./bin/rake stack:commands:execute_recipes_on_layers layers="Analytics" recipes="mh-opsworks-recipes::configure-elk-nginx-proxy"
         ./bin/rake stack:commands:execute_recipes_on_layers layers="Utility" recipes="mh-opsworks-recipes::configure-capture-agent-manager-nginx-proxy"
     
+* *REQUIRES MANUAL RECIPE RUN*
+  MI-73: recipe and script to pull capture agent logs w/ rsync, push to cloudwatch
+  
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Utility" recipes="mh-opsworks-recipes::configure-capture-agent-cwlogs"
+        
 ## v1.26.0 - 08/24/2017
 
 * Allow exit status of '255' on cloudwatch log group creation to get rid of errors due to ResourceAlreadyExistsException
