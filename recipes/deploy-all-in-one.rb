@@ -120,7 +120,6 @@ deploy_revision "matterhorn" do
 
     configure_usertracking(most_recent_deploy, user_tracking_authhost)
     install_aws_s3_distribution_service_config(most_recent_deploy, region, s3_distribution_bucket_name)
-    install_matterhorn_images_properties(most_recent_deploy)
     # /all-in-one SPECIFIC
 
     if using_local_distribution?

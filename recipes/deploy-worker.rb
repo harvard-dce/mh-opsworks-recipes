@@ -90,8 +90,6 @@ deploy_revision "matterhorn" do
     configure_newrelic(most_recent_deploy, newrelic_app_name, :workers)
 
     # WORKER SPECIFIC
-    #TODO - this should probably be checked into the repo
-    install_matterhorn_images_properties(most_recent_deploy)
     set_service_registry_dispatch_interval(most_recent_deploy)
     # /WORKER SPECIFIC
 
