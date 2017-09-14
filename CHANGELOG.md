@@ -3,8 +3,14 @@
 ## TO BE RELEASED
 
 * create cloudwatch log group for utility node's squid logs
-* nginx config performance improvements
-
+* *REQUIRES MANUAL RECIPE RUNS*
+  MI-74: nginx config performance improvements
+  
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin,Workers" recipes="mh-opsworks-recipes::configure-nginx-proxy"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Engage" recipes="mh-opsworks-recipes::configure-engage-nginx-proxy"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Analytics" recipes="mh-opsworks-recipes::configure-elk-nginx-proxy"
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Utility" recipes="mh-opsworks-recipes::configure-capture-agent-manager-nginx-proxy"
+    
 ## v1.26.0 - 08/24/2017
 
 * Allow exit status of '255' on cloudwatch log group creation to get rid of errors due to ResourceAlreadyExistsException
