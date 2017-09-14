@@ -583,6 +583,10 @@ module MhOpsworksRecipes
             dest: 'etc/encoding/engage-images.properties'
           },
           {
+            src: 'dce-config/encoding/matterhorn-images.properties',
+            dest: 'etc/encoding/matterhorn-images.properties'
+          },
+          {
             src: 'dce-config/workflows/DCE-error-handler.xml',
             dest: 'etc/workflows/DCE-error-handler.xml',
           },
@@ -696,14 +700,6 @@ module MhOpsworksRecipes
         variables({
           dispatch_interval: 0
         })
-      end
-    end
-
-    def install_matterhorn_images_properties(current_deploy_root)
-      template %Q|#{current_deploy_root}/etc/encoding/matterhorn-images.properties| do
-        source 'matterhorn-images.properties.erb'
-        owner 'matterhorn'
-        group 'matterhorn'
       end
     end
 
