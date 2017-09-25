@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## v1.27.0 - 09/25/2017
+
 * create cloudwatch log group for utility node's squid logs
 * *REQUIRES MANUAL RECIPE RUNS*
   MI-74: nginx config performance improvements
