@@ -76,6 +76,7 @@
                 <forwardTo>
                   <queue physicalName="ASSETMANAGER.Adminui" />
                   <queue physicalName="ASSETMANAGER.Externalapi" />
+                  <queue physicalName="ASSETMANAGER.Conductor" />                  
                 </forwardTo>
               </compositeQueue>
             </virtualDestinations>
@@ -102,22 +103,10 @@
           </virtualDestinationInterceptor>
           <virtualDestinationInterceptor>
             <virtualDestinations>
-              <compositeQueue name="RECORDING.QUEUE">
-                <forwardTo>
-                  <queue physicalName="RECORDING.Adminui" />
-                  <queue physicalName="RECORDING.Externalapi" />
-                  <queue physicalName="RECORDING.Liveschedule" />
-                </forwardTo>
-              </compositeQueue>
-            </virtualDestinations>
-          </virtualDestinationInterceptor>
-          <virtualDestinationInterceptor>
-            <virtualDestinations>
               <compositeQueue name="SCHEDULER.QUEUE">
                 <forwardTo>
                   <queue physicalName="SCHEDULER.Adminui" />
                   <queue physicalName="SCHEDULER.Externalapi" />
-                  <queue physicalName="SCHEDULER.Liveschedule" />
                 </forwardTo>
               </compositeQueue>
             </virtualDestinations>
