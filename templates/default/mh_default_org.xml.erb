@@ -23,7 +23,6 @@
   <sec:http create-session="ifRequired" servlet-api-provision="true" realm="Opencast"
     entry-point-ref="matterhornEntryPoint">
 
-
     <!-- ################ -->
     <!-- # URL SECURITY # -->
     <!-- ################ -->
@@ -40,8 +39,14 @@
     <sec:intercept-url pattern="/admin-ng/acl/acls.json" method="GET" access="ROLE_ADMIN, ROLE_UI_ACLS_VIEW" />
     <sec:intercept-url pattern="/admin-ng/acl/*" method="GET" access="ROLE_ADMIN, ROLE_UI_ACLS_VIEW" />
     <sec:intercept-url pattern="/acl-manager/acl/*" method="GET" access="ROLE_ADMIN, ROLE_UI_ACLS_VIEW" />
+    <sec:intercept-url pattern="/archive/archive/mediapackage/**" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_ASSETS_VIEW" />
     <sec:intercept-url pattern="/admin-ng/capture-agents/agents.json" method="GET" access="ROLE_ADMIN, ROLE_UI_LOCATIONS_VIEW, ROLE_UI_EVENTS_CREATE" />
+    <sec:intercept-url pattern="/admin-ng/capture-agents/*" method="GET" access="ROLE_ADMIN, ROLE_UI_LOCATIONS_DETAILS_CAPABILITIES_VIEW, ROLE_UI_LOCATIONS_DETAILS_CONFIGURATION_VIEW, ROLE_UI_LOCATIONS_DETAILS_GENERAL_VIEW" />
     <sec:intercept-url pattern="/admin-ng/event/*/asset/assets.json" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_ASSETS_VIEW" />
+    <sec:intercept-url pattern="/admin-ng/event/*/asset/attachment/*.json" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_ASSETS_VIEW" />
+    <sec:intercept-url pattern="/admin-ng/event/*/asset/catalog/*.json" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_ASSETS_VIEW" />
+    <sec:intercept-url pattern="/admin-ng/event/*/asset/media/*.json" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_ASSETS_VIEW" />
+    <sec:intercept-url pattern="/admin-ng/event/*/asset/publication/*.json" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_ASSETS_VIEW" />
     <sec:intercept-url pattern="/admin-ng/event/catalogAdapters" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_METADATA_VIEW" />
     <sec:intercept-url pattern="/admin-ng/event/events.json" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_VIEW" />
     <sec:intercept-url pattern="/admin-ng/event/new/metadata" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_METADATA_VIEW" />
@@ -50,9 +55,11 @@
     <sec:intercept-url pattern="/admin-ng/event/*/comments" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_COMMENTS_VIEW"/>
     <sec:intercept-url pattern="/admin-ng/event/*/comment/*" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_COMMENTS_VIEW"/>
     <sec:intercept-url pattern="/admin-ng/event/*/general.json" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_GENERAL_VIEW" />
+    <sec:intercept-url pattern="/admin-ng/event/*/hasActiveTransaction" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_VIEW" />
     <sec:intercept-url pattern="/admin-ng/event/*/media.json" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_MEDIA_VIEW"/>
     <sec:intercept-url pattern="/admin-ng/event/*/media/*.json" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_MEDIA_VIEW"/>
     <sec:intercept-url pattern="/admin-ng/event/*/metadata.json" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_METADATA_VIEW" />
+    <sec:intercept-url pattern="/admin-ng/event/*/scheduling.json" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_SCHEDULING_VIEW" />
     <sec:intercept-url pattern="/admin-ng/event/*/workflows.json" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_WORKFLOWS_VIEW" />
     <sec:intercept-url pattern="/admin-ng/event/*/workflows/*/operations.json" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_WORKFLOWS_VIEW"/>
     <sec:intercept-url pattern="/admin-ng/event/*/workflows/*/operations/*" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_WORKFLOWS_VIEW"/>
@@ -135,6 +142,7 @@
 
     <sec:intercept-url pattern="/email/template/*" method="DELETE" access="ROLE_ADMIN, ROLE_UI_EMAILTEMPLATES_DELETE" />
     <sec:intercept-url pattern="/admin-ng/acl/*" method="DELETE" access="ROLE_ADMIN, ROLE_UI_ACLS_DELETE" />
+    <sec:intercept-url pattern="/admin-ng/capture-agents/*" method="DELETE" access="ROLE_ADMIN, ROLE_UI_LOCATIONS_DELETE" />
     <sec:intercept-url pattern="/admin-ng/event/*/comment/*/*" method="DELETE" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_COMMENTS_DELETE" />
     <sec:intercept-url pattern="/admin-ng/event/*/comment/*" method="DELETE" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_COMMENTS_DELETE" />
     <sec:intercept-url pattern="/admin-ng/event/*" method="DELETE" access="ROLE_ADMIN, ROLE_UI_EVENTS_DELETE" />
@@ -229,8 +237,7 @@
     <sec:intercept-url pattern="/engage/ui/annots/**" access="ROLE_ADMIN, ROLE_OAUTH_USER" />
     <!-- Enable anonymous access to the engage player and the GET endpoints it requires -->
     <sec:intercept-url pattern="/engage/ui/**" access="ROLE_ANONYMOUS" />
-    <!-- #DCE KHD: DCE paella player is at this path -->
-    <sec:intercept-url pattern="/engage/player/**" method="GET" access="ROLE_ANONYMOUS" />
+    <sec:intercept-url pattern="/engage/**" access="ROLE_ANONYMOUS" />
     <!-- #DCE KHD: Alt paths: DCE former paella player, prep theodulpass -->
     <sec:intercept-url pattern="/paella2.0/ui/**" method="GET" access="ROLE_ANONYMOUS" />
     <sec:intercept-url pattern="/theodulpass/ui/**" method="GET" access="ROLE_ANONYMOUS" />
@@ -240,18 +247,13 @@
     <!--  #DCE -->
     <sec:intercept-url pattern="/engage-player/**" method="GET" access="ROLE_ANONYMOUS" />
     <sec:intercept-url pattern="/search/**" method="GET" access="ROLE_ANONYMOUS" />
-    <sec:intercept-url pattern="/usertracking/footprint*" method="GET" access="ROLE_ANONYMOUS" />
-    <sec:intercept-url pattern="/usertracking/detailenabled" method="GET" access="ROLE_ANONYMOUS" />
-    <sec:intercept-url pattern="/usertracking/stats*" method="GET" access="ROLE_ANONYMOUS" />
-    <!-- #DCE MATT-522 The following get is for paella.ajax.get /usertracking/?_method=PUT  -->
-    <sec:intercept-url pattern="/usertracking/" method="GET" access="ROLE_ANONYMOUS" />
-    <sec:intercept-url pattern="/usertracking/**" method="GET" access="ROLE_ADMIN" />
+    <sec:intercept-url pattern="/usertracking/**" method="GET" access="ROLE_ANONYMOUS" />
+    <sec:intercept-url pattern="/usertracking/**" method="PUT" access="ROLE_ANONYMOUS" />
     <sec:intercept-url pattern="/static/**" method="GET" access="ROLE_ANONYMOUS" />
     <sec:intercept-url pattern="/export/**" method="GET" access="ROLE_ANONYMOUS" />
 
     <!-- Enable anonymous access to the series endpoints -->
     <sec:intercept-url pattern="/series/**" method="GET" access="ROLE_ANONYMOUS" />
-
     <!-- MATT-2094 Annotation endpoint: access depends on which endpoint is used -->
     <!-- Reading annotations, security is done in REST endpoint -->
     <sec:intercept-url pattern="/annotation/annotations*" method="GET" access="ROLE_ANONYMOUS" />
@@ -271,7 +273,7 @@
     <sec:intercept-url pattern="/annotation/**" method="PUT" access="ROLE_ADMIN" />
     <!-- Deleting annotation, role admin only -->
     <sec:intercept-url pattern="/annotation/**" method="DELETE" access="ROLE_ADMIN" />
-
+ 
     <!-- Enable anonymous access to the OAI-PMH repository              -->
     <!-- The OAI-PMH specification demands boths GET and POST requests  -->
     <!-- Please make sure that the path configured here matches         -->
@@ -295,15 +297,11 @@
     <!-- Enable 2-legged OAuth access ("signed fetch") to the LTI launch servlet -->
     <sec:intercept-url pattern="/lti" access="ROLE_OAUTH_USER" />
 
-    <!-- Enable access to the LTI sample tool -->
-    <sec:intercept-url pattern="/ltisample/**" access="ROLE_OAUTH_USER" />
-
     <!-- Enable access to the LTI tools -->
     <sec:intercept-url pattern="/ltitools/**" access="ROLE_OAUTH_USER" />
 
-    <!-- IBM Watson transcription module endpoint -->
     <sec:intercept-url pattern="/transcripts/watson/results*" method="GET" access="ROLE_ANONYMOUS" />
-    <sec:intercept-url pattern="/transcripts/watson/results*" method="POST" access="ROLE_ANONYMOUS" />
+    <sec:intercept-url pattern="/transcripts/watson/results*" method="POST" access="ROLE_ANONYMOUS" />    
 
     <!-- Everything else is for the admin users -->
     <sec:intercept-url pattern="/admin-ng" method="GET" access="ROLE_ADMIN, ROLE_ADMIN_UI, ROLE_COURSE_ADMIN" />
@@ -367,10 +365,9 @@
         <!-- Basic authentication  -->
         <!-- <ref bean="basicAuthenticationFilter" /> -->
 
-        <!-- 2-legged oauth is used by trusted 3rd party applications, including LTI producers. -->
-        <!-- If you do not plan to use OAuth, comment this out. -->
-        <!-- #DCE OPC-9 -->
-        <ref bean="oauthProtectedResourceFilter" />
+        <!-- 2-legged OAuth is used by trusted 3rd party applications, including LTI. -->
+        <!-- Uncomment the line below to support LTI or other OAuth clients.          -->
+        <!-- <ref bean="oauthProtectedResourceFilter" /> -->
       </list>
     </property>
   </bean>
@@ -381,7 +378,7 @@
 
   <bean id="asyncTimeoutRedirectFilter" class="org.opencastproject.kernel.security.AsyncTimeoutRedirectFilter" />
 
-   <!-- ######################################## -->
+  <!-- ######################################## -->
   <!-- # Custom Anonymous Filter Definition   # -->
   <!-- ######################################## -->
 
@@ -469,21 +466,17 @@
   <!-- # OAuth (LTI) Support # -->
   <!-- ####################### -->
 
-  <!-- This is required for LTI. If you plan to use LTI, uncomment this and set
-       custom values for consumerkey and consumersecret: -->
+  <!-- This is required for LTI. If you are using LTI and have enabled the oauthProtectedResourceFilter  -->
+  <!-- in the list of authenticationFilters above, set custom values for CONSUMERKEY and CONSUMERSECRET. -->
+
   <bean name="oAuthConsumerDetailsService" class="org.opencastproject.kernel.security.OAuthSingleConsumerDetailsService">
     <constructor-arg index="0" ref="userDetailsService" />
-    <constructor-arg index="1" value="<%= @lti_oauth[:consumerkey] %>" />
-    <constructor-arg index="2" value="<%= @lti_oauth[:sharedsecret] %>" />
+    <constructor-arg index="1" value="CONSUMERKEY" />
+    <constructor-arg index="2" value="CONSUMERSECRET" />
     <constructor-arg index="3" value="constructorName" />
   </bean>
 
   <bean name="oauthProtectedResourceFilter" class="org.opencastproject.kernel.security.LtiProcessingFilter">
-    <!-- start #DCE MATT-2046 proxy workaround params, comment these out if external and internal URLs match
-    The arg 0 is the String urlSentByLtiClient, the arg 1 is String urlUsedByProxyServer -->
-    <constructor-arg index="0" value = "https://<%= @proxy_name %>/lti" />
-    <constructor-arg index="1" value = "http://<%= @unproxied_name %>/lti" />
-    <!-- end MATT-2046 proxy workaround params -->
     <property name="consumerDetailsService" ref="oAuthConsumerDetailsService" />
     <property name="tokenServices">
       <bean class="org.springframework.security.oauth.provider.token.InMemoryProviderTokenServices" />
@@ -494,20 +487,23 @@
     <property name="authHandler">
       <bean class="org.opencastproject.kernel.security.LtiLaunchAuthenticationHandler">
         <constructor-arg index="0" ref="userDetailsService" />
-        <!-- Uncomment to allow the included keys to be trusted to provide known user details - - >
+
+        <!-- Uncomment to trust usernames from the LTI consumer identified by CONSUMERKEY.           -->
+        <!-- Users from untrusted systems will be prefixed with "lti:" and the consumer domain name. -->
+
+        <!--
         <constructor-arg index="1" ref="securityService" />
         <constructor-arg index="2">
           <list>
-            <value>trustedKey</value>
-            <value>trustedKey2</value>
+            <value>CONSUMERKEY</value>
           </list>
         </constructor-arg>
-        <! - - end of include keys to be a trusted provider -->
+        -->
+
       </bean>
     </property>
-  </bean>
-  <!-- end of OAuth LTI edits -->
-
+  </bean>  
+  
   <!-- ###################### -->
   <!-- # Shibboleth Support # -->
   <!-- ###################### -->
@@ -560,6 +556,7 @@
   <osgi:reference id="userDirectoryService" cardinality="1..1"
                   interface="org.opencastproject.security.api.UserDirectoryService" />
 
+
   <!-- ############################# -->
   <!-- # Spring Security Internals # -->
   <!-- ############################# -->
@@ -581,4 +578,3 @@
   <!-- bean class="org.springframework.security.authentication.event.LoggerListener" / -->
 
 </beans>
-
