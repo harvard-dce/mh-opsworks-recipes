@@ -5,10 +5,14 @@ enabled=true
 ibm.watson.user=<%= @ibm_watson_username %>
 
 # Password obtained when registering with the IBM Watson Speech-to_text service 
-ibm.watson.psw=<%= @ibm_watson_psw %>
+ibm.watson.password=<%= @ibm_watson_psw %>
+
+# Language model to be used. See the IBM Watson Speech-to-Text service documentation
+# for available models. If empty, the default will be used ("en-US_BroadbandModel").
+#ibm.watson.model=
 
 # Workflow to be executed when results are ready to be attached to media package.
-#workflow=DCE-attach-watson-transcription
+workflow=DCE-attach-watson-transcription
   
 # Interval the workflow dispatcher runs to start workflows to attach transcripts to the media package
 # after the transcription job is completed.
@@ -21,6 +25,11 @@ ibm.watson.psw=<%= @ibm_watson_psw %>
 # (in seconds)
 #completion.check.buffer=600
 
+# How long to wait after a transcription is supposed to finish before marking the job as 
+# canceled in the database. Default is 2 hours.
+# (in seconds)
+#max.processing.time=7200
+
 # How long to keep result files in the working file repository in days.
 # The default is 7 days.
 #cleanup.results.days=7
@@ -28,4 +37,3 @@ ibm.watson.psw=<%= @ibm_watson_psw %>
 # Email to send notifications of errors. If not informed, the value from
 # org.opencastproject.admin.email in custom.properties will be used.
 #notification.email=
-
