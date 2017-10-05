@@ -23,7 +23,7 @@ http {
                           '$request_time $upstream_response_time';
 
 	access_log /var/log/nginx/access.log request_time;
-	error_log /var/log/nginx/error.log;
+	error_log /var/log/nginx/error.log info;
 
 	gzip on;
 	gzip_disable "msie6";

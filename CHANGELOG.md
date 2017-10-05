@@ -2,6 +2,10 @@
 
 ## TO BE RELEASED
 
+## v1.28.0 - 10/06/2017
+
+* MATT-2464 nginx error log to INFO level for fileupload debugging
+
 ## v1.27.0 - 09/25/2017
 
 * create cloudwatch log group for utility node's squid logs
