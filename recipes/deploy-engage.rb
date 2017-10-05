@@ -24,9 +24,6 @@ capture_agent_monitor_url = node.fetch(
   :capture_agent_monitor_url, 'http://example.com/monitor_url'
 )
 
-live_streaming_url = get_live_streaming_url
-live_stream_name = get_live_stream_name
-
 auth_host = node.fetch(:auth_host, 'example.com')
 auth_redirect_location = node.fetch(:auth_redirect_location, 'http://example.com/some/url')
 auth_activated = node.fetch(:auth_activated, 'true')
@@ -102,7 +99,6 @@ deploy_revision "opencast" do
     install_auth_service(
       most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated
     )
-#    install_live_streaming_service_config(most_recent_deploy, live_stream_name)
 #    install_published_event_details_email(most_recent_deploy, public_engage_hostname)
 #    configure_newrelic(most_recent_deploy, newrelic_app_name, :engage)
 
@@ -130,7 +126,6 @@ deploy_revision "opencast" do
         database: database_connection,
         engage_hostname: public_engage_hostname,
         capture_agent_monitor_url: capture_agent_monitor_url,
-        live_streaming_url: live_streaming_url,
         job_maxload: nil,
         stack_name: stack_name,
         workspace_cleanup_period: 0,

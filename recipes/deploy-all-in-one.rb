@@ -117,7 +117,7 @@ deploy_revision "opencast" do
     install_auth_service(
       most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated
     )
-    install_live_streaming_service_config(most_recent_deploy, live_stream_name)
+    install_live_streaming_service_config(most_recent_deploy, live_stream_name, live_streaming_url)
     install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host)
     install_otherpubs_service_series_impl_config(most_recent_deploy)
 #    install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name)
@@ -153,7 +153,6 @@ deploy_revision "opencast" do
         database: database_connection,
         engage_hostname: public_hostname,
         capture_agent_monitor_url: capture_agent_monitor_url,
-        live_streaming_url: live_streaming_url,
         live_monitor_url: live_monitor_url,
         job_maxload: nil,
         stack_name: stack_name,

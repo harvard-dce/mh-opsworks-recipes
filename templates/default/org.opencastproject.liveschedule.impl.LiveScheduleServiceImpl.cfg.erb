@@ -1,5 +1,9 @@
 # Configuration for the Live Schedule Service
 
+# The streaming base url e.g. rtmp://streaming.server/live/
+# This is mandatory if not using MHPearl capture agents
+live.streamingUrl=<%= @live_streaming_url %>
+
 # The same mime-type applies to all flavors and resolutions
 live.mimeType=video/x-flv
 
