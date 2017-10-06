@@ -25,6 +25,15 @@ template %Q|/etc/nginx/sites-enabled/default| do
   })
 end
 
+# create path for nginx to buffer large uploads, the get can be called directly
+directory get_nginx_body_temp_path do
+  action :create
+  owner 'www-data'
+  group 'admin'
+  mode '755'
+  recursive true
+end
+
 directory '/etc/nginx/proxy-includes' do
   owner 'root'
   group 'root'
