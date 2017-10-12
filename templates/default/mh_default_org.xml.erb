@@ -365,7 +365,8 @@
 
         <!-- 2-legged OAuth is used by trusted 3rd party applications, including LTI. -->
         <!-- Uncomment the line below to support LTI or other OAuth clients.          -->
-        <!-- <ref bean="oauthProtectedResourceFilter" /> -->
+        <!-- #DCE OPC-9 enable OAuth filter -->
+        <ref bean="oauthProtectedResourceFilter" />
       </list>
     </property>
   </bean>
@@ -469,12 +470,17 @@
 
   <bean name="oAuthConsumerDetailsService" class="org.opencastproject.kernel.security.OAuthSingleConsumerDetailsService">
     <constructor-arg index="0" ref="userDetailsService" />
-    <constructor-arg index="1" value="CONSUMERKEY" />
-    <constructor-arg index="2" value="CONSUMERSECRET" />
+    <constructor-arg index="1" value="<%= @lti_oauth[:consumerkey] %>" />
+    <constructor-arg index="2" value="<%= @lti_oauth[:sharedsecret] %>" />
     <constructor-arg index="3" value="constructorName" />
   </bean>
 
   <bean name="oauthProtectedResourceFilter" class="org.opencastproject.kernel.security.LtiProcessingFilter">
+    <!-- start #DCE MATT-2046 proxy workaround params, comment these out if external and internal URLs match
+    The arg 0 is the String urlSentByLtiClient, the arg 1 is String urlUsedByProxyServer -->
+    <constructor-arg index="0" value = "https://<%= @proxy_name %>/lti" />
+    <constructor-arg index="1" value = "http://<%= @unproxied_name %>/lti" />
+    <!-- end MATT-2046 proxy workaround params -->
     <property name="consumerDetailsService" ref="oAuthConsumerDetailsService" />
     <property name="tokenServices">
       <bean class="org.springframework.security.oauth.provider.token.InMemoryProviderTokenServices" />
