@@ -23,12 +23,3 @@
   end
 end
 
-# create path for nginx to buffer large uploads
-directory get_nginx_body_temp_path do
-  action :create
-  owner 'www-data'
-  group 'admin'
-  mode '755'
-  recursive true
-end
-
