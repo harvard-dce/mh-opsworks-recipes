@@ -124,24 +124,6 @@ directory "template_dir" do
   mode '755'
 end
 
-['useractions', 'episodes'].each do |template_name|
-  cookbook_file "#{template_name}_template" do
-    path "/etc/elasticsearch/templates/#{template_name}.json"
-    source "#{template_name}.json"
-    owner 'root'
-    group 'root'
-    mode '644'
-  end
-
-  http_request "put_template" do
-    url "http://#{es_host}:9200/_template/dce-#{template_name}"
-    message lazy { ::File.read("/etc/elasticsearch/templates/#{template_name}.json") }
-    action :put
-    retries 2
-    retry_delay 30
-  end
-end
-
 if enable_snapshots
   ruby_block 'create snapshot bucket' do
     block do
