@@ -928,13 +928,14 @@ module MhOpsworksRecipes
       end 
     end
 
-    def install_live_streaming_service_config(current_deploy_root,live_stream_name)
+    def install_live_streaming_service_config(current_deploy_root, live_stream_name, live_streaming_url)
       template %Q|#{current_deploy_root}/etc/org.opencastproject.liveschedule.impl.LiveScheduleServiceImpl.cfg| do
         source 'org.opencastproject.liveschedule.impl.LiveScheduleServiceImpl.cfg.erb'
         owner 'opencast'
         group 'opencast'
         variables({
-          live_stream_name: live_stream_name
+          live_stream_name: live_stream_name,
+          live_streaming_url: live_streaming_url 
         })
       end
     end

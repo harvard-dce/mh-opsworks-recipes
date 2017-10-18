@@ -139,7 +139,6 @@ deploy_revision "opencast" do
         database: database_connection,
         engage_hostname: public_engage_hostname,
         capture_agent_monitor_url: capture_agent_monitor_url,
-        live_streaming_url: live_streaming_url,
         live_monitor_url: live_monitor_url,
         job_maxload: nil,
         stack_name: stack_name,
