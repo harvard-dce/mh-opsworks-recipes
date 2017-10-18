@@ -104,7 +104,7 @@ deploy_revision "opencast" do
 #    install_auth_service(
 #      most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated
 #    )
-    install_live_streaming_service_config(most_recent_deploy, live_stream_name)
+    install_live_streaming_service_config(most_recent_deploy, live_stream_name, live_streaming_url)
 #    # Admin Specific
     install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host)
     install_otherpubs_service_series_impl_config(most_recent_deploy)
@@ -137,7 +137,6 @@ deploy_revision "opencast" do
         database: database_connection,
         engage_hostname: public_engage_hostname,
         capture_agent_monitor_url: capture_agent_monitor_url,
-        live_streaming_url: live_streaming_url,
         live_monitor_url: live_monitor_url,
         job_maxload: nil,
         stack_name: stack_name,
