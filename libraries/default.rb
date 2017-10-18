@@ -386,7 +386,10 @@ module MhOpsworksRecipes
           'curator_repo_uri' => 'http://packages.elastic.co/curator/3/debian',
           'http_auth' => {},
           'http_ssl' => get_dummy_cert,
+          'harvester_repo' => 'https://github.com/harvard-dce/dce-user-analytics.git',
           'harvester_release' => 'master',
+          'zoom_key' => nil,
+          'zoom_secret' => nil
       }.merge(node.fetch(:elk, {}))
     end
 

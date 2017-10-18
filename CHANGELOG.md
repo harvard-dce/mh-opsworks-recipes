@@ -2,6 +2,11 @@
 
 ## TO BE RELEASED
 
+* *REQUIRES MANUAL RECIPE RUN*
+  Update useraction harvester & elasticsearch recipes for new, combined zoom + useraction analytics harvester
+  
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Analytics" recipes="mh-opsworks-recipes::install-ua-harvester"
+
 ## v1.28.0 - 10/06/2017
 
 * MATT-2464 nginx error log to INFO level for fileupload debugging
