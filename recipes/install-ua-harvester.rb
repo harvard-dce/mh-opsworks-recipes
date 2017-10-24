@@ -13,7 +13,7 @@ stack_name = stack_shortname
 sqs_queue_name = "#{stack_name}-user-actions"
 region = node[:opsworks][:instance][:region]
 
-install_package('python-pip run-one redis-server')
+install_package('python-pip python-virtualenv run-one redis-server')
 
 user "ua_harvester" do
   comment 'The ua_harvester user'
@@ -31,22 +31,28 @@ git "get the ua harvester" do
 end
 
 bash 'install dependencies' do
-  code 'cd /home/ua_harvester/harvester && pip install -U pip setuptools && pip install -r requirements.txt'
-  user 'root'
+  code %Q|
+cd /home/ua_harvester/harvester &&
+/usr/bin/virtualenv venv &&
+source venv/bin/activate &&
+pip install --no-cache-dir -r requirements.txt
+  |
+  user 'ua_harvester'
 end
 
+include_recipe 'mh-opsworks-recipes::install-geolite2-db'
 include_recipe 'mh-opsworks-recipes::configure-ua-harvester'
 
 bash 'put index templates' do
-  code 'cd /home/ua_harvester/harvester && ./harvest.py setup load_index_templates 2>&1 | logger -t info'
-  user 'root'
+  code 'cd /home/ua_harvester/harvester && source venv/bin/activate && ./harvest.py setup load_index_templates 2>&1 | logger -t info'
+  user 'ua_harvester'
 end
 
 # fetch user action data from MH every 2m
 cron_d 'ua_harvester' do
   user 'ua_harvester'
   minute '*/2'
-  command %Q(cd /home/ua_harvester/harvester && /usr/bin/run-one ./harvest.py useractions -b 10000 2>&1 | logger -t info)
+  command %Q(cd /home/ua_harvester/harvester && source venv/bin/activate && /usr/bin/run-one ./harvest.py useractions -b 10000 2>&1 | logger -t info)
   path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 end
 
@@ -55,7 +61,7 @@ cron_d 'load_episodes' do
   user 'ua_harvester'
   minute '0'
   hour '4'
-  command %Q(cd /home/ua_harvester/harvester && /usr/bin/run-one ./harvest.py load_episodes 2>&1 | logger -t info)
+  command %Q(cd /home/ua_harvester/harvester && source venv/bin/activate && /usr/bin/run-one ./harvest.py load_episodes 2>&1 | logger -t info)
   path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 end
 
@@ -64,7 +70,7 @@ cron_d 'zoom_harvest' do
   user 'ua_harvester'
   minute '0'
   hour '5'
-  command %Q(cd /home/ua_harvester/harvester && /usr/bin/run-one ./harvest.py zoom 2>&1 | logger -t info)
+  command %Q(cd /home/ua_harvester/harvester && source venv/bin/activate && /usr/bin/run-one ./harvest.py zoom 2>&1 | logger -t info)
   path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 end
 

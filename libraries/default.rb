@@ -389,7 +389,8 @@ module MhOpsworksRecipes
           'harvester_repo' => 'https://github.com/harvard-dce/dce-user-analytics.git',
           'harvester_release' => 'master',
           'zoom_key' => nil,
-          'zoom_secret' => nil
+          'zoom_secret' => nil,
+          'geolite2_db_archive' => 'GeoLite2-City_20171003.tar.gz'
       }.merge(node.fetch(:elk, {}))
     end
 

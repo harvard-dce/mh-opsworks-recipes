@@ -34,6 +34,7 @@ MATTERHORN_ADMIN_HOST="#{admin_node[:private_ip]}"
 ES_HOST="#{es_host}"
 ZOOM_KEY=#{zoom_key}
 ZOOM_SECRET=#{zoom_secret}
+GEOLITE_PATH=/opt/geolite2/GeoLite2-City.mmdb
 S3_HARVEST_TS_BUCKET="#{stack_name}-ua-harvester"
 S3_LAST_ACTION_TS_KEY="#{stack_name}-last-action-ts"
 SQS_QUEUE_NAME="#{sqs_queue_name}"
