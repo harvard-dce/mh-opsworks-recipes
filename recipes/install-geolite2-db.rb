@@ -1,5 +1,5 @@
 # Cookbook Name:: mh-opsworks-recipes
-# Recipe:: install-ua-harvester
+# Recipe:: install-geolite2-db
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 

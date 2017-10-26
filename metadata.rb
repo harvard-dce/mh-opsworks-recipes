@@ -1031,6 +1031,19 @@ none
 * creates cron entry for executing script
 '
 )
+recipe(
+    'mh-opsworks-recipes::install-geolite2-db',
+    'Installs the MaxmindDB GeoLite2 db for performing geoip lookups by the analytics harvester.
+
+=== attributes
+none
+
+=== effects
+* downloads the GeoLite2 db archive from the shared assets folder
+* unpacks archive into /opt/geolite2
+* name of archive file can be specified in cluster custom json
+'
+)
 
 depends 'nfs', '~> 2.1.0'
 depends 'apt', '~> 2.9.2'
