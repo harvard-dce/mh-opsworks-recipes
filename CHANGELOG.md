@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## v1.29.0 - 10/26/2017
+
 * *REQUIRES MANUAL RECIPE RUN*
   Update useraction harvester & elasticsearch recipes for new, combined zoom + useraction analytics harvester
   
