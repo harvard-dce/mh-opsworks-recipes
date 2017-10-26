@@ -26,7 +26,7 @@ bash 'download geolite2 db' do
 cd /opt/geolite2 &&
 /bin/rm -f *.* &&
 #{geolite2_dl_cmd} &&
-/bin/tar -xvfz #{geolite2_db_archive} --strip-components=1
+/bin/tar -xzvf #{geolite2_db_archive} --strip-components=1
 |
   timeout 300
   retries 10
