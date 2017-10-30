@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* added `buildspec.yml` file to allow automated CodeBuild builds. See the `harvard-dce/mh-opsworks-builder` project.
+
 ## v1.29.0 - 10/26/2017
 
 * *REQUIRES MANUAL RECIPE RUN*

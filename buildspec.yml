@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Entered the install phase...
+      - gem install berkshelf -v 5.1.0
+  build:
+    commands:
+      - echo Entered the build phase...
+      - printenv
+      - berks package mh-opsworks-recipes-${REVISION}.tar.gz
+artifacts:
+  files:
+    - mh-opsworks-recipes-${REVISION}.tar.gz
+  discard-paths: yes
