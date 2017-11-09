@@ -100,4 +100,9 @@ if on_aws?
       execute_command(command)
     end
   end
+
+  bash 'blacklist rpcsec_gss_krb5 module' do
+    code 'echo "blacklist rpcsec_gss_krb5" > /etc/modprobe.d/blacklist-rpcsec-gss-krb5.conf && rmmod -s rpcsec_gss_krb5'
+    user 'root'
+  end
 end
