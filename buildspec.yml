@@ -9,8 +9,8 @@ phases:
     commands:
       - echo Entered the build phase...
       - printenv
-      - berks package mh-opsworks-recipes-${REVISION}.tar.gz
+      - berks package oc-opsworks-recipes-${REVISION}.tar.gz
 artifacts:
   files:
-    - mh-opsworks-recipes-${REVISION}.tar.gz
+    - oc-opsworks-recipes-${REVISION}.tar.gz
   discard-paths: yes

@@ -40,8 +40,8 @@ pip install --no-cache-dir -r requirements.txt
   user 'ua_harvester'
 end
 
-include_recipe 'mh-opsworks-recipes::install-geolite2-db'
-include_recipe 'mh-opsworks-recipes::configure-ua-harvester'
+include_recipe 'oc-opsworks-recipes::install-geolite2-db'
+include_recipe 'oc-opsworks-recipes::configure-ua-harvester'
 
 bash 'put index templates' do
   code 'cd /home/ua_harvester/harvester && source venv/bin/activate && ./harvest.py setup load_index_templates 2>&1 | logger -t info'
