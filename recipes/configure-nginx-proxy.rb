@@ -7,6 +7,7 @@ install_package('nginx')
 
 install_nginx_logrotate_customizations
 
+body_temp_path = get_nginx_body_temp_path
 worker_procs = get_nginx_worker_procs
 
 template %Q|/etc/nginx/nginx.conf| do

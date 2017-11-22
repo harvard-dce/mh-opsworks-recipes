@@ -789,7 +789,11 @@ module MhOpsworksRecipes
 
     def install_init_scripts(current_deploy_root, opencast_repo_root)
       log_dir = node.fetch(:opencast_log_directory, '/var/log/opencast')
+<<<<<<< HEAD
       java_home = node['java']['java_home']
+=======
+
+>>>>>>> 24e5bb9... `s/mh/oc/` cleanup after rebase
       xmx_ram_ratio = xmx_ram_ratio_for_this_node
       java_xmx_ram = xmx_ram_for_this_node(xmx_ram_ratio)
       java_xms_ram = java_xmx_ram * xmx_xms_ratio_for_this_node
@@ -806,7 +810,12 @@ module MhOpsworksRecipes
         group 'opencast'
         mode '755'
         variables({
+<<<<<<< HEAD
           opencast_root: current_deploy_root
+=======
+          opencast_executable: opencast_repo_root + '/current/bin/opencast',
+          start_check_sleep_seconds: start_check_sleep_seconds
+>>>>>>> 24e5bb9... `s/mh/oc/` cleanup after rebase
         })
       end
 
@@ -817,6 +826,7 @@ module MhOpsworksRecipes
         mode '755'
         variables({
           java_xmx_ram: java_xmx_ram,
+<<<<<<< HEAD
 #          java_xms_ram: java_xms_ram,
 #          enable_G1GC: enable_G1GC?,
 #          enable_yourkit_agent: enable_yourkit_agent?,
@@ -827,6 +837,17 @@ module MhOpsworksRecipes
 #          felix_config_dir: opencast_repo_root + '/current/etc',
 #          opencast_log_directory: log_dir,
 #          enable_newrelic: enable_newrelic?
+=======
+          java_xms_ram: java_xms_ram,
+          main_config_file: %Q|#{opencast_repo_root}/current/etc/opencast.conf|,
+          opencast_root: opencast_repo_root + '/current',
+          felix_config_dir: opencast_repo_root + '/current/etc',
+          opencast_log_directory: log_dir,
+          enable_newrelic: enable_newrelic?,
+          enable_G1GC: enable_G1GC?,
+          enable_yourkit_agent: enable_yourkit_agent?,
+          yourkit_dir: opencast_repo_root + '/yourkit'
+>>>>>>> 24e5bb9... `s/mh/oc/` cleanup after rebase
         })
       end
     end
@@ -990,7 +1011,7 @@ module MhOpsworksRecipes
     def setup_transcript_result_sync_to_s3(shared_storage_root, transcript_bucket_name)
       transcript_path = shared_storage_root + '/files/collection/transcripts'
       cron_d 'sync_transcripts_to_s3' do
-        user 'matterhorn'
+        user 'opencast'
         predefined_value '@daily'
         command %Q|cd #{transcript_path}; aws s3 sync --quiet . s3://#{transcript_bucket_name}|
         path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
