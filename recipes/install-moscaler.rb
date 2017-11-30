@@ -76,5 +76,5 @@ AUTOSCALE_CONFIG="/home/moscaler/mo-scaler/autoscale.json"
   mode '600'
 end
 
-include_recipe "mh-opsworks-recipes::moscaler-resume"
+include_recipe "oc-opsworks-recipes::moscaler-resume"
 

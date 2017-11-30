@@ -592,19 +592,7 @@ module MhOpsworksRecipes
           {
             src: 'dce-config/encoding/DCE-h264-movies.properties',
             dest: 'etc/encoding/DCE-h264-movies.properties'
-          },
-          {
-            src: 'dce-config/encoding/engage-images.properties',
-            dest: 'etc/encoding/engage-images.properties'
-          },
-          {
-            src: 'dce-config/encoding/matterhorn-images.properties',
-            dest: 'etc/encoding/matterhorn-images.properties'
-          },
-          {
-            src: 'dce-config/workflows/DCE-error-handler.xml',
-            dest: 'etc/workflows/DCE-error-handler.xml',
-          },
+          }
         ],
         engage: []
       }
@@ -818,7 +806,7 @@ module MhOpsworksRecipes
         group 'opencast'
         mode '755'
         variables({
-          start_check_sleep_seconds: start_check_sleep_seconds
+          start_check_sleep_seconds: start_check_sleep_seconds,
           opencast_root: current_deploy_root
         })
       end
@@ -833,7 +821,7 @@ module MhOpsworksRecipes
           java_xms_ram: java_xms_ram,
           enable_G1GC: enable_G1GC?,
           enable_yourkit_agent: enable_yourkit_agent?,
-          yourkit_dir: matterhorn_repo_root + '/yourkit',
+          yourkit_dir: opencast_repo_root + '/yourkit',
           java_home: java_home,
 #          main_config_file: %Q|#{opencast_repo_root}/current/etc/opencast.conf|,
 #          opencast_root: opencast_repo_root + '/current',
@@ -1003,7 +991,7 @@ module MhOpsworksRecipes
     def setup_transcript_result_sync_to_s3(shared_storage_root, transcript_bucket_name)
       transcript_path = shared_storage_root + '/files/collection/transcripts'
       cron_d 'sync_transcripts_to_s3' do
-        user 'matterhorn'
+        user 'opencast'
         predefined_value '@daily'
         command %Q|cd #{transcript_path}; aws s3 sync --quiet . s3://#{transcript_bucket_name}|
         path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'

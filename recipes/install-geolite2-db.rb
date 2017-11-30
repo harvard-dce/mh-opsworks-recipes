@@ -1,4 +1,4 @@
-# Cookbook Name:: mh-opsworks-recipes
+# Cookbook Name:: oc-opsworks-recipes
 # Recipe:: install-geolite2-db
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
@@ -9,7 +9,7 @@ shared_assets_bucket = get_shared_asset_bucket_name
 geolite2_db_archive = elk_info['geolite2_db_archive']
 
 if on_aws?
-  include_recipe 'mh-opsworks-recipes::install-awscli'
+  include_recipe 'oc-opsworks-recipes::install-awscli'
   geolite2_dl_cmd = "/usr/local/bin/aws s3 cp s3://#{shared_assets_bucket}/#{geolite2_db_archive} ."
 else
   geolite2_dl_cmd = "wget https://s3.amazonaws.com/#{shared_assets_bucket}/#{geolite2_db_archive}"
