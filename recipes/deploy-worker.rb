@@ -82,7 +82,6 @@ deploy_revision "opencast" do
     install_auth_service(
       most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated
     )
-#    install_published_event_details_email(most_recent_deploy, public_engage_hostname)
 #    configure_newrelic(most_recent_deploy, newrelic_app_name, :workers)
 
     # WORKER SPECIFIC

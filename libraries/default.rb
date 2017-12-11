@@ -575,14 +575,14 @@ module MhOpsworksRecipes
     def files_for(node_profile)
       files = {
         admin: [
-#          {
-#            src: 'dce-config/email/errorDetails',
-#            dest: 'etc/email/errorDetails'
-#          },
-#          {
-#            src: 'dce-config/email/eventDetails',
-#            dest: 'etc/email/eventDetails'
-#          },
+          {
+            src: 'dce-config/email/errorDetails',
+            dest: 'etc/email/errorDetails'
+          },
+          {
+            src: 'dce-config/email/eventDetails',
+            dest: 'etc/email/eventDetails'
+          },
 #          {
 #            src: 'dce-config/email/metasynchDetails',
 #            dest: 'etc/email/metasynchDetails'
@@ -775,11 +775,19 @@ module MhOpsworksRecipes
     def update_workflows_for_local_distribution(current_deploy_root)
       ruby_block "update workflows for local distribution" do
         block do
-          Dir[current_deploy_root + '/etc/workflows/DCE*.xml'].each do |wf_file|
+          Dir[current_deploy_root + '/etc/workflows/dce*.xml'].each do |wf_file|
             editor = Chef::Util::FileEdit.new(wf_file)
             editor.search_file_replace(
               /publish-aws/,
               "publish-engage"
+            )
+            editor.search_file_replace(
+              /retract-aws/,
+              "retract-engage"
+            )
+            editor.search_file_replace(
+              /retract-element-aws/,
+              "retract-element-engage"
             )
             editor.write_file
           end
@@ -938,14 +946,15 @@ module MhOpsworksRecipes
       end 
     end
 
-    def install_live_streaming_service_config(current_deploy_root, live_stream_name, live_streaming_url)
+    def install_live_streaming_service_config(current_deploy_root, live_stream_name, live_streaming_url, distribution)
       template %Q|#{current_deploy_root}/etc/org.opencastproject.liveschedule.impl.LiveScheduleServiceImpl.cfg| do
         source 'org.opencastproject.liveschedule.impl.LiveScheduleServiceImpl.cfg.erb'
         owner 'opencast'
         group 'opencast'
         variables({
           live_stream_name: live_stream_name,
-          live_streaming_url: live_streaming_url 
+          live_streaming_url: live_streaming_url,
+          distribution: distribution 
         })
       end
     end
@@ -1028,6 +1037,11 @@ module MhOpsworksRecipes
     end
 
     def copy_workflows_into_place_for_admin(current_deploy_root)
+      execute 'clean original workflow directory' do
+        command %Q|rm #{current_deploy_root}/etc/workflows/*|
+        retries 3
+        retry_delay 10
+      end
       execute 'copy workflows into place for admin' do
         command %Q|find #{current_deploy_root}/dce-config/workflows -maxdepth 1 -type f -exec cp -t #{current_deploy_root}/etc/workflows {} +|
         retries 3
