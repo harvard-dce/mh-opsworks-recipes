@@ -8,9 +8,10 @@ phases:
   build:
     commands:
       - echo Entered the build phase...
-      - printenv
-      - berks package mh-opsworks-recipes-${REVISION}.tar.gz
+      - export REVISION_ID=`echo $REVISION | sed 's/\//-/g'`
+      - berks package mh-opsworks-recipes-${REVISION_ID}.tar.gz
 artifacts:
   files:
-    - mh-opsworks-recipes-${REVISION}.tar.gz
+    - mh-opsworks-recipes-${REVISION_ID}.tar.gz
   discard-paths: yes
+
