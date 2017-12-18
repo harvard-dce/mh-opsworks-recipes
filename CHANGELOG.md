@@ -4,6 +4,7 @@
 
 * 'yajl-ruby' gem version update to address security vulnerability
 * added `buildspec.yml` file to allow automated CodeBuild builds. See the `harvard-dce/mh-opsworks-builder` project.
+* updated logstash config: remove geoip and useragent parsing (now performed by harvester)
 
 ## v1.29.0 - 10/26/2017
 

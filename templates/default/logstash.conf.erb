@@ -22,25 +22,6 @@ filter {
     match => [ "timestamp", "YYYY-MM-dd'T'HH:mm:ssZZ" ]
     remove_field => ["timestamp"]
   }
-  mutate {
-    add_field => {
-      "hostname" => "%{ip}"
-    }
-  }
-  geoip {
-    source => "ip"
-    lru_cache_size => 100000
-  }
-  if [useragent] =~ /.+/ {
-    useragent {
-      lru_cache_size => 100000
-      source => "useragent"
-      target => "ua"
-    }
-  }
-  mutate {
-    remove_field => "useragent"
-  }
 }
 
 output {
