@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## v1.30.0 - 1/12/2018
+
 * 'yajl-ruby' gem version update to address security vulnerability
 * added `buildspec.yml` file to allow automated CodeBuild builds. See the `harvard-dce/mh-opsworks-builder` project.
 
