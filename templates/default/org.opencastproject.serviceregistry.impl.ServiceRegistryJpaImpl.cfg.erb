@@ -11,6 +11,7 @@ dispatchinterval=<%= @dispatch_interval %>
 # The interval in seconds between checking if the hosts in the service registry hosts are still alive. The default value 
 # is 60 seconds. Set to 0 to disable checking if hosts are still alive and able to be dispatched to.
 #heartbeat.interval=0
+heartbeat.interval=<%= @heartbeat_interval %>
 
 # Whether to collect detailed job statistics information.  This can cause excessive database load (see MH-10034).
 jobstats.collect=false
