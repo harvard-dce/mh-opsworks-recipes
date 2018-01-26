@@ -101,7 +101,7 @@ deploy_revision "opencast" do
     install_elasticsearch_index_config(most_recent_deploy,'adminui')
     install_elasticsearch_index_config(most_recent_deploy,'externalapi')
 #    remove_felix_fileinstall(most_recent_deploy)
-#    install_smtp_config(most_recent_deploy)
+    install_smtp_config(most_recent_deploy)
     install_default_tenant_config(most_recent_deploy, public_admin_hostname, private_hostname)
 #    install_auth_service(
 #      most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated

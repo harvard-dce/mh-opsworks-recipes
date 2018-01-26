@@ -897,8 +897,8 @@ module MhOpsworksRecipes
       smtp_auth = node.fetch(:smtp_auth, {})
       default_email_sender = smtp_auth.fetch(:default_email_sender, 'no-reply@localhost')
 
-      template %Q|#{current_deploy_root}/etc/org.opencastproject.kernel.mail.SmtpService.properties| do
-        source 'org.opencastproject.kernel.mail.SmtpService.properties.erb'
+      template %Q|#{current_deploy_root}/etc/org.opencastproject.kernel.mail.SmtpService.cfg| do
+        source 'org.opencastproject.kernel.mail.SmtpService.cfg.erb'
         owner 'opencast'
         group 'opencast'
         variables({
