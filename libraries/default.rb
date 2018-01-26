@@ -703,13 +703,15 @@ module MhOpsworksRecipes
       end
     end
 
+    # nodes that don't dispatch should also not do hearbeat service health checks
     def set_service_registry_dispatch_interval(current_deploy_root)
       template %Q|#{current_deploy_root}/etc/services/org.opencastproject.serviceregistry.impl.ServiceRegistryJpaImpl.properties| do
         source 'ServiceRegistryJpaImpl.properties.erb'
         owner 'matterhorn'
         group 'matterhorn'
         variables({
-          dispatch_interval: 0
+          dispatch_interval: 0,
+          heartbeat_interval: 0
         })
       end
     end
