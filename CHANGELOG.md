@@ -2,6 +2,11 @@
 
 ## TO BE RELEASED
 
+## v1.31.0 - 3/05/2018
+
+* ruby gem version revert because CI requires a different version that we use to build in production (security issue not relevant because it's for Travis CI)
+* MATT-2406 limit service checking to just be from the service dispatcher to reduce unnecessary work and network traffic from the workers and engage nodes
+
 ## v1.30.0 - 1/12/2018
 
 * 'yajl-ruby' gem version update to address security vulnerability
