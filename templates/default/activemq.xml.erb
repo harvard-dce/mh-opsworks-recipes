@@ -29,10 +29,12 @@
     </bean>
 
    <!-- Allows accessing the server log -->
+   <!-- Turned off by default
     <bean id="logQuery" class="io.fabric8.insight.log.log4j.Log4jLogQuery"
           lazy-init="false" scope="singleton"
           init-method="start" destroy-method="stop">
     </bean>
+   -->
 
     <!--
         The <broker> element is used to configure the ActiveMQ broker.
@@ -76,8 +78,8 @@
                 <forwardTo>
                   <queue physicalName="ASSETMANAGER.Adminui" />
                   <queue physicalName="ASSETMANAGER.Externalapi" />
-                  <queue physicalName="ASSETMANAGER.Conductor" />                  
-                  <queue physicalName="ASSETMANAGER.Liveschedule" />                  
+                  <queue physicalName="ASSETMANAGER.Conductor" />
+                  <queue physicalName="ASSETMANAGER.Liveschedule" />
                 </forwardTo>
               </compositeQueue>
             </virtualDestinations>
@@ -212,7 +214,7 @@
 
         Take a look at ${ACTIVEMQ_HOME}/conf/jetty.xml for more details
     -->
-    <import resource="jetty.xml"/>
+    <!--<import resource="jetty.xml"/>-->
 
 </beans>
 <!-- END SNIPPET: example -->
