@@ -368,7 +368,7 @@ seed via the <tt>admin:republish_maven_cache</tt> rake task in oc-opsworks.
 * MhOpsworksRecipes::RecipeHelpers.get_shared_asset_bucket_name
 
 === Effects
-* The maven cache is downloaded and extracted to <tt>/root/.m2/</tt>
+* The maven cache is downloaded and extracted to <tt>/home/opencast/.m2/</tt>
 '
 )
 recipe(
