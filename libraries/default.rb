@@ -238,6 +238,17 @@ module MhOpsworksRecipes
       )
     end
 
+    def get_ldap_conf
+      node.fetch(
+        :ldap_conf, {
+          enabled: false,
+          url: '',
+          userdn: '',
+          pass: ''
+        }
+      )
+    end
+
     def get_ibm_watson_transcript_bucket_name
       node[:ibm_watson_transcript_sync_bucket_name]
     end
@@ -872,6 +883,7 @@ module MhOpsworksRecipes
 
     def install_default_tenant_config(current_deploy_root, public_dns_name, private_dns_name)
       lti_oauth_info = get_lti_auth_info
+      ldap_conf = get_ldap_conf
       template %Q|#{current_deploy_root}/etc/security/mh_default_org.xml| do
         source 'mh_default_org.xml.erb'
         owner 'opencast'
@@ -879,7 +891,8 @@ module MhOpsworksRecipes
         variables({
           lti_oauth: lti_oauth_info,
           unproxied_name: public_dns_name,
-          proxy_name: public_dns_name
+          proxy_name: public_dns_name,
+          ldap_conf: ldap_conf
         })
       end
     end
@@ -889,6 +902,17 @@ module MhOpsworksRecipes
         {
           consumer: 'consumerkey',
           secret: 'sharedsecret'
+        }
+      )
+    end
+
+    def get_ldap_conf
+      node.fetch(
+        :ldap_conf, {
+          enabled: false,
+          url: '',
+          userdn: '',
+          pass: ''
         }
       )
     end
@@ -955,6 +979,19 @@ module MhOpsworksRecipes
           live_stream_name: live_stream_name,
           live_streaming_url: live_streaming_url,
           distribution: distribution 
+        })
+      end
+    end
+
+    def install_ldap_config(current_deploy_root, ldap_url, ldap_userdn, ldap_psw)
+      template %Q|#{current_deploy_root}/etc/org.opencastproject.userdirectory.ldap-dce.cfg| do
+        source 'org.opencastproject.userdirectory.ldap-dce.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          ldap_url: ldap_url,
+          ldap_userdn: ldap_userdn,
+          ldap_psw: ldap_psw 
         })
       end
     end

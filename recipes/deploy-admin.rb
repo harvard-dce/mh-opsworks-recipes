@@ -41,6 +41,13 @@ live_streaming_url = get_live_streaming_url
 live_stream_name = get_live_stream_name
 distribution = using_local_distribution ? 'download' : 'aws.s3'
 
+# LDAP credentials
+ldap_conf = get_ldap_conf
+ldap_enabled = ldap_conf[:enabled]
+ldap_url = ldap_conf[:url]
+ldap_userdn = ldap_conf[:userdn]
+ldap_psw = ldap_conf[:pass]
+
 auth_host = node.fetch(:auth_host, 'example.com')
 auth_redirect_location = node.fetch(:auth_redirect_location, 'http://example.com/some/url')
 auth_activated = node.fetch(:auth_activated, 'true')
@@ -107,6 +114,9 @@ deploy_revision "opencast" do
 #      most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated
 #    )
     install_live_streaming_service_config(most_recent_deploy, live_stream_name, live_streaming_url, distribution)
+    if ldap_enabled
+      install_ldap_config(most_recent_deploy, ldap_url, ldap_userdn, ldap_psw)
+    end
 #    # Admin Specific
     install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host)
     install_otherpubs_service_series_impl_config(most_recent_deploy)

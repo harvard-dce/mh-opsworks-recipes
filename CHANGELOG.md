@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* LDAP integration (OPC-66).
+
 * 'yajl-ruby' gem version update to address security vulnerability
 * added `buildspec.yml` file to allow automated CodeBuild builds. See the `harvard-dce/mh-opsworks-builder` project.
 * pinned 'mixlib-archive' gem to previous version because of broken release

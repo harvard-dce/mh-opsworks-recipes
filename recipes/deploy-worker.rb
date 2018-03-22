@@ -20,6 +20,13 @@ capture_agent_monitor_url = node.fetch(
   :capture_agent_monitor_url, 'http://example.com/monitor_url'
 )
 
+# LDAP credentials
+ldap_conf = get_ldap_conf
+ldap_enabled = ldap_conf[:enabled]
+ldap_url = ldap_conf[:url]
+ldap_userdn = ldap_conf[:userdn]
+ldap_psw = ldap_conf[:pass]
+
 auth_host = node.fetch(:auth_host, 'example.com')
 auth_redirect_location = node.fetch(:auth_redirect_location, 'http://example.com/some/url')
 auth_key = node.fetch(:auth_key, '')
@@ -79,6 +86,9 @@ deploy_revision "opencast" do
     install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_engage_hostname)
 #    remove_felix_fileinstall(most_recent_deploy)
 #    install_smtp_config(most_recent_deploy)
+    if ldap_enabled
+      install_ldap_config(most_recent_deploy, ldap_url, ldap_userdn, ldap_psw)
+    end
     install_auth_service(
       most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated
     )
