@@ -28,6 +28,7 @@
     <!-- ################ -->
 
     <!-- Allow anonymous access to the login form -->
+    <sec:intercept-url pattern="/" access="ROLE_ANONYMOUS" />
     <sec:intercept-url pattern="/admin-ng/login.html" access="ROLE_ANONYMOUS" />
     <sec:intercept-url pattern="/sysinfo/bundles/version" method="GET" access="ROLE_ANONYMOUS" />
 
@@ -105,6 +106,8 @@
     <sec:intercept-url pattern="/admin-ng/event/*/metadata" method="PUT" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_METADATA_EDIT" />
     <sec:intercept-url pattern="/admin-ng/event/*/scheduling" method="PUT" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_SCHEDULING_EDIT" />
     <sec:intercept-url pattern="/admin-ng/event/*/workflows" method="PUT" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_WORKFLOWS_EDIT" />
+    <sec:intercept-url pattern="/admin-ng/event/*/workflows/*/action/retry" method="PUT" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_WORKFLOWS_EDIT" />
+    <sec:intercept-url pattern="/admin-ng/event/*/workflows/*/action/none" method="PUT" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_WORKFLOWS_EDIT" />
     <sec:intercept-url pattern="/admin-ng/event/*/comment/*/*" method="PUT" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_COMMENTS_EDIT" />
     <sec:intercept-url pattern="/admin-ng/event/*/comment/*" method="PUT" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_COMMENTS_EDIT"/>
     <sec:intercept-url pattern="/admin-ng/event/*/optout/*" method="PUT" access="ROLE_ADMIN, ROLE_UI_EVENTS_STATUS_EDIT" />
@@ -154,6 +157,10 @@
     <sec:intercept-url pattern="/admin-ng/themes/*" method="DELETE" access="ROLE_ADMIN, ROLE_UI_THEMES_DELETE" />
     <sec:intercept-url pattern="/admin-ng/users/*" method="DELETE" access="ROLE_ADMIN, ROLE_UI_USERS_DELETE" />
 
+    <!-- #DCE Repub -->
+    <sec:intercept-url pattern="/repubapp/**" method="GET" access="ROLE_ADMIN, ROLE_DCE_REPUB" />
+    <sec:intercept-url pattern="/repub/**" method="POST" access="ROLE_ADMIN, ROLE_DCE_REPUB" />
+ 
     <!-- Securing the URLs for the external API interface -->
     <!-- External API GET Endpoints -->
     <sec:intercept-url pattern="/api" method="GET" access="ROLE_ADMIN, ROLE_API"/>
@@ -240,9 +247,12 @@
 
     <!-- #DCE OPC-54-test-local uses this link from the admin ui, which is a 
 	 redirect to Paella. This should come before /engage/** because the order matters! -->
-    <sec:intercept-url pattern="/engage/player/watchAdminRedirect.html" method="GET" access="ROLE_ADMIN" />
+    <sec:intercept-url pattern="/engage/player/watchAdminRedirect.html" method="GET" access="ROLE_ADMIN, ROLE_DCE_TEST_LOCAL" />
     <!-- #DCE KHD: MATT-2231 require login for annots summary (extra data auth on oauth performed in endpoint) -->
-    <sec:intercept-url pattern="/engage/ui/annots/**" access="ROLE_ADMIN, ROLE_OAUTH_USER" />
+    <sec:intercept-url pattern="/engage/ui/annots/**" access="ROLE_ADMIN, ROLE_OAUTH_USER, ROLE_DCE_OC_SOCIAL_ADMIN" />
+    <!-- Enable anonymous access to the engage player and the GET endpoints it requires -->
+    <sec:intercept-url pattern="/engage/ui/**" access="ROLE_ANONYMOUS" />
+    <sec:intercept-url pattern="/engage/**" access="ROLE_ANONYMOUS" />
     <!-- #DCE KHD: Alt paths: DCE former paella player, prep theodulpass -->
     <sec:intercept-url pattern="/theodulpass/ui/**" method="GET" access="ROLE_ANONYMOUS" />
     <!-- #DCE KHD: MATT-1569 endpoint for Legacy pub data -->
@@ -274,14 +284,14 @@
     <sec:intercept-url pattern="/annotation/property*" method="POST" access="ROLE_ANONYMOUS" />
     <!-- MATT-2245 (end) -->
     <!-- Read specific annotation, role admin and oauth user (extra auth on oauth performed in endpoint) -->
-    <sec:intercept-url pattern="/annotation/**" method="GET" access="ROLE_ADMIN, ROLE_OAUTH_USER" />
+    <sec:intercept-url pattern="/annotation/**" method="GET" access="ROLE_ADMIN, ROLE_DCE_OC_SOCIAL_ADMIN, ROLE_OAUTH_USER" />
     <!-- Adding annotation, security is done in REST endpoint -->
     <sec:intercept-url pattern="/annotation/" method="PUT" access="ROLE_ANONYMOUS" />
     <!-- Updating annotation, role admin only -->
-    <sec:intercept-url pattern="/annotation/**" method="PUT" access="ROLE_ADMIN" />
+    <sec:intercept-url pattern="/annotation/**" method="PUT" access="ROLE_ADMIN, ROLE_DCE_OC_SOCIAL_ADMIN" />
     <!-- Deleting annotation, role admin only -->
-    <sec:intercept-url pattern="/annotation/**" method="DELETE" access="ROLE_ADMIN" />
- 
+    <sec:intercept-url pattern="/annotation/**" method="DELETE" access="ROLE_ADMINi, ROLE_DCE_OC_SOCIAL_ADMIN" />
+
     <!-- Enable anonymous access to the OAI-PMH repository              -->
     <!-- The OAI-PMH specification demands boths GET and POST requests  -->
     <!-- Please make sure that the path configured here matches         -->
@@ -517,7 +527,63 @@
       </bean>
     </property>
   </bean>  
-  
+
+<%# ----------------------------------------- %>
+<%# This is only included if ldap is enabled. %>
+<%# ----------------------------------------- %>
+<% if @ldap_conf[:enabled] %>
+
+  <!-- ################ -->
+  <!-- # LDAP Support # -->
+  <!-- ################ -->
+
+  <bean id="contextSource"
+    class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
+    <!-- URL of the LDAP server -->
+    <constructor-arg value="<%= @ldap_conf[:url] %>" />
+    <!-- "Distinguished name" for the unprivileged user -->
+    <!-- This user is merely to perform searches in the LDAP to find the users to login -->
+    <property name="userDn" value="<%= @ldap_conf[:userdn] %>" />
+    <!-- Password of the user above -->
+    <property name="password" value="<%= @ldap_conf[:pass] %>" />
+  </bean>
+
+  <bean id="ldapAuthProvider"
+    class="org.springframework.security.ldap.authentication.LdapAuthenticationProvider">
+    <constructor-arg>
+      <bean
+        class="org.springframework.security.ldap.authentication.BindAuthenticator">
+        <constructor-arg ref="contextSource" />
+        <property name="userDnPatterns">
+          <list>
+            <!-- Dn patterns to search for valid users. Multiple "<value>" tags are allowed -->
+            <!-- value>uid={0},ou=Group,dc=my-institution,dc=country</value -->
+            <value>uid={0},ou=people,dc=dce,dc=harvard,dc=edu</value>
+          </list>
+        </property>
+        <!-- If your user IDs are not part of the user Dn's, you can use a search filter to find them -->
+        <!-- This property can be used together with the "userDnPatterns" above -->
+        <!--
+        <property name="userSearch">
+          <bean name="filterUserSearch" class="org.springframework.security.ldap.search.FilterBasedLdapUserSearch">
+            < ! - - Base Dn from where the users will be searched for - - >
+            <constructor-arg index="0" value="ou=group,dc=dce,dc=harvard,dc=edu" />
+            < ! - - Filter to located valid users. Use {0} as a placeholder for the login name - - >
+            <constructor-arg index="1" value="(memberUid={0})" />
+            <constructor-arg ref="contextSource" />
+          </bean>
+        </property>
+        -->
+      </bean>
+    </constructor-arg>
+
+    <!-- Defines how the user attributes are converted to authorities (roles) -->
+    <constructor-arg ref="authoritiesPopulator" />
+  </bean>
+
+<% end %>
+<%# ----------------------------------------- %>
+
   <!-- ###################### -->
   <!-- # Shibboleth Support # -->
   <!-- ###################### -->
@@ -570,6 +636,17 @@
   <osgi:reference id="userDirectoryService" cardinality="1..1"
                   interface="org.opencastproject.security.api.UserDirectoryService" />
 
+<%# ----------------------------------------- %>
+<%# This is only included if ldap is enabled. %>
+<%# ----------------------------------------- %>
+<% if @ldap_conf[:enabled] %>
+
+  <osgi:reference id="authoritiesPopulator" cardinality="1..1"
+                  interface="org.springframework.security.ldap.userdetails.LdapAuthoritiesPopulator"
+                  filter="(instanceId=dce)" />
+
+<% end %>
+<%# ----------------------------------------- %>
 
   <!-- ############################# -->
   <!-- # Spring Security Internals # -->
@@ -582,6 +659,13 @@
     <sec:authentication-provider user-service-ref="userDetailsService">
       <sec:password-encoder hash="md5"><sec:salt-source user-property="username" /></sec:password-encoder>
     </sec:authentication-provider>
+<%# ----------------------------------------- %>
+<%# This is only included if ldap is enabled. %>
+<%# ----------------------------------------- %>
+<% if @ldap_conf[:enabled] %>
+    <sec:authentication-provider ref="ldapAuthProvider" />
+<% end %>
+<%# ----------------------------------------- %>
   </sec:authentication-manager>
 
   <!-- Do not use a request cache -->
