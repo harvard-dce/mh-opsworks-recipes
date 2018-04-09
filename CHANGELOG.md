@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## v1.31.1 - 04/19/2018
+
 * *REQUIRES MANUAL _RECIPE RUN*
   updated loggly TLS certificate
 
