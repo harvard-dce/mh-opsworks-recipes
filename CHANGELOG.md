@@ -2,6 +2,13 @@
 
 ## TO BE RELEASED
 
+## v1.31.1 - 04/19/2018
+
+* *REQUIRES MANUAL _RECIPE RUN*
+  updated loggly TLS certificate
+
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin,Workers,Engage" recipes="mh-opsworks-recipes::rsyslog-to-loggly"
+
 ## v1.31.0 - 3/05/2018
 
 * ruby gem version revert because CI requires a different version that we use to build in production (security issue not relevant because it's for Travis CI)
