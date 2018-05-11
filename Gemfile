@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'berkshelf'
+gem 'berkshelf', '~> 5.1'
 
 # Uncomment these lines if you want to live on the Edge:
 #
@@ -16,4 +16,3 @@ gem 'berkshelf'
 
 gem 'test-kitchen', '~> 1.3.1'
 gem 'kitchen-vagrant', '~> 0.15.0'
-gem 'mixlib-archive', '0.4.4'
