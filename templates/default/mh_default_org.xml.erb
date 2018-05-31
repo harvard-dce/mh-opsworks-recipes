@@ -260,9 +260,6 @@
     <!-- Default Matterhorn engage player module loads at engage-player -->
     <!--  #DCE -->
 
-   <!-- Enable anonymous access to the engage player and the GET endpoints it requires -->
-    <sec:intercept-url pattern="/engage/ui/**" access="ROLE_ANONYMOUS" />
-    <sec:intercept-url pattern="/engage/**" access="ROLE_ANONYMOUS" />
     <sec:intercept-url pattern="/engage-player/**" method="GET" access="ROLE_ANONYMOUS" />
     <sec:intercept-url pattern="/search/**" method="GET" access="ROLE_ANONYMOUS" />
     <sec:intercept-url pattern="/usertracking/**" method="GET" access="ROLE_ANONYMOUS" />
@@ -290,7 +287,7 @@
     <!-- Updating annotation, role admin only -->
     <sec:intercept-url pattern="/annotation/**" method="PUT" access="ROLE_ADMIN, ROLE_DCE_OC_SOCIAL_ADMIN" />
     <!-- Deleting annotation, role admin only -->
-    <sec:intercept-url pattern="/annotation/**" method="DELETE" access="ROLE_ADMINi, ROLE_DCE_OC_SOCIAL_ADMIN" />
+    <sec:intercept-url pattern="/annotation/**" method="DELETE" access="ROLE_ADMIN, ROLE_DCE_OC_SOCIAL_ADMIN" />
 
     <!-- Enable anonymous access to the OAI-PMH repository              -->
     <!-- The OAI-PMH specification demands boths GET and POST requests  -->
