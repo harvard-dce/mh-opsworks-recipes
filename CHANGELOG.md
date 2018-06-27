@@ -3,6 +3,32 @@
 ## TO BE RELEASED
 
 * LDAP integration (OPC-66).
+* fix ua-harvester dependencies installation. No action required; only affects new clusters.
+* *REQUIRES MANUAL_RECIPE RUN* - disable deprecated/insecure ssl protocols in nginx config
+  For existing dev clusters manual recipe runs are not required; a cluster reboot will suffice as the nginx configs get updated during the opsworks "setup" phase.
+  For clusters where it is not desirable to reboot, the following recipes must be run:
+
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin" recipes="mh-opsworks-recipes::configure-nginx-proxy"
+
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Engage" recipes="mh-opsworks-recipes::configure-engage-nginx-proxy"
+
+  If the cluster has an Analytics node run the following as well:
+
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Analytics" recipes="mh-opsworks-recipes::configure-elk-nginx-proxy"
+
+## v1.31.1 - 04/19/2018
+
+* *REQUIRES MANUAL _RECIPE RUN*
+  updated loggly TLS certificate
+
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin,Workers,Engage" recipes="mh-opsworks-recipes::rsyslog-to-loggly"
+
+## v1.31.0 - 3/05/2018
+
+* ruby gem version revert because CI requires a different version that we use to build in production (security issue not relevant because it's for Travis CI)
+* MATT-2406 limit service checking to just be from the service dispatcher to reduce unnecessary work and network traffic from the workers and engage nodes
+
+## v1.30.0 - 1/12/2018
 
 * 'yajl-ruby' gem version update to address security vulnerability
 * added `buildspec.yml` file to allow automated CodeBuild builds. See the `harvard-dce/mh-opsworks-builder` project.

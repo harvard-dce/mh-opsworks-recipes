@@ -5,6 +5,11 @@ This log is structured differently from the base `CHANGELOG.md`.
 * There is no **TO BE RELEASED** section
 * Entries should be headed with just a date; no version numbers
 
+## 08/02/2018
+
+* cherry-picking a fix for the ua-harvester dependency installation
+  note: this commit included some unrelated CHANGELOG updates
+
 ## 07/23/2018
 
 * fixing the enabling logic for the earlier newrelic changes
