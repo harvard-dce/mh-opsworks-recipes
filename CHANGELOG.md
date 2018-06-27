@@ -2,6 +2,7 @@
 
 ## TO BE RELEASED
 
+* fix ua-harvester dependencies installation. No action required; only affects new clusters.
 * *REQUIRES MANUAL_RECIPE RUN* - disable deprecated/insecure ssl protocols in nginx config
   For existing dev clusters manual recipe runs are not required; a cluster reboot will suffice as the nginx configs get updated during the opsworks "setup" phase.
   For clusters where it is not desirable to reboot, the following recipes must be run:
