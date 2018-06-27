@@ -35,6 +35,7 @@ bash 'install dependencies' do
 cd /home/ua_harvester/harvester &&
 /usr/bin/virtualenv venv &&
 source venv/bin/activate &&
+chown -R $USER /root/.cache/pip/wheels/
 pip install --user --no-cache-dir -r requirements.txt
   |
   user 'ua_harvester'
