@@ -30,6 +30,7 @@ git "get the ua harvester" do
   user 'ua_harvester'
 end
 
+=begin
 bash 'install dependencies' do
   code %Q|
 cd /home/ua_harvester/harvester &&
@@ -39,6 +40,7 @@ pip install --user -r requirements.txt
   |
   user 'ua_harvester'
 end
+=end
 
 include_recipe 'mh-opsworks-recipes::install-geolite2-db'
 include_recipe 'mh-opsworks-recipes::configure-ua-harvester'
