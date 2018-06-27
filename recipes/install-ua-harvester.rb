@@ -34,10 +34,9 @@ bash 'install dependencies' do
   code %Q|
 cd /home/ua_harvester/harvester &&
 /usr/bin/virtualenv venv &&
-source venv/bin/activate &&
-pip install --no-cache-dir -r requirements.txt
+venv/bin/pip install -r requirements.txt &&
+chown -R ua_harvester venv
   |
-  user 'ua_harvester'
 end
 
 include_recipe 'mh-opsworks-recipes::install-geolite2-db'
