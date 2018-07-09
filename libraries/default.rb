@@ -68,6 +68,11 @@ module MhOpsworksRecipes
       ['development', 'test'].include?(node[:cluster_env])
     end
 
+    def layer_name_from_hostname
+      hostname = node[:opsworks][:instance][:hostname]
+      hostname.match(%r{^(?<layer>[a-z\-]+)})[:layer]
+    end
+
     def engage_node?
       node[:opsworks][:instance][:hostname].match(/^engage/)
     end
@@ -817,15 +822,12 @@ module MhOpsworksRecipes
       # round(-1) will round to nearest divisible by 10 so we get an even number
       java_xms_ram = [(java_xmx_ram * xms_ram_ratio).to_i.round(-1), 2048].max
 
-      start_check_sleep_seconds = enable_yourkit_agent? ? 30 : 20
-
       template %Q|/etc/init.d/opencast| do
         source 'etc-init.d-opencast.erb'
         owner 'opencast'
         group 'opencast'
         mode '755'
         variables({
-          start_check_sleep_seconds: start_check_sleep_seconds,
           opencast_root: current_deploy_root
         })
       end
@@ -838,15 +840,12 @@ module MhOpsworksRecipes
         variables({
           java_xmx_ram: java_xmx_ram,
           java_xms_ram: java_xms_ram,
-          enable_G1GC: enable_G1GC?,
-          enable_yourkit_agent: enable_yourkit_agent?,
-          yourkit_dir: opencast_repo_root + '/yourkit',
           java_home: java_home,
 #          main_config_file: %Q|#{opencast_repo_root}/current/etc/opencast.conf|,
 #          opencast_root: opencast_repo_root + '/current',
 #          felix_config_dir: opencast_repo_root + '/current/etc',
 #          opencast_log_directory: log_dir,
-#          enable_newrelic: enable_newrelic?
+          enable_newrelic: enable_newrelic?
         })
       end
     end
@@ -929,45 +928,6 @@ module MhOpsworksRecipes
           default_email_sender: default_email_sender,
         })
       end
-    end
-
-    def enable_newrelic?
-      node[:newrelic]
-    end
-
-    def enable_newrelic_layer?(layer_name)
-       nr_layers = node.fetch(:newrelic,{}) #  must be a hash
-       nr_layers.key?(layer_name)
-    end
-
-    def enable_yourkit_agent?
-      node[:enable_yourkit_agent]
-    end
-
-    def enable_G1GC?
-       node[:enable_G1GC] and node[:opsworks][:instance][:hostname].match(/^(admin|engage)/)
-    end
-
-    def configure_newrelic(current_deploy_root, node_name, layer_name)
-      if enable_newrelic_layer?(layer_name)
-            log_dir = node.fetch(:opencast_log_directory, '/var/log/opencast')
-            newrelic_layers = node.fetch(:newrelic,{})
-            newrelic_layer = newrelic_layers.fetch(layer_name,{})
-            newrelic_key = newrelic_layer[:key]
-
-            environment_name = node[:opsworks][:stack][:name]
-            template %Q|#{current_deploy_root}/etc/newrelic.yml| do
-              source 'newrelic.yml.erb'
-              owner 'opencast'
-              group 'opencast'
-              variables({
-                newrelic_key: newrelic_key,
-                node_name: node_name,
-                environment_name: environment_name,
-                log_dir: log_dir
-              })
-            end
-      end 
     end
 
     def install_live_streaming_service_config(current_deploy_root, live_stream_name, live_streaming_url, distribution)
@@ -1149,5 +1109,22 @@ module MhOpsworksRecipes
       most_recent_deploy = deploy_directories.sort_by{ |x| File.mtime(deploy_root + x) }.last
       deploy_root + most_recent_deploy
     end
+
+    def newrelic_config
+      node.fetch(:newrelic, {})
+    end
+
+    def enable_newrelic?
+      ! newrelic_config.empty?
+    end
+
+    def enable_newrelic_layer?(layer_name)
+      newrelic_config.key?(layer_name)
+    end
+
+    def get_newrelic_agent_version
+      newrelic_config.fetch(:agent_version, "4.2.0")
+    end
+
   end
 end

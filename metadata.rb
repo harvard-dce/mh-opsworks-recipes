@@ -987,7 +987,7 @@ none
 '
 )
 recipe(
-    'mh-opsworks-recipes::exec-dist-upgrade',
+    'oc-opsworks-recipes::exec-dist-upgrade',
     'Executes an apt-get dist-upgrade, necessary for installing kernel updates
 
 === attributes
@@ -998,7 +998,7 @@ none
 '
 )
 recipe(
-    'mh-opsworks-recipes::moscaler-resume',
+    'oc-opsworks-recipes::moscaler-resume',
     'Installs the moscaler cron entries
 
 === attributes
@@ -1009,7 +1009,7 @@ none
 '
 )
 recipe(
-    'mh-opsworks-recipes::moscaler-pause',
+    'oc-opsworks-recipes::moscaler-pause',
     'Removes the moscaler cron entries, effectively disabling moscaler
 
 === attributes
@@ -1020,7 +1020,7 @@ none
 '
 )
 recipe(
-    'mh-opsworks-recipes::configure-capture-agent-cwlogs',
+    'oc-opsworks-recipes::configure-capture-agent-cwlogs',
     'Installs script for rsyncing capture agent logs and configures cloudwatch logs agent to monitor them.
 
 === attributes
@@ -1032,7 +1032,7 @@ none
 '
 )
 recipe(
-    'mh-opsworks-recipes::install-geolite2-db',
+    'oc-opsworks-recipes::install-geolite2-db',
     'Installs the MaxmindDB GeoLite2 db for performing geoip lookups by the analytics harvester.
 
 === attributes
@@ -1042,6 +1042,18 @@ none
 * downloads the GeoLite2 db archive from the shared assets folder
 * unpacks archive into /opt/geolite2
 * name of archive file can be specified in cluster custom json
+'
+)
+recipe(
+    'oc-opsworks-recipes::install-newrelic',
+    'Installs the newrelic java agent.
+
+=== attributes
+none
+
+=== effects
+* fetches newrelic agent jar from shared assets bucket
+* installs the agent and config in /opt/newrelic
 '
 )
 

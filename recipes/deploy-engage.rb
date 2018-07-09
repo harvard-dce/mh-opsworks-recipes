@@ -68,8 +68,6 @@ allow_opencast_user_to_restart_daemon_via_sudo
 
 deploy_action = get_deploy_action
 
-newrelic_app_name = alarm_name_prefix
-
 deploy_revision "opencast" do
   deploy_to opencast_repo_root
   repo repo_url
@@ -112,7 +110,6 @@ deploy_revision "opencast" do
     install_auth_service(
       most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated
     )
-#    configure_newrelic(most_recent_deploy, newrelic_app_name, :engage)
 
     # ENGAGE SPECIFIC
     set_service_registry_dispatch_interval(most_recent_deploy)

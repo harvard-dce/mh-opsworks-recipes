@@ -71,8 +71,6 @@ allow_opencast_user_to_restart_daemon_via_sudo
 
 deploy_action = get_deploy_action
 
-newrelic_app_name = alarm_name_prefix
-
 deploy_revision "opencast" do
   deploy_to opencast_repo_root
   repo repo_url
@@ -126,7 +124,6 @@ deploy_revision "opencast" do
       setup_transcript_result_sync_to_s3(shared_storage_root, ibm_watson_transcript_bucket)
     end
     install_published_event_details_email(most_recent_deploy, public_engage_hostname)
-#    configure_newrelic(most_recent_deploy, newrelic_app_name, :admin)
 
     if using_local_distribution
       update_workflows_for_local_distribution(most_recent_deploy)

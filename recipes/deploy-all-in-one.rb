@@ -80,8 +80,6 @@ allow_opencast_user_to_restart_daemon_via_sudo
 
 deploy_action = get_deploy_action
 
-newrelic_app_name = alarm_name_prefix
-
 # chef deploy resource
 deploy_revision "opencast" do
   deploy_to opencast_repo_root
@@ -134,7 +132,6 @@ deploy_revision "opencast" do
 #    install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name)
     install_ibm_watson_transcription_service_config(most_recent_deploy, ibm_watson_username, ibm_watson_psw)
     install_published_event_details_email(most_recent_deploy, public_hostname)
-#    configure_newrelic(most_recent_deploy, newrelic_app_name, :admin)  # All in one installation will use admin newrelic key
 #
 #    # all-in-one SPECIFIC
     initialize_database(most_recent_deploy)
