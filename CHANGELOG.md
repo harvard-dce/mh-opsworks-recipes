@@ -2,6 +2,18 @@
 
 ## TO BE RELEASED
 
+* *REQUIRES MANUAL_RECIPE RUN* - disable deprecated/insecure ssl protocols in nginx config
+  For existing dev clusters manual recipe runs are not required; a cluster reboot will suffice as the nginx configs get updated during the opsworks "setup" phase.
+  For clusters where it is not desirable to reboot, the following recipes must be run:
+
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin" recipes="mh-opsworks-recipes::configure-nginx-proxy"
+
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Engage" recipes="mh-opsworks-recipes::configure-engage-nginx-proxy"
+
+  If the cluster has an Analytics node run the following as well:
+
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Analytics" recipes="mh-opsworks-recipes::configure-elk-nginx-proxy"
+
 ## v1.31.1 - 04/19/2018
 
 * *REQUIRES MANUAL _RECIPE RUN*
