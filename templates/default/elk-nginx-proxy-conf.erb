@@ -6,7 +6,7 @@ server {
 }
 
 server {
-  listen 443 ssl;
+  listen 443 ssl default_server;
   listen [::]:443 ipv6only=on ssl;
 
   ssl_certificate     ssl/certificate.cert;
@@ -19,7 +19,7 @@ server {
 
   # Some settings are recommended by https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html
   # Need SSLv3 for IE on some older windows, this is the default set.
-  # ssl_protocols SSLv3 TLSv1 TLSv1.1 TLSv1.2;
+  ssl_protocols TLSv1.1 TLSv1.2;
   ssl_prefer_server_ciphers on;
   ssl_session_cache shared:SSL:10m;
 
