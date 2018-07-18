@@ -349,6 +349,11 @@ module MhOpsworksRecipes
       end
     end
 
+    def external_storage?
+      storage_info = get_storage_info
+      storage_info[:type] == "external"
+    end
+
     def get_shared_storage_root
       storage_info = get_storage_info
       storage_info[:shared_storage_root] || storage_info[:export_root]

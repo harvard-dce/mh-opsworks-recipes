@@ -5,6 +5,10 @@ This log is structured differently from the base `CHANGELOG.md`.
 * There is no **TO BE RELEASED** section
 * Entries should be headed with just a date; no version numbers
 
+## 07/18/2018
+
+* only run the squid install recipe if external storage (i.e. zadara) is being used
+
 ## 07/12/2018
 
 * *REQUIRES MANUAL RECIPE RUN*

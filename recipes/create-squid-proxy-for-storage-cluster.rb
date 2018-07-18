@@ -5,6 +5,8 @@ require 'resolv'
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 include_recipe "oc-opsworks-recipes::update-package-repo"
 
+return unless external_storage?
+
 install_package('squid3')
 
 storage_hostname = get_storage_hostname
