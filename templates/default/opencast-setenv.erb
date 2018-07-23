@@ -42,6 +42,8 @@ NEWRELIC="-javaagent:${NEWRELIC_JAR} $NEWRELIC_CONFIG"
 NEWRELIC=""
 <% end %>
 
+LOGDIR=<%= @opencast_log_directory %>
+
 GC="-Xloggc:${LOGDIR}/gcnormal.log -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps"
 GC="${GC} -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCApplicationConcurrentTime -XX:+PrintHeapAtGC"
 GC="${GC} -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=20 -XX:GCLogFileSize=32M -XX:+UseG1GC"

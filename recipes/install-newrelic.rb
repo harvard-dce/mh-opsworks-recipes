@@ -9,7 +9,7 @@
 layer_name = layer_name_from_hostname
 
 return unless newrelic_config
-return unless enable_newrelic_layer?(layer_name)
+return unless enable_newrelic_for_layer?(layer_name)
 
 # config template values
 license_key = newrelic_config[layer_name.to_s][:key]

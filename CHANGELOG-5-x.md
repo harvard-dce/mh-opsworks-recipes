@@ -5,6 +5,10 @@ This log is structured differently from the base `CHANGELOG.md`.
 * There is no **TO BE RELEASED** section
 * Entries should be headed with just a date; no version numbers
 
+## 07/23/2018
+
+* fixing the enabling logic for the earlier newrelic changes
+
 ## 07/18/2018
 
 * only run the squid install recipe if external storage (i.e. zadara) is being used

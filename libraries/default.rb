@@ -68,11 +68,6 @@ module MhOpsworksRecipes
       ['development', 'test'].include?(node[:cluster_env])
     end
 
-    def layer_name_from_hostname
-      hostname = node[:opsworks][:instance][:hostname]
-      hostname.match(%r{^(?<layer>[a-z\-]+)})[:layer]
-    end
-
     def engage_node?
       node[:opsworks][:instance][:hostname].match(/^engage/)
     end
@@ -827,6 +822,8 @@ module MhOpsworksRecipes
       # round(-1) will round to nearest divisible by 10 so we get an even number
       java_xms_ram = [(java_xmx_ram * xms_ram_ratio).to_i.round(-1), 2048].max
 
+      layer_name = layer_name_from_hostname
+
       template %Q|/etc/init.d/opencast| do
         source 'etc-init.d-opencast.erb'
         owner 'opencast'
@@ -849,8 +846,8 @@ module MhOpsworksRecipes
 #          main_config_file: %Q|#{opencast_repo_root}/current/etc/opencast.conf|,
 #          opencast_root: opencast_repo_root + '/current',
 #          felix_config_dir: opencast_repo_root + '/current/etc',
-#          opencast_log_directory: log_dir,
-          enable_newrelic: enable_newrelic?
+          opencast_log_directory: log_dir,
+          enable_newrelic: enable_newrelic_for_layer?(layer_name)
         })
       end
     end
@@ -1115,15 +1112,16 @@ module MhOpsworksRecipes
       deploy_root + most_recent_deploy
     end
 
+    def layer_name_from_hostname
+      hostname = node[:opsworks][:instance][:hostname]
+      hostname.match(%r{^(?<layer>[a-z\-]+)})[:layer]
+    end
+
     def newrelic_config
       node.fetch(:newrelic, {})
     end
 
-    def enable_newrelic?
-      ! newrelic_config.empty?
-    end
-
-    def enable_newrelic_layer?(layer_name)
+    def enable_newrelic_for_layer?(layer_name)
       newrelic_config.key?(layer_name)
     end
 
