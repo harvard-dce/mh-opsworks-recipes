@@ -10,4 +10,7 @@ default['maven']['mavenrc']['opts'] = '-Dmaven.repo.local=/root/.m2/repository -
 
 # ActiveMQ
 default['activemq']['install_java'] = false
-default['activemq']['version'] = '5.14.3'
+default['activemq']['version'] = '5.15.4'
+# this is only to tell the 3rd-party activemq recipe not to issue its own
+# service restart; we do that ourselves in the configure-activemq recipe
+default['activemq']['enabled'] = false

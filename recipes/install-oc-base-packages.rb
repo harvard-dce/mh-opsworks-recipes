@@ -34,5 +34,8 @@ execute 'update-ca-certificates' do
   not_if 'test -e /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/cacerts'
 end
 
-include_recipe 'activemq'
+if admin_node?
+  include_recipe 'activemq'
+end
+
 include_recipe "oc-opsworks-recipes::clean-up-package-cache"
