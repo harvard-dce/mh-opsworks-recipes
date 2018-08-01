@@ -5,6 +5,13 @@ This log is structured differently from the base `CHANGELOG.md`.
 * There is no **TO BE RELEASED** section
 * Entries should be headed with just a date; no version numbers
 
+## 08/10/2018
+
+* activemq & nginx service fixes:
+    * update to latest, stable activemq
+    * fix for MI-86: activemq/opencast communication borked on first cluster start
+    * reworking of nginx recipes to ensure config reloads happen on e.g. ssl cert updates
+
 ## 08/02/2018
 
 * cherry-picking a fix for the ua-harvester dependency installation

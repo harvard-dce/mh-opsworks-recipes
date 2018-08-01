@@ -15,10 +15,6 @@ configure_nginx_cloudwatch_logs
 
 create_ssl_cert(elk_info['http_ssl'])
 
-service 'nginx' do
-  action :nothing
-end
-
 bash "htpasswd" do
   code <<-EOH
     htpasswd -bc /etc/nginx/conf.d/kibana.htpasswd #{http_auth['user']} #{http_auth['pass']}
@@ -27,14 +23,16 @@ end
 
 worker_procs = get_nginx_worker_procs
 
-template %Q|/etc/nginx/nginx.conf| do
+template 'nginx' do
+  path %Q|/etc/nginx/nginx.conf|
   source 'nginx.conf.erb'
   variables({
     worker_procs: worker_procs
   })
 end
 
-template %Q|/etc/nginx/conf.d/default.conf| do
+template 'proxy' do
+  path %Q|/etc/nginx/conf.d/default.conf|
   source 'elk-nginx-proxy-conf.erb'
   owner 'root'
   group 'root'
@@ -42,5 +40,16 @@ template %Q|/etc/nginx/conf.d/default.conf| do
   variables({
     elasticsearch_host: es_host
   })
-  notifies :restart, 'service[nginx]', :immediately
 end
+
+service 'nginx' do
+  supports :restart => true, :start => true, :stop => true, :reload => true
+  action [:enable, :start]
+  subscribes :reload, "template[nginx]", :immediately
+  subscribes :reload, "template[proxy]", :immediately
+  # don't do this one immediately as it will trigger a reload when the ssl key
+  # is first written, which is prior to our config templates being generated
+  # on initial node setup run
+  subscribes :reload, "file[/etc/nginx/ssl/certificate.key]"
+end
+
