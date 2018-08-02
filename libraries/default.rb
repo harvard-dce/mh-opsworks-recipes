@@ -714,7 +714,7 @@ module MhOpsworksRecipes
 
     def install_opencast_log_configuration(current_deploy_root)
       oc_log_dir = node.fetch(:opencast_log_directory, '/var/log/opencast')
-      oc_log_level = node.fetch(:opencast_log_level, 'INFO')
+      oc_log_level = node.fetch(:opencast_log_level, 'DEBUG')
       dce_log_level = node.fetch(:dce_log_level, 'DEBUG')
       template %Q|#{current_deploy_root}/etc/org.ops4j.pax.logging.cfg| do
         source 'org.ops4j.pax.logging.cfg.erb'
