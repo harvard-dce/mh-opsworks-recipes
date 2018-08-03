@@ -253,6 +253,15 @@ module MhOpsworksRecipes
       )
     end
 
+    def get_publish_1x_conf
+      node.fetch(
+        :publish_1x_conf, {
+          enabled: false,
+          engage_url: ''
+        }
+      )
+    end
+
     def get_ibm_watson_transcript_bucket_name
       node[:ibm_watson_transcript_sync_bucket_name]
     end
@@ -948,6 +957,18 @@ module MhOpsworksRecipes
           live_stream_name: live_stream_name,
           live_streaming_url: live_streaming_url,
           distribution: distribution 
+        })
+      end
+    end
+
+    def install_publish_1x_service_config(current_deploy_root, enabled, engage_url)
+      template %Q|#{current_deploy_root}/etc/edu.harvard.dce.migration.impl.Publish1XUtilImpl.cfg| do
+        source 'edu.harvard.dce.migration.impl.Publish1XUtilImpl.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          publish_1x_engage_url: engage_url,
+          publish_1x_enabled: enabled 
         })
       end
     end

@@ -60,6 +60,11 @@ ldap_url = ldap_conf[:url]
 ldap_userdn = ldap_conf[:userdn]
 ldap_psw = ldap_conf[:pass]
 
+# Publish to 1.x settings
+publish_1x_conf = get_publish_1x_conf
+publish_1x_enabled = publish_1x_conf[:enabled]
+publish_1x_engage_url = publish_1x_conf[:engage_url]   
+
 auth_host = node.fetch(:auth_host, 'example.com')
 auth_redirect_location = node.fetch(:auth_redirect_location, 'http://example.com/some/url')
 auth_activated = node.fetch(:auth_activated, 'true')
@@ -127,6 +132,7 @@ deploy_revision "opencast" do
     if ldap_enabled
       install_ldap_config(most_recent_deploy, ldap_url, ldap_userdn, ldap_psw)
     end
+    install_publish_1x_service_config(most_recent_deploy, publish_1x_enabled, publish_1x_engage_url)
     install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host)
     install_otherpubs_service_series_impl_config(most_recent_deploy)
 #    install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name)
