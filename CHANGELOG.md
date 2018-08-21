@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## TO BE RELEASED
+## v1.32.0 - 08/18/2018
 
 * fix ua-harvester dependencies installation. No action required; only affects new clusters.
 * *REQUIRES MANUAL_RECIPE RUN* - disable deprecated/insecure ssl protocols in nginx config
