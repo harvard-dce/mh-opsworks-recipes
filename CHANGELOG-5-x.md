@@ -5,6 +5,10 @@ This log is structured differently from the base `CHANGELOG.md`.
 * There is no **TO BE RELEASED** section
 * Entries should be headed with just a date; no version numbers
 
+## 08/22/2018
+
+* upgrade pip during moscaler install to handle improved `requirements.txt` dependency format
+
 ## 08/10/2018
 
 * activemq & nginx service fixes:

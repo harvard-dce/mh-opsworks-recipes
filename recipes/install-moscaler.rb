@@ -37,8 +37,13 @@ git "get the moscaler software" do
   user 'moscaler'
 end
 
+bash 'upgrade pip' do
+  code 'pip install -U pip'
+  user 'root'
+end
+
 bash 'install dependencies' do
-  code 'cd /home/moscaler/mo-scaler && pip install -r requirements.txt'
+  code 'cd /home/moscaler/mo-scaler && /usr/local/bin/pip install -r requirements.txt'
   user 'root'
 end
 
