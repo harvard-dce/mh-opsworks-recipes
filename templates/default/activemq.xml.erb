@@ -179,7 +179,9 @@
           <systemUsage>
             <systemUsage>
                 <memoryUsage>
-                    <memoryUsage percentOfJvmHeap="70" />
+                    <!-- DCE OPC-141 ref https://github.com/opencast/opencast/pull/22/files -->
+                    <!--<memoryUsage percentOfJvmHeap="70" />-->
+                    <memoryUsage limit="2048 MB"/>
                 </memoryUsage>
                 <storeUsage>
                     <storeUsage limit="100 gb"/>

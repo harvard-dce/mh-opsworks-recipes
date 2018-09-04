@@ -14,3 +14,6 @@ default['activemq']['version'] = '5.15.4'
 # this is only to tell the 3rd-party activemq recipe not to issue its own
 # service restart; we do that ourselves in the configure-activemq recipe
 default['activemq']['enabled'] = false
+# OPC-141 update wrapper.conf (https://opencast.jira.com/browse/MH-12620)
+default['activemq']['wrapper']['max_memory'] = '2048'
+
