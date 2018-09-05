@@ -5,6 +5,10 @@ This log is structured differently from the base `CHANGELOG.md`.
 * There is no **TO BE RELEASED** section
 * Entries should be headed with just a date; no version numbers
 
+## 09/10/2018
+
+* MI-106: improvements to activemq install
+
 ## 09/07/2018
 
 * enable activemq install for all-in-one local clusters

@@ -777,13 +777,16 @@ module MhOpsworksRecipes
       end
     end
 
+    def total_ram_in_meg
+      ram_finder = Mixlib::ShellOut.new(%q(grep MemTotal /proc/meminfo | sed -r 's/[^0-9]//g'))
+      ram_finder.run_command
+      ram_finder.error!
+      ram_finder.stdout.chomp.to_i / 1024
+    end
+
     def xmx_ram_for_this_node(xmx_ram_ratio)
       auto_configure_java_xmx_memory = node.fetch(:auto_configure_java_xmx_memory, true)
       if auto_configure_java_xmx_memory
-        ram_finder = Mixlib::ShellOut.new(%q(grep MemTotal /proc/meminfo | sed -r 's/[^0-9]//g'))
-        ram_finder.run_command
-        ram_finder.error!
-        total_ram_in_meg = ram_finder.stdout.chomp.to_i / 1024
         # configure Xmx value as a percent of the total ram for this
         # node, with a minimum of 4096
         [(total_ram_in_meg * xmx_ram_ratio).to_i, 4096].max
