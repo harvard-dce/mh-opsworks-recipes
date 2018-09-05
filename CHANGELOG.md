@@ -2,6 +2,13 @@
 
 ## TO BE RELEASED
 
+* *REQUIRES MANUAL RECIPE RUN*
+  set rds write iops alert threshold based on allocated storage & bump cpu usage alert to a more reasonable threshold
+
+        ./bin/rake stack:commands:execute_recipes_on_layers layers="Ganglia" recipes="mh-opsworks-recipes::create-mysql-alarms"
+
+## v1.32.0 - 08/18/2018
+
 * LDAP integration (OPC-66).
 * fix ua-harvester dependencies installation. No action required; only affects new clusters.
 * *REQUIRES MANUAL_RECIPE RUN* - disable deprecated/insecure ssl protocols in nginx config
