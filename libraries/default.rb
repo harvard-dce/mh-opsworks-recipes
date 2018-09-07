@@ -100,6 +100,10 @@ module MhOpsworksRecipes
       node[:opsworks][:instance][:hostname].match(/^utility/)
     end
 
+    def allinone_node?
+      node[:opsworks][:instance][:hostname].match(/^all-in-one/)
+    end
+
     def get_db_seed_file
       node.fetch(:db_seed_file, 'dce-config/docs/scripts/ddl/mysql5.sql')
     end

@@ -34,7 +34,7 @@ execute 'update-ca-certificates' do
   not_if 'test -e /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/cacerts'
 end
 
-if admin_node?
+if admin_node? || allinone_node?
   include_recipe 'activemq'
 end
 
