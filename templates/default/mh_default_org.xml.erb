@@ -28,7 +28,7 @@
     <!-- ################ -->
 
     <!-- Allow anonymous access to the login form -->
-    <sec:intercept-url pattern="/" access="ROLE_ANONYMOUS" />
+    <sec:intercept-url pattern="/" method="GET" access="ROLE_ANONYMOUS" />
     <sec:intercept-url pattern="/admin-ng/login.html" access="ROLE_ANONYMOUS" />
     <sec:intercept-url pattern="/sysinfo/bundles/version" method="GET" access="ROLE_ANONYMOUS" />
 
@@ -40,7 +40,6 @@
     <sec:intercept-url pattern="/admin-ng/acl/acls.json" method="GET" access="ROLE_ADMIN, ROLE_UI_ACLS_VIEW" />
     <sec:intercept-url pattern="/admin-ng/acl/*" method="GET" access="ROLE_ADMIN, ROLE_UI_ACLS_VIEW" />
     <sec:intercept-url pattern="/acl-manager/acl/*" method="GET" access="ROLE_ADMIN, ROLE_UI_ACLS_VIEW" />
-    <sec:intercept-url pattern="/archive/archive/mediapackage/**" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_ASSETS_VIEW" />
     <sec:intercept-url pattern="/admin-ng/capture-agents/agents.json" method="GET" access="ROLE_ADMIN, ROLE_UI_LOCATIONS_VIEW, ROLE_UI_EVENTS_CREATE" />
     <sec:intercept-url pattern="/admin-ng/capture-agents/*" method="GET" access="ROLE_ADMIN, ROLE_UI_LOCATIONS_DETAILS_CAPABILITIES_VIEW, ROLE_UI_LOCATIONS_DETAILS_CONFIGURATION_VIEW, ROLE_UI_LOCATIONS_DETAILS_GENERAL_VIEW" />
     <sec:intercept-url pattern="/admin-ng/event/*/asset/assets.json" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_ASSETS_VIEW" />
@@ -100,12 +99,14 @@
     <sec:intercept-url pattern="/admin-ng/resources/providers.json" method="GET" access="ROLE_ADMIN, ROLE_ADMIN_UI" />
     <sec:intercept-url pattern="/admin-ng/resources/THEMES.json" method="GET" access="ROLE_ADMIN, ROLE_UI_THEMES_VIEW" />
     <sec:intercept-url pattern="/admin-ng/resources/*.json" method="GET" access="ROLE_ADMIN, ROLE_ADMIN_UI" />
+    <sec:intercept-url pattern="/asset/assets/**" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_ASSETS_VIEW" />
 
     <sec:intercept-url pattern="/email/template/*" method="PUT" access="ROLE_ADMIN, ROLE_UI_EMAILTEMPLATES_EDIT" />
     <sec:intercept-url pattern="/admin-ng/acl/*" method="PUT" access="ROLE_ADMIN, ROLE_UI_ACLS_EDIT" />
     <sec:intercept-url pattern="/admin-ng/event/*/metadata" method="PUT" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_METADATA_EDIT" />
     <sec:intercept-url pattern="/admin-ng/event/*/scheduling" method="PUT" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_SCHEDULING_EDIT" />
     <sec:intercept-url pattern="/admin-ng/event/*/workflows" method="PUT" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_WORKFLOWS_EDIT" />
+    <sec:intercept-url pattern="/admin-ng/event/*/workflows/*/action/stop" method="PUT" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_WORKFLOWS_EDIT" />
     <sec:intercept-url pattern="/admin-ng/event/*/workflows/*/action/retry" method="PUT" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_WORKFLOWS_EDIT" />
     <sec:intercept-url pattern="/admin-ng/event/*/workflows/*/action/none" method="PUT" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_WORKFLOWS_EDIT" />
     <sec:intercept-url pattern="/admin-ng/event/*/comment/*/*" method="PUT" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_COMMENTS_EDIT" />
@@ -130,6 +131,7 @@
     <sec:intercept-url pattern="/admin-ng/event/new/conflicts" method="POST" access="ROLE_ADMIN, ROLE_UI_EVENTS_CREATE" />
     <sec:intercept-url pattern="/admin-ng/event/optouts" method="POST" access="ROLE_ADMIN, ROLE_UI_EVENTS_STATUS_EDIT" />
     <sec:intercept-url pattern="/admin-ng/event/*/access" method="POST" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_ACL_EDIT" />
+    <sec:intercept-url pattern="/admin-ng/event/*/assets" method="POST" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_ASSETS_EDIT" />
     <sec:intercept-url pattern="/admin-ng/event/*/comment" method="POST" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_COMMENTS_CREATE" />
     <sec:intercept-url pattern="/admin-ng/event/*/comment/*/reply" method="POST" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_COMMENTS_CREATE" />
     <sec:intercept-url pattern="/admin-ng/event/*/comment/*" method="POST" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_COMMENTS_CREATE" />
@@ -150,6 +152,7 @@
     <sec:intercept-url pattern="/admin-ng/capture-agents/*" method="DELETE" access="ROLE_ADMIN, ROLE_UI_LOCATIONS_DELETE" />
     <sec:intercept-url pattern="/admin-ng/event/*/comment/*/*" method="DELETE" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_COMMENTS_DELETE" />
     <sec:intercept-url pattern="/admin-ng/event/*/comment/*" method="DELETE" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_COMMENTS_DELETE" />
+    <sec:intercept-url pattern="/admin-ng/event/*/workflows/*" method="DELETE" access="ROLE_ADMIN, ROLE_UI_EVENTS_DETAILS_WORKFLOWS_DELETE" />
     <sec:intercept-url pattern="/admin-ng/event/*" method="DELETE" access="ROLE_ADMIN, ROLE_UI_EVENTS_DELETE" />
     <sec:intercept-url pattern="/admin-ng/groups/*" method="DELETE" access="ROLE_ADMIN, ROLE_UI_GROUPS_DELETE" />
     <sec:intercept-url pattern="/admin-ng/series/*/theme" method="DELETE" access="ROLE_ADMIN, ROLE_UI_SERIES_DETAILS_THEMES_EDIT" />
@@ -244,6 +247,7 @@
     <!-- Paella player -->
     <sec:intercept-url pattern="/paella/ui/auth.html" access="ROLE_USER" />
     <sec:intercept-url pattern="/paella/ui/**" access="ROLE_ANONYMOUS" />
+    <sec:intercept-url pattern="/paella/config/**" access="ROLE_ANONYMOUS" />
 
     <!-- #DCE OPC-54-test-local uses this link from the admin ui, which is a 
 	 redirect to Paella. This should come before /engage/** because the order matters! -->
