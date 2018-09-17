@@ -1005,16 +1005,17 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_aws_s3_file_archive_service_config(current_deploy_root, region, s3_file_archive_bucket_name)
-#      template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.episode.aws.s3.AwsS3ArchiveElementStore.properties| do
-#        source 'edu.harvard.dce.episode.aws.s3.AwsS3ArchiveElementStore.properties.erb'
-#        owner 'opencast'
-#        group 'opencast'
-#        variables({
-#          region: region,
-#          s3_file_archive_bucket_name: s3_file_archive_bucket_name
-#        })
-#      end
+    def install_aws_s3_file_archive_service_config(current_deploy_root, region, s3_file_archive_bucket_name, s3_file_archive_enabled)
+      template %Q|#{current_deploy_root}/etc/org.opencastproject.assetmanager.aws.s3.AwsS3AssetStore.cfg| do
+        source 'org.opencastproject.assetmanager.aws.s3.AwsS3AssetStore.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          region: region,
+          s3_file_archive_bucket_name: s3_file_archive_bucket_name,
+          s3_file_archive_enabled: s3_file_archive_enabled
+        })
+      end
     end
 
     def install_ibm_watson_transcription_service_config(current_deploy_root, ibm_watson_username, ibm_watson_psw)
