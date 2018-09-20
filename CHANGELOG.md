@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## v1.32.1 - 09/20/2018
+
 * *REQUIRES MANUAL RECIPE RUN*
   set rds write iops alert threshold based on allocated storage & bump cpu usage alert to a more reasonable threshold
 
