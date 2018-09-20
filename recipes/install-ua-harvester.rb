@@ -30,10 +30,17 @@ git "get the ua harvester" do
   user 'ua_harvester'
 end
 
+bash 'create virtualenv' do
+  code %Q|
+cd /home/ua_harvester/harvester &&
+/usr/bin/virtualenv venv
+  |
+  not_if { ::Dir.exist?("/home/ua_harvester/harvester/venv") }
+end
+
 bash 'install dependencies' do
   code %Q|
 cd /home/ua_harvester/harvester &&
-/usr/bin/virtualenv venv &&
 venv/bin/pip install -r requirements.txt &&
 chown -R ua_harvester venv
   |

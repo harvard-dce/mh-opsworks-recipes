@@ -6,6 +6,7 @@
   set rds write iops alert threshold based on allocated storage & bump cpu usage alert to a more reasonable threshold
 
         ./bin/rake stack:commands:execute_recipes_on_layers layers="Ganglia" recipes="mh-opsworks-recipes::create-mysql-alarms"
+* workaround for virtualenv re-creation bug
 
 ## v1.32.0 - 08/18/2018
 
