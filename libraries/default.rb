@@ -700,7 +700,7 @@ module MhOpsworksRecipes
     end
 
     # nodes that don't dispatch should also not do hearbeat service health checks
-    def set_service_registry_dispatch_interval(current_deploy_root)
+    def set_service_registry_intervals(current_deploy_root)
       template %Q|#{current_deploy_root}/etc/org.opencastproject.serviceregistry.impl.ServiceRegistryJpaImpl.cfg| do
         source 'org.opencastproject.serviceregistry.impl.ServiceRegistryJpaImpl.cfg.erb'
         owner 'opencast'

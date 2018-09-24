@@ -112,7 +112,7 @@ deploy_revision "opencast" do
     )
 
     # ENGAGE SPECIFIC
-    set_service_registry_dispatch_interval(most_recent_deploy)
+    set_service_registry_intervals(most_recent_deploy)
 #    configure_usertracking(most_recent_deploy, user_tracking_authhost)
     install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host)
     install_otherpubs_service_series_impl_config(most_recent_deploy)

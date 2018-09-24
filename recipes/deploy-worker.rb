@@ -92,7 +92,7 @@ deploy_revision "opencast" do
     )
 
     # WORKER SPECIFIC
-    set_service_registry_dispatch_interval(most_recent_deploy)
+    set_service_registry_intervals(most_recent_deploy)
     # /WORKER SPECIFIC
 
     template %Q|#{most_recent_deploy}/etc/custom.properties| do
