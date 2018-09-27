@@ -5,6 +5,12 @@ This log is structured differently from the base `CHANGELOG.md`.
 * There is no **TO BE RELEASED** section
 * Entries should be headed with just a date; no version numbers
 
+## 09/27/2018
+
+* OPC-155 Editor-shortcuts Waveform bigger encoding change
+* OPC MATT-2406 only admin performs hearbeat checks config change
+* OPC-59-metasynch Added ROLE_DCE_METASYNCH to metasynch endpoints
+
 ## 09/10/2018
 
 * MI-106: improvements to activemq install
