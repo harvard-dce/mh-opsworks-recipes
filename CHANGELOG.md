@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* MI-114: cloudwatch metric for number of online workers
+
 ## v1.32.1 - 09/20/2018
 
 * *REQUIRES MANUAL RECIPE RUN*
