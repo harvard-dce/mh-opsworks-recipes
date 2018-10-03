@@ -1,9 +1,8 @@
 # CHANGELOG for 5.x development
 
-This log is structured differently from the base `CHANGELOG.md`.
+## TO BE RELEASED
 
-* There is no **TO BE RELEASED** section
-* Entries should be headed with just a date; no version numbers
+* MI-114: cloudwatch metric for number of online workers
 
 ## 09/27/2018
 
