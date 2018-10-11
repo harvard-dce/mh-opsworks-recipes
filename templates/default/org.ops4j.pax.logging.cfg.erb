@@ -14,9 +14,13 @@ log4j.logger.org.opencastproject.metadata.synch=TRACE
 # log4j.logger.org.opencastproject.kernel.rest=DEBUG
 
 # For Karaf, Felix & CXF, we want to see some more details in the logs
-log4j.logger.org.apache.karaf=WARN
-log4j.logger.org.apache.felix=WARN
-log4j.logger.org.apache.cxf=WARN
+log4j.logger.org.apache.karaf=INFO
+log4j.logger.org.apache.felix=INFO
+log4j.logger.org.apache.cxf=INFO
+
+# DCE OPC-193 debug JAXRSUtils problem writing the data...
+log4j.logger.org.ops4j.pax.web=DEBUG
+log4j.logger.org.eclipse.jetty.server=DEBUG
 
 # DCE-added
 log4j.logger.org.opencastproject.ingest.scanner.Ingestor=INFO
@@ -27,6 +31,10 @@ log4j.logger.org.opencastproject.kernel.security.TrustedHttpClientImpl=INFO
 log4j.logger.org.opencastproject.kernel.http.impl.HttpClientImpl=INFO
 log4j.logger.org.opencastproject.lti.LtiServlet=DEBUG
 log4j.logger.org.opencastproject.liveschedule=DEBUG
+
+# OPC-197 find correct package log levels
+log4j.logger.org.opencastproject=DEBUG
+log4j.logger.edu.harvard.dce=DEBUG
 
 # Console appender not used by default
 log4j.appender.stdout=org.apache.log4j.ConsoleAppender
