@@ -1,7 +1,6 @@
 # Cookbook Name:: oc-opsworks-recipes
 # Recipe:: exec-dist-upgrade
 
-::Chef::Resource::RubyBlock.send(:include, MhOpsworksRecipes::RecipeHelpers)
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
 include_recipe "oc-opsworks-recipes::update-package-repo"
