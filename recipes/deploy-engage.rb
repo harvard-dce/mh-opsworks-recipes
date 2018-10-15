@@ -36,6 +36,15 @@ auth_redirect_location = node.fetch(:auth_redirect_location, 'http://example.com
 auth_activated = node.fetch(:auth_activated, 'true')
 auth_key = node.fetch(:auth_key, '')
 
+# OPC-149 Other oc host for pub list merge
+# The ignore-flag default value signals the config consumer
+# That the value for the config was not intentionally set and should
+# be ignored.
+ignore_flag = 'IGNORE_ME'
+other_oc_host = node.fetch(:other_oc_host, ignore_flag)
+other_oc_prefother_series = node.fetch(:other_oc_prefother_series, ignore_flag)
+other_oc_preflocal_series = node.fetch(:other_oc_preflocal_series, ignore_flag)
+
 ## Engage specific
 user_tracking_authhost = node.fetch(
   :user_tracking_authhost, 'http://example.com'
@@ -114,7 +123,7 @@ deploy_revision "opencast" do
     # ENGAGE SPECIFIC
     set_service_registry_intervals(most_recent_deploy)
 #    configure_usertracking(most_recent_deploy, user_tracking_authhost)
-    install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host)
+    install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host, other_oc_host, other_oc_prefother_series, other_oc_preflocal_series)
     install_otherpubs_service_series_impl_config(most_recent_deploy)
     install_aws_s3_distribution_service_config(most_recent_deploy, enable_s3, region, s3_distribution_bucket_name, s3_distribution_base_url)
     # /ENGAGE SPECIFIC

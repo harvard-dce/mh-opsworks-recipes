@@ -672,7 +672,7 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_otherpubs_service_config(current_deploy_root, opencast_repo_root, auth_host)
+    def install_otherpubs_service_config(current_deploy_root, opencast_repo_root, auth_host, other_oc_host, other_oc_prefother_series, other_oc_preflocal_series)
       download_episode_defaults_json_file(current_deploy_root)
 
       template %Q|#{current_deploy_root}/etc/edu.harvard.dce.otherpubs.OtherPubsServiceImpl.cfg| do
@@ -681,6 +681,9 @@ module MhOpsworksRecipes
         group 'opencast'
         variables({
           auth_host: auth_host,
+          other_oc_host: other_oc_host,
+          other_oc_prefother_series: other_oc_prefother_series,
+          other_oc_preflocal_series: other_oc_preflocal_series,
           opencast_repo_root: opencast_repo_root
         })
       end

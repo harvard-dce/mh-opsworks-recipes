@@ -70,6 +70,15 @@ auth_redirect_location = node.fetch(:auth_redirect_location, 'http://example.com
 auth_activated = node.fetch(:auth_activated, 'true')
 auth_key = node.fetch(:auth_key, '')
 
+# OPC-149 other oc host for pub list merge
+# The ignore-flag default value signals the config consumer
+# That the value for the config was not intentionally set and should
+# be ignored.
+ignore_flag = 'IGNORE_ME'
+other_oc_host = node.fetch(:other_oc_host, ignore_flag)
+other_oc_prefother_series = node.fetch(:other_oc_prefother_series, ignore_flag)
+other_oc_preflocal_series = node.fetch(:other_oc_preflocal_series, ignore_flag)
+
 git_data = node[:deploy][:opencast][:scm]
 
 
@@ -133,7 +142,7 @@ deploy_revision "opencast" do
       install_ldap_config(most_recent_deploy, ldap_url, ldap_userdn, ldap_psw)
     end
     install_publish_1x_service_config(most_recent_deploy, publish_1x_enabled, publish_1x_engage_url)
-    install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host)
+    install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host, other_oc_host, other_oc_prefother_series, other_oc_preflocal_series)
     install_otherpubs_service_series_impl_config(most_recent_deploy)
 #    install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name)
     install_ibm_watson_transcription_service_config(most_recent_deploy, ibm_watson_username, ibm_watson_psw)
