@@ -676,7 +676,7 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_otherpubs_service_config(current_deploy_root, matterhorn_repo_root, auth_host)
+    def install_otherpubs_service_config(current_deploy_root, matterhorn_repo_root, auth_host, other_oc_host, other_oc_prefother_series, other_oc_preflocal_series)
       download_episode_defaults_json_file(current_deploy_root)
 
       template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.otherpubs.service.OtherpubsService.properties| do
@@ -685,6 +685,9 @@ module MhOpsworksRecipes
         group 'matterhorn'
         variables({
           auth_host: auth_host,
+          other_oc_host: other_oc_host,
+          other_oc_prefother_series: other_oc_prefother_series,
+          other_oc_preflocal_series: other_oc_preflocal_series,
           matterhorn_repo_root: matterhorn_repo_root
         })
       end

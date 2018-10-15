@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* OPC-149 Otherpubs config to combine Opencast pubs on pub listing
+
 ## v1.33.0 - 10/15/2018
 
 * MI-114: cloudwatch metric for number of online workers

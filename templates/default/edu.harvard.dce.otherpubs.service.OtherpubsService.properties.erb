@@ -1,16 +1,48 @@
 # Configuration for DCE Other Publications Service
 
-# For other (Legacy) course publication metadatadata
-# Enable Access to Legacy SD publications
+# For other (Legacy and other Opencast) course publication metadatadata, default course data, system message
+# Enable Access to Legacy SD publications and system message
 # Used by Combo publication listing page
 
+# I. OPC-149 combo page with other opencast engage search (i.e. get 5x pubs if 1x, get 1x pubs if 5x)
+#
+# I.1. Uncomment the following "oc.dns" param line add a different Opencast ENGAGE dns (search service endpoint)
+#    to facilitate pulling in pubs from the other Opencast Engage onto this Engage's combo pub list.
+#    Note: Only local pub is shown when other system pub has an overlapping date. Otherwise, both are shown.
+#    Note: @other_oc_host is a cluster config param, set there to persist the setting across deploys.
+edu.harvard.dce.otherpubs.oc.dns=https://<%= @other_oc_host %>
+
+# I.2. Uncomment the following and add comma separated list of series where the Other Opencast
+#    system's pub takes precedence over local Opencast pubs when both have overlapping dates.
+#    NOTE: if the seriesId shows up in both prefother and preflocal, the preflocal takes precedence.
+#    Example: edu.harvard.dce.otherpubs.oc.prefother.series=20190119998,20190119999
+edu.harvard.dce.otherpubs.oc.prefother.series=<%= @other_oc_prefother_series %>
+
+# I.3. Uncomment the following and add comma separated list of series where the Local Opencast
+#    system's pub takes precedence over other Opencast pubs when both have overlapping dates.
+#    NOTE: if the seriesId shows up in both prefother and preflocal, the preflocal takes precedence.
+#    Example: edu.harvard.dce.otherpubs.oc.preflocal.series=20190119998,20190119999
+edu.harvard.dce.otherpubs.oc.preflocal.series=<%= @other_oc_preflocal_series %>
+
+# I.4. Omit series identifiers from both above lists to prevent other Opencast publications
+#    from showing up in the local publication listing page.
+#    Only local pubs will show up on the omitted series publication listing pages.
+
+# II. Retrieve the Legacy system message for display on combo page (active)
+# The following params are for the host system of the Legacy system note, the path of the note.
 edu.harvard.dce.otherpubs.dns=http://<%= @auth_host %>
 edu.harvard.dce.otherpubs.system.message.path.template=/includes/sys-msg.json
+# Depreciated: these are for the Legacy series note and old Legacy live and VOD pubs
 edu.harvard.dce.otherpubs.offering.message.path.template=/$year/$term/$crn/$crn-msg.json
 edu.harvard.dce.otherpubs.live.path.template=/classroom/publicationListing.json
 edu.harvard.dce.otherpubs.offering.pub.path.template=/$year/$term/$crn/publicationListing.json
 
-# For other (ac-web/Banner) course metadata data
+# III. TODO: the following was to retrieve course metadata from (ac-web/Banner).
+# This was abandoned because course metadata is not acceptably accurate from Banner (per producers)
+# and can not be updated there by producers (as of 2018). Legacy system is populated from Banner
+# and updated by producers. Legacy is still used to retrieve course metadata and scheduling
+# information (as of 2018). See MATT-1857 below.
+# ...
 # Enable Access to Banner episode metadata via the Otherpubs endpoint
 # Used by Admin UI schedule and upload UI auto-form fill by series id
 # edu.harvard.dce.otherpubs.coursedata.dns=https://ac-web.dce.harvard.edu
@@ -18,13 +50,17 @@ edu.harvard.dce.otherpubs.offering.pub.path.template=/$year/$term/$crn/publicati
 # edu.harvard.dce.otherpubs.coursedata.coursedetail.path.template=/rest/de/__get_course_details.php?term=$year$term&crn=$crn
 # edu.harvard.dce.otherpubs.coursedata.coursepeople.path.template=/rest/de/__get_course_people.php?term=$year$term&crn=$crn
 #
-# MATT-1857 Get episode defaults from S3 static JSON bucket extracted from Legacy by MatterhornEpisodeDefaultsDriver
+# IV. MATT-1857 Get episode defaults
+# The EpisodeDefaults.json originates from S3 static JSON bucket
+# that was extracted from Legacy by the Legacy driver MatterhornEpisodeDefaultsDriver
 # edu.harvard.dce.otherpubs.coursedata.dns=
 edu.harvard.dce.otherpubs.coursedata.courses.path.template=/EpisodeDefaults.json
 edu.harvard.dce.otherpubs.coursedata.coursedetail.path.template=/EpisodeDefaults.json
 edu.harvard.dce.otherpubs.coursedata.coursepeople.path.template=/EpisodeDefaults.json
+
 # MATT-1893 Get episode defaults from a local json file
 edu.harvard.dce.otherpubs.coursedata.dir=<%= @matterhorn_repo_root %>/current/etc/default_data
+
 # MATT-2215 Add log threshold for connection/read timeout in seconds
 # default is 3 minutes for connection time, and 0 for logging connection duration
 edu.harvard.dce.otherpubs.connectiontimethreshold=180
