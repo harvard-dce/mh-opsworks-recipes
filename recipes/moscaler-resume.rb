@@ -8,6 +8,8 @@ moscaler_attributes = get_moscaler_info
 moscaler_type = moscaler_attributes['moscaler_type']
 debug_flag = moscaler_attributes['moscaler_debug'] ? '-d' : ''
 cron_interval = moscaler_attributes['cron_interval']
+moscaler_home = "/home/moscaler/mo-scaler"
+moscaler_activate = "source #{moscaler_home}/venv/bin/activate"
 
 if moscaler_type == 'time'
   
@@ -21,7 +23,7 @@ if moscaler_type == 'time'
     hour '0-7,23'
     minute cron_interval
     weekday '1-5'
-    command %Q(cd /home/moscaler/mo-scaler && /usr/bin/run-one ./manager.py #{debug_flag} scale to #{offpeak_instances} --scale-available 2>&1 | logger -t info)
+    command %Q(cd #{moscaler_home} && #{moscaler_activate} && /usr/bin/run-one ./manager.py #{debug_flag} scale to #{offpeak_instances} --scale-available 2>&1 | logger -t info)
     path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   end
 
@@ -31,7 +33,7 @@ if moscaler_type == 'time'
     hour '8-22'
     minute cron_interval
     weekday '1-5'
-    command %Q(cd /home/moscaler/mo-scaler && /usr/bin/run-one ./manager.py #{debug_flag} scale to #{peak_instances} --scale-available 2>&1 | logger -t info)
+    command %Q(cd #{moscaler_home} && #{moscaler_activate} && /usr/bin/run-one ./manager.py #{debug_flag} scale to #{peak_instances} --scale-available 2>&1 | logger -t info)
     path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   end
 
@@ -40,7 +42,7 @@ if moscaler_type == 'time'
     user 'moscaler'
     minute cron_interval
     weekday '6,7'
-    command %Q(cd /home/moscaler/mo-scaler && /usr/bin/run-one ./manager.py #{debug_flag} scale to #{weekend_instances} --scale-available 2>&1 | logger -t info)
+    command %Q(cd #{moscaler_home} && #{moscaler_activate} && /usr/bin/run-one ./manager.py #{debug_flag} scale to #{weekend_instances} --scale-available 2>&1 | logger -t info)
     path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   end
 
@@ -49,7 +51,7 @@ elsif moscaler_type == 'auto'
   cron_d 'moscaler_auto' do
     user 'moscaler'
     minute cron_interval
-    command %Q(cd /home/moscaler/mo-scaler && /usr/bin/run-one ./manager.py #{debug_flag} scale auto 2>&1 | logger -t info)
+    command %Q(cd #{moscaler_home} && #{moscaler_activate} && /usr/bin/run-one ./manager.py #{debug_flag} scale auto 2>&1 | logger -t info)
     path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   end
 

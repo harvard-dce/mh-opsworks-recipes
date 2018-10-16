@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* mo-scaler now uses virtualenv to better manage/isolate python dependencies
+
 ## 10/12/2018
 
 * MI-114: cloudwatch metric for number of online workers
