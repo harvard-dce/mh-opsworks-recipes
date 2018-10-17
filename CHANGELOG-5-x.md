@@ -3,6 +3,7 @@
 ## TO BE RELEASED
 
 * mo-scaler now uses virtualenv to better manage/isolate python dependencies
+* install additional network/io performance testing tools
 
 ## 10/12/2018
 
