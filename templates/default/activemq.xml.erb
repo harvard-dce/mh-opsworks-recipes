@@ -54,7 +54,7 @@
 
                     -->
                   <pendingMessageLimitStrategy>
-                    <constantPendingMessageLimitStrategy limit="1000"/>
+                    <constantPendingMessageLimitStrategy limit="4000"/>
                   </pendingMessageLimitStrategy>
                 </policyEntry>
               </policyEntries>
@@ -198,7 +198,7 @@
         -->
         <transportConnectors>
             <!-- DOS protection, limit concurrent connections to 1000 and frame size to 100MB -->
-            <transportConnector name="openwire" uri="tcp://<%= @activemq_bind_host %>:61616?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600"/>
+            <transportConnector name="openwire" uri="tcp://<%= @activemq_bind_host %>:61616?maximumConnections=4000&amp;wireFormat.maxFrameSize=104857600"/>
         </transportConnectors>
 
         <!-- destroy the spring context on shutdown to stop jetty -->
