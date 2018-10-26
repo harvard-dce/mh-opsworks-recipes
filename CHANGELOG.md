@@ -2,7 +2,9 @@
 
 ## TO BE RELEASED
 
-* OPC-149 Otherpubs config to combine Opencast pubs on pub listing
+## oc-v1.3.0 - 08/29/2018
+
+* OPC-149, Otherpubs config to combine Opencast pubs on pub listing
 * *REQUIRES MANUAL RECIPE RUN*
   set rds write iops alert threshold based on allocated storage & bump cpu usage alert to a more reasonable threshold
 
