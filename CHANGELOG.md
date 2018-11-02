@@ -2,7 +2,11 @@
 
 ## TO BE RELEASED
 
-## v1.34.0 - 10/29/3018
+## v1.34.1 - 11/02/2018
+
+* ensure the dist-upgrade runs with updated package repo && in non-interactive mode
+
+## v1.34.0 - 10/29/2018
 
 * OPC-149 Otherpubs config to combine Opencast pubs on pub listing
 
