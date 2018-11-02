@@ -2,6 +2,9 @@
 
 ## TO BE RELEASED
 
+## 11/02/2018
+
+* ensure dist-upgrade runs with updated package repo and non-interactive mode
 * mo-scaler now uses virtualenv to better manage/isolate python dependencies
 * install additional network/io performance testing tools
 
