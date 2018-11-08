@@ -834,10 +834,10 @@ module MhOpsworksRecipes
 
     def install_init_scripts(current_deploy_root, opencast_repo_root)
       log_dir = node.fetch(:opencast_log_directory, '/var/log/opencast')
+      java_debug_enabled = node.fetch(:java_debug_enabled, '')
       java_home = node['java']['java_home']
       xmx_ram_ratio = xmx_ram_ratio_for_this_node
       java_xmx_ram = xmx_ram_for_this_node(xmx_ram_ratio)
-      java_xms_ram = java_xmx_ram * xmx_xms_ratio_for_this_node
 
       xms_ram_ratio = xmx_xms_ratio_for_this_node
       # round(-1) will round to nearest divisible by 10 so we get an even number
@@ -864,27 +864,8 @@ module MhOpsworksRecipes
           java_xmx_ram: java_xmx_ram,
           java_xms_ram: java_xms_ram,
           java_home: java_home,
-#          main_config_file: %Q|#{opencast_repo_root}/current/etc/opencast.conf|,
-#          opencast_root: opencast_repo_root + '/current',
-#          felix_config_dir: opencast_repo_root + '/current/etc',
           opencast_log_directory: log_dir,
-          enable_newrelic: enable_newrelic_for_layer?(layer_name)
-        })
-      end
-    end
-
-    def install_opencast_conf(current_deploy_root, opencast_repo_root, node_profile)
-      log_dir = node.fetch(:opencast_log_directory, '/var/log/opencast')
-      java_debug_enabled = node.fetch(:java_debug_enabled, 'true')
-
-      template %Q|#{current_deploy_root}/etc/opencast.conf| do
-        source 'opencast.conf.erb'
-        owner 'opencast'
-        group 'opencast'
-        variables({
-          opencast_root: opencast_repo_root + '/current',
-          node_profile: node_profile,
-          opencast_log_directory: log_dir,
+          enable_newrelic: enable_newrelic_for_layer?(layer_name),
           java_debug_enabled: java_debug_enabled
         })
       end

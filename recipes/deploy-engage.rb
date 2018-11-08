@@ -103,7 +103,6 @@ deploy_revision "opencast" do
 #    copy_dce_configs(most_recent_deploy)
 
     install_init_scripts(most_recent_deploy, opencast_repo_root)
-#    install_opencast_conf(most_recent_deploy, opencast_repo_root, 'engage')
     install_opencast_log_configuration(most_recent_deploy)
     install_opencast_log_management
     install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_engage_hostname)

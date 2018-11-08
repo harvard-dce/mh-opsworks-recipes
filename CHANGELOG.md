@@ -3,6 +3,7 @@
 ## TO BE RELEASED
 
 * MI-125: rename maven cache archive to distinguish 5x vs 1x
+* OPC-219: remove creation of `etc/opencast.conf` and allow enabling java debugging via `bin/setenv`
 
 ## v1.34.1 - 11/02/2018
 

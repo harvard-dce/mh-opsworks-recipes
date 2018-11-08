@@ -125,7 +125,6 @@ deploy_revision "opencast" do
     copy_workflows_into_place_for_admin(most_recent_deploy)
 
     install_init_scripts(most_recent_deploy, opencast_repo_root)
-#    install_opencast_conf(most_recent_deploy, opencast_repo_root, 'all-in-one')
     install_opencast_log_configuration(most_recent_deploy)
     install_opencast_log_management
     install_multitenancy_config(most_recent_deploy, public_hostname, public_hostname)
