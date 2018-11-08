@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* MI-125: rename maven cache archive to distinguish 5x vs 1x
+
 ## v1.34.1 - 11/02/2018
 
 * ensure the dist-upgrade runs with updated package repo && in non-interactive mode
