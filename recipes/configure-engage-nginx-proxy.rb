@@ -9,6 +9,8 @@ install_nginx_logrotate_customizations
 
 shared_storage_root = get_shared_storage_root
 
+public_engage_hostname = get_public_engage_hostname
+
 ssl_info = node.fetch(:ssl, get_dummy_cert)
 if cert_defined(ssl_info)
   create_ssl_cert(ssl_info)
@@ -32,7 +34,8 @@ template 'proxy' do
   variables({
     shared_storage_root: shared_storage_root,
     opencast_backend_http_port: 8080,
-    certificate_exists: certificate_exists
+    certificate_exists: certificate_exists,
+    public_engage_hostname: public_engage_hostname
   })
 end
 

@@ -3,6 +3,7 @@
 ## TO BE RELEASED
 
 * MI-97: update mysql alarms for rds aurora cluster
+* OPC-226: redirect http -> https in engage nginx configuration
 * MI-125: rename maven cache archive to distinguish 5x vs 1x
 * OPC-219: remove creation of `etc/opencast.conf` and allow enabling java debugging via `bin/setenv`
 * MATT-2324: In 5x, it's Ok remove LTI process filter proxy workaround. Has companion OC 5x change.

@@ -9,6 +9,12 @@ server {
   listen [::]:80 default_server ipv6only=on;
   directio 1M;
 
+  <% if @certificate_exists %>
+  location /admin-ng/login.html {
+    return 301 https://$host$request_uri;
+  }
+  <% end %>
+
   root /usr/share/nginx/html;
   index index.html index.htm;
 
@@ -75,7 +81,9 @@ server {
   # Ask opencast to redirect to HTTPS
   proxy_set_header X-Forwarded-SSL on;
   # Rewrite outgoing redirects to be HTTPS
-  proxy_redirect http://opencast.dce.harvard.edu/ https://opencast.dce.harvard.edu/;
+  proxy_redirect http://<%= @public_engage_hostname %>/ https://<%= @public_engage_hostname %>/;
+  # Include the old static DNS to protect legacy links
+  proxy_redirect http://matterhorn.dce.harvard.edu/ https://matterhorn.dce.harvard.edu/;
 
   client_max_body_size 102400m;
   gzip on;
