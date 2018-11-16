@@ -9,6 +9,12 @@ server {
   listen [::]:80 default_server ipv6only=on;
   directio 1M;
 
+  <% if @certificate_exists %>
+  location /admin-ng/login.html {
+    return 301 https://$host$request_uri;
+  }
+  <% end %>
+
   root /usr/share/nginx/html;
   index index.html index.htm;
 
