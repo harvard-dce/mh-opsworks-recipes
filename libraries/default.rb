@@ -293,7 +293,7 @@ module MhOpsworksRecipes
     end
 
     def rds_name
-      %Q|#{stack_shortname}-database|
+      %Q|#{stack_shortname}-cluster|
     end
 
     def alarm_name_prefix
