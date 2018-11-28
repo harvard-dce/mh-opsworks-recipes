@@ -4,6 +4,13 @@ userid_expires max;
 
 log_format session_uid '$cookie_JSESSIONID $uid_got';
 
+<% if not @proxy_5x_ip.empty? %>
+# OPC-230 1x to 5x migration. 443 needed for SSL handshake
+upstream opencast_5x {
+   server <%= @proxy_5x_ip %>:443;
+}
+<% end %>
+
 server {
   listen 80 default_server;
   listen [::]:80 default_server ipv6only=on;
@@ -15,6 +22,28 @@ server {
   # Make site accessible from http://localhost/
   server_name localhost;
 
+  # OPC-230 optional param for 1x to 5x migration DNS proxy
+<% if not @proxy_5x_ip.empty? %>
+  # OPC-230 forward all to the proxy 5x
+  location / {
+    proxy_pass https://opencast_5x/;
+  }
+
+<% else %>
+  location /static {
+    alias <%= @shared_storage_root %>/downloads;
+  }
+
+  location /usertracking {
+    proxy_pass http://127.0.0.1:<%= @matterhorn_backend_http_port %>/usertracking;
+    access_log /var/log/nginx/session_uid.log session_uid;
+    access_log /var/log/nginx/access.log request_time;
+  }
+
+  location / {
+    proxy_pass http://127.0.0.1:<%= @matterhorn_backend_http_port %>;
+  }
+<% end %>
   proxy_read_timeout 30m;
   proxy_send_timeout 30m;
   proxy_set_header Host $host;
@@ -29,19 +58,6 @@ server {
   add_header 'Access-Control-Allow-Credentials' 'true';
   add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
 
-  location /static {
-    alias <%= @shared_storage_root %>/downloads;
-  }
-
-  location /usertracking {
-    proxy_pass http://127.0.0.1:<%= @matterhorn_backend_http_port %>/usertracking;
-    access_log /var/log/nginx/session_uid.log session_uid;
-    access_log /var/log/nginx/access.log request_time;
-  }
-
-  location / {
-    proxy_pass http://127.0.0.1:<%= @matterhorn_backend_http_port %>;
-  }
 }
 
 <% if @certificate_exists %>
@@ -65,6 +81,30 @@ server {
   # Make site accessible from http://localhost/
   server_name localhost;
 
+<% if not @proxy_5x_ip.empty? %>
+  # OPC-230 forward all to the proxy 5x
+  location / {
+    proxy_pass https://opencast_5x/;
+  }
+
+<% else %>
+
+   location /static {
+    alias <%= @shared_storage_root %>/downloads;
+  }
+
+  location /usertracking {
+    proxy_pass http://127.0.0.1:<%= @matterhorn_backend_http_port %>/usertracking;
+    access_log /var/log/nginx/session_uid.log session_uid;
+    access_log /var/log/nginx/access.log request_time;
+  }
+
+  location / {
+    proxy_pass http://127.0.0.1:<%= @matterhorn_backend_http_port %>;
+  }
+
+<% end %>
+
   proxy_read_timeout 30m;
   proxy_send_timeout 30m;
   proxy_set_header Host $host;
@@ -84,18 +124,5 @@ server {
   add_header 'Access-Control-Allow-Credentials' 'true';
   add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
 
-  location /static {
-    alias <%= @shared_storage_root %>/downloads;
-  }
-
-  location /usertracking {
-    proxy_pass http://127.0.0.1:<%= @matterhorn_backend_http_port %>/usertracking;
-    access_log /var/log/nginx/session_uid.log session_uid;
-    access_log /var/log/nginx/access.log request_time;
-  }
-
-  location / {
-    proxy_pass http://127.0.0.1:<%= @matterhorn_backend_http_port %>;
-  }
 }
 <% end %>

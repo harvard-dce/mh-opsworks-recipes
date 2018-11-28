@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* OPC-230, optional cluster config param to proxy the 1x Engage to a 5x Engage. Works with Canvas LTI plugins.
+
 ## v1.34.1 - 11/02/2018
 
 * ensure the dist-upgrade runs with updated package repo && in non-interactive mode

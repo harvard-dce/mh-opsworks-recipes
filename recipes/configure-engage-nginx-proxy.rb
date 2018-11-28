@@ -17,6 +17,9 @@ storage_info = node.fetch(
 
 shared_storage_root = get_shared_storage_root
 
+# OPC-230, optional param to direct 1x Engage calls to another Engage (i.e. 5x)
+proxy_5x_ip = node.fetch(:proxy_5x_ip, '')
+
 ssl_info = node.fetch(:ssl, get_dummy_cert)
 if cert_defined(ssl_info)
   create_ssl_cert(ssl_info)
@@ -38,7 +41,8 @@ template %Q|/etc/nginx/sites-enabled/default| do
   variables({
     shared_storage_root: shared_storage_root,
     matterhorn_backend_http_port: 8080,
-    certificate_exists: certificate_exists
+    certificate_exists: certificate_exists,
+    proxy_5x_ip: proxy_5x_ip
   })
 end
 
