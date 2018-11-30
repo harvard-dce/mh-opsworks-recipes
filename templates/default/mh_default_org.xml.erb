@@ -500,11 +500,6 @@
   </bean>
 
   <bean name="oauthProtectedResourceFilter" class="org.opencastproject.kernel.security.LtiProcessingFilter">
-    <!-- start #DCE MATT-2046 proxy workaround params, comment these out if external and internal URLs match
-    The arg 0 is the String urlSentByLtiClient, the arg 1 is String urlUsedByProxyServer -->
-    <constructor-arg index="0" value = "https://<%= @proxy_name %>/lti" />
-    <constructor-arg index="1" value = "http://<%= @unproxied_name %>/lti" />
-    <!-- end MATT-2046 proxy workaround params -->
     <property name="consumerDetailsService" ref="oAuthConsumerDetailsService" />
     <property name="tokenServices">
       <bean class="org.springframework.security.oauth.provider.token.InMemoryProviderTokenServices" />
