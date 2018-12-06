@@ -1056,7 +1056,17 @@ none
 * installs the agent and config in /opt/newrelic
 '
 )
+recipe(
+    'oc-opsworks-recipes::install-aws-kernel',
+    'Installs the aws-tuned v4 linux kernel. This is intended for use only in ami building.
 
+=== attributes
+none
+
+=== effects
+* will install and enable the aws-tuned v4 linux kernel
+'
+)
 depends 'nfs', '~> 2.1.0'
 depends 'apt', '~> 2.9.2'
 depends 'cron', '~> 1.6.1'
