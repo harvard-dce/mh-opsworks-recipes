@@ -1,0 +1,20 @@
+# Configuration for AWS S3 Asset Manager Service
+
+# Set this to true to enable the S3 asset store
+org.opencastproject.assetmanager.aws.s3.enabled=<%= @s3_file_archive_enabled %>
+
+# The AWS region. Name must be a valid AWS region name like us-east-1.
+org.opencastproject.assetmanager.aws.s3.region=<%= @region %>
+
+# The AWS S3 bucket name (mandatory). '_' is not allowed.
+#
+# You should use a distinct bucket name for each MH cluster.
+# Example: cluster-name-file-assetmanager
+org.opencastproject.assetmanager.aws.s3.bucket=<%= @s3_file_archive_bucket_name %>
+
+# The AWS access key ID to use for connecting to S3.
+#org.opencastproject.assetmanager.aws.s3.access.id=
+
+# The AWS secret access key to use for connecting to S3
+#org.opencastproject.assetmanager.aws.s3.secret.key=
+

@@ -274,6 +274,10 @@ module MhOpsworksRecipes
       node[:s3_file_archive_bucket_name]
     end
 
+    def get_s3_file_archive_course_list
+      node.fetch(:s3_file_archive_course_list, '')
+    end
+
     def topic_name
       stack_name = node[:opsworks][:stack][:name]
       stack_name.downcase.gsub(/[^a-z\d\-_]/,'_')
@@ -986,16 +990,25 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_aws_s3_file_archive_service_config(current_deploy_root, region, s3_file_archive_bucket_name)
-#      template %Q|#{current_deploy_root}/etc/services/edu.harvard.dce.episode.aws.s3.AwsS3ArchiveElementStore.properties| do
-#        source 'edu.harvard.dce.episode.aws.s3.AwsS3ArchiveElementStore.properties.erb'
-#        owner 'opencast'
-#        group 'opencast'
-#        variables({
-#          region: region,
-#          s3_file_archive_bucket_name: s3_file_archive_bucket_name
-#        })
-#      end
+    def install_aws_s3_file_archive_service_config(current_deploy_root, region, s3_file_archive_bucket_name, s3_file_archive_enabled, s3_file_archive_course_list)
+      template %Q|#{current_deploy_root}/etc/org.opencastproject.assetmanager.aws.s3.AwsS3AssetStore.cfg| do
+        source 'org.opencastproject.assetmanager.aws.s3.AwsS3AssetStore.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          region: region,
+          s3_file_archive_bucket_name: s3_file_archive_bucket_name,
+          s3_file_archive_enabled: s3_file_archive_enabled
+        })
+      end
+      template %Q|#{current_deploy_root}/etc/edu.harvard.dce.assetmanager.transfer.filters.CourseListFilter.cfg| do
+        source 'edu.harvard.dce.assetmanager.transfer.filters.CourseListFilter.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          s3_file_archive_course_list: s3_file_archive_course_list
+        })
+      end
     end
 
     def install_ibm_watson_transcription_service_config(current_deploy_root, ibm_watson_username, ibm_watson_psw)

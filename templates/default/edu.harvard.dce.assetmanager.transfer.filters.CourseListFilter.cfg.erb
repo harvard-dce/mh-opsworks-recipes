@@ -1,0 +1,6 @@
+# Configuration for filter used in the archive to s3 process. Only courses in this list will be archived to s3.
+# This is for temporary use in the 5.x parallel cluster to only archive the courses we are producing for real.
+# If list is empty, all courses will be archived (if not blocked by other filters).
+#
+filter.courseList=<%= @s3_file_archive_course_list %>
+

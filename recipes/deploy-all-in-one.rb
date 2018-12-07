@@ -33,8 +33,10 @@ s3_distribution_bucket_name = get_s3_distribution_bucket_name
 s3_distribution_base_url=get_base_media_download_url(public_hostname)
 ## /all-in-one specific
 
-# S3 file archive service, also needs the aws region
+# S3 file archive service, also needs region
 s3_file_archive_bucket_name = get_s3_file_archive_bucket_name
+s3_file_archive_enabled = !s3_file_archive_bucket_name.to_s.empty?
+s3_file_archive_course_list = get_s3_file_archive_course_list
 
 # IBM Watson service credentials
 ibm_watson_user_info = get_ibm_watson_user_info
@@ -143,7 +145,7 @@ deploy_revision "opencast" do
     install_publish_1x_service_config(most_recent_deploy, publish_1x_enabled, publish_1x_engage_url)
     install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host, other_oc_host, other_oc_prefother_series, other_oc_preflocal_series)
     install_otherpubs_service_series_impl_config(most_recent_deploy)
-#    install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name)
+    install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name, s3_file_archive_enabled, s3_file_archive_course_list)
     install_ibm_watson_transcription_service_config(most_recent_deploy, ibm_watson_username, ibm_watson_psw)
     install_published_event_details_email(most_recent_deploy, public_hostname)
 #

@@ -21,6 +21,8 @@ using_local_distribution = is_using_local_distribution?
 # S3 file archive service
 region = node.fetch(:region, 'us-east-1')
 s3_file_archive_bucket_name = get_s3_file_archive_bucket_name
+s3_file_archive_enabled = !s3_file_archive_bucket_name.to_s.empty?
+s3_file_archive_course_list = get_s3_file_archive_course_list
 # S3 file archive service
 
 # IBM Watson service credentials
@@ -132,7 +134,7 @@ deploy_revision "opencast" do
 #    # Admin Specific
     install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host, other_oc_host, other_oc_prefother_series, other_oc_preflocal_series)
     install_otherpubs_service_series_impl_config(most_recent_deploy)
-#    install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name)
+    install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name, s3_file_archive_enabled, s3_file_archive_course_list)
     install_ibm_watson_transcription_service_config(most_recent_deploy, ibm_watson_username, ibm_watson_psw)
     unless ibm_watson_transcript_bucket.nil? or ibm_watson_transcript_bucket.empty?
       setup_transcript_result_sync_to_s3(shared_storage_root, ibm_watson_transcript_bucket)
