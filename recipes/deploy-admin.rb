@@ -50,10 +50,11 @@ ldap_url = ldap_conf[:url]
 ldap_userdn = ldap_conf[:userdn]
 ldap_psw = ldap_conf[:pass]
 
-# Publish to 1.x settings
+# Publish to 1.x/migration settings
 publish_1x_conf = get_publish_1x_conf
 publish_1x_enabled = publish_1x_conf[:enabled] 
 publish_1x_engage_url = publish_1x_conf[:engage_url] 
+admin_1x_url = publish_1x_conf[:admin_url] 
 
 auth_host = node.fetch(:auth_host, 'example.com')
 auth_redirect_location = node.fetch(:auth_redirect_location, 'http://example.com/some/url')
@@ -135,6 +136,8 @@ deploy_revision "opencast" do
     install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host, other_oc_host, other_oc_prefother_series, other_oc_preflocal_series)
     install_otherpubs_service_series_impl_config(most_recent_deploy)
     install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name, s3_file_archive_enabled, s3_file_archive_course_list)
+    # OPC-224 (only used during migration)
+    install_ingest_1x_config(most_recent_deploy, s3_file_archive_bucket_name, admin_1x_url)
     install_ibm_watson_transcription_service_config(most_recent_deploy, ibm_watson_username, ibm_watson_psw)
     unless ibm_watson_transcript_bucket.nil? or ibm_watson_transcript_bucket.empty?
       setup_transcript_result_sync_to_s3(shared_storage_root, ibm_watson_transcript_bucket)
