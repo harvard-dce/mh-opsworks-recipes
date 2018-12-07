@@ -673,23 +673,6 @@ recipe(
 '
 )
 recipe(
-  'oc-opsworks-recipes::enable-enhanced-networking',
-  'Compile and install an updated network driver to enable full nic speed
-
-This downloads resources from the <tt>shared_asset_bucket</tt> and uses them to
-compile and install an updated driver to enable full network speed. If we
-already have the driver installed, nothing happens.
-
-=== Attributes
-* <tt>node[:ixgbevf_version]</tt> the desired driver version
-* <tt>MhOpsworksRecipes::RecipeHelpers.get_shared_asset_bucket_name
-
-=== Effects
-* The new driver is installed and you must restart. This driver is in the
-  default AMI so you should be good.
-'
-)
-recipe(
   'oc-opsworks-recipes::install-job-queued-metrics',
   'Install a opencast jobs queued metric. Part of the experimental horizontal scaling feature
 
