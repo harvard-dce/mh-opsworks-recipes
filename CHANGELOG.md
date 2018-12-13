@@ -8,6 +8,7 @@
 * MATT-2324: In 5x, it's Ok remove LTI process filter proxy workaround. Has companion OC 5x change.
 * MI-117: recipe for installing the linux-aws kernel package
 * MI-133: remove recipe for building enhanced networking kernel module
+* updating some references to the "dont_start_matterhorn_automatically" flag
 
 ## v1.34.1 - 11/02/2018
 
