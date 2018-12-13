@@ -257,7 +257,8 @@ module MhOpsworksRecipes
       node.fetch(
         :publish_1x_conf, {
           enabled: false,
-          engage_url: ''
+          engage_url: '',
+          admin_url: 'dummyValue'
         }
       )
     end
