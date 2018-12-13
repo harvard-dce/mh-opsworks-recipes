@@ -53,14 +53,14 @@ failed() {
 
 start() {
 
-   # If you don't want to boot matterhorn automatically after instance boot, set
-   # "dont_start_matterhorn_automatically" to "true" in your stack's custom_json.
-   # *THIS WILL KEEP YOU FROM BOOTING MATTERHORN ENTIRELY UNTIL YOU UNSET THE VARIABLE
+   # If you don't want to boot opencast automatically after instance boot, set
+   # "dont_start_opencast_automatically" to "true" in your stack's custom_json.
+   # *THIS WILL KEEP YOU FROM BOOTING OPENCAST ENTIRELY UNTIL YOU UNSET THE VARIABLE
    # AND UPDATE YOUR CHEF RECIPES TO UPDATE YOUR JSON METADATA*. Use with caution.
    #
-   if [ $(/usr/sbin/opsworks-agent-cli get_json | /usr/bin/jq '.dont_start_matterhorn_automatically' | grep 'true') ];
+   if [ $(/usr/sbin/opsworks-agent-cli get_json | /usr/bin/jq '.dont_start_opencast_automatically' | grep 'true') ];
    then
-     echo "Not starting because dont_start_matterhorn_automatically is set in the stack's custom_json"
+     echo "Not starting because dont_start_opencast_automatically is set in the stack's custom_json"
      exit 0;
    fi
 
