@@ -1012,14 +1012,15 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_ingest_1x_config(current_deploy_root, s3_file_archive_bucket_name, admin_1x_url)
+    def install_ingest_1x_config(current_deploy_root, s3_file_archive_bucket_name, admin_1x_url, publish_1x_enabled)
       template %Q|#{current_deploy_root}/etc/edu.harvard.dce.migration.workflowoperation.Ingest1XWorkflowOperationHandler.cfg| do
         source 'edu.harvard.dce.migration.workflowoperation.Ingest1XWorkflowOperationHandler.cfg.erb'
         owner 'opencast'
         group 'opencast'
         variables({
           archive_bucket_name: s3_file_archive_bucket_name,
-          admin_1x_url: admin_1x_url 
+          admin_1x_url: admin_1x_url,
+          publish_1x_enabled: publish_1x_enabled
         })
       end
     end
