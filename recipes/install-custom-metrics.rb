@@ -6,6 +6,7 @@ include_recipe "oc-opsworks-recipes::create-metrics-dependencies"
 
 aws_instance_id = node[:opsworks][:instance][:aws_instance_id]
 stack_id = node[:opsworks][:stack][:id]
+rest_auth_info = get_rest_auth_info
 
 cookbook_file "disk_free_metric.sh" do
   path "/usr/local/bin/disk_free_metric.sh"
@@ -58,6 +59,13 @@ end
 
 cookbook_file "num_online_workers.sh" do
   path "/usr/local/bin/num_online_workers.sh"
+  owner "root"
+  group "root"
+  mode "755"
+end
+
+cookbook_file "ownload_metric.sh" do
+  path "/usr/local/bin/ownload_metric.sh"
   owner "root"
   group "root"
   mode "755"
@@ -131,6 +139,14 @@ if mh_node?
     command %Q(/usr/local/bin/jvm_metrics.sh "#{aws_instance_id}" karaf 2>&1 | logger -t info)
     path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   end
+
+  cron_d 'ownload_metrics' do
+    user 'root'
+    minute '*/2'
+    command %Q(/usr/local/bin/ownload_metric.sh "#{aws_instance_id}" "#{rest_auth_info[:user]}" "#{rest_auth_info[:pass]}" 2>&1 | logger -t info)
+    path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  end
+
 end
 
 if admin_node?
