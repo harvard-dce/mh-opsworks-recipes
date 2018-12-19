@@ -9,6 +9,7 @@
 * MI-117: recipe for installing the linux-aws kernel package
 * MI-133: remove recipe for building enhanced networking kernel module
 * updating some references to the "dont_start_matterhorn_automatically" flag
+* MI-138: generate a cloudwatch metric based on Opencast's job load
 
 ## v1.34.1 - 11/02/2018
 
