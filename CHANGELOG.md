@@ -10,6 +10,7 @@
 * MI-133: remove recipe for building enhanced networking kernel module
 * updating some references to the "dont_start_matterhorn_automatically" flag
 * MI-138: generate a cloudwatch metric based on Opencast's job load
+* MI-140: cluster reset scripts now use correct solr indices path
 
 ## v1.34.1 - 11/02/2018
 

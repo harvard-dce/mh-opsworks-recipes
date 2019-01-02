@@ -22,7 +22,7 @@ done
 
 if ! $do_it; then
   echo
-  echo "Usage: remove-solr-indexes.sh -x -p <full path to indexes>"
+  echo "Usage: remove-indexes.sh -x -p <full path to indexes>"
   echo
   echo " -x	Actually remove the indexes"
   echo " -p	the full path to the root directory of the indexes, probably the local workspace"
@@ -35,4 +35,8 @@ if [ -z "$index_path" ]; then
   exit 1
 fi
 
-/bin/rm -Rf $index_path/*index/
+# elasticsearch indexes
+/bin/rm -Rf $index_path/index/data
+
+# solr indexes
+/bin/rm -Rf $index_path/solr-indexes/*
