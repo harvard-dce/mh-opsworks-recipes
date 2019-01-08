@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 Outputs the number of Opencast jobs with 'QUEUED' status. See --help for options.
@@ -35,7 +35,7 @@ def main(args):
             if x.status == 'QUEUED'
         ])
 
-    print len(queued_jobs)
+    print(len(queued_jobs))
 
 if __name__ == '__main__':
 

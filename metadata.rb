@@ -674,16 +674,12 @@ recipe(
 )
 recipe(
   'oc-opsworks-recipes::install-job-queued-metrics',
-  'Install a opencast jobs queued metric. Part of the experimental horizontal scaling feature
-
-This uses pyhorn and some logic to count the number of queued jobs, and then
-spins up workers when we see jobs starting to stack up.
-
-=== Attributes
-* <tt>node[:scale_up_when_queued_jobs_gt]</tt> Start another worker when there is more than this number of jobs waiting to be processed
-
-=== Effects
-* Installs a metric and alarm to hook into the opsworks custom scaling functionality
+  'This is stub that includes the install-job-load-metrics recipe. It was left in for backwards compatibility.
+'
+)
+recipe(
+    'oc-opsworks-recipes::install-job-load-metrics',
+    'Installs shell and python scripts for generating several metrics useful for horizontal scaling.
 '
 )
 recipe(

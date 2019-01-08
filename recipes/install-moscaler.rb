@@ -4,12 +4,19 @@
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 include_recipe "oc-opsworks-recipes::update-package-repo"
 
-install_package('python-pip python-virtualenv run-one git python-dev libffi-dev libssl-dev')
+install_package('python3-pip run-one git python3-dev libffi-dev libssl-dev')
+
+bash 'install virtualenv for python3' do
+  code '/usr/bin/pip3 install virtualenv'
+  user 'root'
+end
 
 moscaler_attributes = get_moscaler_info
 Chef::Log.info moscaler_attributes
 
 moscaler_release = moscaler_attributes['moscaler_release']
+moscaler_home = "/home/moscaler"
+moscaler_dir = "#{moscaler_home}/mo-scaler"
 
 rest_auth_info = get_rest_auth_info
 stack_name = node[:opsworks][:stack][:name]
@@ -26,28 +33,29 @@ user "moscaler" do
   comment 'The moscaler user'
   system true
   manage_home true
-  home '/home/moscaler'
+  home moscaler_home
   shell '/bin/false'
 end
 
 git "get the moscaler software" do
   repository "https://github.com/harvard-dce/mo-scaler.git"
   revision moscaler_release
-  destination '/home/moscaler/mo-scaler'
+  destination moscaler_dir
   user 'moscaler'
 end
 
 bash 'create virtualenv' do
   code %Q|
-cd /home/moscaler/mo-scaler &&
-/usr/bin/virtualenv venv
+cd #{moscaler_dir} &&
+rm -rf venv &&
+/usr/bin/python3 -m virtualenv --clear venv
   |
-  not_if { ::Dir.exist?("/home/moscaler/mo-scaler/venv") }
+  not_if "test -d #{moscaler_dir}/venv && test -e #{moscaler_dir}/venv/bin/python3"
 end
 
-bash 'upgrade pip and install dependencies' do
+bash 'upgrade the venvs pip and install dependencies' do
   code %Q|
-cd /home/moscaler/mo-scaler &&
+cd #{moscaler_dir} &&
 venv/bin/pip install -U pip &&
 venv/bin/pip install -r requirements.txt &&
 chown -R moscaler venv
@@ -60,7 +68,8 @@ execute "Clean out existing cron jobs" do
   action :run  
 end
 
-file '/home/moscaler/mo-scaler/autoscale.json' do
+file 'autoscale config' do
+  path "#{moscaler_dir}/autoscale.json"
   owner 'moscaler'
   group 'moscaler'
   content Chef::JSONCompat.to_json_pretty({
@@ -71,7 +80,8 @@ file '/home/moscaler/mo-scaler/autoscale.json' do
   })
 end
 
-file '/home/moscaler/mo-scaler/.env' do
+file "moscaler dotenv" do
+  path "#{moscaler_dir}/.env"
   owner 'moscaler'
   group 'moscaler'
   content %Q|
@@ -82,7 +92,7 @@ AWS_DEFAULT_REGION="#{region}"
 
 MOSCALER_MIN_WORKERS=#{moscaler_attributes['min_workers']}
 MOSCALER_IDLE_UPTIME_THRESHOLD=#{moscaler_attributes['idle_uptime_threshold']}
-AUTOSCALE_CONFIG="/home/moscaler/mo-scaler/autoscale.json"
+AUTOSCALE_CONFIG="#{moscaler_dir}/autoscale.json"
 #{loggly_config}
 |
   mode '600'
