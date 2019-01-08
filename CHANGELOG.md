@@ -13,6 +13,7 @@
 * MI-138: generate a cloudwatch metric based on Opencast's job load
 * MI-140: cluster reset scripts now use correct solr indices path
 * MI-143: fix for MYSQLServerAvailable metric generator
+* MI-141: new workflow and job_load metrics
 
 ## v1.34.1 - 11/02/2018
 
