@@ -4,7 +4,8 @@ phases:
   install:
     commands:
       - echo Entered the install phase...
-      - gem install berkshelf -v 5.1.0
+      - gem install mixlib-log -v '~> 2'
+      - gem install berkshelf -v '~> 5.1'
   build:
     commands:
       - echo Entered the build phase...
