@@ -220,6 +220,10 @@ module MhOpsworksRecipes
       admin_attributes[:ip]
     end
 
+    def get_engage_admin_allowed_hosts
+      node[:vpn_ips] || []
+    end
+
     def get_cloudfront_url
       node[:cloudfront_url]
     end

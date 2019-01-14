@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* OPC-226: restrict engage admin access to whitelisted hosts
+
 ## v2.0.0 - 01/11/2019
 
 * MI-97: update mysql alarms for rds aurora cluster

@@ -45,6 +45,12 @@ server {
     access_log /var/log/nginx/access.log request_time;
   }
 
+  location /admin-ng {
+    include /etc/nginx/conf.d/admin_allow.conf;
+    deny all;
+    proxy_pass http://127.0.0.1:<%= @opencast_backend_http_port %>/admin-ng;
+  }
+
   location / {
     proxy_pass http://127.0.0.1:<%= @opencast_backend_http_port %>;
   }
@@ -100,6 +106,12 @@ server {
     proxy_pass http://127.0.0.1:<%= @opencast_backend_http_port %>/usertracking;
     access_log /var/log/nginx/session_uid.log session_uid;
     access_log /var/log/nginx/access.log request_time;
+  }
+
+  location /admin-ng {
+    include /etc/nginx/conf.d/admin_allow.conf;
+    deny all;
+    proxy_pass http://127.0.0.1:<%= @opencast_backend_http_port %>/admin-ng;
   }
 
   location / {

@@ -10,6 +10,7 @@ install_nginx_logrotate_customizations
 shared_storage_root = get_shared_storage_root
 
 public_engage_hostname = get_public_engage_hostname
+engage_whitelist = get_engage_admin_allowed_hosts
 
 ssl_info = node.fetch(:ssl, get_dummy_cert)
 if cert_defined(ssl_info)
@@ -18,6 +19,13 @@ if cert_defined(ssl_info)
 end
 
 worker_procs = get_nginx_worker_procs
+
+file 'access whitelist' do
+  path %Q|/etc/nginx/conf.d/admin_allow.conf|
+  action :create
+  owner 'root'
+  content engage_whitelist.map{|ip| "allow #{ip};"}.join("\n") + "\n"
+end
 
 template 'nginx' do
   path %Q|/etc/nginx/nginx.conf|
