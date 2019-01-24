@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* MI-152: make instances failed and rds alarm names less misleading
+
 ## v2.1.0 - 01/25/2019
 
 * OPC-226: restrict engage admin access to whitelisted hosts
