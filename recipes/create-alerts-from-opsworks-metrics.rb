@@ -67,7 +67,7 @@ ruby_block "add alarms" do
     end
 
     if monitoring_node?
-      command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{alarm_name_prefix}_instances_failed" --alarm-description "Instances failed to start correctly" --metric-name InstancesStartedOK --namespace AWS/OpsworksCustom --statistic Minimum --period 60 --threshold 1 --comparison-operator LessThanThreshold --dimensions Name=StackId,Value=#{stack_id} --evaluation-periods 1 --alarm-actions "#{topic_arn}")
+      command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{topic_name}_instances_failed" --alarm-description "Instances failed to start correctly" --metric-name InstancesStartedOK --namespace AWS/OpsworksCustom --statistic Minimum --period 60 --threshold 1 --comparison-operator LessThanThreshold --dimensions Name=StackId,Value=#{stack_id} --evaluation-periods 1 --alarm-actions "#{topic_arn}")
       Chef::Log.info command
       execute_command(command)
     end
