@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## v2.1.0 - 01/25/2019
+
 * OPC-226: restrict engage admin access to whitelisted hosts
 
 ## v2.0.0 - 01/11/2019
