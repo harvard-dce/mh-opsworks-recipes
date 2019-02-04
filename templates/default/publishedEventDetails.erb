@@ -2,13 +2,13 @@ Event Details
 
 <#if catalogs['series']?has_content>
 Course: ${catalogs['series']['subject']!'offering missing'} - ${catalogs['series']['title']!' '}
-Instructor: ${catalogs['series']['contributor']!'instructor missing'}
+Instructor: ${catalogs['series']['creator']!'instructor missing'}
 </#if>
 
 Title: ${catalogs['episode']['title']!'title missing'}
 Publication: ${catalogs['episode']['type']!'typeNumber missing'}
 Event Date: ${mediaPackage.date?datetime?iso_local}
-Producer: ${catalogs['episode']['contributor']!'producer missing'}
+Producer: ${catalogs['episode']['publisher']!'producer missing'}
 
 <#if catalogs['series']?has_content>
 <#if (catalogs['series']['identifier'])?matches("[0-9]{11}")>

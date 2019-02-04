@@ -3,6 +3,7 @@
 ## TO BE RELEASED
 
 * MI-152: make instances failed and rds alarm names less misleading
+* OPC-259 publisher and instructor name missing in email message body
 
 ## v2.1.0 - 01/25/2019
 
