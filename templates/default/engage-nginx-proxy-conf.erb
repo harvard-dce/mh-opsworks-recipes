@@ -4,6 +4,15 @@ userid_expires max;
 
 log_format session_uid '$cookie_JSESSIONID $uid_got';
 
+# increase size of default proxy buffers so that proxied content
+# doesn't get written to temp files
+proxy_buffers 16 16k;
+
+# if the client closes the request connection (happens a lot)
+# don't abort the upstream request as it will sometimes make
+# Opencast throw jetty EofExceptions
+proxy_ignore_client_abort on;
+
 server {
   listen 80 default_server;
   listen [::]:80 default_server ipv6only=on;
@@ -21,12 +30,9 @@ server {
   # Make site accessible from http://localhost/
   server_name localhost;
 
-  proxy_read_timeout 30m;
-  proxy_send_timeout 30m;
   proxy_set_header Host $host;
   proxy_set_header X-Real-IP $remote_addr;
   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-  proxy_buffering off;
 
   client_max_body_size 102400m;
   gzip on;
@@ -77,12 +83,9 @@ server {
   # Make site accessible from http://localhost/
   server_name localhost;
 
-  proxy_read_timeout 30m;
-  proxy_send_timeout 30m;
   proxy_set_header Host $host;
   proxy_set_header X-Real-IP $remote_addr;
   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-  proxy_buffering off;
 
   # Ask opencast to redirect to HTTPS
   proxy_set_header X-Forwarded-SSL on;

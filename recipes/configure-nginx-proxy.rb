@@ -31,6 +31,13 @@ template 'proxy' do
   notifies :restart, 'service[nginx]', :immediately
 end
 
+cookbook_file 'nginx-status.conf' do
+  path %Q|/etc/nginx/conf.d/status.conf|
+  owner "root"
+  group "root"
+  mode "644"
+end
+
 service 'nginx' do
   supports :restart => true, :start => true, :stop => true, :reload => true
   action [:enable, :start]
