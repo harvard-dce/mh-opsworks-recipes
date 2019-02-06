@@ -59,7 +59,8 @@ edu.harvard.dce.otherpubs.coursedata.coursedetail.path.template=/EpisodeDefaults
 edu.harvard.dce.otherpubs.coursedata.coursepeople.path.template=/EpisodeDefaults.json
 
 # MATT-1893 Get episode defaults from a local json file
-edu.harvard.dce.otherpubs.coursedata.dir=<%= @opencast_repo_root %>/current/etc/default_data
+# OPC-291 allow currentterm to be auto-generated
+# edu.harvard.dce.otherpubs.coursedata.dir=<%= @opencast_repo_root %>/current/etc/default_data
 
 # MATT-2215 Add log threshold for connection/read timeout in seconds
 # default is 3 minutes for connection time, and 0 for logging connection duration
