@@ -237,9 +237,10 @@ module MhOpsworksRecipes
       )
     end
 
-    def get_ibm_watson_user_info
+    def get_ibm_watson_credentials
       node.fetch(
         :ibm_watson_service_auth, {
+          api_key: '',
           user: 'admin',
           pass: 'password'
         }
@@ -1023,14 +1024,15 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_ibm_watson_transcription_service_config(current_deploy_root, ibm_watson_username, ibm_watson_psw)
+    def install_ibm_watson_transcription_service_config(current_deploy_root, ibm_watson_api_key, ibm_watson_username, ibm_watson_psw)
       template %Q|#{current_deploy_root}/etc/org.opencastproject.transcription.ibmwatson.IBMWatsonTranscriptionService.cfg| do
         source 'org.opencastproject.transcription.ibmwatson.IBMWatsonTranscriptionService.cfg.erb'
         owner 'opencast'
         group 'opencast'
         variables({
+          ibm_watson_api_key: ibm_watson_api_key,
           ibm_watson_username: ibm_watson_username,
-          ibm_watson_psw: ibm_watson_psw  
+          ibm_watson_psw: ibm_watson_psw
         })
       end
     end

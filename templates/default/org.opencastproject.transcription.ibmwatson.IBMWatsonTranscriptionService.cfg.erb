@@ -1,15 +1,26 @@
 # Change enabled to true to enable this service. 
 enabled=true
 
-# User obtained when registering with the IBM Watson Speech-to_text service 
+# IBM Watson Speech-to-Text service url
+# Default: https://stream.watsonplatform.net/speech-to-text/api
+# ibm.watson.service.url=https://stream.watsonplatform.net/speech-to-text/api
+
+# APi key obtained when registering with the IBM Watson Speech-to_text service.
+# If empty, user and password below will be used.
+ibm.watson.api.key=<%= @ibm_watson_api_key %>
+
+# User obtained when registering with the IBM Watson Speech-to_text service.
+# Mandatory if ibm.watson.api.key not entered.
 ibm.watson.user=<%= @ibm_watson_username %>
 
-# Password obtained when registering with the IBM Watson Speech-to_text service 
+# Password obtained when registering with the IBM Watson Speech-to_text service
+# Mandatory if ibm.watson.api.key not entered.
 ibm.watson.password=<%= @ibm_watson_psw %>
 
 # Language model to be used. See the IBM Watson Speech-to-Text service documentation
-# for available models. If empty, the default will be used ("en-US_BroadbandModel").
-#ibm.watson.model=
+# for available models. 
+# Default: en-US_BroadbandModel
+#ibm.watson.model=en-US_BroadbandModel
 
 # Workflow to be executed when results are ready to be attached to media package.
 workflow=dce-int-attach-watson-transcription
@@ -17,7 +28,7 @@ workflow=dce-int-attach-watson-transcription
 # Interval the workflow dispatcher runs to start workflows to attach transcripts to the media package
 # after the transcription job is completed.
 # (in seconds) Default is 1 minute.
-#workflow.dispatch.interval=60
+workflow.dispatch.interval=120
  
 # How long it should wait to check jobs after their start date + track duration has passed.
 # The default is 10 minutes. This is only used if we didn't get a callback from the
@@ -28,7 +39,7 @@ workflow=dce-int-attach-watson-transcription
 # How long to wait after a transcription is supposed to finish before marking the job as 
 # canceled in the database. Default is 2 hours.
 # (in seconds)
-#max.processing.time=7200
+max.processing.time=1800
 
 # How long to keep result files in the working file repository in days.
 # The default is 7 days.
@@ -37,3 +48,16 @@ workflow=dce-int-attach-watson-transcription
 # Email to send notifications of errors. If not informed, the value from
 # org.opencastproject.admin.email in custom.properties will be used.
 #notification.email=
+
+# Start transcription job load
+# Default: 0.1
+#job.load.start.transcription=0.1
+
+# Number of max attempts. If max attempts > 1 and the service returned an error after the recognitions job was
+# accepted or the job did not return any results, the transcription is re-submitted. Default is to not retry.
+# Default: 1
+max.attempts=3
+
+# If max.attempts > 1, name of workflow to use for retries.
+retry.workflow=dce-int-retry-watson-transcription
+
