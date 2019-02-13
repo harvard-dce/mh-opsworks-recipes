@@ -2,9 +2,14 @@
 
 ## TO BE RELEASED
 
+## v2.3.0 - 02/13/2019
+
+* MI-153: re-enable proxy buffering of upstream responses; ignore client abort
+
+## v2.2.0 
+
 * MI-152: make instances failed and rds alarm names less misleading
 * OPC-259 publisher and instructor name missing in email message body
-* MI-153: re-enable proxy buffering of upstream responses; ignore client abort
 
 ## v2.1.0 - 01/25/2019
 
