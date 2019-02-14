@@ -157,3 +157,7 @@ if admin_node?
     path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   end
 end
+
+if admin_node?
+  include_recipe("oc-opsworks-recipes::install-opencast-job-metrics")
+end
