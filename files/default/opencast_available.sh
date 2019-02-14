@@ -7,7 +7,10 @@ opencast_port="$2"
 metric_name="OpencastAvailable"
 test_string="j_username"
 value=0
-if $(/usr/bin/curl -s -L http://localhost/ | grep -q "$test_string"); then
+
+# http will get redirected to https here so use -k to ignore issues
+# related to the ssl certificate not being valid for "localhost"
+if $(/usr/bin/curl -k -s -L http://localhost/ | grep -q "$test_string"); then
   value=1
 fi
 

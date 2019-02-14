@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* MI-156: Update engage nginx to allow requests from localhost for OpencastAvailable metric
+
 ## v2.3.0 - 02/13/2019
 
 * MI-153: re-enable proxy buffering of upstream responses; ignore client abort

@@ -221,7 +221,7 @@ module MhOpsworksRecipes
     end
 
     def get_engage_admin_allowed_hosts
-      node[:vpn_ips] || []
+      node.fetch(:vpn_ips, []) + ["127.0.0.1/32"]
     end
 
     def get_cloudfront_url
