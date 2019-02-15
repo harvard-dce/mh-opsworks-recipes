@@ -26,11 +26,29 @@ server {
 
   client_max_body_size 102400m;
 
+  # don't write proxied responses > 1m to temp files, just serve synchronously
+  # explanation: if a response is too big to fit in the proxy memory buffers
+  # nginx will buffer to a temp file. This is totally fine for small files
+  # but the temp file is on the root partition and we wouldn't want to
+  # risk having that fill up. it is also possible to set the temp file path
+  # to another directory, but the logical path would be somewhere on the
+  # NFS share and then you run into race-condition issues between when nginx
+  # is first started up vs. when the NFS share gets mounted.
+  proxy_max_temp_file_size 1m;
+
   gzip on;
 
   location / {
     proxy_request_buffering off;
     proxy_pass http://127.0.0.1:<%= @opencast_backend_http_port %>;
+  }
+
+  # responses from the /assets endpoint are likely big media files, so
+  # don't try to buffer them
+  location /assets {
+    proxy_buffering off;
+    proxy_request_buffering off;
+    proxy_pass http://127.0.0.1:<%= @opencast_backend_http_port %>/assets;
   }
 
   access_log /var/log/nginx/access.log request_time;
