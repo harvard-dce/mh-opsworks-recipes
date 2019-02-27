@@ -2,8 +2,11 @@
 
 ## TO BE RELEASED
 
+## v2.4.0 - 02/27/2019
+
 * MI-156: Update engage nginx to allow requests from localhost for OpencastAvailable metric
 * MI-157: Re-disable proxy buffering for the admin node's `/assets` path
+* OPC-247: ibm watson creditials changes
 
 ## v2.3.0 - 02/13/2019
 
