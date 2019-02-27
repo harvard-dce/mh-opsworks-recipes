@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* MI-159: fix `/etc/filename` hostname value
+
 ## v2.4.0 - 02/27/2019
 
 * MI-156: Update engage nginx to allow requests from localhost for OpencastAvailable metric

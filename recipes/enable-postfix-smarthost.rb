@@ -30,6 +30,13 @@ template %Q|/etc/postfix/sasl_passwd| do
   })
 end
 
+file '/etc/mailname' do
+  mode '600'
+  owner 'root'
+  group 'root'
+  content "#{hostname}.localdomain\n"
+end
+
 execute 'postmap the sasl_passwd file' do
   command %Q|postmap hash:/etc/postfix/sasl_passwd|
   retries 5
