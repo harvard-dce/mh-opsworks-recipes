@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## v2.4.1 - 03/06/2019
+
 * MI-159: fix `/etc/filename` hostname value
 
 ## v2.4.0 - 02/27/2019
