@@ -9,6 +9,8 @@ elk_info = get_elk_info
 
 harvester_release = elk_info['harvester_release']
 harvester_repo = elk_info['harvester_repo']
+harvester_home = "/home/ua_harvester"
+harvester_dir = "#{harvester_home}/harvester"
 stack_name = stack_shortname
 sqs_queue_name = "#{stack_name}-user-actions"
 region = node[:opsworks][:instance][:region]
@@ -19,21 +21,28 @@ user "ua_harvester" do
   comment 'The ua_harvester user'
   system true
   manage_home true
-  home '/home/ua_harvester'
+  home harvester_home
   shell '/bin/false'
 end
 
 git "get the ua harvester" do
   repository harvester_repo
   revision harvester_release
-  destination '/home/ua_harvester/harvester'
+  destination harvester_dir
   user 'ua_harvester'
+end
+
+bash 'create virtualenv' do
+  code %Q|
+cd #{harvester_dir} &&
+/usr/bin/virtualenv venv
+  |
+  not_if "test -d #{harvester_dir}/venv"
 end
 
 bash 'install dependencies' do
   code %Q|
-cd /home/ua_harvester/harvester &&
-/usr/bin/virtualenv venv &&
+cd #{harvester_dir} &&
 venv/bin/pip install -r requirements.txt &&
 chown -R ua_harvester venv
   |
