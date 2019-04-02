@@ -2,6 +2,10 @@
 
 ## TO BE RELEASED
 
+## v2.4.2 - 04/02/2019 (hotfix)
+
+* increase execution timeout for the `awslogs-agent-setup.py` script to 300s
+
 ## v2.4.1 - 03/06/2019
 
 * MI-159: fix `/etc/filename` hostname value

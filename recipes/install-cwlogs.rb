@@ -34,7 +34,7 @@ execute 'Install CloudWatch Logs agent' do
   command %Q|/opt/aws/cloudwatch/awslogs-agent-setup.py -n -r #{region} -c /tmp/cwlogs.conf|
   retries 2
   retry_delay 15
-  timeout 30
+  timeout 300
 end
 
 execute 'delete existing stream configs' do
