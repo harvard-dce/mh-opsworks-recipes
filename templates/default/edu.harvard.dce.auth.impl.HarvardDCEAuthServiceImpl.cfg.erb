@@ -10,3 +10,10 @@ dce.auth.key=<%= @auth_key %>
 # MATT-2215 Add log threshold for connection/read timeout in seconds
 dce.auth.connectiontimelogthreshold=0
 
+# OPC-334
+# Ldap/authdaemon will only be accessed when coming via Canvas and no acid cookie set.
+dce.auth.ldap.url=<%= @ldap_url %>
+dce.auth.ldap.userDn=<%= @ldap_userdn %>
+dce.auth.ldap.password=<%= @ldap_psw %>
+dce.auth.authdaemon.port=57329
+

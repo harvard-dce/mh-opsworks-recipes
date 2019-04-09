@@ -141,7 +141,7 @@ deploy_revision "opencast" do
     install_smtp_config(most_recent_deploy)
     install_default_tenant_config(most_recent_deploy, public_hostname, private_hostname)
     install_auth_service(
-      most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated
+      most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated, ldap_url, ldap_userdn, ldap_psw 
     )
     install_live_streaming_service_config(most_recent_deploy, live_stream_name, live_streaming_url, distribution)
     if ldap_enabled

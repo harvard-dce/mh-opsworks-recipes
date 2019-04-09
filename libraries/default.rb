@@ -1089,7 +1089,7 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_auth_service(current_deploy_root, auth_host, redirect_location, auth_key, auth_activated = 'true')
+    def install_auth_service(current_deploy_root, auth_host, redirect_location, auth_key, auth_activated = 'true', ldap_url, ldap_userdn, ldap_psw)
       template %Q|#{current_deploy_root}/etc/edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.cfg| do
         source 'edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.cfg.erb'
         owner 'opencast'
@@ -1098,7 +1098,10 @@ module MhOpsworksRecipes
           auth_host: auth_host,
           redirect_location: redirect_location,
           auth_activated: auth_activated,
-          auth_key: auth_key
+          auth_key: auth_key,
+          ldap_url: ldap_url,
+          ldap_userdn: ldap_userdn,
+          ldap_psw: ldap_psw
         })
       end
     end
