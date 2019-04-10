@@ -250,6 +250,22 @@ org.opencastproject.file.repo.url=<%= @admin_url %>
 # Default: 1
 #org.opencastproject.inbox.threads=1
 
+# #DCE OPC-327 Flag for enabling or disabling the start/stop now option.
+# A value of "true" enables the option, "false" disables the option.
+# Default is true
+#org.opencast.scheduling.startstop.enabled=true
+
+# #DCE OPC-327 The buffer for making a scheduled capture eligible for "start now", in minutes.
+# The number of minutes before event start when the event can be checked for
+# conflicts and the "start now" option enbled. The "stop now" is enabled as soon as event starts.
+# Default is 120 minutes (2 hours)
+# org.opencast.scheduling.startstop.buffer=120
+
+# #DCE OPC-327 Theme of the event listings start-capture-now/stop-capture-now icon pair.
+# Options: "flag" or "button" or "heat" (see documentation for images of available icon pairs)
+# Default is button (red circle for start capture now, black square for stop capture now)
+#org.opencast.scheduling.startstop.actionicontheme=button
+
 ######### Third-party Binaries #########
 
 # Path to the ffmpeg binary. Its name is sufficient if the binary is in the
