@@ -2,7 +2,9 @@
 
 ## TO BE RELEASED
 
-OPC-314: editor shortcut display config
+## v2.5.0 - 04/18/2019
+
+* OPC-314: editor shortcut display config
 * MI-160: analytics harvester install, don't create virtualenv if it exists
 
 ## v2.4.2 - 04/02/2019 (hotfix)
