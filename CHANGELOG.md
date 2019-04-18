@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* OPC-340: producer permission for DCE stop-start scheduler endpoints
+
 ## v2.5.0 - 04/18/2019
 
 * OPC-314: editor shortcut display config
