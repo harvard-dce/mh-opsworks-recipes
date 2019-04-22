@@ -4,6 +4,7 @@
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
 include_recipe "oc-opsworks-recipes::update-package-repo"
+include_recipe "oc-opsworks-recipes::enable-ubuntu-advantage-esm"
 
 packages = %Q|autofs5 curl dkms gzip jq libglib2.0-dev mysql-client postfix python-pip python-dev rsyslog-gnutls run-one tesseract-ocr|
 install_package(packages)

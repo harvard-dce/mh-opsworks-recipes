@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* MI-162: new recipe to enable ubuntu advantage esm
+
 ## v2.6.0 - 04/23/2019
 
 * OPC-340: producer permission for DCE stop-start scheduler endpoints

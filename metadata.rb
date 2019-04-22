@@ -1046,6 +1046,18 @@ none
 * will install and enable the aws-tuned v4 linux kernel
 '
 )
+recipe(
+    'oc-opsworks-recipes::enable-ubuntu-advantage-esm',
+    'Runs the `ubuntu-advantage enable-esm` command.
+
+=== attributes
+none
+
+=== effects
+* Will execute the enable-esm command with the user/pass combo
+  configured in the cluster config "ubuntu_advantage_esm"
+'
+)
 depends 'nfs', '~> 2.1.0'
 depends 'apt', '~> 2.9.2'
 depends 'cron', '~> 1.6.1'
