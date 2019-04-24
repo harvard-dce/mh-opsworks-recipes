@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* MI-163 ruby 2.0 no longer good for berkshelf 5.1?
+
 ## v2.6.0 - 04/23/2019
 
 * OPC-340: producer permission for DCE stop-start scheduler endpoints
