@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## v2.7.0 - 04/26/2019
+
 * MI-162: new recipe to enable ubuntu advantage esm
 
 ## v2.6.0 - 04/23/2019
