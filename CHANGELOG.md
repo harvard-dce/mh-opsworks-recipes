@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* MI-164: set nginx logrotate to only keep 30 
+
 ## v2.8 - 7/05/2019 
 
 * OPC-363 bug report feature
