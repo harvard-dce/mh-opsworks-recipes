@@ -15,9 +15,6 @@ stack_name = stack_shortname
 public_hostname = node[:opsworks][:instance][:public_dns_name]
 private_hostname = node[:opsworks][:instance][:private_dns_name]
 
-capture_agent_query_url = node.fetch(
-  :capture_agent_query_url, 'http://example.com'
-)
 
 ## all-in-one specific
 user_tracking_authhost = node.fetch(
@@ -152,6 +149,9 @@ deploy_revision "opencast" do
     install_ingest_1x_config(most_recent_deploy, s3_file_archive_bucket_name, admin_1x_url)
     install_ibm_watson_transcription_service_config(most_recent_deploy, ibm_watson_api_key, ibm_watson_username, ibm_watson_psw)
     install_published_event_details_email(most_recent_deploy, public_hostname)
+    # f/OPC-344-notify-ca
+    # External Capture Agent Sync service
+    install_capture_agent_sync_config(most_recent_deploy)
 #
 #    # all-in-one SPECIFIC
     initialize_database(most_recent_deploy)

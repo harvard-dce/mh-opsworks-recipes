@@ -12,10 +12,6 @@ rest_auth_info = get_rest_auth_info
 admin_user_info = get_admin_user_info
 stack_name = stack_shortname
 
-capture_agent_query_url = node.fetch(
-  :capture_agent_query_url, 'http://example.com'
-)
-
 using_local_distribution = is_using_local_distribution?
 
 # S3 file archive service
@@ -148,6 +144,9 @@ deploy_revision "opencast" do
     if using_local_distribution
       update_workflows_for_local_distribution(most_recent_deploy)
     end
+    # f/OPC-344-notify-ca
+    # External Capture Agent Sync service
+    install_capture_agent_sync_config(most_recent_deploy)
 
     # ADMIN SPECIFIC
     initialize_database(most_recent_deploy)
@@ -163,7 +162,6 @@ deploy_revision "opencast" do
         local_workspace_root: local_workspace_root,
         shared_storage_root: shared_storage_root,
         admin_url: "http://#{public_admin_hostname}",
-        capture_agent_query_url: capture_agent_query_url,
         rest_auth: rest_auth_info,
         admin_auth: admin_user_info,
         database: database_connection,
