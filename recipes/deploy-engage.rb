@@ -16,10 +16,6 @@ public_engage_hostname = get_public_engage_hostname_on_engage
 private_hostname = node[:opsworks][:instance][:private_dns_name]
 private_admin_hostname = get_private_admin_hostname
 
-capture_agent_query_url = node.fetch(
-  :capture_agent_query_url, 'http://example.com'
-)
-
 capture_agent_monitor_url = node.fetch(
   :capture_agent_monitor_url, 'http://example.com/monitor_url'
 )

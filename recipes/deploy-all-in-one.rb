@@ -175,7 +175,6 @@ deploy_revision "opencast" do
         local_workspace_root: local_workspace_root,
         shared_storage_root: shared_storage_root,
         admin_url: "http://#{public_hostname}",
-        capture_agent_query_url: capture_agent_query_url,
         rest_auth: rest_auth_info,
         admin_auth: admin_user_info,
         database: database_connection,
