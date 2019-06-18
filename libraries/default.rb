@@ -644,6 +644,17 @@ module MhOpsworksRecipes
       end
     end
 
+    def install_bug_report_email(current_deploy_root, engage_hostname)
+      template %Q|#{current_deploy_root}/etc/email/bugReport| do
+        source 'bugReport.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          engage_hostname: engage_hostname
+        })
+      end
+    end
+
     def configure_usertracking(current_deploy_root, user_tracking_authhost)
       template %Q|#{current_deploy_root}/etc/services/org.opencastproject.usertracking.impl.UserTrackingServiceImpl.properties| do
         source 'UserTrackingServiceImpl.properties.erb'
@@ -677,7 +688,7 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_otherpubs_service_config(current_deploy_root, opencast_repo_root, auth_host, other_oc_host, other_oc_prefother_series, other_oc_preflocal_series)
+    def install_otherpubs_service_config(current_deploy_root, opencast_repo_root, auth_host, other_oc_host, other_oc_prefother_series, other_oc_preflocal_series, bug_report_email)
       download_episode_defaults_json_file(current_deploy_root)
 
       template %Q|#{current_deploy_root}/etc/edu.harvard.dce.otherpubs.OtherPubsServiceImpl.cfg| do
@@ -689,7 +700,8 @@ module MhOpsworksRecipes
           other_oc_host: other_oc_host,
           other_oc_prefother_series: other_oc_prefother_series,
           other_oc_preflocal_series: other_oc_preflocal_series,
-          opencast_repo_root: opencast_repo_root
+          opencast_repo_root: opencast_repo_root,
+          bug_report_email: bug_report_email
         })
       end
     end

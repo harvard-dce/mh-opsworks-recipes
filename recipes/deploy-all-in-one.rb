@@ -79,6 +79,7 @@ ignore_flag = 'IGNORE_ME'
 other_oc_host = node.fetch(:other_oc_host, ignore_flag)
 other_oc_prefother_series = node.fetch(:other_oc_prefother_series, ignore_flag)
 other_oc_preflocal_series = node.fetch(:other_oc_preflocal_series, ignore_flag)
+bug_report_email = node.fetch(:bug_report_email, "no_email_set")
 
 git_data = node[:deploy][:opencast][:scm]
 
@@ -142,8 +143,9 @@ deploy_revision "opencast" do
       install_ldap_config(most_recent_deploy, ldap_url, ldap_userdn, ldap_psw)
     end
     install_publish_1x_service_config(most_recent_deploy, publish_1x_enabled, publish_1x_engage_url)
-    install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host, other_oc_host, other_oc_prefother_series, other_oc_preflocal_series)
+    install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host, other_oc_host, other_oc_prefother_series, other_oc_preflocal_series, bug_report_email)
     install_otherpubs_service_series_impl_config(most_recent_deploy)
+    install_bug_report_email(most_recent_deploy, public_hostname)
     install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name, s3_file_archive_enabled, s3_file_archive_course_list)
     # OPC-224 (only used during migration)
     install_ingest_1x_config(most_recent_deploy, s3_file_archive_bucket_name, admin_1x_url)

@@ -2,6 +2,11 @@
 
 ## TO BE RELEASED
 
+## v2.8 - 6/20/2019 
+
+* OPC-363 bug report feature
+* OPC-344 Configuration for CA notification (start/stop now)
+
 ## v2.7.1 - 04/26/2019
 
 * Fix for MI-162: ubuntu advantage recipe now included by a recipe that

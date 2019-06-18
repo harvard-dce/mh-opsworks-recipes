@@ -40,6 +40,7 @@ ignore_flag = 'IGNORE_ME'
 other_oc_host = node.fetch(:other_oc_host, ignore_flag)
 other_oc_prefother_series = node.fetch(:other_oc_prefother_series, ignore_flag)
 other_oc_preflocal_series = node.fetch(:other_oc_preflocal_series, ignore_flag)
+bug_report_email = node.fetch(:bug_report_email, "no_email_set")
 
 ## Engage specific
 user_tracking_authhost = node.fetch(
@@ -103,7 +104,7 @@ deploy_revision "opencast" do
     install_opencast_log_management
     install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_engage_hostname)
 #    remove_felix_fileinstall(most_recent_deploy)
-#    install_smtp_config(most_recent_deploy)
+    install_smtp_config(most_recent_deploy)
 
     if ldap_enabled
       install_ldap_config(most_recent_deploy, ldap_url, ldap_userdn, ldap_psw)
@@ -118,8 +119,9 @@ deploy_revision "opencast" do
     # ENGAGE SPECIFIC
     set_service_registry_intervals(most_recent_deploy)
 #    configure_usertracking(most_recent_deploy, user_tracking_authhost)
-    install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host, other_oc_host, other_oc_prefother_series, other_oc_preflocal_series)
+    install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host, other_oc_host, other_oc_prefother_series, other_oc_preflocal_series, bug_report_email)
     install_otherpubs_service_series_impl_config(most_recent_deploy)
+    install_bug_report_email(most_recent_deploy, public_engage_hostname)
     install_aws_s3_distribution_service_config(most_recent_deploy, enable_s3, region, s3_distribution_bucket_name, s3_distribution_base_url)
     # /ENGAGE SPECIFIC
 

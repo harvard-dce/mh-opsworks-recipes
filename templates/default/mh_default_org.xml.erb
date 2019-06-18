@@ -262,7 +262,9 @@
     <!-- #DCE KHD: Alt paths: DCE former paella player, prep theodulpass -->
     <sec:intercept-url pattern="/theodulpass/ui/**" method="GET" access="ROLE_ANONYMOUS" />
     <!-- #DCE KHD: MATT-1569 endpoint for Legacy pub data -->
-    <sec:intercept-url pattern="/otherpubs/**" method="GET" access="ROLE_ANONYMOUS" />    
+    <sec:intercept-url pattern="/otherpubs/**" method="GET" access="ROLE_ANONYMOUS" />
+    <!-- OPC-363 report a problem -->
+    <sec:intercept-url pattern="/otherpubs/problemReport/**" method="POST" access="ROLE_ANONYMOUS" />
     <!-- Default Matterhorn engage player module loads at engage-player -->
     <!--  #DCE -->
 
