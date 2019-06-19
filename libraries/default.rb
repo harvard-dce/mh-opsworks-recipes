@@ -1076,6 +1076,23 @@ module MhOpsworksRecipes
       end
     end
 
+    def install_capture_agent_sync_config(current_deploy_root)
+      capture_agent_sync = node.fetch(:capture_agent_sync, {
+            url: '',
+            threshold: '200'
+      })
+      template %Q|#{current_deploy_root}/etc/org.opencastproject.captureagentsync.CaptureAgentSyncUpdatedEventHandler.cfg| do
+        source 'org.opencastproject.captureagentsync.CaptureAgentSyncUpdatedEventHandler.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          capture_agent_sync_url: capture_agent_sync[:url],
+          capture_agent_sync_threshold: capture_agent_sync[:threshold]
+        })
+      end
+    end
+
+
     def copy_workflows_into_place_for_admin(current_deploy_root)
       execute 'clean original workflow directory' do
         command %Q|rm #{current_deploy_root}/etc/workflows/*|

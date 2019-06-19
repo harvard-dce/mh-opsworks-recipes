@@ -12,10 +12,6 @@ rest_auth_info = get_rest_auth_info
 admin_user_info = get_admin_user_info
 stack_name = stack_shortname
 
-capture_agent_query_url = node.fetch(
-  :capture_agent_query_url, 'http://example.com'
-)
-
 capture_agent_monitor_url = node.fetch(
   :capture_agent_monitor_url, 'http://example.com/monitor_url'
 )
