@@ -2,10 +2,16 @@
 
 ## TO BE RELEASED
 
-## v2.8 - 6/20/2019 
+## v2.8 - 7/05/2019 
 
 * OPC-363 bug report feature
-* OPC-344 Configuration for CA notification (start/stop now)
+* OPC-344 Configuration for CA notification via CATracker (start/stop now)
+      Requires adding this to cluster configs custom_json:
+       "capture_agent_sync": {
+          "url": "https://<low level username>:<low level username's pasword>@catracker.<dev or prod catracker, preferably prod>.edu/tracker/notify/#{name}",
+          "threshold": "180"
+        },
+ 
 
 ## v2.7.1 - 04/26/2019
 
