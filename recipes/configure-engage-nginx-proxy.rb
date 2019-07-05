@@ -59,9 +59,10 @@ service 'nginx' do
   action [:enable, :start]
   subscribes :reload, "template[nginx]", :immediately
   subscribes :reload, "template[proxy]", :immediately
-  # don't do this one immediately as it will trigger a reload when the ssl key
+  # don't do these immediately as it will trigger a reload when the ssl key
   # is first written, which is prior to our config templates being generated
   # on initial node setup run
   subscribes :reload, "file[/etc/nginx/ssl/certificate.key]"
+  subscribes :reload, "file[/etc/nginx/ssl/certificate.cert]"
 end
 

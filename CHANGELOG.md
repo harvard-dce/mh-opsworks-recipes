@@ -3,6 +3,7 @@
 ## TO BE RELEASED
 
 * MI-164: set nginx logrotate to only keep 30 
+* MI-171: nginx config reload needs to watch for changes to both the ssl key *and* cert
 
 ## v2.8 - 7/05/2019 
 
