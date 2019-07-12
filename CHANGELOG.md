@@ -9,12 +9,23 @@
 
 * OPC-363 bug report feature
 * OPC-344 Configuration for CA notification via CATracker (start/stop now)
-      Requires adding this to cluster configs custom_json:
+   I.   Requires adding this to cluster configs custom_json:
        "capture_agent_sync": {
           "url": "https://<low level username>:<low level username's pasword>@catracker.<dev or prod catracker, preferably prod>.edu/tracker/notify/#{name}",
           "threshold": "180"
         },
- 
+
+  II. Required manually run recipe for OPC-344
+     Run: ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin" recipes="mh-opsworks-recipes::configure-activemq"
+     To push template change:
+     templates/default/activemq.xml.erb
+                 <forwardTo>
+                   <queue physicalName="SCHEDULER.Adminui" />
+                   <queue physicalName="SCHEDULER.Externalapi" />
++                  <queue physicalName="SCHEDULER.CaptureAgentSync" />
+                   <queue physicalName="SCHEDULER.Liveschedule" />
+                 </forwardTo>
+
 
 ## v2.7.1 - 04/26/2019
 
