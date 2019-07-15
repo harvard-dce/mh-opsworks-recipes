@@ -1049,6 +1049,22 @@ module MhOpsworksRecipes
       end
     end
 
+    def install_search_content_service_config(current_deploy_root, enable, region, s3_distribution_bucket_name, stack_name, index_url, lambda_function)
+      template %Q|#{current_deploy_root}/etc/edu.harvard.dce.search.content.impl.SearchContentServiceImpl.cfg| do
+        source 'edu.harvard.dce.search.content.impl.SearchContentServiceImpl.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          enable: enable,
+          region: region,
+          s3_distribution_bucket_name: s3_distribution_bucket_name,
+          stack_name: stack_name,
+          index_url: index_url,
+          lambda_function: lambda_function
+        })
+      end
+    end
+
     def setup_transcript_result_sync_to_s3(shared_storage_root, transcript_bucket_name)
       transcript_path = shared_storage_root + '/files/collection/transcripts'
       cron_d 'sync_transcripts_to_s3' do

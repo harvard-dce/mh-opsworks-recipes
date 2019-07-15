@@ -332,6 +332,9 @@
     <!-- OPC-201 #DCE LiveMontitor access -->
     <sec:intercept-url pattern="/livemonitor/**" method="GET" access="ROLE_ADMIN, ROLE_UI_EVENTS_VIEW" />
 
+    <!-- OPC-359 search transcripts -->
+    <sec:intercept-url pattern="/searchContent/searchText*" method="GET" access="ROLE_ANONYMOUS" />
+
     <!-- Everything else is for the admin users -->
     <sec:intercept-url pattern="/admin-ng" method="GET" access="ROLE_ADMIN, ROLE_ADMIN_UI, ROLE_COURSE_ADMIN" />
     <sec:intercept-url pattern="/admin-ng/" method="GET" access="ROLE_ADMIN, ROLE_ADMIN_UI, ROLE_COURSE_ADMIN" />
