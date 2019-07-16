@@ -161,6 +161,9 @@ deploy_revision "opencast" do
 #    configure_usertracking(most_recent_deploy, user_tracking_authhost)
     install_aws_s3_distribution_service_config(most_recent_deploy, enable_s3, region, s3_distribution_bucket_name, s3_distribution_base_url)
 #    install_opencast_images_properties(most_recent_deploy)
+    # OPC-139 Oauth config (for Engage)
+    install_oauthconsumerdetails_service_config(most_recent_deploy)
+
     # /all-in-one SPECIFIC
 
     if using_local_distribution
