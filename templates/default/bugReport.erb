@@ -1,4 +1,3 @@
-=====================================
 Opencast Report-a-Problem
 -------------------------------------
 
@@ -9,8 +8,7 @@ Phone #: ${bugReportInfo['phone']}
 
 <#if bugReportInfo['seriesId']?has_content>
 Course: ${bugReportInfo['courseNumber']!''} (${bugReportInfo['crn']}) ${bugReportInfo['seriesTitle']!''}
-Acadmic Year: ${bugReportInfo['academicYear']}
-Academic Term: ${bugReportInfo['term']}
+Academic Year-Term: ${bugReportInfo['academicYear']}-${bugReportInfo['term']}
 </#if>
 
 =====================================
