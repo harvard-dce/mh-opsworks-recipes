@@ -1,26 +1,33 @@
+=====================================
 Opencast Report-a-Problem
+-------------------------------------
 
 Reported by: ${bugReportInfo['userName']} (${bugReportInfo['userEmail']})
 <#if bugReportInfo['phone']?has_content>
 Phone #: ${bugReportInfo['phone']}
 </#if>
 
-Description:
-
-${bugReportInfo['description']}
-
 <#if bugReportInfo['seriesId']?has_content>
-Course: ${bugReportInfo['courseNumber']!''} (${bugReportInfo['seriesId']}) ${bugReportInfo['seriesTitle']!''}
-Videos: ${bugReportInfo['protocol']}://<%= @engage_hostname %>/engage/ui/index.html#${bugReportInfo['academicYear']}/${bugReportInfo['term']}/${bugReportInfo['crn']}
+Course: ${bugReportInfo['courseNumber']!''} (${bugReportInfo['crn']}) ${bugReportInfo['seriesTitle']!''}
+Acadmic Year: ${bugReportInfo['academicYear']}
+Academic Term: ${bugReportInfo['term']}
 </#if>
 
+=====================================
+Description:
+-------------------------------------
+${bugReportInfo['description']}
+
+=====================================
+Context:
+-------------------------------------
+<#if bugReportInfo['seriesId']?has_content>
+Videos: ${bugReportInfo['protocol']}://<%= @engage_hostname %>/engage/ui/index.html#${bugReportInfo['academicYear']}/${bugReportInfo['term']}/${bugReportInfo['crn']}
+</#if>
 <#if bugReportInfo['mpId']?has_content>
 Class: ${bugReportInfo['recordingTitle']!'No Title'} on ${bugReportInfo['recordingDate']!'No date'}
 Video: ${bugReportInfo['protocol']}://<%= @engage_hostname %>/engage/player/watch.html?id=${bugReportInfo['mpId']}
 </#if>
-
-Other:
-
 <#list bugReportInfo['sessionDetails'] as key, value>
 ${key}: ${value}
 </#list>
