@@ -937,6 +937,18 @@ module MhOpsworksRecipes
       )
     end
 
+   def install_oauthconsumerdetails_service_config(current_deploy_root)
+      lti_oauth_info = get_lti_auth_info
+      template %Q|#{current_deploy_root}/etc/org.opencastproject.kernel.security.OAuthConsumerDetailsService.cfg| do
+        source 'org.opencastproject.kernel.security.OAuthConsumerDetailsService.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          lti_oauth: lti_oauth_info
+        })
+      end
+    end
+
     def install_smtp_config(current_deploy_root)
       smtp_auth = node.fetch(:smtp_auth, {})
       default_email_sender = smtp_auth.fetch(:default_email_sender, 'no-reply@localhost')

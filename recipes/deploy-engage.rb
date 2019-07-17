@@ -123,6 +123,8 @@ deploy_revision "opencast" do
     install_otherpubs_service_series_impl_config(most_recent_deploy)
     install_bug_report_email(most_recent_deploy, public_engage_hostname)
     install_aws_s3_distribution_service_config(most_recent_deploy, enable_s3, region, s3_distribution_bucket_name, s3_distribution_base_url)
+    # OPC-139 Oauth config
+    install_oauthconsumerdetails_service_config(most_recent_deploy)
     # /ENGAGE SPECIFIC
 
     template %Q|#{most_recent_deploy}/etc/custom.properties| do
