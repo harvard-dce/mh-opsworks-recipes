@@ -5,6 +5,10 @@
 * MI-164: set nginx logrotate to only keep 30 
 * MI-171: nginx config reload needs to watch for changes to both the ssl key *and* cert
 
+## v2.9 - 7/19/2019
+
+* OPC-371 report a problem template updates
+
 ## v2.8 - 7/05/2019 
 
 * OPC-363 bug report feature
