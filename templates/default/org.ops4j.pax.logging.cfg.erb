@@ -73,17 +73,17 @@ log4j2.appender.console.layout.pattern = ${log4j2.out.pattern}
 
 # Rolling file appender
 log4j2.appender.out.type = RollingFile
-log4j2.appender.out.name = RollingFile
+log4j2.appender.out.name = File
 log4j2.appender.out.fileName=<%= @opencast_log_directory %>/opencast.log
 log4j2.appender.out.filePattern=<%= @opencast_log_directory %>/opencast.log.%d{yyyy-MM-dd}
 log4j2.appender.out.append = true
 log4j2.appender.out.immediateFlush = true
 log4j2.appender.out.layout.type = PatternLayout
 log4j2.appender.out.layout.pattern = ${log4j2.pattern}
+log4j2.appender.out.policies.type = Policies
 log4j2.appender.out.policies.time.type = TimeBasedTriggeringPolicy
-log4j2.appender.out.policies.time.interval = 1 # "1" is Daily rollover
+log4j2.appender.out.policies.time.interval = 1
 log4j2.appender.out.policies.time.modulate = true
-log4j2.appender.out.encoding = UTF-8
 
 # OSGi appender
 log4j2.appender.osgi.type = PaxOsgi
