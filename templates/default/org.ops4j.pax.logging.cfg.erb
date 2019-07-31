@@ -41,27 +41,27 @@ log4j2.logger.cxf.level = WARN
 
 # DCE-added
 # Helps to have these at DEBUG level or accessible to toggle to DEBUG as needed
-log4j.logger.opencastproject.lti.name = org.opencast.project.lti.LtiServlet
-log4j.logger.opencastproject.lti.level = DEBUG
-log4j.logger.opencastproject.liveschedule.name = org.opencastproject.liveschedule
-log4j.logger.opencastproject.liveschedule.level = INFO
-log4j.logger.opencastproject.captureagentsync.name = org.opencastproject.captureagentsync
-log4j.logger.opencastproject.captureagentsync.level = DEBUG
+log4j2.logger.lti.name = org.opencast.project.lti.LtiServlet
+log4j2.logger.lti.level = DEBUG
+log4j2.logger.liveschedule.name = org.opencastproject.liveschedule
+log4j2.logger.liveschedule.level = INFO
+log4j2.logger.captureagentsync.name = org.opencastproject.captureagentsync
+log4j2.logger.captureagentsync.level = DEBUG
 
 # DCE-added
 # Helps to leave these at INFO level while debugging general opencast classes
-log4j.logger.opencastproject.ingest.scanner.name = org.opencastproject.ingest.scanner.Ingestor
-log4j.logger.opencastproject.ingest.scanner.level = INFO
-log4j.logger.opencastproject.kernel.jsonfilter.name = org.opencastproject.kernel.rest.JsonpFilter
-log4j.logger.opencastproject.kernel.jsonfilter.level = INFO
-log4j.logger.opencastproject.kernel.TrustedAnonAuthFilter.name = org.opencastproject.kernel.security.TrustedAnonymousAuthenticationFilter
-log4j.logger.opencastproject.kernel.TrustedAnonAuthFilter.level=INFO
-log4j.logger.opencastproject.kernel.TrustedHttpClient.name = org.opencastproject.kernel.security.TrustedHttpClientImpl
-log4j.logger.opencastproject.kernel.TrustedHttpClient.level = INFO
-log4j.logger.opencastproject.kernel.HttpClient.name = org.opencastproject.kernel.http.impl.HttpClientImpl
-log4j.logger.opencastproject.kernel.HttpClient.level = INFO
-log4j.logger.springframework.AnonAuthFilter.name = org.security.web.authentication.AnonymousAuthenticationFilter
-log4j.logger.springframework.AnonAuthFilter.level = INFO
+log4j2.logger.scanner.name = org.opencastproject.ingest.scanner.Ingestor
+log4j2.logger.scanner.level = INFO
+log4j2.logger.kerneljsonfilter.name = org.opencastproject.kernel.rest.JsonpFilter
+log4j2.logger.kerneljsonfilter.level = INFO
+log4j2.logger.kernelTrustedAnonAuthFilter.name = org.opencastproject.kernel.security.TrustedAnonymousAuthenticationFilter
+log4j2.logger.kernelTrustedAnonAuthFilter.level=INFO
+log4j2.logger.kernelTrustedHttpClient.name = org.opencastproject.kernel.security.TrustedHttpClientImpl
+log4j2.logger.kernelTrustedHttpClient.level = INFO
+log4j2.logger.kernelHttpClient.name = org.opencastproject.kernel.http.impl.HttpClientImpl
+log4j2.logger.kernelHttpClient.level = INFO
+log4j2.logger.SpringframeworkAnonAuthFilter.name = org.security.web.authentication.AnonymousAuthenticationFilter
+log4j2.logger.springframeworkAnonAuthFilter.level = INFO
 
 # Appenders configuration
 
@@ -93,11 +93,11 @@ log4j2.appender.osgi.filter = *
 # Syslog
 # see: https://logging.apache.org/log4j/2.x/manual/appenders.html#SyslogAppender
 # also see: https://logging.apache.org/log4j/2.x/manual/migration.html
-log4j.appender.SYSLOG.name = org.apache.log4j.net.SyslogAppender
-log4j.appender.SYSLOG.host = localhost
-log4j.appender.SYSLOG.facility = LOCAL3
+log4j2.appender.SYSLOG.name = org.apache.log4j.net.SyslogAppender
+log4j2.appender.SYSLOG.host = localhost
+log4j2.appender.SYSLOG.facility = LOCAL3
 # is there a  migration for this param? log4j.appender.SYSLOG.Header = true
-log4j.appender.SYSLOG.layout.type = PatternLayout
-log4j.appender.SYSLOG.layout.pattern = opencast %p %t %c{1}.%M - %m %throwable%n
+log4j2.appender.SYSLOG.layout.type = PatternLayout
+log4j2.appender.SYSLOG.layout.pattern = opencast %p %t %c{1}.%M - %m %throwable%n
 
 
