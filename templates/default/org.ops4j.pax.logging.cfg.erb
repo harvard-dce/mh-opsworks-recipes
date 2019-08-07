@@ -14,6 +14,7 @@ log4j2.rootLogger.level = WARN
 log4j2.rootLogger.appenderRef.File.ref = File
 log4j2.rootLogger.appenderRef.PaxOsgi.ref = PaxOsgi
 log4j2.rootLogger.appenderRef.Console.ref = Console
+log4j2.rootLogger.appenderRef.syslog.ref = syslog
 log4j2.rootLogger.appenderRef.Console.filter.threshold.type = ThresholdFilter
 log4j2.rootLogger.appenderRef.Console.filter.threshold.level = ${karaf.log.console:-OFF}
 
@@ -60,7 +61,7 @@ log4j2.logger.kernelTrustedHttpClient.name = org.opencastproject.kernel.security
 log4j2.logger.kernelTrustedHttpClient.level = INFO
 log4j2.logger.kernelHttpClient.name = org.opencastproject.kernel.http.impl.HttpClientImpl
 log4j2.logger.kernelHttpClient.level = INFO
-log4j2.logger.SpringframeworkAnonAuthFilter.name = org.security.web.authentication.AnonymousAuthenticationFilter
+log4j2.logger.springframeworkAnonAuthFilter.name = org.security.web.authentication.AnonymousAuthenticationFilter
 log4j2.logger.springframeworkAnonAuthFilter.level = INFO
 
 # Appenders configuration
@@ -93,11 +94,15 @@ log4j2.appender.osgi.filter = *
 # Syslog
 # see: https://logging.apache.org/log4j/2.x/manual/appenders.html#SyslogAppender
 # also see: https://logging.apache.org/log4j/2.x/manual/migration.html
-log4j2.appender.SYSLOG.name = org.apache.log4j.net.SyslogAppender
-log4j2.appender.SYSLOG.host = localhost
-log4j2.appender.SYSLOG.facility = LOCAL3
-# is there a  migration for this param? log4j.appender.SYSLOG.Header = true
-log4j2.appender.SYSLOG.layout.type = PatternLayout
-log4j2.appender.SYSLOG.layout.pattern = opencast %p %t %c{1}.%M - %m %throwable%n
-
+log4j2.appender.syslog.type = Syslog
+log4j2.appender.syslog.name = syslog
+log4j2.appender.syslog.appName = opencast
+log4j2.appender.syslog.host = localhost
+log4j2.appender.syslog.facility = LOCAL1
+log4j2.appender.syslog.port = 514
+log4j2.appender.syslog.newLine = true
+log4j2.appender.syslog.ignoreExceptions = false
+log4j2.appender.syslog.protocol = UDP
+log4j2.appender.syslog.layout.type = PatternLayout
+log4j2.appender.syslog.layout.pattern = <%= @log_event_hostname %> opencast %p %t (%c{1}.%M:%L) - %m%n %throwable{separator(|)}
 
