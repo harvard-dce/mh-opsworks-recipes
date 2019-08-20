@@ -4,6 +4,7 @@
 
 * OPC-359 search-transcripts
 * OPC-139 LTI Oauth config change from Upstream
+* OPC-334 many-embedded Added configuration to auth service 
 * MI-164: set nginx logrotate to only keep 30 
 * MI-171: nginx config reload needs to watch for changes to both the ssl key *and* cert
 
