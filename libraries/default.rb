@@ -736,6 +736,7 @@ module MhOpsworksRecipes
       oc_log_dir = node.fetch(:opencast_log_directory, '/var/log/opencast')
       oc_log_level = node.fetch(:opencast_log_level, 'INFO')
       dce_log_level = node.fetch(:dce_log_level, 'DEBUG')
+      hostname = node[:opsworks][:instance][:hostname]
       template %Q|#{current_deploy_root}/etc/org.ops4j.pax.logging.cfg| do
         source 'org.ops4j.pax.logging.cfg.erb'
         owner 'opencast'
@@ -743,7 +744,8 @@ module MhOpsworksRecipes
         variables ({
             opencast_log_directory: oc_log_dir,
             opencast_log_level: oc_log_level,
-            dce_log_level: dce_log_level
+            dce_log_level: dce_log_level,
+            log_event_hostname: hostname
         })
       end
     end
@@ -935,6 +937,18 @@ module MhOpsworksRecipes
           pass: ''
         }
       )
+    end
+
+   def install_oauthconsumerdetails_service_config(current_deploy_root)
+      lti_oauth_info = get_lti_auth_info
+      template %Q|#{current_deploy_root}/etc/org.opencastproject.kernel.security.OAuthConsumerDetailsService.cfg| do
+        source 'org.opencastproject.kernel.security.OAuthConsumerDetailsService.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          lti_oauth: lti_oauth_info
+        })
+      end
     end
 
     def install_smtp_config(current_deploy_root)
