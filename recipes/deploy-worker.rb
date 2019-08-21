@@ -23,12 +23,6 @@ ldap_url = ldap_conf[:url]
 ldap_userdn = ldap_conf[:userdn]
 ldap_psw = ldap_conf[:pass]
 
-auth_host = node.fetch(:auth_host, 'example.com')
-auth_redirect_location = node.fetch(:auth_redirect_location, 'http://example.com/some/url')
-auth_key = node.fetch(:auth_key, '')
-
-auth_activated = node.fetch(:auth_activated, 'true')
-
 git_data = node[:deploy][:opencast][:scm]
 
 public_engage_hostname = get_public_engage_hostname
@@ -82,9 +76,6 @@ deploy_revision "opencast" do
     if ldap_enabled
       install_ldap_config(most_recent_deploy, ldap_url, ldap_userdn, ldap_psw)
     end
-    install_auth_service(
-      most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated
-    )
 
     # WORKER SPECIFIC
     set_service_registry_intervals(most_recent_deploy)

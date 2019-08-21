@@ -141,7 +141,7 @@ deploy_revision "opencast" do
     install_smtp_config(most_recent_deploy)
     install_default_tenant_config(most_recent_deploy, public_hostname, private_hostname)
     install_auth_service(
-      most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated
+      most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated, ldap_url, ldap_userdn, ldap_psw 
     )
     install_live_streaming_service_config(most_recent_deploy, live_stream_name, live_streaming_url, distribution)
     if ldap_enabled
@@ -167,6 +167,9 @@ deploy_revision "opencast" do
     install_aws_s3_distribution_service_config(most_recent_deploy, enable_s3, region, s3_distribution_bucket_name, s3_distribution_base_url)
     install_search_content_service_config(most_recent_deploy, search_content_enabled, region, s3_distribution_bucket_name, stack_name, search_content_index_url, search_content_lambda_name)
 #    install_opencast_images_properties(most_recent_deploy)
+    # OPC-139 Oauth config (for Engage)
+    install_oauthconsumerdetails_service_config(most_recent_deploy)
+
     # /all-in-one SPECIFIC
 
     if using_local_distribution

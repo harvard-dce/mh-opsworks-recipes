@@ -1,51 +1,111 @@
-# Root logger configuration.  This defines the default values to be used.  They may be overwritten by more specific
-# settings below.
-log4j.rootLogger=WARN, out, osgi:*, SYSLOG
-log4j.throwableRenderer=org.apache.log4j.OsgiThrowableRenderer
+# Colors for log level rendering
+color.fatal = bright red
+color.error = bright red
+color.warn = bright yellow
+color.info = bright green
+color.debug = cyan
+color.trace = cyan
+
+# Common pattern layout for appenders
+log4j2.pattern =  %d{ISO8601} | %-5.5p | (%C{1}:%L) - %m%n
+
+# Root logger
+log4j2.rootLogger.level = WARN
+log4j2.rootLogger.appenderRef.File.ref = File
+log4j2.rootLogger.appenderRef.PaxOsgi.ref = PaxOsgi
+log4j2.rootLogger.appenderRef.Console.ref = Console
+log4j2.rootLogger.appenderRef.syslog.ref = syslog
+log4j2.rootLogger.appenderRef.Console.filter.threshold.type = ThresholdFilter
+log4j2.rootLogger.appenderRef.Console.filter.threshold.level = ${karaf.log.console:-OFF}
+
+# Loggers configuration
 
 # Loglevel configuration for all opencast modules. Usually, INFO is a quite sane log level. If you need a different
 # detail level of logs, you can adjust this to: ERROR, WARN, INFO, DEBUG, TRACE.
-log4j.logger.org.opencastproject=<%= @opencast_log_level %>
-log4j.logger.edu.harvard.dce=<%= @dce_log_level %>
+log4j2.logger.opencast.name = org.opencastproject
+log4j2.logger.opencast.level = <%= @opencast_log_level %>
+log4j2.logger.hudce.name = edu.harvard.dce
+log4j2.logger.hudce.level = <%= @dce_log_level %>
 
 # You can specify different log levels for different packages/modules by specifying their package component names. For
 # example, to raise the log level to DEBUG for the rest endpoints contained in the kernel module, set:
-# log4j.logger.org.opencastproject.kernel.rest=DEBUG
+#log4j2.logger.ingest.name = org.opencastproject.ingest
+#log4j2.logger.ingest.level = DEBUG
 
 # For Karaf, Felix & CXF, we want to see some more details in the logs
-log4j.logger.org.apache.karaf=WARN
-log4j.logger.org.apache.felix=WARN
-log4j.logger.org.apache.cxf=WARN
+log4j2.logger.karaf.name = org.apache.karaf
+log4j2.logger.karaf.level = WARN
+log4j2.logger.felix.name = org.apache.felix
+log4j2.logger.felix.level = WARN
+log4j2.logger.cxf.name = org.apache.cxf
+log4j2.logger.cxf.level = WARN
 
 # DCE-added
-log4j.logger.org.opencastproject.ingest.scanner.Ingestor=INFO
-log4j.logger.org.opencastproject.kernel.rest.JsonpFilter=INFO
-log4j.logger.org.opencastproject.kernel.security.TrustedAnonymousAuthenticationFilter=INFO
-log4j.logger.org.springframework.security.web.authentication.AnonymousAuthenticationFilter=INFO
-log4j.logger.org.opencastproject.kernel.security.TrustedHttpClientImpl=INFO
-log4j.logger.org.opencastproject.kernel.http.impl.HttpClientImpl=INFO
-log4j.logger.org.opencastproject.lti.LtiServlet=DEBUG
-log4j.logger.org.opencastproject.liveschedule=INFO
-log4j.logger.org.opencastproject.captureagentsync=DEBUG
+# Helps to have these at DEBUG level or accessible to toggle to DEBUG as needed
+log4j2.logger.lti.name = org.opencastproject.lti.LtiServlet
+log4j2.logger.lti.level = DEBUG
+log4j2.logger.liveschedule.name = org.opencastproject.liveschedule
+log4j2.logger.liveschedule.level = INFO
+log4j2.logger.captureagentsync.name = org.opencastproject.captureagentsync
+log4j2.logger.captureagentsync.level = DEBUG
 
-# Console appender not used by default
-log4j.appender.stdout=org.apache.log4j.ConsoleAppender
-log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
-log4j.appender.stdout.layout.ConversionPattern=%d{ISO8601} | %-5.5p | (%C{1}:%L) - %m%n
+# DCE-added
+# Helps to leave these at INFO level while debugging general opencast classes
+log4j2.logger.scanner.name = org.opencastproject.ingest.scanner.Ingestor
+log4j2.logger.scanner.level = INFO
+log4j2.logger.kerneljsonfilter.name = org.opencastproject.kernel.rest.JsonpFilter
+log4j2.logger.kerneljsonfilter.level = INFO
+log4j2.logger.kernelTrustedAnonAuthFilter.name = org.opencastproject.kernel.security.TrustedAnonymousAuthenticationFilter
+log4j2.logger.kernelTrustedAnonAuthFilter.level=INFO
+log4j2.logger.kernelTrustedHttpClient.name = org.opencastproject.kernel.security.TrustedHttpClientImpl
+log4j2.logger.kernelTrustedHttpClient.level = INFO
+log4j2.logger.kernelHttpClient.name = org.opencastproject.kernel.http.impl.HttpClientImpl
+log4j2.logger.kernelHttpClient.level = INFO
+log4j2.logger.springframeworkAnonAuthFilter.name = org.security.web.authentication.AnonymousAuthenticationFilter
+log4j2.logger.springframeworkAnonAuthFilter.level = INFO
 
-# File appender
-log4j.appender.out=org.apache.log4j.DailyRollingFileAppender
-log4j.appender.out.layout=org.apache.log4j.PatternLayout
-log4j.appender.out.layout.ConversionPattern=%d{ISO8601} | %-5.5p | (%C{1}:%L) - %m%n
-log4j.appender.out.file=<%= @opencast_log_directory %>/opencast.log
-log4j.appender.out.append=true
-log4j.appender.out.encoding=UTF-8
-log4j.appender.out.DatePattern='.'yyyy-MM-dd
+log4j2.logger.searchServiceEndpoint.name = org.opencastproject.search.endpoint 
+log4j2.logger.searchServiceEndpoint.level = DEBUG 
+
+# Appenders configuration
+
+# Console appender not used by default (see log4j2.rootLogger.appenderRefs)
+log4j2.appender.console.type = Console
+log4j2.appender.console.name = Console
+log4j2.appender.console.layout.type = PatternLayout
+log4j2.appender.console.layout.pattern = ${log4j2.out.pattern}
+
+# Rolling file appender
+log4j2.appender.out.type = RollingFile
+log4j2.appender.out.name = File
+log4j2.appender.out.fileName=<%= @opencast_log_directory %>/opencast.log
+log4j2.appender.out.filePattern=<%= @opencast_log_directory %>/opencast.log.%d{yyyy-MM-dd}
+log4j2.appender.out.append = true
+log4j2.appender.out.immediateFlush = true
+log4j2.appender.out.layout.type = PatternLayout
+log4j2.appender.out.layout.pattern = ${log4j2.pattern}
+log4j2.appender.out.policies.type = Policies
+log4j2.appender.out.policies.time.type = TimeBasedTriggeringPolicy
+log4j2.appender.out.policies.time.interval = 1
+log4j2.appender.out.policies.time.modulate = true
+
+# OSGi appender
+log4j2.appender.osgi.type = PaxOsgi
+log4j2.appender.osgi.name = PaxOsgi
+log4j2.appender.osgi.filter = *
 
 # Syslog
-log4j.appender.SYSLOG=org.apache.log4j.net.SyslogAppender
-log4j.appender.SYSLOG.SyslogHost=localhost
-log4j.appender.SYSLOG.Facility=local3
-log4j.appender.SYSLOG.Header=true
-log4j.appender.SYSLOG.layout=org.apache.log4j.EnhancedPatternLayout
-log4j.appender.SYSLOG.layout.ConversionPattern=opencast %p %t %c{1}.%M - %m %throwable%n
+# see: https://logging.apache.org/log4j/2.x/manual/appenders.html#SyslogAppender
+# also see: https://logging.apache.org/log4j/2.x/manual/migration.html
+log4j2.appender.syslog.type = Syslog
+log4j2.appender.syslog.name = syslog
+log4j2.appender.syslog.appName = opencast
+log4j2.appender.syslog.host = localhost
+log4j2.appender.syslog.facility = LOCAL1
+log4j2.appender.syslog.port = 514
+log4j2.appender.syslog.newLine = true
+log4j2.appender.syslog.ignoreExceptions = false
+log4j2.appender.syslog.protocol = UDP
+log4j2.appender.syslog.layout.type = PatternLayout
+log4j2.appender.syslog.layout.pattern = <%= @log_event_hostname %> opencast %p %t (%c{1}.%M:%L) - %m%n %throwable{separator(|)}
+
