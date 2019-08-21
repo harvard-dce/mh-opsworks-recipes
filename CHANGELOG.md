@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## v2.10 - 8/22/2019
+
 * OPC-359 search-transcripts
 * OPC-139 LTI Oauth config change from Upstream
 * OPC-334 many-embedded Added configuration to auth service 
