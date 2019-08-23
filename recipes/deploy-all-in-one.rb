@@ -33,6 +33,9 @@ s3_distribution_base_url=get_base_media_download_url(public_hostname)
 search_content_index_url = node.fetch(:transcript_search_endpoint, '')
 search_content_lambda_name = node.fetch(:transcript_index_function, '')
 search_content_enabled = ! search_content_index_url.empty? && ! search_content_lambda_name.empty? 
+search_content_host_replace = get_cloudfront_download_path
+search_content_host_replacement = get_s3_download_path
+
 ## /all-in-one specific
 
 # S3 file archive service, also needs region
@@ -165,7 +168,7 @@ deploy_revision "opencast" do
 
 #    configure_usertracking(most_recent_deploy, user_tracking_authhost)
     install_aws_s3_distribution_service_config(most_recent_deploy, enable_s3, region, s3_distribution_bucket_name, s3_distribution_base_url)
-    install_search_content_service_config(most_recent_deploy, search_content_enabled, region, s3_distribution_bucket_name, stack_name, search_content_index_url, search_content_lambda_name)
+    install_search_content_service_config(most_recent_deploy, search_content_enabled, search_content_host_replace, search_content_host_replacement, region, s3_distribution_bucket_name, stack_name, search_content_index_url, search_content_lambda_name)
 #    install_opencast_images_properties(most_recent_deploy)
     # OPC-139 Oauth config (for Engage)
     install_oauthconsumerdetails_service_config(most_recent_deploy)

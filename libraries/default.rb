@@ -179,21 +179,34 @@ module MhOpsworksRecipes
       uri.host
     end
 
+    def get_cloudfront_download_path
+      cloudfront_url = get_cloudfront_url
+      if cloudfront_url && (! cloudfront_url.empty?)
+        %Q|https://#{cloudfront_url}|
+      else
+        ''
+      end
+    end
+
+    def get_s3_download_path
+      %Q|https://#{get_s3_distribution_bucket_name}.s3.amazonaws.com|
+    end
+
     def get_base_media_download_url(engage_hostname)
       # engage_hostname is passed in because we don't have the engage instance
       # chef attributes when we're deploying the engage instance. The chef
       # attributes don't make it into the shared chef environment until the
       # node comes online.
 
-      cloudfront_url = get_cloudfront_url
+      cloudfront_url = get_cloudfront_download_path
       base_media_download_url = ''
 
       if cloudfront_url && (! cloudfront_url.empty?)
         Chef::Log.info "Cloudfront url: #{cloudfront_url}"
-        base_media_download_url = %Q|https://#{cloudfront_url}|
+        base_media_download_url = cloudfront_url
       else
         Chef::Log.info "s3 distribution: #{engage_hostname}"
-        base_media_download_url = %Q|https://#{get_s3_distribution_bucket_name}.s3.amazonaws.com|
+        base_media_download_url = get_s3_download_path
       end
       base_media_download_url
     end
@@ -1063,13 +1076,15 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_search_content_service_config(current_deploy_root, enable, region, s3_distribution_bucket_name, stack_name, index_url, lambda_function)
+    def install_search_content_service_config(current_deploy_root, enable, host_to_replace, host_replacement, region, s3_distribution_bucket_name, stack_name, index_url, lambda_function)
       template %Q|#{current_deploy_root}/etc/edu.harvard.dce.search.content.impl.SearchContentServiceImpl.cfg| do
         source 'edu.harvard.dce.search.content.impl.SearchContentServiceImpl.cfg.erb'
         owner 'opencast'
         group 'opencast'
         variables({
           enable: enable,
+          host_to_replace: host_to_replace,
+          host_replacement: host_replacement,
           region: region,
           s3_distribution_bucket_name: s3_distribution_bucket_name,
           stack_name: stack_name,

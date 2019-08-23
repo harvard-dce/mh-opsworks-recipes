@@ -59,6 +59,9 @@ s3_distribution_base_url=get_base_media_download_url(public_engage_hostname)
 search_content_index_url = node.fetch(:transcript_search_endpoint, '')
 search_content_lambda_name = node.fetch(:transcript_index_function, '')
 search_content_enabled = ! search_content_index_url.empty? && ! search_content_lambda_name.empty? 
+search_content_host_replace = get_cloudfront_download_path
+search_content_host_replacement = get_s3_download_path
+
 ## /Engage specific
 
 git_data = node[:deploy][:opencast][:scm]
@@ -128,7 +131,7 @@ deploy_revision "opencast" do
     install_otherpubs_service_series_impl_config(most_recent_deploy)
     install_bug_report_email(most_recent_deploy, public_engage_hostname)
     install_aws_s3_distribution_service_config(most_recent_deploy, enable_s3, region, s3_distribution_bucket_name, s3_distribution_base_url)
-    install_search_content_service_config(most_recent_deploy, search_content_enabled, region, s3_distribution_bucket_name, stack_name, search_content_index_url, search_content_lambda_name)
+    install_search_content_service_config(most_recent_deploy, search_content_enabled, search_content_host_replace, search_content_host_replacement, region, s3_distribution_bucket_name, stack_name, search_content_index_url, search_content_lambda_name)
     # OPC-139 Oauth config
     install_oauthconsumerdetails_service_config(most_recent_deploy)
     # /ENGAGE SPECIFIC

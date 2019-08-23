@@ -24,3 +24,7 @@ transcripts.index.name=<%= @stack_name %>-transcripts
 # Something like https://vpc-dev-transcript-indexer-es-76sexnyqtlky2gs7ftqj353f5i.us-east-1.es.amazonaws.com
 transcripts.index.url=<%= @index_url %>
 
+# Swap the caption path host, if necessary, before sending the captionUrl to the lambda
+# For example, if the download is cloudfront, replace with the local s3 bucket distributed file
+transcripts.index.host.replace=<%= @host_to_replace %>
+transcripts.index.host.replacement=<%= @host_replacement %>
