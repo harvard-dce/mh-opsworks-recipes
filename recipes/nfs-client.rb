@@ -83,7 +83,7 @@ if on_aws?
 
   cron_d 'nfs_available' do
     user 'custom_metrics'
-    minute '*/2'
+    minute '*'
     # Redirect stderr and stdout to logger. The command is silent on succesful runs
     command %Q(/usr/local/bin/nfs_available.sh "#{aws_instance_id}" "#{heartbeat_root_dir}" 2>&1 | logger -t info)
     path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
@@ -95,7 +95,7 @@ if on_aws?
       # This is idempotent according to the aws docs
       topic_arn = execute_command(%Q(aws sns create-topic --name "#{topic_name}" --region #{region} --output text)).chomp
 
-      command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{alarm_name_prefix}_nfs_availability" --alarm-description "NFS is unavailable #{alarm_name_prefix}" --metric-name NFSAvailable --namespace AWS/OpsworksCustom --statistic Minimum --period 120 --threshold 1 --comparison-operator LessThanThreshold --dimensions Name=InstanceId,Value=#{aws_instance_id} --evaluation-periods 1 --alarm-actions "#{topic_arn}")
+      command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{alarm_name_prefix}_nfs_availability" --alarm-description "NFS is unavailable #{alarm_name_prefix}" --metric-name NFSAvailable --namespace AWS/OpsworksCustom --statistic Minimum --period 60 --threshold 1 --comparison-operator LessThanThreshold --dimensions Name=InstanceId,Value=#{aws_instance_id} --evaluation-periods 2 --alarm-actions "#{topic_arn}")
       Chef::Log.info command
       execute_command(command)
     end
