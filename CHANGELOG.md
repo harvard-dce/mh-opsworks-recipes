@@ -8,6 +8,10 @@
 * MI-126 adjust nfs availability cron and metric alarm to only trigger if two failures
   over two 60s periods to avoid false positives
 
+## TO BE RELEASED
+
+* OPC-357 HLS-VOD ffmpeg version and logging
+
 ## v2.10 - 8/22/2019
 
 * OPC-359 search-transcripts
