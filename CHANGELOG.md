@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## v2.10.1 - 9/26/2019
+
 * OPC-381 search-transcripts endpoint access update
 * MI-126 adjust nfs availability cron and metric alarm to only trigger if two failures
   over two 60s periods to avoid false positives
