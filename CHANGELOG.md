@@ -2,6 +2,7 @@
 
 ## TO BE RELEASED
 
+* OPC-357 HLS-VOD ffmpeg version and logging
 
 ## v2.12.0 - 11/22/2019
 
