@@ -736,6 +736,7 @@ module MhOpsworksRecipes
       oc_log_dir = node.fetch(:opencast_log_directory, '/var/log/opencast')
       oc_log_level = node.fetch(:opencast_log_level, 'INFO')
       dce_log_level = node.fetch(:dce_log_level, 'DEBUG')
+      hostname = node[:opsworks][:instance][:hostname]
       template %Q|#{current_deploy_root}/etc/org.ops4j.pax.logging.cfg| do
         source 'org.ops4j.pax.logging.cfg.erb'
         owner 'opencast'
@@ -743,7 +744,8 @@ module MhOpsworksRecipes
         variables ({
             opencast_log_directory: oc_log_dir,
             opencast_log_level: oc_log_level,
-            dce_log_level: dce_log_level
+            dce_log_level: dce_log_level,
+            log_event_hostname: hostname
         })
       end
     end
@@ -937,6 +939,18 @@ module MhOpsworksRecipes
       )
     end
 
+   def install_oauthconsumerdetails_service_config(current_deploy_root)
+      lti_oauth_info = get_lti_auth_info
+      template %Q|#{current_deploy_root}/etc/org.opencastproject.kernel.security.OAuthConsumerDetailsService.cfg| do
+        source 'org.opencastproject.kernel.security.OAuthConsumerDetailsService.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          lti_oauth: lti_oauth_info
+        })
+      end
+    end
+
     def install_smtp_config(current_deploy_root)
       smtp_auth = node.fetch(:smtp_auth, {})
       default_email_sender = smtp_auth.fetch(:default_email_sender, 'no-reply@localhost')
@@ -1049,6 +1063,22 @@ module MhOpsworksRecipes
       end
     end
 
+    def install_search_content_service_config(current_deploy_root, enable, region, s3_distribution_bucket_name, stack_name, index_url, lambda_function)
+      template %Q|#{current_deploy_root}/etc/edu.harvard.dce.search.content.impl.SearchContentServiceImpl.cfg| do
+        source 'edu.harvard.dce.search.content.impl.SearchContentServiceImpl.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          enable: enable,
+          region: region,
+          s3_distribution_bucket_name: s3_distribution_bucket_name,
+          stack_name: stack_name,
+          index_url: index_url,
+          lambda_function: lambda_function
+        })
+      end
+    end
+
     def setup_transcript_result_sync_to_s3(shared_storage_root, transcript_bucket_name)
       transcript_path = shared_storage_root + '/files/collection/transcripts'
       cron_d 'sync_transcripts_to_s3' do
@@ -1059,7 +1089,7 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_auth_service(current_deploy_root, auth_host, redirect_location, auth_key, auth_activated = 'true')
+    def install_auth_service(current_deploy_root, auth_host, redirect_location, auth_key, auth_activated = 'true', ldap_url, ldap_userdn, ldap_psw)
       template %Q|#{current_deploy_root}/etc/edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.cfg| do
         source 'edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.cfg.erb'
         owner 'opencast'
@@ -1068,7 +1098,10 @@ module MhOpsworksRecipes
           auth_host: auth_host,
           redirect_location: redirect_location,
           auth_activated: auth_activated,
-          auth_key: auth_key
+          auth_key: auth_key,
+          ldap_url: ldap_url,
+          ldap_userdn: ldap_userdn,
+          ldap_psw: ldap_psw
         })
       end
     end

@@ -2,8 +2,27 @@
 
 ## TO BE RELEASED
 
+## v2.10.1 - 9/26/2019
+
+* OPC-381 search-transcripts endpoint access update
+* MI-126 adjust nfs availability cron and metric alarm to only trigger if two failures
+  over two 60s periods to avoid false positives
+
+## TO BE RELEASED
+
+* OPC-357 HLS-VOD ffmpeg version and logging
+
+## v2.10 - 8/22/2019
+
+* OPC-359 search-transcripts
+* OPC-139 LTI Oauth config change from Upstream
+* OPC-334 many-embedded Added configuration to auth service 
 * MI-164: set nginx logrotate to only keep 30 
 * MI-171: nginx config reload needs to watch for changes to both the ssl key *and* cert
+
+## v2.9 - 7/19/2019
+
+* OPC-371 report a problem template updates
 
 ## v2.8 - 7/05/2019 
 
@@ -25,7 +44,6 @@
 +                  <queue physicalName="SCHEDULER.CaptureAgentSync" />
                    <queue physicalName="SCHEDULER.Liveschedule" />
                  </forwardTo>
-
 
 ## v2.7.1 - 04/26/2019
 
