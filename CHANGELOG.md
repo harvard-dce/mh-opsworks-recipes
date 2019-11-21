@@ -2,6 +2,10 @@
 
 ## TO BE RELEASED
 
+## v2.11.0 - 11/22/2019
+
+* PSUPP-3145 playeroldRedirect auth for special test-local redirect page
+
 ## v2.10.1 - 9/26/2019
 
 * OPC-381 search-transcripts endpoint access update
