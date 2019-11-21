@@ -2,9 +2,14 @@
 
 ## TO BE RELEASED
 
-## v2.11.0 - 11/22/2019
+
+## v2.12.0 - 11/22/2019
 
 * PSUPP-3145 playeroldRedirect auth for special test-local redirect page
+
+## v2.11.0 - 10/10/2019
+
+*  OPC-381-lamda-timeout-conf Search transcripts config
 
 ## v2.10.1 - 9/26/2019
 
