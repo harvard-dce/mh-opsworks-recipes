@@ -2,6 +2,17 @@
 
 ## TO BE RELEASED
 
+* OPC-357 HLS-VOD ffmpeg version and logging
+* Requires ffmpeg push with ./bin/rake stack:commands:execute_recipes_on_layers recipes="oc-opsworks-recipes::install-ffmpeg"
+
+## v2.12.0 - 11/22/2019
+
+* PSUPP-3145 playeroldRedirect auth for special test-local redirect page
+
+## v2.11.0 - 10/10/2019
+
+*  OPC-381-lamda-timeout-conf Search transcripts config
+
 ## v2.10.1 - 9/26/2019
 
 * OPC-381 search-transcripts endpoint access update

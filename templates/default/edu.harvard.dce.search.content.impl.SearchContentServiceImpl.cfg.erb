@@ -24,3 +24,7 @@ transcripts.index.name=<%= @stack_name %>-transcripts
 # Something like https://vpc-dev-transcript-indexer-es-76sexnyqtlky2gs7ftqj353f5i.us-east-1.es.amazonaws.com
 transcripts.index.url=<%= @index_url %>
 
+# The time to wait for the indexer lambda function to complete (in seconds) 
+# Default is 2 minutes
+#aws.lambda.socket.timeout.seconds=120
+
