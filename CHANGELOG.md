@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* OPC-357 HLS-VOD ffmpeg version and logging
+* Requires ffmpeg push with ./bin/rake stack:commands:execute_recipes_on_layers recipes="oc-opsworks-recipes::install-ffmpeg"
 
 ## v2.12.0 - 11/22/2019
 
@@ -16,6 +18,10 @@
 * OPC-381 search-transcripts endpoint access update
 * MI-126 adjust nfs availability cron and metric alarm to only trigger if two failures
   over two 60s periods to avoid false positives
+
+## TO BE RELEASED
+
+* OPC-357 HLS-VOD ffmpeg version and logging
 
 ## v2.10 - 8/22/2019
 

@@ -14,7 +14,7 @@ packages = %Q|libasound2 libass4 libasyncns0 libc6 libcaca0 libdbus-1-3 libenca0
 install_package(packages)
 
 bucket_name = get_shared_asset_bucket_name
-ffmpeg_version = node.fetch(:ffmpeg_version, '3.2.4')
+ffmpeg_version = node.fetch(:ffmpeg_version, '4.2.2')
 ffmpeg_archive = %Q|ffmpeg-#{ffmpeg_version}-static.tgz|
 
 if on_aws?
@@ -31,6 +31,7 @@ cd /opt &&
 #{download_command} &&
 /bin/tar xvfz #{ffmpeg_archive} &&
 cd /usr/local/bin/ &&
+sudo rm ffmpeg &&
 /usr/bin/find /opt/ffmpeg-#{ffmpeg_version} -mindepth 1 -type f -executable -exec /bin/ln -sf {} \\;
 |
   # retries 10
