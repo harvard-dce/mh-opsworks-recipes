@@ -247,6 +247,18 @@ module MhOpsworksRecipes
       )
     end
 
+    def get_helix_googlesheet_config
+      node.fetch(
+        :helix_googlesheets, {
+          enabled: false,
+          defaultduration_min: 240,
+          token: '',
+          cred: '',
+          helix_sheet_id: ''
+        }
+      )
+    end
+
     def get_ldap_conf
       node.fetch(
         :ldap_conf, {
@@ -1060,6 +1072,51 @@ module MhOpsworksRecipes
           ibm_watson_username: ibm_watson_username,
           ibm_watson_psw: ibm_watson_psw
         })
+      end
+    end
+
+    def install_helix_googlesheets_service_config(current_deploy_root, local_workspace_root, helix_googlesheets_cred, helix_googlesheets_defaultdur_min, helix_enabled, token, helix_sheet_id)
+      template %Q|#{current_deploy_root}/etc/edu.harvard.dce.otherpubs.helix.OtherPubsHelixGooglesheetService.cfg| do
+        source 'edu.harvard.dce.otherpubs.helix.OtherPubsHelixGooglesheetService.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          helix_googlesheets_defaultdur_min: helix_googlesheets_defaultdur_min,
+          helix_enabled: helix_enabled,
+          helix_sheet_id: helix_sheet_id
+        })
+      end
+      # Only create the file if the creds exist in the cluster config
+      if helix_googlesheets_cred && (! helix_googlesheets_cred.empty?) && helix_enabled
+
+        # Make sure the etc/dce-otherpubs dir exists
+        creds_default_storage_dir = %Q|#{current_deploy_root}/etc/dce-otherpubs|
+        google_data_default_storage_dir = %Q|#{local_workspace_root}/dce-otherpubs|
+        unpacked_creds = helix_googlesheets_cred.unpack('m*')[0]
+        unpacked_service_token = token.unpack('m*')[0]
+
+        directory creds_default_storage_dir  do
+          owner 'opencast'
+          group 'opencast'
+          mode '755'
+          recursive true
+        end
+        directory google_data_default_storage_dir  do
+          owner 'opencast'
+          group 'opencast'
+          mode '755'
+          recursive true
+        end
+
+        template %Q|#{current_deploy_root}/etc/dce-otherpubs/client-secrets-googlesheets.json| do
+          source 'client-secrets-googlesheets.json.erb'
+          owner 'opencast'
+          group 'opencast'
+          variables({
+            helix_googlesheets_cred: unpacked_creds,
+            token: unpacked_service_token
+          })
+        end
       end
     end
 

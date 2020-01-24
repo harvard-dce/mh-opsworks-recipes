@@ -1,0 +1,47 @@
+# OPC-446 Helix Live Googlesheets (for combo publist other live pubs)
+
+edu.harvard.dce.otherpubs.googlesheet.enabled=<%= @helix_enabled %>
+
+# The id of the Googlesheet used for HELIX (changes for dev, test prod)
+edu.harvard.dce.otherpubs.googlesheet.id=<%= @helix_sheet_id %>
+
+
+# The spreadseet page names that contain Helix event ROWs. Char Case Matters!
+edu.harvard.dce.otherpubs.googlesheet.pages=HELIX Classroom MONDAY,HELIX Classroom TUESDAY,HELIX Classroom WEDNESDAY,HELIX Classroom THURSDAY,HELIX Classroom FRIDAY,HELIX Anywhere,HELIX Livestream
+
+# -----------------------------------------------
+# --- Required & Optional Googlesheet headers ---
+# WARN: only dayofweek, room, rpc can handle variable Googlesheet Column headers (comma separated list, exact char case)
+# USE SINGLETON VALUEs for crn, timeofday, zoomlink, course Column heaaders. Char Case matters!
+# Expected: CRN column contain one 5 digit number
+edu.harvard.dce.otherpubs.googlesheet.header.crn=CRN
+# Expected: Type column contains [Lecture|Section]
+edu.harvard.dce.otherpubs.googlesheet.header.type=Type
+# Optional: but expected to contain the Course Number
+edu.harvard.dce.otherpubs.googlesheet.header.course=Course
+# Required: at least 3 starting char of name of day of week
+# Examples: [Mon[day] | Tue[sday] | Wed[nesday] | Thu[rsday] | Fri[day] |  Sat[urday] | Sun[day]]
+edu.harvard.dce.otherpubs.googlesheet.header.dayofweek=Day,Weekdays
+# Required(?): in 12 hrAM|PM. Example: "11 AM", "2PM", etc.
+edu.harvard.dce.otherpubs.googlesheet.header.timeofday=Time
+# Required: full http link to zoom classroom
+edu.harvard.dce.otherpubs.googlesheet.header.zoomlink=Zoom Link
+# Optional: string
+edu.harvard.dce.otherpubs.googlesheet.header.room=Room,Location
+# Optional: string
+edu.harvard.dce.otherpubs.googlesheet.header.rpc=RPC,Videographer
+# ------------------------------------
+
+# Default zoom link duration, taken from cluster config. Initially setting to 4 hours (i.e. 240 min)
+edu.harvard.dce.otherpubs.googlesheet.defaultdurationInMin=<%= @helix_googlesheets_defaultdur_min %>
+# How often to query for updated data, default is 60 min (1 hours)
+edu.harvard.dce.otherpubs.googlesheet.defaultupdatedurationInMin=60
+
+# GoogleAPI requried variable config lives under storage.dir
+# Formally edu.harvard.dce.otherpubs.creds=<%= @helix_googlesheets_cred %>
+# Google api libs are requred to be accessible via file
+edu.harvard.dce.otherpubs.googlesheet.clientSecrets=${karaf.etc}/dce-otherpubs/client-secrets-googlesheets.json
+edu.harvard.dce.otherpubs.googlesheet.dataStore=${org.opencastproject.storage.dir}/dce-otherpubs/data-store
+# Name of datastore
+edu.harvard.dce.otherpubs.googlesheet.credentialDatastore=store
+

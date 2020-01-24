@@ -46,6 +46,14 @@ ibm_watson_api_key = ibm_watson_credentials[:api_key]
 ibm_watson_username = ibm_watson_credentials[:user]
 ibm_watson_psw = ibm_watson_credentials[:pass]
 
+# OPC-446 get helix googlesheet service config
+helix_googlesheets_config = get_helix_googlesheet_config
+helix_googlesheets_cred = helix_googlesheets_config[:cred]
+helix_googlesheets_defaultdur_min = helix_googlesheets_config[:defaultduration_min]
+helix_enabled = helix_googlesheets_config[:enabled]
+helix_token = helix_googlesheets_config[:token]
+helix_sheet_id = helix_googlesheets_config[:helix_sheet_id]
+
 capture_agent_monitor_url = node.fetch(
   :capture_agent_monitor_url, 'http://example.com/monitor_url'
 )
@@ -150,6 +158,7 @@ deploy_revision "opencast" do
     install_publish_1x_service_config(most_recent_deploy, publish_1x_enabled, publish_1x_engage_url)
     install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host, other_oc_host, other_oc_prefother_series, other_oc_preflocal_series, bug_report_email)
     install_otherpubs_service_series_impl_config(most_recent_deploy)
+    install_helix_googlesheets_service_config(most_recent_deploy, local_workspace_root, helix_googlesheets_cred, helix_googlesheets_defaultdur_min, helix_enabled, helix_token, helix_sheet_id)
     install_bug_report_email(most_recent_deploy, public_hostname)
     install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name, s3_file_archive_enabled, s3_file_archive_course_list)
     # OPC-224 (only used during migration)

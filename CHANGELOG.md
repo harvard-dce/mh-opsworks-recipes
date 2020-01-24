@@ -2,6 +2,19 @@
 
 ## TO BE RELEASED
 
+* OPC-446 Helix Googlesheets config for Otherservice
+  Requires new cluster config params and update recipe
+
+        helix_googlesheets, {
+          enabled: <if false, the helix google sheets managed config is not created>,
+          defaultduration_min: <no longer used, it's default dur of a helix pub>,
+          token: <the service api, ask the dev team>,
+          cred: <the old oauth2, ask the dev team>,
+          helix_sheet_id: <the Helix Googledoc spreadsheet id of choice>
+        }
+
+## v2.13.0 - 1/21/2020
+
 * OPC-357 HLS-VOD ffmpeg version and logging
 * Requires ffmpeg push with ./bin/rake stack:commands:execute_recipes_on_layers recipes="oc-opsworks-recipes::install-ffmpeg"
 
