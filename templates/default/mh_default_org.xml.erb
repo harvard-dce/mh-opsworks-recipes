@@ -265,6 +265,8 @@
     <sec:intercept-url pattern="/theodulpass/ui/**" method="GET" access="ROLE_ANONYMOUS" />
     <!-- #DCE KHD: MATT-1569 endpoint for Legacy pub data -->
     <sec:intercept-url pattern="/otherpubs/**" method="GET" access="ROLE_ANONYMOUS" />
+    <!-- OPC-446 Producers can change otherpubs preferences (local, other) -->
+    <sec:intercept-url pattern="/otherpubs/otherpubspref/**" method="PUT" access="ROLE_ADMIN, ROLE_DCE_TEST_LOCAL" />
     <!-- OPC-363 report a problem -->
     <sec:intercept-url pattern="/otherpubs/problemReport/**" method="POST" access="ROLE_ANONYMOUS" />
     <!-- Default Matterhorn engage player module loads at engage-player -->
