@@ -15,6 +15,7 @@ stack_name = stack_shortname
 public_engage_hostname = get_public_engage_hostname_on_engage
 private_hostname = node[:opsworks][:instance][:private_dns_name]
 private_admin_hostname = get_private_admin_hostname
+zoom_ingester_url = get_zoom_ingester_url
 
 capture_agent_monitor_url = node.fetch(
   :capture_agent_monitor_url, 'http://example.com/monitor_url'
@@ -115,7 +116,7 @@ deploy_revision "opencast" do
     install_init_scripts(most_recent_deploy, opencast_repo_root)
     install_opencast_log_configuration(most_recent_deploy)
     install_opencast_log_management
-    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_engage_hostname)
+    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_engage_hostname, zoom_ingester_url)
 #    remove_felix_fileinstall(most_recent_deploy)
     install_smtp_config(most_recent_deploy)
 

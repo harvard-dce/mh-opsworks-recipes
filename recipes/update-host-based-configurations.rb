@@ -10,13 +10,14 @@ production_deploy_root = opencast_repo_root + '/current'
 
 public_engage_hostname = get_public_engage_hostname
 public_admin_hostname = get_public_admin_hostname
+zoom_ingester_url = get_zoom_ingester_url
 
 if File.directory?(production_deploy_root)
   # This is being run during the config lifecycle after a successful deploy,
   # so everytime a node goes online or off and right before deployment.
   # We only care about the fact that it runs before a node changes its online state
 
-  install_multitenancy_config(production_deploy_root, public_admin_hostname, public_engage_hostname)
+  install_multitenancy_config(production_deploy_root, public_admin_hostname, public_engage_hostname, zoom_ingester_url)
 
   ruby_block "update engage hostname" do
     block do

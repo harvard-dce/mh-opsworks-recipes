@@ -72,6 +72,7 @@ git_data = node[:deploy][:opencast][:scm]
 public_engage_hostname = get_public_engage_hostname
 public_admin_hostname = get_public_admin_hostname_on_admin
 private_hostname = node[:opsworks][:instance][:private_dns_name]
+zoom_ingester_url = get_zoom_ingester_url 
 
 activemq_bind_host = private_hostname 
 
@@ -115,7 +116,7 @@ deploy_revision "opencast" do
     install_init_scripts(most_recent_deploy, opencast_repo_root)
     install_opencast_log_configuration(most_recent_deploy)
     install_opencast_log_management
-    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_engage_hostname)
+    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_engage_hostname, zoom_ingester_url)
     install_elasticsearch_index_config(most_recent_deploy,'adminui')
     install_elasticsearch_index_config(most_recent_deploy,'externalapi')
 #    remove_felix_fileinstall(most_recent_deploy)

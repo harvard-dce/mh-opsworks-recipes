@@ -140,6 +140,10 @@ module MhOpsworksRecipes
       node.fetch(:live_streaming_url, 'rtmp://example.com/streaming_url')
     end
 
+    def get_zoom_ingester_url
+      node.fetch(:zoom_ingester_url, 'https://unknown_url')
+    end
+
     def get_public_engage_hostname_on_engage
       return node[:public_engage_hostname] if node[:public_engage_hostname]
 
@@ -902,7 +906,7 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_multitenancy_config(current_deploy_root, admin_hostname, engage_hostname)
+    def install_multitenancy_config(current_deploy_root, admin_hostname, engage_hostname, zoom_ingester_url)
       template %Q|#{current_deploy_root}/etc/org.opencastproject.organization-mh_default_org.cfg| do
         source 'org.opencastproject.organization-mh_default_org.cfg.erb'
         owner 'opencast'
@@ -910,7 +914,8 @@ module MhOpsworksRecipes
         variables({
           hostname: admin_hostname,
           admin_hostname: admin_hostname,
-          engage_hostname: engage_hostname
+          engage_hostname: engage_hostname,
+          zoom_ingester_url: zoom_ingester_url
         })
       end
     end

@@ -14,7 +14,7 @@ stack_name = stack_shortname
 
 public_hostname = node[:opsworks][:instance][:public_dns_name]
 private_hostname = node[:opsworks][:instance][:private_dns_name]
-
+zoom_ingester_url = get_zoom_ingester_url
 
 ## all-in-one specific
 user_tracking_authhost = node.fetch(
@@ -142,7 +142,7 @@ deploy_revision "opencast" do
     install_init_scripts(most_recent_deploy, opencast_repo_root)
     install_opencast_log_configuration(most_recent_deploy)
     install_opencast_log_management
-    install_multitenancy_config(most_recent_deploy, public_hostname, public_hostname)
+    install_multitenancy_config(most_recent_deploy, public_hostname, public_hostname, zoom_ingester_url)
     install_elasticsearch_index_config(most_recent_deploy,'adminui')
     install_elasticsearch_index_config(most_recent_deploy,'externalapi')
 #    remove_felix_fileinstall(most_recent_deploy)
