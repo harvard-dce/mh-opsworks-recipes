@@ -7,7 +7,7 @@ include_recipe "oc-opsworks-recipes::update-package-repo"
 install_package('python3-pip run-one git python3-dev libffi-dev libssl-dev')
 
 bash 'install virtualenv for python3' do
-  code '/usr/bin/pip3 install virtualenv'
+  code '/usr/bin/pip3 install virtualenv pathlib2'
   user 'root'
 end
 

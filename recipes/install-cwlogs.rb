@@ -30,6 +30,14 @@ remote_file '/opt/aws/cloudwatch/awslogs-agent-setup.py' do
   mode '0755'
 end
 
+execute 'Upgrade to latest pip' do
+  # upgrade pip, ensure virtualenv is installed & ignore errors about `six` compatibility
+  command %Q|pip install --ignore-installed six -U pip virtualenv|
+  retries 5
+  retry_delay 15
+  timeout 300
+end
+
 execute 'Install CloudWatch Logs agent' do
   command %Q|/opt/aws/cloudwatch/awslogs-agent-setup.py -n -r #{region} -c /tmp/cwlogs.conf|
   retries 2
