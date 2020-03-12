@@ -46,6 +46,11 @@ ibm_watson_api_key = ibm_watson_credentials[:api_key]
 ibm_watson_username = ibm_watson_credentials[:user]
 ibm_watson_psw = ibm_watson_credentials[:pass]
 
+# OPC-496 Zoom ingester config
+zoom_ingester_config = get_zoom_ingester_config
+zoom_ingester_url = zoom_ingester_config[:url]
+zoom_ingester_api_key = zoom_ingester_config[:api_key]
+
 # OPC-446 get helix googlesheet service config
 helix_googlesheets_config = get_helix_googlesheet_config
 helix_googlesheets_cred = helix_googlesheets_config[:cred]
@@ -164,6 +169,8 @@ deploy_revision "opencast" do
     # OPC-224 (only used during migration)
     install_ingest_1x_config(most_recent_deploy, s3_file_archive_bucket_name, admin_1x_url)
     install_ibm_watson_transcription_service_config(most_recent_deploy, ibm_watson_api_key, ibm_watson_username, ibm_watson_psw)
+    # OPC-496
+    install_adminui_tools_config(most_recent_deploy, zoom_ingester_url, zoom_ingester_api_key)
     install_published_event_details_email(most_recent_deploy, public_hostname)
     # f/OPC-344-notify-ca
     # External Capture Agent Sync service

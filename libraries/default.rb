@@ -247,6 +247,15 @@ module MhOpsworksRecipes
       )
     end
 
+    def get_zoom_ingester_config
+      node.fetch(
+        :zoom_ingester_config, {
+          url: 'unknown',
+          api_key: 'unknown'
+        }
+      )
+    end
+
     def get_helix_googlesheet_config
       node.fetch(
         :helix_googlesheets, {
@@ -1071,6 +1080,18 @@ module MhOpsworksRecipes
           ibm_watson_api_key: ibm_watson_api_key,
           ibm_watson_username: ibm_watson_username,
           ibm_watson_psw: ibm_watson_psw
+        })
+      end
+    end
+
+    def install_adminui_tools_config(current_deploy_root, zoom_ingester_url, zoom_ingester_api_key)
+      template %Q|#{current_deploy_root}/etc/org.opencastproject.adminui.endpoint.ToolsEndpoint.cfg| do
+        source 'org.opencastproject.adminui.endpoint.ToolsEndpoint.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          zoom_ingester_url: zoom_ingester_url,
+          zoom_ingester_api_key: zoom_ingester_api_key
         })
       end
     end
