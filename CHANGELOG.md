@@ -15,6 +15,7 @@
 * MI-183 additional python packages needed for cwlogs and mo-scaler install
   * `install-cwlogs` recipe needs to install latest version of pip
   * mo-scaler recipe needs pathlib2 to create virtualenv
+* update `attributes/default.rb` to install latest maven version
 
 ## v2.13.0 - 1/21/2020
 
