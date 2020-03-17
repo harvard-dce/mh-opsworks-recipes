@@ -7,7 +7,7 @@ color.debug = cyan
 color.trace = cyan
 
 # Common pattern layout for appenders
-log4j2.pattern =  %d{ISO8601} | %-5.5p | (%C{1}:%L) - %m%n
+log4j2.pattern =  %d{ISO8601} | %-5.5p | %tid | (%C{1}:%L) - %m%n
 
 # Root logger
 log4j2.rootLogger.level = WARN
