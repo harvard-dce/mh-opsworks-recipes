@@ -2,6 +2,12 @@
 
 ## TO BE RELEASED
 
+## v2.15.0 - 3/20/2020
+
+* OPC-496 On-demand zoom ingest: add configuration for zoom ingester endpoint. 
+
+## v2.14.0 - 1/24/2020
+
 * OPC-446 Helix Googlesheets config for Otherservice
   Requires new cluster config params and update recipe
 
