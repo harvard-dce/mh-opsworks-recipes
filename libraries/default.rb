@@ -260,6 +260,7 @@ module MhOpsworksRecipes
       node.fetch(
         :helix_googlesheets, {
           enabled: false,
+          change_notification_email_enabled: false,
           defaultduration_min: 240,
           token: '',
           cred: '',
@@ -1096,7 +1097,7 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_helix_googlesheets_service_config(current_deploy_root, local_workspace_root, helix_googlesheets_cred, helix_googlesheets_defaultdur_min, helix_enabled, token, helix_sheet_id)
+    def install_helix_googlesheets_service_config(current_deploy_root, local_workspace_root, helix_googlesheets_cred, helix_googlesheets_defaultdur_min, helix_enabled, token, helix_sheet_id, helix_email_enabled)
       template %Q|#{current_deploy_root}/etc/edu.harvard.dce.otherpubs.helix.OtherPubsHelixGooglesheetService.cfg| do
         source 'edu.harvard.dce.otherpubs.helix.OtherPubsHelixGooglesheetService.cfg.erb'
         owner 'opencast'
@@ -1104,7 +1105,8 @@ module MhOpsworksRecipes
         variables({
           helix_googlesheets_defaultdur_min: helix_googlesheets_defaultdur_min,
           helix_enabled: helix_enabled,
-          helix_sheet_id: helix_sheet_id
+          helix_sheet_id: helix_sheet_id,
+          helix_email_enabled: helix_email_enabled
         })
       end
       # Only create the file if the creds exist in the cluster config
