@@ -49,6 +49,7 @@ helix_googlesheets_defaultdur_min = helix_googlesheets_config[:defaultduration_m
 helix_enabled = helix_googlesheets_config[:enabled]
 helix_token = helix_googlesheets_config[:token]
 helix_sheet_id = helix_googlesheets_config[:helix_sheet_id]
+helix_email_enabled = helix_googlesheets_config[:change_notification_email_enabled]
 
 ## Engage specific
 user_tracking_authhost = node.fetch(
@@ -134,7 +135,7 @@ deploy_revision "opencast" do
 #    configure_usertracking(most_recent_deploy, user_tracking_authhost)
     install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host, other_oc_host, other_oc_prefother_series, other_oc_preflocal_series, bug_report_email)
     install_otherpubs_service_series_impl_config(most_recent_deploy)
-    install_helix_googlesheets_service_config(most_recent_deploy, local_workspace_root,  helix_googlesheets_cred, helix_googlesheets_defaultdur_min, helix_enabled, helix_token, helix_sheet_id)
+    install_helix_googlesheets_service_config(most_recent_deploy, local_workspace_root,  helix_googlesheets_cred, helix_googlesheets_defaultdur_min, helix_enabled, helix_token, helix_sheet_id, helix_email_enabled)
     install_bug_report_email(most_recent_deploy, public_engage_hostname)
     install_aws_s3_distribution_service_config(most_recent_deploy, enable_s3, region, s3_distribution_bucket_name, s3_distribution_base_url)
     install_search_content_service_config(most_recent_deploy, search_content_enabled, region, s3_distribution_bucket_name, stack_name, search_content_index_url, search_content_lambda_name)
