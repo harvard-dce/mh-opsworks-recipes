@@ -2,6 +2,10 @@
 
 ## TO BE RELEASED
 
+## v2.16.1 - 04/09/2020
+
+* OPC-510 otherpubs helix value change email notification configurable on-off
+
 ## v2.15.0 - 3/20/2020
 
 * OPC-496 On-demand zoom ingest: add configuration for zoom ingester endpoint. 
