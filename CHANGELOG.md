@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* MI-185 use the aurora cluster's reader endpoint for the mysqldump
+
 ## v2.16.1 - 04/09/2020
 
 * OPC-510 otherpubs helix value change email notification configurable on-off
