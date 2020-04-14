@@ -6,3 +6,8 @@ password=<%= @password %>
 host=<%= @host %>
 <% end %>
 port=<%= @port %>
+
+[mysqldump]
+<% unless @is_db_node %>
+host=<%= @readonly_op_host %>
+<% end %>
