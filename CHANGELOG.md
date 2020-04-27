@@ -2,6 +2,12 @@
 
 ## TO BE RELEASED
 
+## v2.16.3 - 04/27/2020
+
+* OPC-498 update ffmpeg to 4.2
+
+## v2.16.2 - 04/14/2020
+
 * MI-185 use the aurora cluster's reader endpoint for the mysqldump
 
 ## v2.16.1 - 04/09/2020
