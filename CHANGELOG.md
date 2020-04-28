@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* MI-187 don't let missing old ffmpeg fail the provisioning
+
 ## v2.16.3 - 04/27/2020
 
 * OPC-498 update ffmpeg to 4.2
