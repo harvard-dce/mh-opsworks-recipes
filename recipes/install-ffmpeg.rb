@@ -31,7 +31,7 @@ cd /opt &&
 #{download_command} &&
 /bin/tar xvfz #{ffmpeg_archive} &&
 cd /usr/local/bin/ &&
-sudo rm ffmpeg &&
+sudo rm -f ffmpeg &&
 /usr/bin/find /opt/ffmpeg-#{ffmpeg_version} -mindepth 1 -type f -executable -exec /bin/ln -sf {} \\;
 |
   # retries 10
