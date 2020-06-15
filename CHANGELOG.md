@@ -2,6 +2,9 @@
 
 ## TO BE RELEASED
 
+## v2.17.0 - 06/15/2020
+
+* OPC-543 admin-ng series property rights for producers
 * MI-187 don't let missing old ffmpeg fail the provisioning
 
 ## v2.16.3 - 04/27/2020
