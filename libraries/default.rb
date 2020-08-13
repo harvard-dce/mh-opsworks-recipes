@@ -298,8 +298,20 @@ module MhOpsworksRecipes
       node.fetch(
         :porta_metadata_conf, {
           enabled: false,
-          porta_url: '',
-          porta_api_key: ''
+          porta_url: ''
+        }
+      )
+    end
+
+    def get_porta_auth_conf
+      node.fetch(
+        :porta_auth_conf, {
+          enabled: false,
+          porta_auto_url: '',
+          cookie_name: '',
+          redirect_url: '',
+          default_auth_system: 'acid',
+          other_courses: ''
         }
       )
     end
@@ -1225,15 +1237,40 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_porta_metadata_service(current_deploy_root, porta_url, porta_api_key, enabled = 'true')
+    def install_porta_auth_service(current_deploy_root, porta_auto_url, cookie_name, redirect_url, enabled = 'true')
+      template %Q|#{current_deploy_root}/etc/edu.harvard.dce.auth.porta.impl.PortaAuthServiceImpl.cfg| do
+        source 'edu.harvard.dce.auth.porta.impl.PortaAuthServiceImpl.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          porta_auto_url: porta_auto_url,
+          cookie_name: cookie_name,
+          redirect_url: redirect_url,
+          enabled: enabled 
+        })
+      end
+    end
+
+    def install_porta_metadata_service(current_deploy_root, porta_url, enabled = 'true')
       template %Q|#{current_deploy_root}/etc/edu.harvard.dce.metadata.porta.PortaSeriesMetadataService.cfg| do
         source 'edu.harvard.dce.metadata.porta.PortaSeriesMetadataService.cfg.erb'
         owner 'opencast'
         group 'opencast'
         variables({
           porta_url: porta_url,
-          porta_api_key: porta_api_key,
           enabled: enabled 
+        })
+      end
+    end
+
+    def install_porta_adapter_service(current_deploy_root, default_auth_system, other_courses)
+      template %Q|#{current_deploy_root}/etc/edu.harvard.dce.auth.migration.AuthServiceAdapterImpl.cfg| do
+        source 'edu.harvard.dce.auth.migration.AuthServiceAdapterImpl.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          default_auth_system: default_auth_system,
+          other_courses: other_courses
         })
       end
     end

@@ -33,6 +33,16 @@ auth_redirect_location = node.fetch(:auth_redirect_location, 'http://example.com
 auth_activated = node.fetch(:auth_activated, 'true')
 auth_key = node.fetch(:auth_key, '')
 
+# Porta auth system
+porta_auto_conf = get_porta_auth_conf
+porta_auto_enabled = porta_auto_conf[:enabled]
+porta_auto_url = porta_auto_conf[:porta_auto_url]
+porta_auto_cookie_name = porta_auto_conf[:cookie_name]
+porta_auto_redirect_url = porta_auto_conf[:redirect_url]
+# Used in the migration adapter service
+default_auth_system = porta_auto_conf[:default_auth_system]
+other_courses = porta_auto_conf[:other_courses]
+
 # OPC-149 Other oc host for pub list merge
 # The ignore-flag default value signals the config consumer
 # That the value for the config was not intentionally set and should
@@ -127,6 +137,10 @@ deploy_revision "opencast" do
     install_auth_service(
       most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated, ldap_url, ldap_userdn, ldap_psw 
     )
+    install_porta_auth_service(
+      most_recent_deploy, porta_auto_url, porta_auto_cookie_name, porta_auto_redirect_url, porta_auto_enabled 
+    )
+    install_porta_adapter_service(most_recent_deploy, default_auth_system, other_courses)
 
     # ENGAGE SPECIFIC
     set_service_registry_intervals(most_recent_deploy)

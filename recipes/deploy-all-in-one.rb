@@ -87,7 +87,16 @@ ldap_psw = ldap_conf[:pass]
 porta_conf = get_porta_metadata_conf
 porta_enabled = porta_conf[:enabled]
 porta_url = porta_conf[porta_url]
-porta_api_key = porta_conf[:porta_api_key]
+
+# Porta-auto (check auth) 
+porta_auto_conf = get_porta_auth_conf
+porta_auto_enabled = porta_auto_conf[:enabled]
+porta_auto_url = porta_auto_conf[:porta_auto_url]
+porta_auto_cookie_name = porta_auto_conf[:cookie_name]
+porta_auto_redirect_url = porta_auto_conf[:redirect_url]
+# Used in the migration adapter service
+default_auth_system = porta_auto_conf[:default_auth_system]
+other_courses = porta_auto_conf[:other_courses]
 
 # Publish to 1.x/migration settings
 publish_1x_conf = get_publish_1x_conf
@@ -167,7 +176,11 @@ deploy_revision "opencast" do
     install_auth_service(
       most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated, ldap_url, ldap_userdn, ldap_psw 
     )
-    install_porta_metadata_service(most_recent_deploy, porta_url, porta_api_key, porta_enabled)
+    install_porta_auth_service(
+      most_recent_deploy, porta_auto_url, porta_auto_cookie_name, porta_auto_redirect_url, porta_auto_enabled 
+    )
+    install_porta_adapter_service(most_recent_deploy, default_auth_system, other_courses)
+    install_porta_metadata_service(most_recent_deploy, porta_url, porta_enabled)
     install_live_streaming_service_config(most_recent_deploy, live_stream_name, live_streaming_url, distribution)
     if ldap_enabled
       install_ldap_config(most_recent_deploy, ldap_url, ldap_userdn, ldap_psw)

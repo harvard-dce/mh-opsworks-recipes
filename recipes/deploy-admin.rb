@@ -43,7 +43,6 @@ ibm_watson_transcript_bucket = get_ibm_watson_transcript_bucket_name
 porta_conf = get_porta_metadata_conf
 porta_enabled = porta_conf[:enabled]
 porta_url = porta_conf[:porta_url]
-porta_api_key = porta_conf[:porta_api_key]
 
 # OPC-496 Zoom ingester config
 zoom_ingester_config = get_zoom_ingester_config
@@ -161,7 +160,7 @@ deploy_revision "opencast" do
     install_ingest_1x_config(most_recent_deploy, s3_file_archive_bucket_name, admin_1x_url)
     install_ibm_watson_transcription_service_config(most_recent_deploy, ibm_watson_url, ibm_watson_api_key, ibm_watson_username, ibm_watson_psw)
     # OPC-554 porta metadata service
-    install_porta_metadata_service(most_recent_deploy, porta_url, porta_api_key, porta_enabled)
+    install_porta_metadata_service(most_recent_deploy, porta_url, porta_enabled)
     # OPC-496
     install_adminui_tools_config(most_recent_deploy, zoom_ingester_url, zoom_ingester_api_key)
     unless ibm_watson_transcript_bucket.nil? or ibm_watson_transcript_bucket.empty?

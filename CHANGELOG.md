@@ -2,6 +2,11 @@
 
 ## TO BE RELEASED
 
+## v2.25.0
+
+* OPC-554 Configuration for porta auth and porta migration services.
+
+
 ## v2.22.0
 
 * OPC-596 Increase activemq memory (affects stage and prod). 
