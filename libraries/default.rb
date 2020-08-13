@@ -280,6 +280,19 @@ module MhOpsworksRecipes
       )
     end
 
+    def get_porta_conf
+      node.fetch(
+        :porta_conf, {
+          enabled: false,
+          auth_url: '',
+          api_key: '',
+          cookie_name: '',
+          redirect_url: '',
+          courses: ''
+        }
+      )
+    end
+
     def get_publish_1x_conf
       node.fetch(
         :publish_1x_conf, {
@@ -1182,6 +1195,32 @@ module MhOpsworksRecipes
           ldap_url: ldap_url,
           ldap_userdn: ldap_userdn,
           ldap_psw: ldap_psw
+        })
+      end
+    end
+
+    def install_porta_auth_service(current_deploy_root, auth_url, api_key, cookie_name, redirect_url, enabled = 'true')
+      template %Q|#{current_deploy_root}/etc/edu.harvard.dce.auth.porta.impl.PortaAuthServiceImpl.cfg| do
+        source 'edu.harvard.dce.auth.porta.impl.PortaAuthServiceImpl.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          auth_url: auth_url,
+          api_key: api_key,
+          cookie_name: cookie_name,
+          redirect_url: redirect_url,
+          enabled: enabled 
+        })
+      end
+    end
+
+    def install_porta_adapter_service(current_deploy_root, courses)
+      template %Q|#{current_deploy_root}/etc/edu.harvard.dce.auth.migration.AuthServiceAdapterImpl.cfg| do
+        source 'edu.harvard.dce.auth.migration.AuthServiceAdapterImpl.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          courses: courses
         })
       end
     end
