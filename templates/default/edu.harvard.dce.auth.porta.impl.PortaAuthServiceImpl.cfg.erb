@@ -1,0 +1,37 @@
+
+# Indicates if this service is enabled
+enabled=<%= @enabled %>
+
+# The url where the porta auth service is e.g. https://porta.dcex.harvard.edu
+porta.url=<%= @auth_url %>
+
+# API key to be used when calling the porta api for authorization
+porta.api.key=<%= @api_key %>
+
+# The porta api path. Default: /api/v1/porta_api
+#api.path=/api/v1/porta_api
+
+# Url to redirect when the user needs to log in. This is not a porta url, but a web page
+# that displays a message and has login/logout buttons.
+# Something like: https://ENGAGE_HOST/engage/ui/index.html#/login
+redirect.url=<%= @redirect_url %>
+
+# Porta session cookie name. In production, porta_sessionid.
+cookie.name=<%= @cookie_name %>
+
+# Porta session cookie domain. Default: .harvard.edu 
+#cookie.domain=.harvard.edu
+
+# Porta session cookie path. Default: /
+#cookie.path=/
+
+# Login path. Path to porta login url. Default: /cas/login
+#login.path=/cas/login
+
+# Logout path. Path to porta logout url. Default: /logout
+#logout.path=/logout
+
+# HarvardKey logout path. Path to porta cas logout url, which also logs out of HarvardKey.
+# Default: /cas/logout
+#logout.hkey.path=/cas/logout
+
