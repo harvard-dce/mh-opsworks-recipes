@@ -648,6 +648,10 @@ module MhOpsworksRecipes
           {
             src: 'dce-config/encoding/DCE-h264-movies.properties',
             dest: 'etc/encoding/DCE-h264-movies.properties'
+          },
+          {
+            src: 'dce-config/encoding/HLS-zoom-movies.properties',
+            dest: 'etc/encoding/HLS-zoom-movies.properties'
           }
         ],
         engage: []
