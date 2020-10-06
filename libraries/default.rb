@@ -650,6 +650,10 @@ module MhOpsworksRecipes
             dest: 'etc/encoding/DCE-h264-movies.properties'
           },
           {
+            src: 'dce-config/encoding/HLS-30fps-movies.properties',
+            dest: 'etc/encoding/HLS-30fps-movies.properties'
+          },
+          {
             src: 'dce-config/encoding/HLS-zoom-movies.properties',
             dest: 'etc/encoding/HLS-zoom-movies.properties'
           }
