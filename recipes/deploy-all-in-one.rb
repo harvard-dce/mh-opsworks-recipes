@@ -42,6 +42,7 @@ s3_file_archive_course_list = get_s3_file_archive_course_list
 
 # IBM Watson service credentials
 ibm_watson_credentials = get_ibm_watson_credentials
+ibm_watson_url = ibm_watson_credentials[:url]
 ibm_watson_api_key = ibm_watson_credentials[:api_key]
 ibm_watson_username = ibm_watson_credentials[:user]
 ibm_watson_psw = ibm_watson_credentials[:pass]
@@ -169,7 +170,7 @@ deploy_revision "opencast" do
     install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name, s3_file_archive_enabled, s3_file_archive_course_list)
     # OPC-224 (only used during migration)
     install_ingest_1x_config(most_recent_deploy, s3_file_archive_bucket_name, admin_1x_url)
-    install_ibm_watson_transcription_service_config(most_recent_deploy, ibm_watson_api_key, ibm_watson_username, ibm_watson_psw)
+    install_ibm_watson_transcription_service_config(most_recent_deploy, ibm_watson_url, ibm_watson_api_key, ibm_watson_username, ibm_watson_psw)
     # OPC-496
     install_adminui_tools_config(most_recent_deploy, zoom_ingester_url, zoom_ingester_api_key)
     install_published_event_details_email(most_recent_deploy, public_hostname)
