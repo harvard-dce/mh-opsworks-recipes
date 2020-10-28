@@ -48,7 +48,7 @@ bash 'create virtualenv' do
   code %Q|
 cd #{moscaler_dir} &&
 rm -rf venv &&
-/usr/bin/python3 -m virtualenv --clear venv
+/usr/bin/python3 -m venv --clear venv
   |
   not_if "test -d #{moscaler_dir}/venv && test -e #{moscaler_dir}/venv/bin/python3"
 end
