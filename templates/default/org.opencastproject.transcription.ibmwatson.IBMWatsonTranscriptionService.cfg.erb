@@ -3,7 +3,7 @@ enabled=true
 
 # IBM Watson Speech-to-Text service url
 # Default: https://stream.watsonplatform.net/speech-to-text/api
-# ibm.watson.service.url=https://stream.watsonplatform.net/speech-to-text/api
+ibm.watson.service.url=<%= @ibm_watson_url %>
 
 # APi key obtained when registering with the IBM Watson Speech-to_text service.
 # If empty, user and password below will be used.
@@ -34,7 +34,7 @@ workflow.dispatch.interval=120
 # The default is 10 minutes. This is only used if we didn't get a callback from the
 # ibm watson speech-to-text service.
 # (in seconds)
-#completion.check.buffer=600
+completion.check.buffer=120
 
 # How long to wait after a transcription is supposed to finish before marking the job as 
 # canceled in the database. Default is 2 hours.
