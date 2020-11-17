@@ -25,6 +25,12 @@ directory '/opt/aws/cloudwatch' do
   recursive true
 end
 
+# wipe the pip cache directory to keep it from filling with wheel builds
+directory '/root/.cache/pip/wheels' do
+  action :delete
+  recursive true
+end
+
 remote_file '/opt/aws/cloudwatch/awslogs-agent-setup.py' do
   source %Q|https://s3.amazonaws.com/#{ shared_assets_bucket }/awslogs-agent-setup.py|
   mode '0755'
@@ -61,5 +67,3 @@ end
 if engage_node? || admin_node?
   configure_nginx_cloudwatch_logs
 end
-
-

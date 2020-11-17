@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* MI-193: wipe `/root/.cache/pip/wheels` directory during cloudwatch log agent install
+
 ## v2.17.0 - 06/15/2020
 
 * OPC-543 admin-ng series property rights for producers
