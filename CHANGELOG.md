@@ -1,8 +1,14 @@
 # CHANGELOG
 
 ## TO BE RELEASED
+## TBD v2.19.0
 
 * MI-193: wipe `/root/.cache/pip/wheels` directory during cloudwatch log agent install
+* OPC-577 remember-me bean for OC upstream security patches (companion OC patch)
+
+## v2.18.0 - 11/02/2020
+
+* OPC-568 Watson url from cluster config. Decrease check interval after expected job duration. (#235)
 
 ## v2.17.0 - 06/15/2020
 

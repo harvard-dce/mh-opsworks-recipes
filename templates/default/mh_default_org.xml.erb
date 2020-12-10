@@ -374,7 +374,7 @@
     -->
 
     <!-- Enables "remember me" functionality -->
-    <sec:remember-me key="opencast" user-service-ref="userDetailsService" />
+    <sec:remember-me services-ref="rememberMeServices" />
 
     <!-- Set the request cache -->
     <sec:request-cache ref="requestCache" />
@@ -391,6 +391,22 @@
     -->
 
   </sec:http>
+
+  <bean id="rememberMeServices" class="org.opencastproject.kernel.security.SystemTokenBasedRememberMeService">
+    <property name="userDetailsService" ref="userDetailsService"/>
+    <!-- All following settings are optional -->
+    <property name="tokenValiditySeconds" value="1209600"/>
+    <property name="cookieName" value="oc-remember-me"/>
+    <!-- The following key will be augmented by system properties. Thus, leaving this untouched is okay -->
+    <!-- This key must be equal to the key passed to rememberMeAuthenticationProvider (s. below) -->
+    <property name="key" value="opencast"/>
+  </bean>
+
+  <bean id="rememberMeAuthenticationProvider"
+        class="org.opencastproject.kernel.security.SystemTokenBasedRememberMeAuthenticationProvider">
+    <!-- This key must be equal to the key passed to rememberMeServices (s. above) -->
+    <property name="key" value="opencast"/>
+  </bean>
 
   <!-- ############################# -->
   <!-- # Authentication Filters    # -->
@@ -655,6 +671,7 @@
 
   <!-- The JPA user directory stores md5 hashed, salted passwords, so we must use a username-salted md5 password encoder. -->
   <sec:authentication-manager alias="authenticationManager">
+    <sec:authentication-provider ref="rememberMeAuthenticationProvider"/>
     <!-- Uncomment this if using Shibboleth authentication -->
     <!--sec:authentication-provider ref="preauthAuthProvider" /-->
     <sec:authentication-provider user-service-ref="userDetailsService">
