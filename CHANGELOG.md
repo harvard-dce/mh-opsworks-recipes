@@ -1,7 +1,8 @@
 # CHANGELOG
 
 ## TO BE RELEASED
-## TBD v2.19.0
+
+## v2.19.0 - 12/17/202
 
 * MI-193: wipe `/root/.cache/pip/wheels` directory during cloudwatch log agent install
 * OPC-577 remember-me bean for OC upstream security patches (companion OC patch)
