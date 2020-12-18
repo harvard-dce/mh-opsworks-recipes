@@ -13,6 +13,16 @@ proxy_buffers 16 16k;
 # Opencast throw jetty EofExceptions
 proxy_ignore_client_abort on;
 
+# All traffic that comes to http://SOMETHING.harvard.edu will be redirected to https.
+# The "harvard.edu" was used to exclude: the internal host name (used by Opencast job dispatching),
+# dev clusters that do not bother to set auth/ssl up, local vagrant.
+server {
+  listen 80;
+
+  server_name ~(.+).harvard.edu;
+  return 301 https://$1.harvard.edu$request_uri;
+}
+
 server {
   listen 80 default_server;
   listen [::]:80 default_server ipv6only=on;

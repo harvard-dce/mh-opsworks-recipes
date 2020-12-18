@@ -210,6 +210,11 @@ module MhOpsworksRecipes
       public_engage_hostname
     end
 
+    def get_public_engage_protocol
+      return node[:public_engage_protocol] if node[:public_engage_protocol]
+      'http'
+    end
+
     def get_public_engage_ip
       (private_engage_hostname, engage_attributes) = node[:opsworks][:layers][:engage][:instances].first
       engage_attributes[:ip]
@@ -663,13 +668,14 @@ module MhOpsworksRecipes
       files.fetch(node_profile.to_sym, [])
     end
 
-    def install_published_event_details_email(current_deploy_root, engage_hostname)
+    def install_published_event_details_email(current_deploy_root, engage_hostname, engage_protocol)
       template %Q|#{current_deploy_root}/etc/email/publishedEventDetails| do
         source 'publishedEventDetails.erb'
         owner 'opencast'
         group 'opencast'
         variables({
-          engage_hostname: engage_hostname
+          engage_hostname: engage_hostname,
+          engage_protocol: engage_protocol
         })
       end
     end
@@ -920,7 +926,7 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_multitenancy_config(current_deploy_root, admin_hostname, engage_hostname)
+    def install_multitenancy_config(current_deploy_root, admin_hostname, engage_hostname, engage_protocol)
       template %Q|#{current_deploy_root}/etc/org.opencastproject.organization-mh_default_org.cfg| do
         source 'org.opencastproject.organization-mh_default_org.cfg.erb'
         owner 'opencast'
@@ -928,7 +934,8 @@ module MhOpsworksRecipes
         variables({
           hostname: admin_hostname,
           admin_hostname: admin_hostname,
-          engage_hostname: engage_hostname
+          engage_hostname: engage_hostname,
+          engage_protocol: engage_protocol
         })
       end
     end
