@@ -76,6 +76,7 @@ other_oc_preflocal_series = node.fetch(:other_oc_preflocal_series, ignore_flag)
 git_data = node[:deploy][:opencast][:scm]
 
 public_engage_hostname = get_public_engage_hostname
+public_engage_protocol = get_public_engage_protocol
 public_admin_hostname = get_public_admin_hostname_on_admin
 private_hostname = node[:opsworks][:instance][:private_dns_name]
 
@@ -121,7 +122,7 @@ deploy_revision "opencast" do
     install_init_scripts(most_recent_deploy, opencast_repo_root)
     install_opencast_log_configuration(most_recent_deploy)
     install_opencast_log_management
-    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_engage_hostname)
+    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_engage_hostname, public_engage_protocol)
     install_elasticsearch_index_config(most_recent_deploy,'adminui')
     install_elasticsearch_index_config(most_recent_deploy,'externalapi')
 #    remove_felix_fileinstall(most_recent_deploy)
@@ -147,7 +148,7 @@ deploy_revision "opencast" do
     unless ibm_watson_transcript_bucket.nil? or ibm_watson_transcript_bucket.empty?
       setup_transcript_result_sync_to_s3(shared_storage_root, ibm_watson_transcript_bucket)
     end
-    install_published_event_details_email(most_recent_deploy, public_engage_hostname)
+    install_published_event_details_email(most_recent_deploy, public_engage_hostname, public_engage_protocol)
 
     if using_local_distribution
       update_workflows_for_local_distribution(most_recent_deploy)
@@ -174,6 +175,7 @@ deploy_revision "opencast" do
         admin_auth: admin_user_info,
         database: database_connection,
         engage_hostname: public_engage_hostname,
+        engage_protocol: public_engage_protocol,
         capture_agent_monitor_url: capture_agent_monitor_url,
         live_monitor_url: live_monitor_url,
         job_maxload: nil,

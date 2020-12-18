@@ -2,7 +2,11 @@
 
 ## TO BE RELEASED
 
-## v2.19.0 - 12/17/202
+## v2.20.0
+
+* OPC-580: redirect http requests to engage to https when host is *.harvard.edu
+
+## v2.19.0 - 12/17/2020
 
 * MI-193: wipe `/root/.cache/pip/wheels` directory during cloudwatch log agent install
 * OPC-577 remember-me bean for OC upstream security patches (companion OC patch)

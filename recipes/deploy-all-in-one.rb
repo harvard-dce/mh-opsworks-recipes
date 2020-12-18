@@ -13,6 +13,7 @@ admin_user_info = get_admin_user_info
 stack_name = stack_shortname
 
 public_hostname = node[:opsworks][:instance][:public_dns_name]
+public_engage_protocol = get_public_engage_protocol
 private_hostname = node[:opsworks][:instance][:private_dns_name]
 
 
@@ -149,7 +150,7 @@ deploy_revision "opencast" do
     install_init_scripts(most_recent_deploy, opencast_repo_root)
     install_opencast_log_configuration(most_recent_deploy)
     install_opencast_log_management
-    install_multitenancy_config(most_recent_deploy, public_hostname, public_hostname)
+    install_multitenancy_config(most_recent_deploy, public_hostname, public_hostname, public_engage_protocol)
     install_elasticsearch_index_config(most_recent_deploy,'adminui')
     install_elasticsearch_index_config(most_recent_deploy,'externalapi')
 #    remove_felix_fileinstall(most_recent_deploy)
@@ -173,7 +174,7 @@ deploy_revision "opencast" do
     install_ibm_watson_transcription_service_config(most_recent_deploy, ibm_watson_url, ibm_watson_api_key, ibm_watson_username, ibm_watson_psw)
     # OPC-496
     install_adminui_tools_config(most_recent_deploy, zoom_ingester_url, zoom_ingester_api_key)
-    install_published_event_details_email(most_recent_deploy, public_hostname)
+    install_published_event_details_email(most_recent_deploy, public_hostname, public_engage_protocol)
     # f/OPC-344-notify-ca
     # External Capture Agent Sync service
     install_capture_agent_sync_config(most_recent_deploy)
@@ -208,6 +209,7 @@ deploy_revision "opencast" do
         admin_auth: admin_user_info,
         database: database_connection,
         engage_hostname: public_hostname,
+        engage_protocol: public_engage_protocol,
         capture_agent_monitor_url: capture_agent_monitor_url,
         live_monitor_url: live_monitor_url,
         job_maxload: nil,

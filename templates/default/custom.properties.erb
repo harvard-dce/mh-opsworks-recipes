@@ -112,7 +112,7 @@ org.opencastproject.workflow.handler.workflow.ZipWorkflowOperationHandler.tmpdir
 # Comment for #DCE: After 2.x, this needs to be set to the internal publication channel i.e. 
 # http://ENGAGE/static. The S3 distributioni configuration now have a separate url where
 # we specify the bucket url or the cloudfront address.
-org.opencastproject.download.url=http://<%= @engage_hostname %>/static
+org.opencastproject.download.url=<%= @engage_protocol %>://<%= @engage_hostname %>/static
 
 # The directory to store media, metadata, and attachments for download from the engage tool
 org.opencastproject.download.directory=${org.opencastproject.shared_storage.dir}/downloads

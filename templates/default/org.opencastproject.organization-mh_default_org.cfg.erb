@@ -127,7 +127,7 @@ prop.org.opencastproject.admin.mediamodule.url=${prop.org.opencastproject.engage
 # Value: <a complete url with scheme and port>
 # Default: ${org.opencastproject.server.url}
 #
-prop.org.opencastproject.engage.ui.url=http://<%= @engage_hostname %>
+prop.org.opencastproject.engage.ui.url=<%= @engage_protocol %>://<%= @engage_hostname %>
 
 # Link to the RSS and atom feed base
 #
