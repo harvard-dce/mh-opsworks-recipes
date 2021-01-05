@@ -691,17 +691,6 @@ module MhOpsworksRecipes
       end
     end
 
-    def configure_usertracking(current_deploy_root, user_tracking_authhost)
-      template %Q|#{current_deploy_root}/etc/services/org.opencastproject.usertracking.impl.UserTrackingServiceImpl.properties| do
-        source 'UserTrackingServiceImpl.properties.erb'
-        owner 'opencast'
-        group 'opencast'
-        variables({
-          user_tracking_authhost: user_tracking_authhost
-        })
-      end
-    end
-
     def download_episode_defaults_json_file(current_deploy_root)
       private_assets_bucket_name = node.fetch(:private_assets_bucket_name, 'default-private-bucket')
 
