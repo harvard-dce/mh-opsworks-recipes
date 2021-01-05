@@ -18,9 +18,6 @@ private_hostname = node[:opsworks][:instance][:private_dns_name]
 
 
 ## all-in-one specific
-user_tracking_authhost = node.fetch(
-  :user_tracking_authhost, 'http://example.com'
-)
 
 using_local_distribution = is_using_local_distribution?
 
@@ -182,7 +179,6 @@ deploy_revision "opencast" do
 #    # all-in-one SPECIFIC
     initialize_database(most_recent_deploy)
 
-#    configure_usertracking(most_recent_deploy, user_tracking_authhost)
     install_aws_s3_distribution_service_config(most_recent_deploy, enable_s3, region, s3_distribution_bucket_name, s3_distribution_base_url)
     install_search_content_service_config(most_recent_deploy, search_content_enabled, region, s3_distribution_bucket_name, stack_name, search_content_index_url, search_content_lambda_name)
 #    install_opencast_images_properties(most_recent_deploy)
