@@ -21,11 +21,16 @@ private_hostname = node[:opsworks][:instance][:private_dns_name]
 
 using_local_distribution = is_using_local_distribution?
 
-# S3 distribution service
+# S3 distribution service; also used by video export
 enable_s3 = !using_local_distribution
 region = node.fetch(:region, 'us-east-1')
 s3_distribution_bucket_name = get_s3_distribution_bucket_name
 s3_distribution_base_url=get_base_media_download_url(public_hostname)
+
+# credentials for generating the signed urls for exporting videos
+video_export_creds = get_video_export_credentials
+video_export_access_key_id = video_export_creds[:access_key_id]
+video_export_secret_access_key = video_export_creds[:secret_access_key]
 
 # Configuration for searching transcripts
 search_content_index_url = node.fetch(:transcript_search_endpoint, '')
@@ -180,6 +185,7 @@ deploy_revision "opencast" do
     initialize_database(most_recent_deploy)
 
     install_aws_s3_distribution_service_config(most_recent_deploy, enable_s3, region, s3_distribution_bucket_name, s3_distribution_base_url)
+    install_aws_s3_export_video_service_config(most_recent_deploy, enable_s3, region, s3_distribution_bucket_name, video_export_access_key_id, video_export_secret_access_key)
     install_search_content_service_config(most_recent_deploy, search_content_enabled, region, s3_distribution_bucket_name, stack_name, search_content_index_url, search_content_lambda_name)
 #    install_opencast_images_properties(most_recent_deploy)
     # OPC-139 Oauth config (for Engage)

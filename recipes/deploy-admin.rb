@@ -21,6 +21,16 @@ s3_file_archive_enabled = !s3_file_archive_bucket_name.to_s.empty?
 s3_file_archive_course_list = get_s3_file_archive_course_list
 # S3 file archive service
 
+# S3 distribution config to be used by the video export feature
+enable_s3 = !using_local_distribution
+region = node.fetch(:region, 'us-east-1')
+s3_distribution_bucket_name = get_s3_distribution_bucket_name
+
+# credentials for generating the signed urls for exporting videos
+video_export_creds = get_video_export_credentials 
+video_export_access_key_id = video_export_creds[:access_key_id]
+video_export_secret_access_key = video_export_creds[:secret_access_key]
+
 # IBM Watson service credentials
 ibm_watson_credentials = get_ibm_watson_credentials
 ibm_watson_url = ibm_watson_credentials[:url]
@@ -139,6 +149,7 @@ deploy_revision "opencast" do
 #    # Admin Specific
     install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host, other_oc_host, other_oc_prefother_series, other_oc_preflocal_series, '')
     install_otherpubs_service_series_impl_config(most_recent_deploy)
+    install_aws_s3_export_video_service_config(most_recent_deploy, enable_s3, region, s3_distribution_bucket_name, video_export_access_key_id, video_export_secret_access_key)
     install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name, s3_file_archive_enabled, s3_file_archive_course_list)
     # OPC-224 (only used during migration)
     install_ingest_1x_config(most_recent_deploy, s3_file_archive_bucket_name, admin_1x_url)

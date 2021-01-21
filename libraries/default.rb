@@ -252,6 +252,15 @@ module MhOpsworksRecipes
       )
     end
 
+    def get_video_export_credentials
+      node.fetch(
+        :video_export_user, {
+          access_key_id: 'unknown',
+          secret_access_key: 'unknown'
+        }
+      )
+    end
+
     def get_zoom_ingester_config
       node.fetch(
         :zoom_ingester_config, {
@@ -644,10 +653,10 @@ module MhOpsworksRecipes
             src: 'dce-config/email/eventDetails',
             dest: 'etc/email/eventDetails'
           },
-#          {
-#            src: 'dce-config/email/metasynchDetails',
-#            dest: 'etc/email/metasynchDetails'
-#          },
+          {
+            src: 'dce-config/email/videoExport',
+            dest: 'etc/email/videoExport'
+          },
         ],
         worker: [
           {
@@ -1039,6 +1048,21 @@ module MhOpsworksRecipes
           region: region,
           s3_distribution_bucket_name: s3_distribution_bucket_name,
           s3_distribution_base_url: s3_distribution_base_url 
+        })
+      end
+    end
+
+    def install_aws_s3_export_video_service_config(current_deploy_root, enable, region, bucket_name, access_key_id, secret_access_key)
+      template %Q|#{current_deploy_root}/etc/edu.harvard.dce.export.impl.VideoExportServiceImpl.cfg| do
+        source 'edu.harvard.dce.export.impl.VideoExportServiceImpl.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          enable: enable,
+          region: region,
+          bucket_name: bucket_name,
+          access_key_id: access_key_id,
+          secret_access_key: secret_access_key 
         })
       end
     end

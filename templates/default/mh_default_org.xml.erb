@@ -78,6 +78,8 @@
     <sec:intercept-url pattern="/admin-ng/series/*/access.json" method="GET" access="ROLE_ADMIN, ROLE_UI_SERIES_DETAILS_ACL_VIEW" />
     <sec:intercept-url pattern="/admin-ng/series/*/metadata.json" method="GET" access="ROLE_ADMIN, ROLE_UI_SERIES_DETAILS_METADATA_VIEW" />
     <sec:intercept-url pattern="/admin-ng/series/*/theme.json" method="GET" access="ROLE_ADMIN, ROLE_UI_SERIES_DETAILS_THEMES_VIEW" />
+    <!-- #DCE OPC-581 video export tool -->
+    <sec:intercept-url pattern="/admin-ng/series/*/videoExport" method="POST" access="ROLE_ADMIN, ROLE_UI_SERIES_DETAILS_VIEW" />
     <!-- #DCE start OPC-543 -->
     <sec:intercept-url pattern="/admin-ng/series/*/property/*" method="GET" access="ROLE_ADMIN, ROLE_DCE_TEST_LOCAL" />
     <sec:intercept-url pattern="/admin-ng/series/*/property" method="POST" access="ROLE_ADMIN, ROLE_DCE_TEST_LOCAL" />

@@ -2,7 +2,11 @@
 
 ## TO BE RELEASED
 
-## v2.20.0
+## v2.21.0
+
+* OPC-581 Configuration for the video export tool (send email with s3 bucket presigned urls). 
+
+## v2.20.1
 
 * OPC-580: redirect http requests to engage to https when host is *.harvard.edu
 
