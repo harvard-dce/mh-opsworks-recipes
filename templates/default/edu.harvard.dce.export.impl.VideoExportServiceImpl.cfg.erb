@@ -1,0 +1,30 @@
+
+# Most of this configuration comes from the S3 distribution service configuration.
+# If S3 distribution is not enabled, video export is not enabled.
+
+# Set this to true to enable S3 video export.
+enable=<%= @enable %>
+
+# The AWS region. Name must be a valid AWS region name like us-east-1.
+# Default: us-east-1
+###aws.s3.region=<%= @region %>
+
+# The AWS S3 bucket name (mandatory). '_' is not allowed.
+aws.s3.bucket=<%= @bucket_name %>
+
+# The AWS access key ID to use for signing the urls. This is the IAM opencast_system_user. Mandatory.
+aws.access.key.id=<%= @access_key_id %>
+
+# The AWS secret access key to use for signing the urls. This is the IAM opencast_system_user. Mandatory. 
+aws.secret.access.key=<%= @secret_access_key %>
+
+# The template for the email sent with the download video links
+email.template=videoExport
+
+# The number of days the signed urls will expire. The maximum is 7.
+# Default: 7
+###expiration.days=7
+
+# Video flavors to export
+# Default: presenter/delivery,presentation/delivery
+###video.flavors=presenter/delivery,presentation/delivery
