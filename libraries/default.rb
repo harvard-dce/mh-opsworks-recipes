@@ -274,6 +274,17 @@ module MhOpsworksRecipes
       )
     end
 
+    def get_transcript_google_config
+      node.fetch(
+        :transcript_google, {
+          enabled: false,
+          token: '',
+          secret: '',
+          id: ''
+        }
+      )
+    end
+
     def get_ldap_conf
       node.fetch(
         :ldap_conf, {
@@ -1145,6 +1156,21 @@ module MhOpsworksRecipes
             token: unpacked_service_token
           })
         end
+      end
+    end
+
+    # OPC-547
+    def install_googlestranscript_config(current_deploy_root, local_workspace_root, transcript_google_enabled, transcript_google_secret, transcript_google_token, transcript_google_id)
+      template %Q|#{current_deploy_root}/etc/org.opencastproject.transcription.googlespeech.GoogleSpeechTranscriptionService.cfg| do
+        source 'org.opencastproject.transcription.googlespeech.GoogleSpeechTranscriptionService.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          transcript_google_enabled: transcript_google_enabled,
+          transcript_google_token: transcript_google_token,
+          transcript_google_id: transcript_google_id,
+          transcript_google_secret: transcript_google_secret
+        })
       end
     end
 

@@ -2,6 +2,16 @@
 
 ## TO BE RELEASED
 
+* OPC-547 Googles Transcript service config
+  Requires additional cluster config params
+
+        "transcript_google": {
+          "enabled": true,
+          "id": "myGoogleId@google.example.org",
+          "token": "myGoogleToken",
+          "secret": "myGoogleSecret"
+        },
+
 ## v2.20.0
 
 * OPC-580: redirect http requests to engage to https when host is *.harvard.edu

@@ -59,6 +59,13 @@ helix_token = helix_googlesheets_config[:token]
 helix_sheet_id = helix_googlesheets_config[:helix_sheet_id]
 helix_email_enabled = helix_googlesheets_config[:change_notification_email_enabled]
 
+# OPC-547 get Google Transcript config
+transcript_google_config = get_transcript_google_config
+transcript_google_secret = transcript_google_config[:secret]
+transcript_google_enabled = transcript_google_config[:enabled]
+transcript_google_token = transcript_google_config[:token]
+transcript_google_id = transcript_google_config[:id]
+
 capture_agent_monitor_url = node.fetch(
   :capture_agent_monitor_url, 'http://example.com/monitor_url'
 )
@@ -164,6 +171,7 @@ deploy_revision "opencast" do
     install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host, other_oc_host, other_oc_prefother_series, other_oc_preflocal_series, bug_report_email)
     install_otherpubs_service_series_impl_config(most_recent_deploy)
     install_helix_googlesheets_service_config(most_recent_deploy, local_workspace_root, helix_googlesheets_cred, helix_googlesheets_defaultdur_min, helix_enabled, helix_token, helix_sheet_id, helix_email_enabled)
+    install_googlestranscript_config(most_recent_deploy, local_workspace_root, transcript_google_enabled, transcript_google_secret, transcript_google_token, transcript_google_id)
     install_bug_report_email(most_recent_deploy, public_hostname)
     install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name, s3_file_archive_enabled, s3_file_archive_course_list)
     # OPC-224 (only used during migration)

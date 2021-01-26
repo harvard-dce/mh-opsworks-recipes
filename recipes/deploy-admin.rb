@@ -29,6 +29,13 @@ ibm_watson_username = ibm_watson_credentials[:user]
 ibm_watson_psw = ibm_watson_credentials[:pass]
 ibm_watson_transcript_bucket = get_ibm_watson_transcript_bucket_name
 
+# OPC-547 get Google Transcript config
+transcript_google_config = get_transcript_google_config
+transcript_google_secret = transcript_google_config[:secret]
+transcript_google_enabled = transcript_google_config[:enabled]
+transcript_google_token = transcript_google_config[:token]
+transcript_google_id = transcript_google_config[:id]
+
 # OPC-496 Zoom ingester config
 zoom_ingester_config = get_zoom_ingester_config
 zoom_ingester_url = zoom_ingester_config[:url]
@@ -149,6 +156,7 @@ deploy_revision "opencast" do
       setup_transcript_result_sync_to_s3(shared_storage_root, ibm_watson_transcript_bucket)
     end
     install_published_event_details_email(most_recent_deploy, public_engage_hostname, public_engage_protocol)
+    install_googlestranscript_config(most_recent_deploy, local_workspace_root, transcript_google_enabled, transcript_google_secret, transcript_google_token, transcript_google_id)
 
     if using_local_distribution
       update_workflows_for_local_distribution(most_recent_deploy)

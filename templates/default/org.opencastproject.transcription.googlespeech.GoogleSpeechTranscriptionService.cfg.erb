@@ -1,0 +1,56 @@
+# Change enabled to true to enable this service.
+enabled=<%= @transcript_google_enabled %>
+
+# Google Cloud Service details
+google.cloud.client.id=<%= @transcript_google_id %>
+google.cloud.client.secret=<%= @transcript_google_secret %>
+google.cloud.refresh.token=<%= @transcript_google_token %>
+
+# The cloud token endpoint url
+# default is https://www.googleapis.com/oauth2/v4/token
+#google.cloud.token.endpoint.url=https://www.googleapis.com/oauth2/v4/token
+google.cloud.token.endpoint.url=https://oauth2.googleapis.com/token
+
+# google cloud storage bucket
+# The google bucket is manually created when setting up the Google side
+google.cloud.storage.bucket=opencast_transcription
+
+# Language code of the supplied audio. See the Google Speech-to-Text service documentation
+# for available languages. If empty, the default will be used ("en-US").
+# List of supported languages: https://cloud.google.com/speech-to-text/docs/languages
+#google.speech.language=en-US
+
+# Filter out profanities from result. Default is false
+#google.speech.profanity.filter=false
+
+# Audio encoding extension.
+# The value will be used to store the audio file as [medidpackage_id].[extension] in the Google storage bucket
+# If empty the he default will be used (flac)
+#encoding.extension = flac
+
+# Workflow to be executed when results are ready to be attached to media package.
+#workflow=google-speech-attach-transcripts
+
+# Interval the workflow dispatcher runs to start workflows to attach transcripts to the media package
+# after the transcription job is completed.
+# (in seconds) Default is 1 minute.
+#workflow.dispatch.interval=60
+
+# How long it should wait to check jobs after their start date + track duration has passed.
+# The default is 5 minutes.
+# (in seconds)
+#completion.check.buffer=300
+
+# How long to wait after a transcription is supposed to finish before marking the job as
+# cancelled in the database. Default is 5 hours.
+# (in seconds)
+#max.processing.time=18000
+
+# How long to keep result files in the working file repository in days.
+# The default is 7 days.
+#cleanup.results.days=7
+
+# Email to send notifications of errors. If not entered, the value from
+# org.opencastproject.admin.email in custom.properties will be used.
+# notification.email=
+
