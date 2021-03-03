@@ -2,6 +2,10 @@
 
 ## TO BE RELEASED
 
+## v2.22.0
+
+* OPC-596 Increase activemq memory (affects stage and prod). 
+
 ## v2.21.0
 
 * OPC-581 Configuration for the video export tool (send email with s3 bucket presigned urls). 

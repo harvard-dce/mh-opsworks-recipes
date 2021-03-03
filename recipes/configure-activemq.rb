@@ -24,7 +24,7 @@ increase_max_memory = total_ram_in_meg > 16000
 ruby_block "max_memory" do
   block do
     sed = Chef::Util::FileEdit.new(activemq_wrapper_conf)
-    sed.search_file_replace(/^(wrapper\.java\.maxmemory)=\d+/, '\1=2048')
+    sed.search_file_replace(/^(wrapper\.java\.maxmemory)=\d+/, '\1=4096')
     sed.write_file
   end
   only_if { increase_max_memory }
