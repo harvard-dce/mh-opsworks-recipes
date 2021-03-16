@@ -19,7 +19,10 @@ log4j2.rootLogger.appenderRef.Console.filter.threshold.type = ThresholdFilter
 log4j2.rootLogger.appenderRef.Console.filter.threshold.level = ${karaf.log.console:-OFF}
 
 # Loggers configuration
+log4j2.logger.cleansession.name=org.opencastproject.kernel.rest.CleanSessionsFilter
+log4j2.logger.cleansession.level=TRACE
 
+# FOR TESTING ONLY
 # Loglevel configuration for all opencast modules. Usually, INFO is a quite sane log level. If you need a different
 # detail level of logs, you can adjust this to: ERROR, WARN, INFO, DEBUG, TRACE.
 log4j2.logger.opencast.name = org.opencastproject
