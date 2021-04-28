@@ -294,12 +294,22 @@ module MhOpsworksRecipes
       )
     end
 
-    def get_porta_conf
+    def get_porta_metadata_conf
       node.fetch(
-        :porta_conf, {
+        :porta_metadata_conf, {
           enabled: false,
-          auth_url: '',
-          api_key: '',
+          porta_url: '',
+          porta_api_key: ''
+        }
+      )
+    end
+
+    def get_porta_auth_conf
+      node.fetch(
+        :porta_auth_conf, {
+          enabled: false,
+          porta_auto_url: '',
+          porta_auto_api_key: '',
           cookie_name: '',
           redirect_url: '',
           courses: ''
@@ -1228,14 +1238,14 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_porta_auth_service(current_deploy_root, auth_url, api_key, cookie_name, redirect_url, enabled = 'true')
+    def install_porta_auth_service(current_deploy_root, porta_auto_url, porta_auto_api_key, cookie_name, redirect_url, enabled = 'true')
       template %Q|#{current_deploy_root}/etc/edu.harvard.dce.auth.porta.impl.PortaAuthServiceImpl.cfg| do
         source 'edu.harvard.dce.auth.porta.impl.PortaAuthServiceImpl.cfg.erb'
         owner 'opencast'
         group 'opencast'
         variables({
-          auth_url: auth_url,
-          api_key: api_key,
+          porta_auto_url: porta_auto_url,
+          porta_auto_api_key: porta_auto_api_key,
           cookie_name: cookie_name,
           redirect_url: redirect_url,
           enabled: enabled 
@@ -1243,14 +1253,14 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_porta_metadata_service(current_deploy_root, auth_url, api_key, enabled = 'true')
+    def install_porta_metadata_service(current_deploy_root, porta_url, porta_api_key, enabled = 'true')
       template %Q|#{current_deploy_root}/etc/edu.harvard.dce.metadata.porta.PortaSeriesMetadataService.cfg| do
         source 'edu.harvard.dce.metadata.porta.PortaSeriesMetadataService.cfg.erb'
         owner 'opencast'
         group 'opencast'
         variables({
-          auth_url: auth_url,
-          api_key: api_key,
+          porta_url: porta_url,
+          porta_api_key: porta_api_key,
           enabled: enabled 
         })
       end

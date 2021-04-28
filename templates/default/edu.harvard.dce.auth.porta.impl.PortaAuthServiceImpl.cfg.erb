@@ -3,13 +3,13 @@
 enabled=<%= @enabled %>
 
 # The url where the porta auth service is e.g. https://porta.dcex.harvard.edu
-porta.url=<%= @auth_url %>
+porta.url=<%= @porta_auto_url %>
 
 # API key to be used when calling the porta api for authorization
-porta.api.key=<%= @api_key %>
+porta.api.key=<%= @porta_auto_api_key %>
 
 # The porta api path. Default: /api/v1/porta_api
-#api.path=/api/v1/porta_api
+#api.path=/api/v1/porta_auto
 
 # Url to redirect when the user needs to log in. This is not a porta url, but a web page
 # that displays a message and has login/logout buttons.

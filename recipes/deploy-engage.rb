@@ -34,14 +34,14 @@ auth_activated = node.fetch(:auth_activated, 'true')
 auth_key = node.fetch(:auth_key, '')
 
 # Porta auth system
-porta_conf = get_porta_conf
-porta_enabled = porta_conf[:enabled]
-porta_auth_url = porta_conf[:auth_url]
-porta_api_key = porta_conf[:api_key]
-porta_cookie_name = porta_conf[:cookie_name]
-porta_redirect_url = porta_conf[:redirect_url]
+porta_auto_conf = get_porta_auth_conf
+porta_auto_enabled = porta_auto_conf[:enabled]
+porta_auto_url = porta_auto_conf[:porta_auto_url]
+porta_auto_api_key = porta_auto_conf[:porta_auto_api_key]
+porta_auto_cookie_name = porta_auto_conf[:cookie_name]
+porta_auto_redirect_url = porta_auto_conf[:redirect_url]
 # Used in the migration adapter service
-porta_courses = porta_conf[:courses]
+porta_courses = porta_auto_conf[:courses]
 
 # OPC-149 Other oc host for pub list merge
 # The ignore-flag default value signals the config consumer
@@ -138,7 +138,7 @@ deploy_revision "opencast" do
       most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated, ldap_url, ldap_userdn, ldap_psw 
     )
     install_porta_auth_service(
-      most_recent_deploy, porta_auth_url, porta_api_key, porta_cookie_name, porta_redirect_url, porta_enabled 
+      most_recent_deploy, porta_auto_url, porta_auto_api_key, porta_auto_cookie_name, porta_auto_redirect_url, porta_auto_enabled 
     )
     install_porta_adapter_service(most_recent_deploy, porta_courses)
 
