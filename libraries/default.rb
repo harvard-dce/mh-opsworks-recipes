@@ -294,6 +294,16 @@ module MhOpsworksRecipes
       )
     end
 
+    def get_porta_metadata_conf
+      node.fetch(
+        :porta_metadata_conf, {
+          enabled: false,
+          porta_url: '',
+          porta_api_key: ''
+        }
+      )
+    end
+
     def get_publish_1x_conf
       node.fetch(
         :publish_1x_conf, {
@@ -1211,6 +1221,19 @@ module MhOpsworksRecipes
           ldap_url: ldap_url,
           ldap_userdn: ldap_userdn,
           ldap_psw: ldap_psw
+        })
+      end
+    end
+
+    def install_porta_metadata_service(current_deploy_root, porta_url, porta_api_key, enabled = 'true')
+      template %Q|#{current_deploy_root}/etc/edu.harvard.dce.metadata.porta.PortaSeriesMetadataService.cfg| do
+        source 'edu.harvard.dce.metadata.porta.PortaSeriesMetadataService.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          porta_url: porta_url,
+          porta_api_key: porta_api_key,
+          enabled: enabled 
         })
       end
     end
