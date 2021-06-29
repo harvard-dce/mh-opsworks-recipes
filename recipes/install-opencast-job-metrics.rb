@@ -12,6 +12,11 @@ workers_layer_id = node[:opsworks][:layers][:workers][:id]
 stack_id = node[:opsworks][:stack][:id]
 stack_name = stack_shortname
 
+bash 'install older requests-cache' do
+  code 'pip3 install requests-cache==0.5.2'
+  user 'root'
+end
+
 bash 'install pyhorn' do
   code 'pip3 install pyhorn'
   user 'root'
@@ -43,4 +48,3 @@ cron_d 'workers_job_load_metrics' do
   command %Q(/usr/local/bin/workers_job_load_metrics.sh "#{stack_name}" "#{stack_id}" "#{workers_layer_id}" "#{private_admin_hostname}" "#{rest_auth_info[:user]}" "#{rest_auth_info[:pass]}" 2>&1 | logger -t info)
   path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 end
-

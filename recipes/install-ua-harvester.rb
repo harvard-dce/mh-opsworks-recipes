@@ -15,7 +15,7 @@ stack_name = stack_shortname
 sqs_queue_name = "#{stack_name}-user-actions"
 region = node[:opsworks][:instance][:region]
 
-install_package('python-pip python-virtualenv run-one redis-server')
+install_package('python3-pip python3-virtualenv run-one redis-server')
 
 user "ua_harvester" do
   comment 'The ua_harvester user'
