@@ -9,7 +9,7 @@ if on_aws?
   awscli_version = node.fetch(:awscli_version, '1.10.5')
 
   execute 'install awscli' do
-    command %Q|pip install awscli==#{awscli_version}|
+    command %Q|pip3 install awscli==#{awscli_version}|
     retries 5
     retry_delay 10
     timeout 300
