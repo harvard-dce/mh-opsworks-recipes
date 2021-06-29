@@ -3,7 +3,7 @@
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
-install_package("python-dev")
+install_package("python3-dev")
 
 region = node[:opsworks][:instance][:region]
 shared_assets_bucket = get_shared_asset_bucket_name

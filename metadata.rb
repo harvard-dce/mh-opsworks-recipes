@@ -154,7 +154,7 @@ want by setting the parameter below.
 * <tt>node[:awscli_version]</tt>
 
 === Effects
-* the python-pip package is installed
+* the python3-pip package is installed
 * the aws-cli is installed into /usr/local/bin
 '
 )
