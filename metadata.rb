@@ -471,7 +471,7 @@ more info.
 recipe(
   'oc-opsworks-recipes::write-root-my-dot-cnf',
   'write a /root/.my.cnf on the node that connects to the database
-  
+
 === Attributes
 * <tt>node[:deploy][:opencast][:database]</tt>, the default opsworks database attributes
 
@@ -1048,14 +1048,14 @@ none
 )
 recipe(
     'oc-opsworks-recipes::enable-ubuntu-advantage-esm',
-    'Runs the `ubuntu-advantage enable-esm` command.
+    'Runs the `ubuntu-advantage attach [token]` command.
 
 === attributes
 none
 
 === effects
-* Will execute the enable-esm command with the user/pass combo
-  configured in the cluster config "ubuntu_advantage_esm"
+* Will execute the enable-esm command with the `token` value
+  configured in the cluster config "ubuntu_advantage_esm" block
 '
 )
 depends 'nfs', '~> 2.1.0'

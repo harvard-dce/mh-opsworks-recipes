@@ -2,18 +2,45 @@
 
 ## TO BE RELEASED
 
+* *REQUIRES MANUAL RECIPE RUN* *REQUIRES EDITS TO CLUSTER CONFIG*
+  MI-196: update syntax for esm registration command
+  The `ubuntu_advantage_esm` block of the custom json must be updated from this:
+  ```
+	"ubuntu_advantage_esm": {
+		"user": "...",
+		"password": "..."
+	},
+  ```
+  to this:
+  ```
+	"ubuntu_advantage_esm": {
+		"token": "...",
+	},
+  ```
+  For an existing cluster you must then execute the modified recipe:
+  ```bash
+	./bin/rake stack:commands:execute_recipes_on_layers layers="Admin,Engage,Utility,Storage,Analytics,Workers" recipes="oc-opsworks-recipes::enable-ubuntu-advantage-esm"
+  ```
+
 ## v2.25.0
 
 * OPC-554 Configuration for porta auth and porta migration services.
 
+## v2.24.0
+
+* OPC-554: Add configuration for porta series metadata update. (#244)
+
+## v2.23.0
+
+* Changed notification email
 
 ## v2.22.0
 
-* OPC-596 Increase activemq memory (affects stage and prod). 
+* OPC-596 Increase activemq memory (affects stage and prod).
 
 ## v2.21.0
 
-* OPC-581 Configuration for the video export tool (send email with s3 bucket presigned urls). 
+* OPC-581 Configuration for the video export tool (send email with s3 bucket presigned urls).
 
 ## v2.20.1
 
@@ -47,7 +74,7 @@
 
 ## v2.15.0 - 3/20/2020
 
-* OPC-496 On-demand zoom ingest: add configuration for zoom ingester endpoint. 
+* OPC-496 On-demand zoom ingest: add configuration for zoom ingester endpoint.
 
 ## v2.14.0 - 1/24/2020
 
@@ -89,15 +116,15 @@
 
 * OPC-359 search-transcripts
 * OPC-139 LTI Oauth config change from Upstream
-* OPC-334 many-embedded Added configuration to auth service 
-* MI-164: set nginx logrotate to only keep 30 
+* OPC-334 many-embedded Added configuration to auth service
+* MI-164: set nginx logrotate to only keep 30
 * MI-171: nginx config reload needs to watch for changes to both the ssl key *and* cert
 
 ## v2.9 - 7/19/2019
 
 * OPC-371 report a problem template updates
 
-## v2.8 - 7/05/2019 
+## v2.8 - 7/05/2019
 
 * OPC-363 bug report feature
 * OPC-344 Configuration for CA notification via CATracker (start/stop now)
@@ -154,7 +181,7 @@
 
 * MI-153: re-enable proxy buffering of upstream responses; ignore client abort
 
-## v2.2.0 
+## v2.2.0
 
 * MI-152: make instances failed and rds alarm names less misleading
 * OPC-259 publisher and instructor name missing in email message body
@@ -231,7 +258,7 @@
 #### 07/12/2018
 
 * *REQUIRES MANUAL RECIPE RUN*
-  install latest stable nginx & disable `proxy_request_buffering` for admin nginx to allow direct streaming of uploads. 
+  install latest stable nginx & disable `proxy_request_buffering` for admin nginx to allow direct streaming of uploads.
   For an existing cluster you can either reboot the cluster, or, if that's not desired, the various nginx recipes must be run:
   ```bash
     ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin" recipes="oc-opsworks-recipes::configure-nginx-proxy"
@@ -247,7 +274,7 @@
 #### 07/11/2018
 
 * *REQUIRES MANUAL RECIPE RUN* *REQUIRES EDITS TO CLUSTER CONFIG*
-  OPC-97: install newrelic via recipe. 
+  OPC-97: install newrelic via recipe.
   To enable newrelic in a cluster the custom json must include a block like:
   ```
     "newrelic": {
@@ -327,7 +354,7 @@
 
 * *REQUIRES MANUAL RECIPE RUN*
   Update useraction harvester & elasticsearch recipes for new, combined zoom + useraction analytics harvester
-  
+
         ./bin/rake stack:commands:execute_recipes_on_layers layers="Analytics" recipes="mh-opsworks-recipes::install-ua-harvester"
 
 ## v1.28.0 - 10/06/2017
@@ -339,17 +366,17 @@
 * create cloudwatch log group for utility node's squid logs
 * *REQUIRES MANUAL RECIPE RUNS*
   MI-74: nginx config performance improvements
-  
+
         ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin,Workers" recipes="mh-opsworks-recipes::configure-nginx-proxy"
         ./bin/rake stack:commands:execute_recipes_on_layers layers="Engage" recipes="mh-opsworks-recipes::configure-engage-nginx-proxy"
         ./bin/rake stack:commands:execute_recipes_on_layers layers="Analytics" recipes="mh-opsworks-recipes::configure-elk-nginx-proxy"
         ./bin/rake stack:commands:execute_recipes_on_layers layers="Utility" recipes="mh-opsworks-recipes::configure-capture-agent-manager-nginx-proxy"
-    
+
 * *REQUIRES MANUAL RECIPE RUN*
   MI-73: recipe and script to pull capture agent logs w/ rsync, push to cloudwatch
-  
+
         ./bin/rake stack:commands:execute_recipes_on_layers layers="Utility" recipes="mh-opsworks-recipes::configure-capture-agent-cwlogs"
-        
+
 ## v1.26.0 - 08/24/2017
 
 * Allow exit status of '255' on cloudwatch log group creation to get rid of errors due to ResourceAlreadyExistsException
@@ -398,7 +425,7 @@
 * MI-63: remove nodejs install recipe as it is no longer needed
 * *REQUIRES EDITS TO CLUSTER CONFIG*
   MI-62: create cron entry to sync ibm watson transcript results to s3. Prior to deployment, the `custom_json` block in cluster config should be updated with the name of the target s3 bucket:
-  
+
         "ibm_watson_transcript_sync_bucket_name": "dce-ibm-watson-transcripts"
 
 ## v1.21.2-hotfix - 03/13/2017
@@ -421,12 +448,12 @@
 
 ## v1.20.0 - 02/06/2017
 
-* MATT-1929 Create inbox for republish with re-trimming. 
+* MATT-1929 Create inbox for republish with re-trimming.
 
 ## v1.19.0 - 01/30/2017
 
 * MATT-2245 Enable DCE annot property endpoint
-* *REQUIRES EDITS TO CLUSTER CONFIG* 
+* *REQUIRES EDITS TO CLUSTER CONFIG*
   include auth key when deploying mh auth properties file. `auth_key` value must be
   added to prod cluster config prior to deployment.
 
@@ -455,7 +482,7 @@
   adjust the `layers` list according to what nodes are present.
 
         ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin,Engage,Utility,Storage,Analytics" recipes="oc-opsworks-recipes::install-crowdstrike"
-        
+
 ## v1.16.0 - 12/8/2016
 
 * *REQUIRES EDITS TO EXISTING CLUSTER CONFIG*
@@ -467,7 +494,7 @@
 
 * *REQUIRES EDITS TO CLUSTER CONFIG*
   Configuration for the new Matterhorn ibm watson transcription service (service credentials).
-* Changed location of temporary zip files to Zadara to avoid cross-device link errors. Zip operations are executed when republishing and failing a workflow. 
+* Changed location of temporary zip files to Zadara to avoid cross-device link errors. Zip operations are executed when republishing and failing a workflow.
 * MATT-2215 add threshold config params to log connection durations in hudce-auth and leg-otherpubs (sys web msg)
 * *REQUIRES MANUAL RECIPE RUN*
   Enable dynamic scripting in `elasticsearch.yml`
@@ -486,7 +513,7 @@
     * add `configure-ua-harvester` to `configure` list
 * *REQUIRES MANUAL RECIPE RUN*
   Adding redis service to analytics node for useraction harvest caching of episode data
-  
+
         ./bin/rake stack:commands:execute_recipes_on_layers layers="Analytics" recipes="oc-opsworks-recipes::install-ua-harvester"
 
 ## 1.13.0 - 10/20/2016
@@ -498,36 +525,36 @@
   New recipe, `install-cwlogs`, that installs and configures the AWS Cloudwatch Log Agent.
   `mh-opsworks-recipe::install-cwlogs` should be added to the `setup` list of the
   Admin, Engage and Workers (and Analytics/Utility, if present) layers.
-  
+
   Manual recipe runs should come after any MH release/deploy and an `update_chef_recipes`.
-  
+
         ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin,Engage,Workers" recipes="oc-opsworks-recipes::install-cwlogs"
         ./bin/rake stack:commands:execute_recipes_on_layers layers="Analytics" recipes="oc-opsworks-recipes::install-cwlogs,oc-opsworks-recipes::install-elasticsearch,oc-opsworks-recipes::install-kibana"
         ./bin/rake stack:commands:execute_recipes_on_layers layers="Utility" recipes="oc-opsworks-recipes::install-cwlogs,oc-opsworks-recipes::install-capture-agent-manager,oc-opsworks-recipes::configure-capture-agent-manager-nginx-proxy"
-        
+
 ## 1.12.0 - 10/7/2016
 
 * Akamai account limit hack. See MATT-2182.
 
 * *REQUIRES MANUAL CHEF RECIPE RUN*
   Add new custom metric script for feeding jvm stats to cloudwatch.
-  
+
         ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin, Workers, Engage" recipes="oc-opsworks-recipes::install-custom-metrics"
-        
+
 * *REQUIRES MANUAL CHEF RECIPE RUNS*
   Updates to ELK pipeline components and apt pinning of package major versions. Config
   support and new cron entry for `mh-user-action-harvester` `load_episodes` command.
-  
+
   Manual recipe run should come after any MH release/deploy and an `update_chef_recipes`.
-  
+
         ./bin/rake stack:commands:execute_recipes_on_layers layers="Analytics" recipes="oc-opsworks-recipes:install-elasticsearch,oc-opsworks-recipes::install-logstash-kibana,oc-opsworks-recipes::install-ua-harvester"
 
 ## 1.11.0 - 9/8/2016
 
 * `moscaler_release` now defaults to "master"
-* *REQUIRES MANUAL CHEF RECIPE RUN* 
+* *REQUIRES MANUAL CHEF RECIPE RUN*
   Additional helpful utils to be installed by default
-  
+
         ./bin/rake stack:commands:execute_recipes_on_layers recipes="oc-opsworks-recipes::install-utils"
 * prevent autofs restart only if existing mount matches the storage hostname. this
   enables use of the `nfs-client` recipe for switching storage nodes or zadara vpsas
@@ -546,7 +573,7 @@
   After an `update_chef_recipes` do a manual recipe exec:
 
         ./bin/rake stack:commands:execute_recipes_on_layers layers="Ganglia" recipes="oc-opsworks-recipes::install-moscaler"
-        
+
 * *REQURES EDITS TO THE CLUSTER CONFIG* *REQUIRES MANUAL CHEF RECIPE RUNS*:
   Fixes to the recipe/script that provides the MatterhornJobsQueue metric. Cluster config
   should be updated to include the `install-job-queued-metrics` recipe. See MH release notes for more deets.
@@ -574,7 +601,7 @@
 
 ## 1.7.0 - 7/5/2016
 
-* Added stack short name to config.properties so that we can show the cluster name when sending notification emails.  
+* Added stack short name to config.properties so that we can show the cluster name when sending notification emails.
 
 ## 1.6.0 - 6/24/2016
 
@@ -593,9 +620,9 @@ all-in-one deployment will use admin key.
 ## 1.5.0 - 6/10/2016
 
 * Configuration for the new Matterhorn aws s3 file archive service (s3 bucket name).
-* *[OPTIONAL]* Changes to the `install-ua-harvester` recipe. Changed naming path 
-  of the s3 bucket used to store the useraction harvester's last action timestamp 
-  value. Only relevant for analytics node and only affects new clusters. Also 
+* *[OPTIONAL]* Changes to the `install-ua-harvester` recipe. Changed naming path
+  of the s3 bucket used to store the useraction harvester's last action timestamp
+  value. Only relevant for analytics node and only affects new clusters. Also
   bumped harvest batch size from the default 1000/per
 
 ## 1.4.0 - 6/8/2016
