@@ -2,6 +2,34 @@
 
 ## TO BE RELEASED
 
+* *REQUIRES MANUAL RECIPE RUN* *REQUIRES EDITS TO CLUSTER CONFIG*
+  MI-196: update syntax for esm registration command
+  The `ubuntu_advantage_esm` block of the custom json must be updated from this:
+  ```
+	"ubuntu_advantage_esm": {
+		"user": "...",
+		"password": "..."
+	},
+  ```
+  to this:
+  ```
+	"ubuntu_advantage_esm": {
+		"token": "...",
+	},
+  ```
+  For an existing cluster you must then execute the modified recipe:
+  ```bash
+	./bin/rake stack:commands:execute_recipes_on_layers layers="Admin,Engage,Utility,Storage,Analytics,Workers" recipes="oc-opsworks-recipes::enable-ubuntu-advantage-esm"
+  ```
+
+## v2.24.0
+
+* OPC-554: Add configuration for porta series metadata update. (#244)
+
+## v2.23.0
+
+* Changed notification email
+
 ## v2.22.0
 
 * OPC-596 Increase activemq memory (affects stage and prod). 
