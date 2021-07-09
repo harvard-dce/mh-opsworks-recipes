@@ -11,7 +11,7 @@ kibana_repo_uri = elk_info['kibana_repo_uri']
 apt_repository 'kibana' do
   uri kibana_repo_uri
   components ['stable', 'main']
-  keyserver 'ha.pool.sks-keyservers.net'
+  keyserver 'pgp.mit.edu'
   key '46095ACC8548582C1A2699A9D27D666CD88E42B4'
 end
 

@@ -15,7 +15,7 @@ stack_name = stack_shortname
 sqs_queue_name = "#{stack_name}-user-actions"
 region = node[:opsworks][:instance][:region]
 
-install_package('python-pip python-virtualenv run-one redis-server')
+install_package('python3-pip python3.4-venv libffi-dev run-one redis-server')
 
 user "ua_harvester" do
   comment 'The ua_harvester user'
@@ -35,7 +35,7 @@ end
 bash 'create virtualenv' do
   code %Q|
 cd #{harvester_dir} &&
-/usr/bin/virtualenv venv
+/usr/bin/python3 -m venv --clear venv
   |
   not_if "test -d #{harvester_dir}/venv"
 end
@@ -43,7 +43,8 @@ end
 bash 'install dependencies' do
   code %Q|
 cd #{harvester_dir} &&
-venv/bin/pip install -r requirements.txt &&
+venv/bin/python -m pip install -U "pip < 19.2" &&
+venv/bin/python -m pip install -r requirements.txt &&
 chown -R ua_harvester venv
   |
 end
