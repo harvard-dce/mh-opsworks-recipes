@@ -22,14 +22,14 @@ es_snapshot_bucket = "#{stack_name}-snapshots"
 apt_repository 'elasticsearch' do
   uri es_repo_uri
   components ['stable', 'main']
-  keyserver 'ha.pool.sks-keyservers.net'
+  keyserver 'pgp.mit.edu'
   key '46095ACC8548582C1A2699A9D27D666CD88E42B4'
 end
 
 apt_repository 'curator' do
   uri curator_repo_uri
   components ['stable', 'main']
-  keyserver 'ha.pool.sks-keyservers.net'
+  keyserver 'pgp.mit.edu'
   key '46095ACC8548582C1A2699A9D27D666CD88E42B4'
 end
 
@@ -160,4 +160,3 @@ if enable_snapshots
     path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   end
 end
-

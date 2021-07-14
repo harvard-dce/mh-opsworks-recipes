@@ -13,7 +13,7 @@ logstash_repo_uri = elk_info['logstash_repo_uri']
 apt_repository 'logstash' do
   uri logstash_repo_uri
   components ['stable', 'main']
-  keyserver 'ha.pool.sks-keyservers.net'
+  keyserver 'pgp.mit.edu'
   key '46095ACC8548582C1A2699A9D27D666CD88E42B4'
 end
 
@@ -47,4 +47,3 @@ template '/etc/logstash/conf.d/logstash.conf' do
   })
   notifies :restart, 'service[logstash]', :immediately
 end
-

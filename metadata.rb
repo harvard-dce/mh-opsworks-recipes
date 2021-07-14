@@ -154,7 +154,7 @@ want by setting the parameter below.
 * <tt>node[:awscli_version]</tt>
 
 === Effects
-* the python-pip package is installed
+* the python3-pip package is installed
 * the aws-cli is installed into /usr/local/bin
 '
 )
@@ -471,7 +471,7 @@ more info.
 recipe(
   'oc-opsworks-recipes::write-root-my-dot-cnf',
   'write a /root/.my.cnf on the node that connects to the database
-  
+
 === Attributes
 * <tt>node[:deploy][:opencast][:database]</tt>, the default opsworks database attributes
 
@@ -844,101 +844,6 @@ and README.zadara.md in oc-opsworks.
 '
 )
 recipe(
-  'oc-opsworks-recipes::configure-capture-agent-manager-gunicorn',
-  'Sets up start script for gunicorn with capture-agent-manager app
-
-This is relevant for the utility node, where the capture-agent-manager `cadash`
-should run.
-
-=== attributes
-* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_app_name
-* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_usr_name
-
-=== effects
-* gunicorn installed under the virtualenv for the capture-agent-manager-app root dir
-  (usually /home/user/sites/<app>/venv)
-* script to start gunicorn running the capture-agent-manager-app under app root dir
-'
-)
-recipe(
-  'oc-opsworks-recipes::configure-capture-agent-manager-nginx-proxy',
-  'Sets up an nginx proxy that allows connections to flask-gunicorn apps via https-only
-
-=== attributes
-* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_app_name
-* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_usr_name
-
-=== effects
-* A configured and restarted nginx linked to flask-gunicorn capture-agent-manager app
-* HTTPS-only setup
-'
-)
-recipe(
-  'oc-opsworks-recipes::configure-capture-agent-manager-supervisor',
-  'Installs and sets up supervisor for gunicorn apps to run as service-daemon
-
-=== attributes
-* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_app_name
-* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_usr_name
-
-=== effects
-* configured capture-agent-manager app as a supervisor task under `/etc/supervisord/conf.d/<app>.conf`
-* supervisor restarted
-'
-)
-recipe(
-  'oc-opsworks-recipes::create-capture-agent-manager-directories',
-  'Creates directories(logs, app, etc) for capture-agent-manager flask-gunicorn app
-
-=== attributes
-* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_usr_name
-
-=== effects
-* directories for app(sites), logs, sock created under capture-agent-manager user
-'
-)
-recipe(
-  'oc-opsworks-recipes::create-capture-agent-manager-user',
-  'Create user and group to run capture-agent-manager flask-gunicorn app as
-
-=== attributes
-* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_usr_name
-
-=== effects
-* capture-agent-manager user and group created
-* .ssh dir in home dir
-'
-)
-recipe(
-  'oc-opsworks-recipes::install-capture-agent-manager-packages',
-  'Installs packages specific to the capture-agent-manager
-
-=== attributes
-none
-
-=== effects
-* packages needed for capture-agent-manager app to run like: redis, nginx, python,
-  and supervisor, among others
-* the package cache is cleared to save space
-'
-)
-recipe(
-  'oc-opsworks-recipes::install-capture-agent-manager',
-  'Sets up flask-gunicorn app for capture-agent-manager
-
-=== attributes
-* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_info
-* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_app_name
-* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_usr_name
-
-=== effects
-* capture-agent-manager app cloned or checked out under capture-agent-manager `$HOME/sites`
-* environment vars for capture-agent-manager app are configured in a source file
-* pip dependencies installed in virtualenv under capture-agent-manager `$HOME/sites/venv`
-* configured logrotate file for capture-agent-manager app log
-'
-)
-recipe(
     'oc-opsworks-recipes::install-cwlogs',
     'Installs the AWS Cloudwatch Log Agent and configures some basic log streams
 
@@ -999,18 +904,6 @@ none
 '
 )
 recipe(
-    'oc-opsworks-recipes::configure-capture-agent-cwlogs',
-    'Installs script for rsyncing capture agent logs and configures cloudwatch logs agent to monitor them.
-
-=== attributes
-none
-
-=== effects
-* installs script for rsyncing logs and configuring cloudwatch log agent
-* creates cron entry for executing script
-'
-)
-recipe(
     'oc-opsworks-recipes::install-geolite2-db',
     'Installs the MaxmindDB GeoLite2 db for performing geoip lookups by the analytics harvester.
 
@@ -1048,14 +941,14 @@ none
 )
 recipe(
     'oc-opsworks-recipes::enable-ubuntu-advantage-esm',
-    'Runs the `ubuntu-advantage enable-esm` command.
+    'Runs the `ubuntu-advantage attach [token]` command.
 
 === attributes
 none
 
 === effects
-* Will execute the enable-esm command with the user/pass combo
-  configured in the cluster config "ubuntu_advantage_esm"
+* Will execute the enable-esm command with the `token` value
+  configured in the cluster config "ubuntu_advantage_esm" block
 '
 )
 depends 'nfs', '~> 2.1.0'
