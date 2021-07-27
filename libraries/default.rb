@@ -19,20 +19,14 @@ module MhOpsworksRecipes
       80
     end
 
-    def install_package(name)
-      #
-      # Yes, I know about the "package" resource, but for some reason using a timeout
-      # with it causes a compile-time error.
-      #
-      # We really want to be able to timeout and retry installs to get faster package
-      # mirrors. This is an annoying quirk with the ubuntu package mirror repos.
-      #
-      execute "install #{name}" do
-        environment 'DEBIAN_FRONTEND' => 'noninteractive'
-        command %Q|apt-get install -y #{name}|
-        retries 5
-        retry_delay 15
-        timeout 180
+    def install_package(names, opts="")
+      names.gsub(/\s+/m, " ").strip.split(" ").each do |name|
+        execute "install #{name}" do
+          command %|yum #{opts} install -y #{name}|
+          retries 5
+          retry_delay 15
+          timeout 180
+        end
       end
     end
 
@@ -1211,7 +1205,7 @@ module MhOpsworksRecipes
           porta_auto_url: porta_auto_url,
           cookie_name: cookie_name,
           redirect_url: redirect_url,
-          enabled: enabled 
+          enabled: enabled
         })
       end
     end
@@ -1223,7 +1217,7 @@ module MhOpsworksRecipes
         group 'opencast'
         variables({
           porta_url: porta_url,
-          enabled: enabled 
+          enabled: enabled
         })
       end
     end
