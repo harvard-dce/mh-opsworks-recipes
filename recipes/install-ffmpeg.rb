@@ -4,9 +4,6 @@
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 include_recipe "oc-opsworks-recipes::update-package-repo"
 
-install_package("ffmpeg")
-
-
 # The list of libraries that've been built against the ffmpeg binary (and are
 # therefore required for it to function fully)  was generated on the build
 # vagrant image thusly:
@@ -16,29 +13,29 @@ install_package("ffmpeg")
 
 # install_package(packages)
 
-# bucket_name = get_shared_asset_bucket_name
-# ffmpeg_version = node.fetch(:ffmpeg_version, '4.2.snapshot')
-# ffmpeg_archive = %Q|ffmpeg-#{ffmpeg_version}-static.tgz|
+bucket_name = get_shared_asset_bucket_name
+ffmpeg_version = node.fetch(:ffmpeg_version, '4.4')
+ffmpeg_archive = %Q|ffmpeg-#{ffmpeg_version}-static.tgz|
 
-# if on_aws?
-#   include_recipe "oc-opsworks-recipes::install-awscli"
-#   download_command="/usr/local/bin/aws s3 cp s3://#{bucket_name}/#{ffmpeg_archive} ."
-# else
-#   download_command="wget https://s3.amazonaws.com/#{bucket_name}/#{ffmpeg_archive}"
-# end
+if on_aws?
+	include_recipe "oc-opsworks-recipes::install-awscli"
+	download_command="/usr/local/bin/aws s3 cp s3://#{bucket_name}/#{ffmpeg_archive} ."
+else
+	download_command="wget https://s3.amazonaws.com/#{bucket_name}/#{ffmpeg_archive}"
+end
 
-# bash 'extract ffmpeg archive and create symbolic links' do
-#   code %Q|
-# cd /opt &&
-# /bin/rm -Rf ffmpeg-#{ffmpeg_version} &&
-# #{download_command} &&
-# /bin/tar xvfz #{ffmpeg_archive} &&
-# cd /usr/local/bin/ &&
-# sudo rm -f ffmpeg &&
-# /usr/bin/find /opt/ffmpeg-#{ffmpeg_version} -mindepth 1 -type f -executable -exec /bin/ln -sf {} \\;
-# |
-#   # retries 10
-#   # retry_delay 5
-#   timeout 300
-#   not_if { ::File.exists?("/opt/#{ffmpeg_archive}") }
-# end
+bash 'extract ffmpeg archive and create symbolic links' do
+  code %Q|
+cd /opt &&
+/bin/rm -Rf ffmpeg-#{ffmpeg_version} &&
+#{download_command} &&
+/bin/tar xvfz #{ffmpeg_archive} &&
+cd /usr/local/bin/ &&
+sudo rm -f ffmpeg ffprobe &&
+/usr/bin/find /opt/ffmpeg-#{ffmpeg_version} -mindepth 1 -type f -executable -exec /bin/ln -sf {} \\;
+|
+  # retries 10
+  # retry_delay 5
+  timeout 300
+  not_if %Q(test -e /usr/local/bin/ffmpeg && /usr/local/bin/ffmpeg >2&1 > /dev/null | grep -q "version #{ffmpeg_version}")
+end
