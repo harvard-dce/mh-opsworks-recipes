@@ -5,7 +5,7 @@
 
 include_recipe "oc-opsworks-recipes::update-package-repo"
 
-packages = %Q|autofs5 curl dkms gzip jq libglib2.0-dev mysql-client postfix python3-pip python3-dev rsyslog-gnutls run-one tesseract-ocr|
+packages = %Q|autofs5 curl dkms gzip jq libglib2.0-dev mysql-client postfix python3-pip python3-setuptools python3-dev rsyslog-gnutls run-one tesseract-ocr|
 install_package(packages)
 
 # remove any existing maven install
