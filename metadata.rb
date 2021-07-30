@@ -904,18 +904,6 @@ none
 '
 )
 recipe(
-    'oc-opsworks-recipes::install-newrelic',
-    'Installs the newrelic java agent.
-
-=== attributes
-none
-
-=== effects
-* fetches newrelic agent jar from shared assets bucket
-* installs the agent and config in /opt/newrelic
-'
-)
-recipe(
     'oc-opsworks-recipes::install-aws-kernel',
     'Installs the aws-tuned v4 linux kernel. This is intended for use only in ami building.
 

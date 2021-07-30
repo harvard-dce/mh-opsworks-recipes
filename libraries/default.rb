@@ -844,7 +844,6 @@ module MhOpsworksRecipes
           java_xms_ram: java_xms_ram,
           java_home: java_home,
           opencast_log_directory: log_dir,
-          enable_newrelic: enable_newrelic_for_layer?(layer_name),
           java_debug_enabled: java_debug_enabled
         })
       end
@@ -1291,18 +1290,6 @@ module MhOpsworksRecipes
     def layer_name_from_hostname
       hostname = node[:opsworks][:instance][:hostname]
       hostname.match(%r{^(?<layer>[a-z\-]+)})[:layer]
-    end
-
-    def newrelic_config
-      node.fetch(:newrelic, {})
-    end
-
-    def enable_newrelic_for_layer?(layer_name)
-      newrelic_config.key?(layer_name)
-    end
-
-    def get_newrelic_agent_version
-      newrelic_config.fetch(:agent_version, "4.2.0")
     end
 
   end
