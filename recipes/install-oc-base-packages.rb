@@ -5,7 +5,17 @@
 
 include_recipe "oc-opsworks-recipes::update-package-repo"
 
-packages = %Q|autofs5 curl dkms gzip jq libglib2.0-dev mysql-client postfix python3-pip python3-setuptools python3-dev rsyslog-gnutls run-one tesseract-ocr|
+# python3-pip needs python3-setuptools but it won't install because python-setuptools is already
+# there and also contains the file /usr/local/bin/easy_install which no one should care about
+# or be using so we're going to just clobber it
+execute 'force python3-setuptools' do
+  command 'apt-get -o Dpkg::Options::="--force-overwrite" install python3-setuptools'
+  retries         3
+  retry_delay     30
+  ignore_failure  true
+end
+
+packages = %Q|autofs5 curl dkms gzip jq libglib2.0-dev mysql-client postfix python3-pip python3-dev rsyslog-gnutls run-one tesseract-ocr|
 install_package(packages)
 
 # remove any existing maven install
