@@ -265,22 +265,6 @@ logstash part of our analytics layer.
 '
 )
 recipe(
-  'oc-opsworks-recipes::fix-raid-mapping',
-  'fix RAID mapping of ebs volumes
-
-Fixes {this bug}[https://github.com/aws/opsworks-cookbooks/issues/188] which is
-apparently still a thing. It should be run on all nodes.
-
-=== Attributes
-* none
-
-=== Effects
-* regenerates initramfs to ensure it supports software RAIDed volumes
-* instances that (optionally) use software RAIDed EBS volumes now start
-  correctly after a reboot
-'
-)
-recipe(
   'oc-opsworks-recipes::deploy-all-in-one',
   'FIXME: deploys an all-in-one node.'
 )
@@ -648,19 +632,6 @@ if we are on aws
 '
 )
 recipe(
-  'oc-opsworks-recipes::set-bash-as-default-shell',
-  'Sets bash (instead of dash) as the default shell
-
-Ubuntu uses dash (instead of bash) as the default non-interactive shell. It is supposedly fully bash compatible but - surprise! Nope.
-
-=== Attributes
-* none
-
-=== Effects
-* sets bash instead of dash as the default non-interactive shell
-'
-)
-recipe(
   'oc-opsworks-recipes::configure-elk-nginx-proxy',
   'Sets up an nginx proxy that allows connections to elasticsearch on the local network
 
@@ -926,7 +897,8 @@ none
   configured in the cluster config "ubuntu_advantage_esm" block
 '
 )
-depends 'nfs', '~> 2.1.0'
+depends 'nfs', '~> 2.2.9'
+depends 'line', '~> 0.6.3'
 depends 'apt', '~> 2.9.2'
 depends 'cron', '~> 1.6.1'
 depends 'nodejs', '~> 2.4.4'
