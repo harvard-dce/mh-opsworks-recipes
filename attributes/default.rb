@@ -12,3 +12,10 @@ default['activemq']['home'] = '/opt/opencast/activemq'
 # this is only to tell the 3rd-party activemq recipe not to issue its own
 # service restart; we do that ourselves in the configure-activemq recipe
 default['activemq']['enabled'] = false
+
+# Overrides for nfs
+# the nfs cookbook gets these service names wrong for amazon linux 2018.03
+# so here we override the nfs cookbook attributes
+default['nfs']['service']['lock'] = 'nfslock'
+default['nfs']['service']['idmap'] = 'rpcidmapd'
+default['nfs']['service']['server'] = 'nfs'

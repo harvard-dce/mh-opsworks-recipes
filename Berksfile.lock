@@ -48,6 +48,7 @@ GRAPH
     apt (~> 2.9.2)
     cron (~> 1.6.1)
     java (= 1.47.0)
+    line (~> 0.6.3)
     maven (~> 2.2.0)
     nfs (~> 2.1.0)
     nodejs (~> 2.4.4)

@@ -897,7 +897,7 @@ none
   configured in the cluster config "ubuntu_advantage_esm" block
 '
 )
-depends 'nfs', '~> 2.2.9'
+depends 'nfs', '~> 2.1.0'
 depends 'line', '~> 0.6.3'
 depends 'apt', '~> 2.9.2'
 depends 'cron', '~> 1.6.1'
