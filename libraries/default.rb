@@ -552,61 +552,6 @@ module MhOpsworksRecipes
         }.merge(node.fetch(:moscaler, {}))
     end
 
-    def configure_cloudwatch_log(log_name, log_file, datetime_format)
-
-      unless on_aws?
-        return
-      end
-
-      stack_name = stack_shortname
-      log_group_name = stack_name + "_" + log_name
-
-      create_log_group(log_group_name)
-
-      service 'awslogs' do
-        action :nothing
-      end
-
-      template "/var/awslogs/etc/config/#{log_name}.conf" do
-        source 'cwlog_stream.conf.erb'
-        owner 'root'
-        group 'root'
-        mode 0644
-        variables ({
-            :log_name => log_name,
-            :hostname => node[:opsworks][:instance][:hostname],
-            :stack_name => stack_name,
-            :log_file => log_file,
-            :datetime_format => datetime_format
-        })
-        notifies :restart, 'service[awslogs]', :delayed
-      end
-    end
-
-    def create_log_group(log_group_name)
-
-      region = node.fetch(:region, 'us-east-1')
-      retention_days = node.fetch(:cwlogs_retention_days, '30')
-
-      execute 'create log group' do
-        command %Q|aws logs create-log-group --region #{region} --log-group-name #{log_group_name}|
-        returns [0, 255]
-        ignore_failure true
-      end
-
-      execute 'set log group retention policy' do
-        command %Q|aws logs put-retention-policy --region #{region} --log-group-name #{log_group_name} --retention-in-days #{retention_days}|
-        retries 3
-        retry_delay 10
-      end
-
-    end
-
-    def configure_nginx_cloudwatch_logs
-      configure_cloudwatch_log("nginx-access", "/var/log/nginx/access.log", "%d/%b/%Y:%H:%M:%S %z")
-      configure_cloudwatch_log("nginx-error", "/var/log/nginx/error.log", "%d/%b/%Y:%H:%M:%S %z")
-    end
-
     def get_nginx_worker_procs
       number_of_cpus = execute_command(%Q(nproc)).chomp.to_i
       if admin_node? || engage_node?

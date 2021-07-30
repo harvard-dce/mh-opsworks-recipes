@@ -37,7 +37,6 @@ include_recipe "oc-opsworks-recipes::update-package-repo"
 pin_package("elasticsearch", "#{es_major_version}.*")
 pin_package("python-elasticsearch-curator", "#{curator_major_version}.*")
 install_package("openjdk-7-jdk openjdk-7-jre elasticsearch python-elasticsearch-curator")
-configure_cloudwatch_log("elasticsearch", "/var/log/elasticsearch/*.log", "%Y-%m-%d %H:%M:%S")
 
 service 'elasticsearch' do
   action :enable

@@ -49,4 +49,3 @@ service 'activemq' do
 end
 
 activemq_log = "#{activemq_base}/data/activemq.log"
-configure_cloudwatch_log('activemq', activemq_log, "%Y-%m-%d %H:%M:%S")

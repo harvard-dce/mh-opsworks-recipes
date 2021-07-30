@@ -11,7 +11,6 @@ include_recipe "oc-opsworks-recipes::install-nginx"
 install_package('apache2-utils')
 
 install_nginx_logrotate_customizations
-configure_nginx_cloudwatch_logs
 
 create_ssl_cert(elk_info['http_ssl'])
 
@@ -52,4 +51,3 @@ service 'nginx' do
   # on initial node setup run
   subscribes :reload, "file[/etc/nginx/ssl/certificate.key]"
 end
-

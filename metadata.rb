@@ -844,19 +844,6 @@ and README.zadara.md in oc-opsworks.
 '
 )
 recipe(
-    'oc-opsworks-recipes::install-cwlogs',
-    'Installs the AWS Cloudwatch Log Agent and configures some basic log streams
-
-=== attributes
-* MhOpsworksRecipes::RecipeHelpers.configure_cloudwatch_log
-* MhOpsworksRecipes::RecipeHelpers.configure_nginx_cloudwatch_logs
-
-=== effects
-* installs the cloudwatch log agent
-* creates log stream configurations for syslog, opencast.log and nginx logs on appropriate nodes
-'
-)
-recipe(
     'oc-opsworks-recipes::install-crowdstrike',
     'Installs the CrowdStrike Falcon Sensor software. Because security.
 
