@@ -13,8 +13,8 @@ guard_clause = %Q|[ -e '#{old_root}/nginx' ] && [ -L '#{old_root}/nginx' ]|
 
 directory %Q|#{new_root}/nginx| do
   action :create
-  owner 'www-data'
-  group 'adm'
+  owner 'nobody'
+  group 'nobody'
   mode '755'
   not_if guard_clause
 end
