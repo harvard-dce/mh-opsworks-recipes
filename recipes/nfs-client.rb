@@ -8,7 +8,7 @@ include_recipe 'oc-opsworks-recipes::create-metrics-dependencies'
 storage_info = get_storage_info
 
 # Ensure nfs client requirements are installed
-install_package('autofs5')
+install_package('autofs')
 include_recipe "nfs::client4"
 
 export_root = storage_info[:export_root]
