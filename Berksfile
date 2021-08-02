@@ -8,4 +8,6 @@ cookbook 'activemq', '~> 2.0.4'
 cookbook 'java', '1.47'
 cookbook 'maven', '~> 2.2.0'
 
+cookbook 'opsworks_initial_setup', path: 'opsworks_initial_setup/'
+
 metadata
