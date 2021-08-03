@@ -2,8 +2,7 @@
 # Recipe:: install-opencast-job-metrics
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
-
-install_package('python3-pip python3-requests python3-six')
+include_recipe "oc-opsworks-recipes::update-python"
 
 rest_auth_info = get_rest_auth_info
 aws_instance_id = node[:opsworks][:instance][:aws_instance_id]
@@ -12,13 +11,13 @@ workers_layer_id = node[:opsworks][:layers][:workers][:id]
 stack_id = node[:opsworks][:stack][:id]
 stack_name = stack_shortname
 
-bash 'install older requests-cache' do
-  code 'pip3 install requests-cache==0.5.2'
-  user 'root'
-end
+#bash 'install older requests-cache' do
+#  code 'pip3 install requests-cache==0.5.2'
+#  user 'root'
+#end
 
-bash 'install pyhorn' do
-  code 'pip3 install pyhorn'
+execute 'install pyhorn' do
+  command '/usr/bin/python3 -m pip install pyhorn'
   user 'root'
 end
 

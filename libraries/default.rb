@@ -565,6 +565,22 @@ module MhOpsworksRecipes
       node[:vagrant_environment] || ( ! node[:cloudfront_url] && ! node[:s3_distribution_bucket_name] )
     end
 
+    def create_virtualenv(venv_path, user, requirements_path=nil)
+      execute "create virtualenv #{venv_path}" do
+        # use the installed 'virtualenv' package instead of builtin 'venv'
+        command "/usr/bin/python3 -m virtualenv --clear #{venv_path}"
+        user user
+        # don't if virtualenv python is already correct
+        not_if %Q!test -d #{venv_path} && #{venv_path}/bin/python -V | grep -q "$(python3 -V)"!
+      end
+      if !requirements_path.nil?
+        execute "install requirements from #{requirements_path}" do
+          command "#{venv_path}/bin/python -m pip install -r #{requirements_path}"
+          user user
+        end
+      end
+    end
+
   end
 
   module DeployHelpers

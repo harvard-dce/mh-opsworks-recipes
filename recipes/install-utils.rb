@@ -3,7 +3,7 @@
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
-packages = %Q|htop nmap iotop pv nethogs sysstat dstat tree jq fio iperf3 python38 python38-devel|
+packages = %Q|htop nmap iotop pv nethogs sysstat dstat tree jq fio iperf3 git rsyslog-gnutls curl autofs|
 install_package(packages)
 
 # seems as good a place as any for this

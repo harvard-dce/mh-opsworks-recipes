@@ -2,12 +2,9 @@
 # Recipe:: install-moscaler
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
-include_recipe "oc-opsworks-recipes::update-package-repo"
-
-install_package('python3-pip python3.4-venv run-one git python3-dev libffi-dev libssl-dev')
+include_recipe "oc-opsworks-recipes::update-python"
 
 moscaler_attributes = get_moscaler_info
-Chef::Log.info moscaler_attributes
 
 moscaler_release = moscaler_attributes['moscaler_release']
 moscaler_home = "/home/moscaler"
@@ -39,23 +36,9 @@ git "get the moscaler software" do
   user 'moscaler'
 end
 
-bash 'create virtualenv' do
-  code %Q|
-cd #{moscaler_dir} &&
-rm -rf venv &&
-/usr/bin/python3 -m venv --clear venv
-  |
-  not_if "test -d #{moscaler_dir}/venv && test -e #{moscaler_dir}/venv/bin/python3"
-end
-
-bash 'upgrade the venvs pip and install dependencies' do
-  code %Q|
-cd #{moscaler_dir} &&
-venv/bin/python -m pip install -U "pip < 19.2" &&
-venv/bin/python -m pip install -r requirements.txt &&
-chown -R moscaler venv
-  |
-end
+moscaler_venv = "#{moscaler_dir}/venv"
+moscaler_requirements = "#{moscaler_dir}/requirements.txt"
+create_virtualenv(moscaler_venv, "moscaler", moscaler_requirements)
 
 execute "Clean out existing cron jobs" do
   command "find -name 'moscaler*' -delete"
