@@ -15,7 +15,7 @@ stack_name = stack_shortname
 sqs_queue_name = "#{stack_name}-user-actions"
 region = node[:opsworks][:instance][:region]
 
-install_package('redis-server')
+install_package('redis')
 
 user "ua_harvester" do
   comment 'The ua_harvester user'
