@@ -5,18 +5,15 @@
 
 elk_info = get_elk_info
 es_host = node[:opsworks][:instance][:private_ip]
-kibana_major_version = elk_info['kibana_major_version']
-kibana_repo_uri = elk_info['kibana_repo_uri']
 
-apt_repository 'kibana' do
-  uri kibana_repo_uri
-  components ['stable', 'main']
-  keyserver 'pgp.mit.edu'
-  key '46095ACC8548582C1A2699A9D27D666CD88E42B4'
+yum_repository 'kibana' do
+  description "kibana 4.6.x packages"
+  baseurl "http://packages.elastic.co/kibana/4.6/centos"
+  action :create
+  gpgkey "http://packages.elastic.co/GPG-KEY-elasticsearch"
 end
 
 include_recipe "oc-opsworks-recipes::update-package-repo"
-pin_package("kibana", "#{kibana_major_version}.*")
 install_package("kibana")
 
 service 'kibana' do

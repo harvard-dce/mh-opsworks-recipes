@@ -6,10 +6,6 @@
 ::Chef::Resource::RubyBlock.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
 elk_info = get_elk_info
-es_major_version = elk_info['es_major_version']
-es_repo_uri = elk_info['es_repo_uri']
-curator_major_version = elk_info['curator_major_version']
-curator_repo_uri = elk_info['curator_repo_uri']
 es_cluster_name = elk_info['es_cluster_name']
 data_path = elk_info['es_data_path']
 es_heap_size = xmx_ram_for_this_node(0.5)
@@ -19,24 +15,22 @@ stack_name = stack_shortname
 enable_snapshots = elk_info['es_enable_snapshots']
 es_snapshot_bucket = "#{stack_name}-snapshots"
 
-apt_repository 'elasticsearch' do
-  uri es_repo_uri
-  components ['stable', 'main']
-  keyserver 'pgp.mit.edu'
-  key '46095ACC8548582C1A2699A9D27D666CD88E42B4'
+yum_repository 'elasticsearch' do
+  description "Elasticsearch 2.x packages"
+  baseurl "http://packages.elastic.co/elasticsearch/2.x/centos"
+  action :create
+  gpgkey "http://packages.elastic.co/GPG-KEY-elasticsearch"
 end
 
-apt_repository 'curator' do
-  uri curator_repo_uri
-  components ['stable', 'main']
-  keyserver 'pgp.mit.edu'
-  key '46095ACC8548582C1A2699A9D27D666CD88E42B4'
+yum_repository 'curator' do
+  description "Elasticsearch Curator 3.x packages"
+  baseurl "http://packages.elastic.co/curator/3/centos/6"
+  action :create
+  gpgkey "http://packages.elastic.co/GPG-KEY-elasticsearch"
 end
 
 include_recipe "oc-opsworks-recipes::update-package-repo"
-pin_package("elasticsearch", "#{es_major_version}.*")
-pin_package("python-elasticsearch-curator", "#{curator_major_version}.*")
-install_package("openjdk-7-jdk openjdk-7-jre elasticsearch python-elasticsearch-curator")
+install_package("java-1.8.0-openjdk java-1.8.0-openjdk-devel elasticsearch python-elasticsearch-curator")
 
 service 'elasticsearch' do
   action :enable

@@ -471,20 +471,12 @@ module MhOpsworksRecipes
     def get_elk_info
       stack_name = stack_shortname
       {
-          'es_major_version' => '2.4',
-          'es_repo_uri' => 'http://packages.elasticsearch.org/elasticsearch/2.x/debian',
           'es_cluster_name' => stack_name,
           'es_index_prefix' => "useractions-#{stack_name}",
           'es_data_path' => "/vol/elasticsearch_data",
           'es_enable_snapshots' => true,
-          'logstash_major_version' => '1:2.4',
-          'logstash_repo_uri' => 'http://packages.elasticsearch.org/logstash/2.4/debian',
           'logstash_tcp_port' => '5000',
           'logstash_stdout_output' => false,
-          'kibana_major_version' => '4.6',
-          'kibana_repo_uri' => 'https://packages.elastic.co/kibana/4.6/debian',
-          'curator_major_version' => '3.5',
-          'curator_repo_uri' => 'http://packages.elastic.co/curator/3/debian',
           'http_auth' => {},
           'http_ssl' => get_dummy_cert,
           'harvester_repo' => 'https://github.com/harvard-dce/dce-user-analytics.git',
