@@ -5,8 +5,6 @@
 
 include_recipe "oc-opsworks-recipes::install-nginx"
 
-install_nginx_logrotate_customizations
-
 shared_storage_root = get_shared_storage_root
 
 public_engage_hostname = get_public_engage_hostname
@@ -65,4 +63,3 @@ service 'nginx' do
   subscribes :reload, "file[/etc/nginx/ssl/certificate.key]"
   subscribes :reload, "file[/etc/nginx/ssl/certificate.cert]"
 end
-

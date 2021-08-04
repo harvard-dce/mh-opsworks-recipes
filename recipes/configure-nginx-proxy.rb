@@ -5,8 +5,6 @@
 
 include_recipe "oc-opsworks-recipes::install-nginx"
 
-install_nginx_logrotate_customizations
-
 worker_procs = get_nginx_worker_procs
 
 directory '/etc/nginx/proxy-includes' do

@@ -10,8 +10,6 @@ es_host = node[:opsworks][:instance][:private_ip]
 include_recipe "oc-opsworks-recipes::install-nginx"
 install_package('httpd-tools')
 
-install_nginx_logrotate_customizations
-
 create_ssl_cert(elk_info['http_ssl'])
 
 bash "htpasswd" do

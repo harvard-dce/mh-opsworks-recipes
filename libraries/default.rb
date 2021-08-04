@@ -113,15 +113,6 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_nginx_logrotate_customizations
-      cookbook_file "nginx-logrotate.conf" do
-        path "/etc/logrotate.d/nginx"
-        owner "root"
-        group "root"
-        mode "644"
-      end
-    end
-
     def nginx_log_root_dir
       node.fetch(:nginx_log_root_dir, '/var/log')
     end
