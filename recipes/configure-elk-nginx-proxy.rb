@@ -8,7 +8,7 @@ http_auth = elk_info['http_auth']
 es_host = node[:opsworks][:instance][:private_ip]
 
 include_recipe "oc-opsworks-recipes::install-nginx"
-install_package('apache2-utils')
+install_package('httpd-tools')
 
 install_nginx_logrotate_customizations
 
