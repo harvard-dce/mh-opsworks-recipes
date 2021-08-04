@@ -14,7 +14,7 @@ include_recipe "oc-opsworks-recipes::update-package-repo"
 # install_package(packages)
 
 bucket_name = get_shared_asset_bucket_name
-ffmpeg_version = node.fetch(:ffmpeg_version, '4.4')
+ffmpeg_version = node.fetch(:ffmpeg_version, '4.4-amazon-linux')
 ffmpeg_archive = %Q|ffmpeg-#{ffmpeg_version}-static.tgz|
 
 if on_aws?
