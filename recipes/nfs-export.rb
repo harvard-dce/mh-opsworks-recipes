@@ -7,12 +7,6 @@ storage_info = get_storage_info
 
 shared_storage_root = get_shared_storage_root
 
-Chef::Log.info("platform: #{node['platform']}")
-Chef::Log.info("platform family: #{node['platform_family']}")
-Chef::Log.info("platform version: #{node['platform_version']}")
-
-
-
 include_recipe "nfs::server4"
 
 nfs_export storage_info[:export_root] do
