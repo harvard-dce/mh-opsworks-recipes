@@ -8,7 +8,7 @@ install_package(packages)
 
 # seems as good a place as any for this
 cookbook_file "bash.bashrc" do
-	path "/etc/bash.bashrc"
+	path "/etc/bashrc"
 	owner "root"
 	group "root"
 	mode "644"

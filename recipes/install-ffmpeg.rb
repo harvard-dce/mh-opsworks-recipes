@@ -33,10 +33,10 @@ bash 'extract ffmpeg archive and create symbolic links' do
 end
 
 [ "ffmpeg", "ffprobe" ].each do |prog|
-  link "/opt/ffmpeg-#{ffmpeg_version}/#{prog}" do
-    to "/usr/local/bin/#{prog}"
+  link "/usr/local/bin/#{prog}" do
+    to "/opt/ffmpeg-#{ffmpeg_version}/#{prog}"
   end
-  link "/opt/ffmpeg-#{ffmpeg_version}/#{prog}" do
-    to "/usr/bin/#{prog}"
+  link "/usr/bin/#{prog}" do
+    to "/opt/ffmpeg-#{ffmpeg_version}/#{prog}"
   end
 end
