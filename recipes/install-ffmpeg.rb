@@ -25,17 +25,18 @@ else
 end
 
 bash 'extract ffmpeg archive and create symbolic links' do
-  code %Q|
-cd /opt &&
-/bin/rm -Rf ffmpeg-#{ffmpeg_version} &&
-#{download_command} &&
-/bin/tar xvfz #{ffmpeg_archive} &&
-cd /usr/local/bin/ &&
-sudo rm -f ffmpeg ffprobe &&
-/usr/bin/find /opt/ffmpeg-#{ffmpeg_version} -mindepth 1 -type f -executable -exec /bin/ln -sf {} \\;
-|
-  # retries 10
-  # retry_delay 5
+  code %Q|cd /opt && /bin/rm -Rf ffmpeg-#{ffmpeg_version} && #{download_command} && /bin/tar xvfz #{ffmpeg_archive}|
+  retries 2
+  retry_delay 30
   timeout 300
   not_if %Q(test -e /usr/local/bin/ffmpeg && /usr/local/bin/ffmpeg >2&1 > /dev/null | grep -q "version #{ffmpeg_version}")
+end
+
+[ "ffmpeg", "ffprobe" ].each do |prog|
+  link "/opt/ffmpeg-#{ffmpeg_version}/#{prog}" do
+    to "/usr/local/bin/#{prog}"
+  end
+  link "/opt/ffmpeg-#{ffmpeg_version}/#{prog}" do
+    to "/usr/bin/#{prog}"
+  end
 end
