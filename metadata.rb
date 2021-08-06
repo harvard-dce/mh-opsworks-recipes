@@ -138,9 +138,22 @@ docs in the ffmpeg-build project above.
 * <tt>node[:ffmpeg_version]</tt>
 
 === Effects
-* shared library packages for ffmpeg are installed
 * ffmpeg, ffprobe, ffplay, ffserver, and x264 are installed and symlinked to
   /usr/local/bin
+'
+)
+recipe(
+  'oc-opsworks-recipes::install-run-one',
+  'Install the run-one script for cron jobs
+
+This installs the packaged run-one script that isn\'t available
+for non-ubuntu distros so we cribbed it from ubuntu
+
+=== Attributes
+* MhOpsworksRecipes::RecipeHelpers.get_shared_asset_bucket_name
+
+=== Effects
+* run-one script is installed and symlinked to /usr/bin
 '
 )
 recipe(

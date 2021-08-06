@@ -14,4 +14,6 @@ cookbook_file "bash.bashrc" do
 	mode "644"
 end
 
+include_recipe "oc-opsworks-recipes::install-run-one"
+
 include_recipe "oc-opsworks-recipes::clean-up-package-cache"
