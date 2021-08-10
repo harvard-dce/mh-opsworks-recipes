@@ -822,9 +822,9 @@ and README.zadara.md in oc-opsworks.
 * MhOpsworksRecipes::RecipeHelpers.get_storage_hostname
 
 === Effects
-* squid3 is installed
-* squid3 is configured to allow proxy requests from the zadara controller
-* squid3 is restarted to apply the new proxy config.
+* squid proxy service is installed
+* squid is configured to allow proxy requests from the zadara controller
+* squid is restarted to apply the new proxy config.
 '
 )
 recipe(
