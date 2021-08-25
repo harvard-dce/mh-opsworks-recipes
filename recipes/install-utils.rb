@@ -15,5 +15,6 @@ cookbook_file "bash.bashrc" do
 end
 
 include_recipe "oc-opsworks-recipes::install-run-one"
+include_recipe "oc-opsworks-recipes::install-crowdstrike"
 
 include_recipe "oc-opsworks-recipes::clean-up-package-cache"

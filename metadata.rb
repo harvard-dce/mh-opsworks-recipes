@@ -831,14 +831,16 @@ recipe(
     'oc-opsworks-recipes::install-crowdstrike',
     'Installs the CrowdStrike Falcon Sensor software. Because security.
 
+**NOTE**: this software updates itself! The version running may be newer than the actual install package. The
+yum package manager still keeps track of which package version was installed, so hopefully this will prevent a
+situation where the recipe continually re-installs.
+
 === attributes
 none
 
 === effects
-* installs a stand-alone .deb file from our oc-opsworks-shared-assets bucket
+* installs a stand-alone .rpm file from our oc-opsworks-shared-assets bucket
 * installs to /opt/CrowdStrike
-* includes apt package dependencies: auditd, libauparse0
-* auditd log rotation is configured in /etc/audit.conf (which is modiified by the CrowdStrike package)
 '
 )
 recipe(
