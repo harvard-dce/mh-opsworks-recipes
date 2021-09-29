@@ -540,41 +540,6 @@ module MhOpsworksRecipes
       end
     end
 
-    def get_capture_agent_manager_info
-      node.fetch(
-        :capture_agent_manager, {
-          capture_agent_manager_app_name: 'cadash',
-          capture_agent_manager_usr_name: 'capture_agent_manager',
-          capture_agent_manager_secret_key: 'super_secret_key',
-          capture_agent_manager_gunicorn_log_level: 'debug',
-          log_config: '/home/capture_agent_manager/sites/cadash/logging.yaml',
-          ca_stats_user: 'usr',
-          ca_stats_passwd: 'pwd',
-          ca_stats_json_url: 'http://fake-ca-status.com/ca-status.json',
-          epipearl_user: 'usr',
-          epipearl_passwd: 'pwd',
-          ldap_host: 'ldap-hostname.some-domain.com',
-          ldap_base_search: 'dc=some-domain,dc=com',
-          ldap_bind_dn: 'cn=fake_usr,dc=some-domain,dc=com',
-          ldap_bind_passwd: 'pwd',
-          capture_agent_manager_git_repo: 'https://github.com/harvard-dce/cadash',
-          capture_agent_manager_git_revision: 'master',
-          capture_agent_manager_database_usr: 'usr',
-          capture_agent_manager_database_pwd: 'pwd'
-        }
-      )
-    end
-
-    def get_capture_agent_manager_app_name
-      ca_info = get_capture_agent_manager_info
-      ca_info[:capture_agent_manager_app_name]
-    end
-
-    def get_capture_agent_manager_usr_name
-      ca_info = get_capture_agent_manager_info
-      ca_info[:capture_agent_manager_usr_name]
-    end
-    
     def get_moscaler_info
       {
           'moscaler_type' => 'disabled',
@@ -1030,7 +995,7 @@ module MhOpsworksRecipes
         variables({
           live_stream_name: live_stream_name,
           live_streaming_url: live_streaming_url,
-          distribution: distribution 
+          distribution: distribution
         })
       end
     end
@@ -1042,7 +1007,7 @@ module MhOpsworksRecipes
         group 'opencast'
         variables({
           publish_1x_engage_url: engage_url,
-          publish_1x_enabled: enabled 
+          publish_1x_enabled: enabled
         })
       end
     end
@@ -1055,7 +1020,7 @@ module MhOpsworksRecipes
         variables({
           ldap_url: ldap_url,
           ldap_userdn: ldap_userdn,
-          ldap_psw: ldap_psw 
+          ldap_psw: ldap_psw
         })
       end
     end
@@ -1069,7 +1034,7 @@ module MhOpsworksRecipes
           enable: enable,
           region: region,
           s3_distribution_bucket_name: s3_distribution_bucket_name,
-          s3_distribution_base_url: s3_distribution_base_url 
+          s3_distribution_base_url: s3_distribution_base_url
         })
       end
     end
@@ -1084,7 +1049,7 @@ module MhOpsworksRecipes
           region: region,
           bucket_name: bucket_name,
           access_key_id: access_key_id,
-          secret_access_key: secret_access_key 
+          secret_access_key: secret_access_key
         })
       end
     end
@@ -1117,7 +1082,7 @@ module MhOpsworksRecipes
         group 'opencast'
         variables({
           archive_bucket_name: s3_file_archive_bucket_name,
-          admin_1x_url: admin_1x_url 
+          admin_1x_url: admin_1x_url
         })
       end
     end
@@ -1284,8 +1249,8 @@ module MhOpsworksRecipes
         owner 'opencast'
         group 'opencast'
         variables({
-          elasticsearch_data: local_workspace_root, 
-          elasticsearch_log: log_dir 
+          elasticsearch_data: local_workspace_root,
+          elasticsearch_log: log_dir
         })
       end
     end
@@ -1366,7 +1331,7 @@ module MhOpsworksRecipes
         command %Q|cd #{current_deploy_root} && rsync -a build/opencast-dist-#{node_profile.to_s}-*/* .|
       end
     end
-   
+
     # Rute 4/11/2017: not sure what this does?
     def remove_felix_fileinstall(current_deploy_root)
       file %Q|#{current_deploy_root}/etc/load/org.apache.felix.fileinstall-opencast.cfg| do

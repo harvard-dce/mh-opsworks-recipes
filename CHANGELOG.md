@@ -2,6 +2,13 @@
 
 ## TO BE RELEASED
 
+* MI-197: Elasticsearch package repo keyserver has changed
+* MI-195: Dealing with issues related to aging Ubuntu 14.04 python
+    * make sure we're using python3/pip3 everywhere
+    * pre-install an older version of requests-cache prior to pyhorn install in the `install-oc-job-metrics` recipe (this fixes the actual reported issue
+    * install virtualenv for python3 the correct way
+    * finally ripping out all of the unused capture-agent-manager stuff
+
 ## v2.26.0 - 09/29/2021
 
 * *REQUIRES MANUAL RECIPE RUN* *REQUIRES EDITS TO CLUSTER CONFIG*

@@ -4,12 +4,7 @@
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 include_recipe "oc-opsworks-recipes::update-package-repo"
 
-install_package('python3-pip run-one git python3-dev libffi-dev libssl-dev')
-
-bash 'install virtualenv for python3' do
-  code '/usr/bin/pip3 install virtualenv'
-  user 'root'
-end
+install_package('python3-pip python3.4-venv run-one git python3-dev libffi-dev libssl-dev')
 
 moscaler_attributes = get_moscaler_info
 Chef::Log.info moscaler_attributes
@@ -48,7 +43,7 @@ bash 'create virtualenv' do
   code %Q|
 cd #{moscaler_dir} &&
 rm -rf venv &&
-/usr/bin/python3 -m virtualenv --clear venv
+/usr/bin/python3 -m venv --clear venv
   |
   not_if "test -d #{moscaler_dir}/venv && test -e #{moscaler_dir}/venv/bin/python3"
 end
@@ -56,8 +51,8 @@ end
 bash 'upgrade the venvs pip and install dependencies' do
   code %Q|
 cd #{moscaler_dir} &&
-venv/bin/pip install -U pip &&
-venv/bin/pip install -r requirements.txt &&
+venv/bin/python -m pip install -U "pip < 19.2" &&
+venv/bin/python -m pip install -r requirements.txt &&
 chown -R moscaler venv
   |
 end
@@ -65,7 +60,7 @@ end
 execute "Clean out existing cron jobs" do
   command "find -name 'moscaler*' -delete"
   cwd "/etc/cron.d"
-  action :run  
+  action :run
 end
 
 file 'autoscale config' do
@@ -99,4 +94,3 @@ AUTOSCALE_CONFIG="#{moscaler_dir}/autoscale.json"
 end
 
 include_recipe "oc-opsworks-recipes::moscaler-resume"
-
