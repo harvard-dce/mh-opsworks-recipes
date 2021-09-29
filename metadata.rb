@@ -138,9 +138,22 @@ docs in the ffmpeg-build project above.
 * <tt>node[:ffmpeg_version]</tt>
 
 === Effects
-* shared library packages for ffmpeg are installed
 * ffmpeg, ffprobe, ffplay, ffserver, and x264 are installed and symlinked to
   /usr/local/bin
+'
+)
+recipe(
+  'oc-opsworks-recipes::install-run-one',
+  'Install the run-one script for cron jobs
+
+This installs the packaged run-one script that isn\'t available
+for non-ubuntu distros so we cribbed it from ubuntu
+
+=== Attributes
+* MhOpsworksRecipes::RecipeHelpers.get_shared_asset_bucket_name
+
+=== Effects
+* run-one script is installed and symlinked to /usr/bin
 '
 )
 recipe(
@@ -154,7 +167,7 @@ want by setting the parameter below.
 * <tt>node[:awscli_version]</tt>
 
 === Effects
-* the python-pip package is installed
+* the python3-pip package is installed
 * the aws-cli is installed into /usr/local/bin
 '
 )
@@ -262,22 +275,6 @@ logstash part of our analytics layer.
 === Effects
 * logstash is installed
 * logstash is configured
-'
-)
-recipe(
-  'oc-opsworks-recipes::fix-raid-mapping',
-  'fix RAID mapping of ebs volumes
-
-Fixes {this bug}[https://github.com/aws/opsworks-cookbooks/issues/188] which is
-apparently still a thing. It should be run on all nodes.
-
-=== Attributes
-* none
-
-=== Effects
-* regenerates initramfs to ensure it supports software RAIDed volumes
-* instances that (optionally) use software RAIDed EBS volumes now start
-  correctly after a reboot
 '
 )
 recipe(
@@ -648,19 +645,6 @@ if we are on aws
 '
 )
 recipe(
-  'oc-opsworks-recipes::set-bash-as-default-shell',
-  'Sets bash (instead of dash) as the default shell
-
-Ubuntu uses dash (instead of bash) as the default non-interactive shell. It is supposedly fully bash compatible but - surprise! Nope.
-
-=== Attributes
-* none
-
-=== Effects
-* sets bash instead of dash as the default non-interactive shell
-'
-)
-recipe(
   'oc-opsworks-recipes::configure-elk-nginx-proxy',
   'Sets up an nginx proxy that allows connections to elasticsearch on the local network
 
@@ -838,131 +822,25 @@ and README.zadara.md in oc-opsworks.
 * MhOpsworksRecipes::RecipeHelpers.get_storage_hostname
 
 === Effects
-* squid3 is installed
-* squid3 is configured to allow proxy requests from the zadara controller
-* squid3 is restarted to apply the new proxy config.
-'
-)
-recipe(
-  'oc-opsworks-recipes::configure-capture-agent-manager-gunicorn',
-  'Sets up start script for gunicorn with capture-agent-manager app
-
-This is relevant for the utility node, where the capture-agent-manager `cadash`
-should run.
-
-=== attributes
-* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_app_name
-* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_usr_name
-
-=== effects
-* gunicorn installed under the virtualenv for the capture-agent-manager-app root dir
-  (usually /home/user/sites/<app>/venv)
-* script to start gunicorn running the capture-agent-manager-app under app root dir
-'
-)
-recipe(
-  'oc-opsworks-recipes::configure-capture-agent-manager-nginx-proxy',
-  'Sets up an nginx proxy that allows connections to flask-gunicorn apps via https-only
-
-=== attributes
-* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_app_name
-* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_usr_name
-
-=== effects
-* A configured and restarted nginx linked to flask-gunicorn capture-agent-manager app
-* HTTPS-only setup
-'
-)
-recipe(
-  'oc-opsworks-recipes::configure-capture-agent-manager-supervisor',
-  'Installs and sets up supervisor for gunicorn apps to run as service-daemon
-
-=== attributes
-* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_app_name
-* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_usr_name
-
-=== effects
-* configured capture-agent-manager app as a supervisor task under `/etc/supervisord/conf.d/<app>.conf`
-* supervisor restarted
-'
-)
-recipe(
-  'oc-opsworks-recipes::create-capture-agent-manager-directories',
-  'Creates directories(logs, app, etc) for capture-agent-manager flask-gunicorn app
-
-=== attributes
-* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_usr_name
-
-=== effects
-* directories for app(sites), logs, sock created under capture-agent-manager user
-'
-)
-recipe(
-  'oc-opsworks-recipes::create-capture-agent-manager-user',
-  'Create user and group to run capture-agent-manager flask-gunicorn app as
-
-=== attributes
-* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_usr_name
-
-=== effects
-* capture-agent-manager user and group created
-* .ssh dir in home dir
-'
-)
-recipe(
-  'oc-opsworks-recipes::install-capture-agent-manager-packages',
-  'Installs packages specific to the capture-agent-manager
-
-=== attributes
-none
-
-=== effects
-* packages needed for capture-agent-manager app to run like: redis, nginx, python,
-  and supervisor, among others
-* the package cache is cleared to save space
-'
-)
-recipe(
-  'oc-opsworks-recipes::install-capture-agent-manager',
-  'Sets up flask-gunicorn app for capture-agent-manager
-
-=== attributes
-* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_info
-* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_app_name
-* MhOpsworksRecipes::RecipeHelpers.get_capture_agent_manager_usr_name
-
-=== effects
-* capture-agent-manager app cloned or checked out under capture-agent-manager `$HOME/sites`
-* environment vars for capture-agent-manager app are configured in a source file
-* pip dependencies installed in virtualenv under capture-agent-manager `$HOME/sites/venv`
-* configured logrotate file for capture-agent-manager app log
-'
-)
-recipe(
-    'oc-opsworks-recipes::install-cwlogs',
-    'Installs the AWS Cloudwatch Log Agent and configures some basic log streams
-
-=== attributes
-* MhOpsworksRecipes::RecipeHelpers.configure_cloudwatch_log
-* MhOpsworksRecipes::RecipeHelpers.configure_nginx_cloudwatch_logs
-
-=== effects
-* installs the cloudwatch log agent
-* creates log stream configurations for syslog, opencast.log and nginx logs on appropriate nodes
+* squid proxy service is installed
+* squid is configured to allow proxy requests from the zadara controller
+* squid is restarted to apply the new proxy config.
 '
 )
 recipe(
     'oc-opsworks-recipes::install-crowdstrike',
     'Installs the CrowdStrike Falcon Sensor software. Because security.
 
+**NOTE**: this software updates itself! The version running may be newer than the actual install package. The
+yum package manager still keeps track of which package version was installed, so hopefully this will prevent a
+situation where the recipe continually re-installs.
+
 === attributes
 none
 
 === effects
-* installs a stand-alone .deb file from our oc-opsworks-shared-assets bucket
+* installs a stand-alone .rpm file from our oc-opsworks-shared-assets bucket
 * installs to /opt/CrowdStrike
-* includes apt package dependencies: auditd, libauparse0
-* auditd log rotation is configured in /etc/audit.conf (which is modiified by the CrowdStrike package)
 '
 )
 recipe(
@@ -999,18 +877,6 @@ none
 '
 )
 recipe(
-    'oc-opsworks-recipes::configure-capture-agent-cwlogs',
-    'Installs script for rsyncing capture agent logs and configures cloudwatch logs agent to monitor them.
-
-=== attributes
-none
-
-=== effects
-* installs script for rsyncing logs and configuring cloudwatch log agent
-* creates cron entry for executing script
-'
-)
-recipe(
     'oc-opsworks-recipes::install-geolite2-db',
     'Installs the MaxmindDB GeoLite2 db for performing geoip lookups by the analytics harvester.
 
@@ -1021,18 +887,6 @@ none
 * downloads the GeoLite2 db archive from the shared assets folder
 * unpacks archive into /opt/geolite2
 * name of archive file can be specified in cluster custom json
-'
-)
-recipe(
-    'oc-opsworks-recipes::install-newrelic',
-    'Installs the newrelic java agent.
-
-=== attributes
-none
-
-=== effects
-* fetches newrelic agent jar from shared assets bucket
-* installs the agent and config in /opt/newrelic
 '
 )
 recipe(
@@ -1059,6 +913,9 @@ none
 '
 )
 depends 'nfs', '~> 2.1.0'
+# this addresses a dependency issue where we need to pin the version of line,
+# which is a subdependency of another library, for compatibility reasons
+depends 'line', '~> 0.6.3'
 depends 'apt', '~> 2.9.2'
 depends 'cron', '~> 1.6.1'
 depends 'nodejs', '~> 2.4.4'

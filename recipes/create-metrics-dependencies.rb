@@ -6,6 +6,8 @@ include_recipe "oc-opsworks-recipes::install-awscli"
 user "custom_metrics" do
   comment 'The custom metrics reporting user'
   system true
+  manage_home true
+  home '/home/custom_metrics'
   shell '/bin/false'
 end
 

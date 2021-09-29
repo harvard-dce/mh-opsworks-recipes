@@ -5,26 +5,35 @@
 include_recipe "oc-opsworks-recipes::update-package-repo"
 
 bucket_name = get_shared_asset_bucket_name
-crowdstrike_deb = node.fetch(:crowdstrike_deb, 'falcon-sensor_2.0.22-1202_amd64.deb')
-crowdstrike_version = node.fetch(:crowdstrike_version, '2.0.0022.1202')
-::Chef::Log.info("crowdstrike version #{crowdstrike_version}")
+crowdstrike = node.fetch(:crowdstrike, {})
+
+return if !crowdstrike[:cid]
+rpm = crowdstrike[:rpm] || 'crowdstrike-falcon-sensor.rpm'
 
 if on_aws?
-  install_package("auditd libauparse0")
   include_recipe "oc-opsworks-recipes::install-awscli"
-  download_command="/usr/local/bin/aws s3 cp s3://#{bucket_name}/#{crowdstrike_deb} ."
+  download_command="/usr/local/bin/aws s3 cp s3://#{bucket_name}/#{rpm} ."
 
-  bash 'install crowdstrike falcon host pacakge' do
+  bash 'install crowdstrike falcon sensor' do
     code %Q|
 cd /opt &&
-/bin/rm -f #{crowdstrike_deb} &&
+/bin/rm -f #{rpm} &&
 #{download_command} &&
-dpkg -i #{crowdstrike_deb}
+yum install -y #{rpm}
 |
-    retries 5
+    retries 3
     retry_delay 10
     timeout 300
-    # don't install if the install dir is present AND the version matches
-    not_if "test -d /opt/CrowdStrike && /opt/CrowdStrike/CsConfig -g --version | /bin/grep -q -F '#{crowdstrike_version}.'"
+    # Search list of installed packages for this specific one.
+    # This should work becaues even though this falcon sensor software updates itself,
+    # the entry in the yum registry will remain static
+    not_if "rpm -qa | grep $(rpm -qp /opt/#{rpm} 2>/dev/null)"
+    notifies :run, "execute[set cid]", :immediately
+  end
+
+  execute 'set cid' do
+    command "/opt/CrowdStrike/falconctl -s -f --cid=#{crowdstrike[:cid]}"
+    # only run when notified by the previous block
+    action :nothing
   end
 end

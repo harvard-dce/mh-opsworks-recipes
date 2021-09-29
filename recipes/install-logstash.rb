@@ -7,18 +7,15 @@ elk_info = get_elk_info
 
 stack_name = stack_shortname
 es_host = node[:opsworks][:instance][:private_ip]
-logstash_major_version = elk_info['logstash_major_version']
-logstash_repo_uri = elk_info['logstash_repo_uri']
 
-apt_repository 'logstash' do
-  uri logstash_repo_uri
-  components ['stable', 'main']
-  keyserver 'ha.pool.sks-keyservers.net'
-  key '46095ACC8548582C1A2699A9D27D666CD88E42B4'
+yum_repository 'logstash' do
+  description "logstash 2.4.x packages"
+  baseurl "http://packages.elastic.co/logstash/2.4/centos"
+  action :create
+  gpgkey "http://packages.elastic.co/GPG-KEY-elasticsearch"
 end
 
 include_recipe "oc-opsworks-recipes::update-package-repo"
-pin_package("logstash", "#{logstash_major_version}.*")
 install_package("logstash")
 
 service 'logstash' do
@@ -47,4 +44,3 @@ template '/etc/logstash/conf.d/logstash.conf' do
   })
   notifies :restart, 'service[logstash]', :immediately
 end
-

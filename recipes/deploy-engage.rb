@@ -72,15 +72,15 @@ region = node.fetch(:region, 'us-east-1')
 s3_distribution_bucket_name = get_s3_distribution_bucket_name
 s3_distribution_base_url=get_base_media_download_url(public_engage_hostname)
 
-# Configuration for searching transcripts 
+# Configuration for searching transcripts
 search_content_index_url = node.fetch(:transcript_search_endpoint, '')
 search_content_lambda_name = node.fetch(:transcript_index_function, '')
-search_content_enabled = ! search_content_index_url.empty? && ! search_content_lambda_name.empty? 
+search_content_enabled = ! search_content_index_url.empty? && ! search_content_lambda_name.empty?
 ## /Engage specific
 
 git_data = node[:deploy][:opencast][:scm]
 
-activemq_bind_host = private_admin_hostname 
+activemq_bind_host = private_admin_hostname
 
 public_admin_hostname = get_public_admin_hostname
 
@@ -135,10 +135,10 @@ deploy_revision "opencast" do
     install_ldap_config(most_recent_deploy, ldap_url, ldap_userdn, ldap_psw)
     install_default_tenant_config(most_recent_deploy, public_engage_hostname, private_hostname)
     install_auth_service(
-      most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated, ldap_url, ldap_userdn, ldap_psw 
+      most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated, ldap_url, ldap_userdn, ldap_psw
     )
     install_porta_auth_service(
-      most_recent_deploy, porta_auto_url, porta_auto_cookie_name, porta_auto_redirect_url, porta_auto_enabled 
+      most_recent_deploy, porta_auto_url, porta_auto_cookie_name, porta_auto_redirect_url, porta_auto_enabled
     )
     install_porta_adapter_service(most_recent_deploy, default_auth_system, other_courses)
 
@@ -181,7 +181,7 @@ end
 
 include_recipe 'oc-opsworks-recipes::register-opencast-to-boot'
 
-unless node[:dont_start_opencast_automatically]
+unless dont_start_opencast_automatically?
   service 'opencast' do
     action :start
     supports restart: true, start: true, stop: true, status: true

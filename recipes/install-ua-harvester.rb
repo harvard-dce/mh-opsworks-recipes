@@ -1,9 +1,9 @@
 # Cookbook Name:: oc-opsworks-recipes
 # Recipe:: install-ua-harvester
 
-include_recipe "oc-opsworks-recipes::update-package-repo"
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 ::Chef::Resource::RubyBlock.send(:include, MhOpsworksRecipes::RecipeHelpers)
+include_recipe "oc-opsworks-recipes::update-python"
 
 elk_info = get_elk_info
 
@@ -15,7 +15,7 @@ stack_name = stack_shortname
 sqs_queue_name = "#{stack_name}-user-actions"
 region = node[:opsworks][:instance][:region]
 
-install_package('python-pip python-virtualenv run-one redis-server')
+install_package('redis')
 
 user "ua_harvester" do
   comment 'The ua_harvester user'
@@ -32,21 +32,9 @@ git "get the ua harvester" do
   user 'ua_harvester'
 end
 
-bash 'create virtualenv' do
-  code %Q|
-cd #{harvester_dir} &&
-/usr/bin/virtualenv venv
-  |
-  not_if "test -d #{harvester_dir}/venv"
-end
-
-bash 'install dependencies' do
-  code %Q|
-cd #{harvester_dir} &&
-venv/bin/pip install -r requirements.txt &&
-chown -R ua_harvester venv
-  |
-end
+harvester_venv = "#{harvester_dir}/venv"
+harvester_requirements = "#{harvester_dir}/requirements.txt"
+create_virtualenv(harvester_venv, 'ua_harvester', harvester_requirements)
 
 include_recipe 'oc-opsworks-recipes::install-geolite2-db'
 include_recipe 'oc-opsworks-recipes::configure-ua-harvester'
@@ -88,4 +76,8 @@ ruby_block 'create sqs queue' do
     Chef::Log.info command
     execute_command(command)
   end
+end
+
+service "redis" do
+  action [ :enable, :start ]
 end

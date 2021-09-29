@@ -1,98 +1,96 @@
-# System-wide .bashrc file for interactive bash(1) shells.
+# /etc/bashrc
 
-# To enable the settings / commands in this file for login shells as well,
-# this file has to be sourced in /etc/profile.
+# System wide functions and aliases
+# Environment stuff goes in /etc/profile
 
-# If not running interactively, don't do anything
-[ -z "$PS1" ] && return
+# This is the default amazon linux .bashrc with our custom opsworks stuff
 
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
-shopt -s checkwinsize
+# It's NOT a good idea to change this file unless you know what you
+# are doing. It's much better to create a custom.sh shell script in
+# /etc/profile.d/ to make custom changes to your environment, as this
+# will prevent the need for merging in future updates.
 
-# set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
+# are we an interactive shell?
+if [ "$PS1" ]; then
+
+  # set a fancy prompt (non-color, unless we know we "want" color)
+  case "$TERM" in
+  xterm-256color) color_prompt=yes ;;
+  screen-256color) color_prompt=yes ;;
+  xterm-color) color_prompt=yes ;;
+  screen) color_prompt=yes ;;
+  esac
+
+  OPSWORKS_CLUSTER=$(ruby -e 'puts $stdin.each.find{|line| line.match(/OpsWorks Stack/)}.split(":").last.strip' </etc/motd)
+
+  case "$OPSWORKS_CLUSTER" in
+  *prod*)
+    # Red background with white text. CAUTION WHOOP WHOOP!
+    cluster_color="41"
+    ;;
+  *)
+    # A calm pleasing yellow.
+    cluster_color="33"
+    ;;
+  esac
+
+  if [ "$color_prompt" = yes ]; then
+    PROMPT_COMMAND='echo -n -e "\033[01;${cluster_color}m${OPSWORKS_CLUSTER}\033[00m - "'
+  else
+    PROMPT_COMMAND='echo -n -e "${OPSWORKS_CLUSTER} - "'
+  fi
+
+  # Turn on checkwinsize
+  shopt -s checkwinsize
+  [ "$PS1" = "\\s-\\v\\\$ " ] && PS1="[\u@\h \W]\\$ "
+  # You might want to have e.g. tty in prompt (e.g. more virtual machines)
+  # and console windows
+  # If you want to do so, just add e.g.
+  # if [ "$PS1" ]; then
+  #   PS1="[\u@\h:\l \W]\\$ "
+  # fi
+  # to your custom modification shell script in /etc/profile.d/ directory
 fi
 
-# set a fancy prompt (non-color, unless we know we "want" color)
-case "$TERM" in
-    # Fixed by DJCP, was "xterm-color", not the correct value.
-    xterm-256color) color_prompt=yes;;
-    screen-256color) color_prompt=yes;;
-    xterm-color) color_prompt=yes;;
-esac
+if ! shopt -q login_shell; then # We're not a login shell
+  # Need to redefine pathmunge, it get's undefined at the end of /etc/profile
+  pathmunge() {
+    case ":${PATH}:" in
+    *:"$1":*) ;;
 
-# set a fancy prompt (non-color, overwrite the one in /etc/profile)
-# PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-
-# Set opsworks cluster name in prompt - DJCP
-OPSWORKS_CLUSTER=`ruby -e 'puts $stdin.each.find{|line| line.match(/OpsWorks Stack/)}.split(":").last.strip' < /etc/motd`
-
-case "$OPSWORKS_CLUSTER" in
-*production*)
-  # Red background with white text. CAUTION WHOOP WHOOP!
-  cluster_color="41"
-  ;;
-*)
-  # A calm pleasing yellow.
-  cluster_color="33"
-  ;;
-esac
-
-if [ "$color_prompt" = yes ]; then
-  PROMPT_COMMAND='echo -n -e "\033[01;${cluster_color}m${OPSWORKS_CLUSTER}\033[00m - "'
-else
-  PROMPT_COMMAND='echo -n -e "${OPSWORKS_CLUSTER} - "'
-fi
-
-# /Set opsworks cluster name in prompt - DJCP
-
-# Commented out, don't overwrite xterm -T "title" -n "icontitle" by default.
-# If this is an xterm set the title to user@host:dir
-#case "$TERM" in
-#xterm*|rxvt*)
-#    PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD}\007"'
-#    ;;
-#*)
-#    ;;
-#esac
-
-# enable bash completion in interactive shells
-#if ! shopt -oq posix; then
-#  if [ -f /usr/share/bash-completion/bash_completion ]; then
-#    . /usr/share/bash-completion/bash_completion
-#  elif [ -f /etc/bash_completion ]; then
-#    . /etc/bash_completion
-#  fi
-#fi
-
-# sudo hint
-if [ ! -e "$HOME/.sudo_as_admin_successful" ] && [ ! -e "$HOME/.hushlogin" ] ; then
-    case " $(groups) " in *\ admin\ *)
-    if [ -x /usr/bin/sudo ]; then
-	cat <<-EOF
-	To run a command as administrator (user "root"), use "sudo <command>".
-	See "man sudo_root" for details.
-	
-	EOF
-    fi
+    *)
+      if [ "$2" = "after" ]; then
+        PATH=$PATH:$1
+      else
+        PATH=$1:$PATH
+      fi
+      ;;
     esac
-fi
+  }
 
-# if the command-not-found package is installed, use it
-if [ -x /usr/lib/command-not-found -o -x /usr/share/command-not-found/command-not-found ]; then
-	function command_not_found_handle {
-	        # check because c-n-f could've been removed in the meantime
-                if [ -x /usr/lib/command-not-found ]; then
-		   /usr/lib/command-not-found -- "$1"
-                   return $?
-                elif [ -x /usr/share/command-not-found/command-not-found ]; then
-		   /usr/share/command-not-found/command-not-found -- "$1"
-                   return $?
-		else
-		   printf "%s: command not found\n" "$1" >&2
-		   return 127
-		fi
-	}
+  # By default, we want umask to get set. This sets it for non-login shell.
+  # Current threshold for system reserved uid/gids is 200
+  # You could check uidgid reservation validity in
+  # /usr/share/doc/setup-*/uidgid file
+  if [ $UID -gt 199 ] && [ "$(id -gn)" = "$(id -un)" ]; then
+    umask 002
+  else
+    umask 022
+  fi
+
+  # Only display echos from profile.d scripts if we are no login shell
+  # and interactive - otherwise just process them to set envvars
+  for i in /etc/profile.d/*.sh; do
+    if [ -r "$i" ]; then
+      if [ "$PS1" ]; then
+        . "$i"
+      else
+        . "$i" >/dev/null 2>&1
+      fi
+    fi
+  done
+
+  unset i
+  unset pathmunge
 fi
+# vim:ts=4:sw=4

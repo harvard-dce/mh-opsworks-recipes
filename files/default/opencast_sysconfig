@@ -1,0 +1,2 @@
+# uncomment to override the `dont_start_opencast_automatically` flag for this instance
+#FORCE_OPENCAST_START=1

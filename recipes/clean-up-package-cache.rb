@@ -2,8 +2,7 @@
 # Recipe:: clean-up-package-cache
 
 execute 'clean package cache' do
-  environment 'DEBIAN_FRONTEND' => 'noninteractive'
-  command "apt-get clean"
+  command "yum clean all"
   retries 5
   retry_delay 5
 end

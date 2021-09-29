@@ -34,14 +34,6 @@
 # export KARAF_DEBUG       # Enable debug mode
 # export KARAF_REDIRECT    # Enable/set the std/err redirection when using bin/start
 
-<% if @enable_newrelic %>
-NEWRELIC_JAR="/opt/newrelic/newrelic.jar"
-NEWRELIC_CONFIG="-Dnewrelic.config.file=/opt/newrelic/newrelic.yml"
-NEWRELIC="-javaagent:${NEWRELIC_JAR} $NEWRELIC_CONFIG"
-<% else %>
-NEWRELIC=""
-<% end %>
-
 KARAF_DEBUG=<%= @java_debug_enabled %>
 LOGDIR=<%= @opencast_log_directory %>
 
@@ -49,6 +41,6 @@ GC="-Xloggc:${LOGDIR}/gcnormal.log -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -X
 GC="${GC} -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCApplicationConcurrentTime -XX:+PrintHeapAtGC"
 GC="${GC} -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=20 -XX:GCLogFileSize=32M -XX:+UseG1GC"
 
-export EXTRA_JAVA_OPTS="$NEWRELIC $GC -Dorg.eclipse.jetty.server.Request.maxFormContentSize=1500000 -Dfile.encoding=UTF-8"
+export EXTRA_JAVA_OPTS="$GC -Dorg.eclipse.jetty.server.Request.maxFormContentSize=1500000 -Dfile.encoding=UTF-8"
 export JAVA_MAX_MEM=<%= @java_xmx_ram %>M
 export JAVA_HOME=<%= @java_home %>

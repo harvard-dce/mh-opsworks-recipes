@@ -8,10 +8,7 @@ http_auth = elk_info['http_auth']
 es_host = node[:opsworks][:instance][:private_ip]
 
 include_recipe "oc-opsworks-recipes::install-nginx"
-install_package('apache2-utils')
-
-install_nginx_logrotate_customizations
-configure_nginx_cloudwatch_logs
+install_package('httpd-tools')
 
 create_ssl_cert(elk_info['http_ssl'])
 
@@ -19,6 +16,10 @@ bash "htpasswd" do
   code <<-EOH
     htpasswd -bc /etc/nginx/conf.d/kibana.htpasswd #{http_auth['user']} #{http_auth['pass']}
   EOH
+end
+
+file '/etc/nginx/conf.d/kibana.htpasswd' do
+	mode '644'
 end
 
 worker_procs = get_nginx_worker_procs
@@ -52,4 +53,3 @@ service 'nginx' do
   # on initial node setup run
   subscribes :reload, "file[/etc/nginx/ssl/certificate.key]"
 end
-

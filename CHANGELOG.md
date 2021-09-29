@@ -2,6 +2,12 @@
 
 ## TO BE RELEASED
 
+* MI-197: Elasticsearch package repo keyserver has changed
+* MI-195: Dealing with issues related to aging Ubuntu 14.04 python
+		* make sure we're using python3/pip3 everywhere
+		* pre-install an older version of requests-cache prior to pyhorn install in the `install-oc-job-metrics` recipe (this fixes the actual reported issue
+		* install virtualenv for python3 the correct way
+		* finally ripping out all of the unused capture-agent-manager stuff
 
 ## v2.27.1 - 11/01/2021
 
@@ -13,20 +19,20 @@
   MI-196: update syntax for esm registration command
   The `ubuntu_advantage_esm` block of the custom json must be updated from this:
   ```
-	"ubuntu_advantage_esm": {
-		"user": "...",
-		"password": "..."
-	},
+  "ubuntu_advantage_esm": {
+    "user": "...",
+    "password": "..."
+  },
   ```
   to this:
   ```
-	"ubuntu_advantage_esm": {
-		"token": "...",
-	},
+  "ubuntu_advantage_esm": {
+    "token": "...",
+  },
   ```
   For an existing cluster you must then execute the modified recipe:
   ```bash
-	./bin/rake stack:commands:execute_recipes_on_layers layers="Admin,Engage,Utility,Storage,Analytics,Workers" recipes="oc-opsworks-recipes::enable-ubuntu-advantage-esm"
+  ./bin/rake stack:commands:execute_recipes_on_layers layers="Admin,Engage,Utility,Storage,Analytics,Workers" recipes="oc-opsworks-recipes::enable-ubuntu-advantage-esm"
   ```
 
 ## v2.25.0

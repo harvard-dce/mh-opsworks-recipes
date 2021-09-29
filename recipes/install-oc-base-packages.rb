@@ -5,18 +5,19 @@
 
 include_recipe "oc-opsworks-recipes::update-package-repo"
 
-packages = %Q|autofs5 curl dkms gzip jq libglib2.0-dev mysql-client postfix python-pip python-dev rsyslog-gnutls run-one tesseract-ocr|
+
+# make sure we get this one from the epel repo or it will cause dep conflicts with tesseract
+install_package("libwebp", %Q|--disablerepo="*" --enablerepo="epel"|)
+
+packages = %Q|java-1.8.0-openjdk java-1.8.0-openjdk-devel mysql56 postfix tesseract|
 install_package(packages)
 
-# remove any existing maven install
-['maven2', 'maven'].each do |package_name|
-  package package_name do
-    action :purge
-    ignore_failure true
-  end
+# remove java-1.7 so that 1.8 becomes default
+package 'java-1.7.0-openjdk' do
+  action :remove
+  ignore_failure true
 end
 
-include_recipe 'java'
 include_recipe 'maven'
 
 # create symlink in common system path as deploy operations don't seem to source
@@ -26,13 +27,6 @@ if node['maven']['setup_bin']
   link '/usr/bin/mvn' do
     to "#{node['maven']['m2_home']}/bin/mvn"
   end
-end
-
-# this is a workaround for a bug on ubuntu 14.04: https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1406483
-# alternatively we could purge and reinstall the ca-certificates-java package but this works and is simpler
-execute 'update-ca-certificates' do
-  command '/usr/sbin/update-ca-certificates -f'
-  not_if 'test -e /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/cacerts'
 end
 
 if admin_node? || allinone_node?

@@ -19,20 +19,21 @@ module MhOpsworksRecipes
       80
     end
 
-    def install_package(name)
-      #
-      # Yes, I know about the "package" resource, but for some reason using a timeout
-      # with it causes a compile-time error.
-      #
-      # We really want to be able to timeout and retry installs to get faster package
-      # mirrors. This is an annoying quirk with the ubuntu package mirror repos.
-      #
-      execute "install #{name}" do
-        environment 'DEBIAN_FRONTEND' => 'noninteractive'
-        command %Q|apt-get install -y #{name}|
-        retries 5
-        retry_delay 15
-        timeout 180
+		# this method is called with multiple package names in several recipes.
+		# Because of a quirk in yum we have to install each package with
+		# a separate command. If instead we attempted to install multiple with
+		# a single command, and one of the packagex was already installed,
+		# yum will exit with an non-zero status code (failure), so if your
+		# command is `yum install -y foo bar baz` and foo was already installed,
+		# yum would fail and bar and baz would never get installed.
+    def install_package(names, opts="")
+      names.gsub(/\s+/m, " ").strip.split(" ").each do |name|
+        execute "install #{name}" do
+          command %|yum #{opts} install -y #{name}|
+          retries 5
+          retry_delay 15
+          timeout 180
+        end
       end
     end
 
@@ -116,15 +117,6 @@ module MhOpsworksRecipes
         requested_action
       else
         :deploy
-      end
-    end
-
-    def install_nginx_logrotate_customizations
-      cookbook_file "nginx-logrotate.conf" do
-        path "/etc/logrotate.d/nginx"
-        owner "root"
-        group "root"
-        mode "644"
       end
     end
 
@@ -316,16 +308,6 @@ module MhOpsworksRecipes
       )
     end
 
-    def get_publish_1x_conf
-      node.fetch(
-        :publish_1x_conf, {
-          enabled: false,
-          engage_url: '',
-          admin_url: 'dummyValue'
-        }
-      )
-    end
-
     def get_ibm_watson_transcript_bucket_name
       node[:ibm_watson_transcript_sync_bucket_name]
     end
@@ -477,20 +459,12 @@ module MhOpsworksRecipes
     def get_elk_info
       stack_name = stack_shortname
       {
-          'es_major_version' => '2.4',
-          'es_repo_uri' => 'http://packages.elasticsearch.org/elasticsearch/2.x/debian',
           'es_cluster_name' => stack_name,
           'es_index_prefix' => "useractions-#{stack_name}",
           'es_data_path' => "/vol/elasticsearch_data",
           'es_enable_snapshots' => true,
-          'logstash_major_version' => '1:2.4',
-          'logstash_repo_uri' => 'http://packages.elasticsearch.org/logstash/2.4/debian',
           'logstash_tcp_port' => '5000',
           'logstash_stdout_output' => false,
-          'kibana_major_version' => '4.6',
-          'kibana_repo_uri' => 'https://packages.elastic.co/kibana/4.6/debian',
-          'curator_major_version' => '3.5',
-          'curator_repo_uri' => 'http://packages.elastic.co/curator/3/debian',
           'http_auth' => {},
           'http_ssl' => get_dummy_cert,
           'harvester_repo' => 'https://github.com/harvard-dce/dce-user-analytics.git',
@@ -540,41 +514,6 @@ module MhOpsworksRecipes
       end
     end
 
-    def get_capture_agent_manager_info
-      node.fetch(
-        :capture_agent_manager, {
-          capture_agent_manager_app_name: 'cadash',
-          capture_agent_manager_usr_name: 'capture_agent_manager',
-          capture_agent_manager_secret_key: 'super_secret_key',
-          capture_agent_manager_gunicorn_log_level: 'debug',
-          log_config: '/home/capture_agent_manager/sites/cadash/logging.yaml',
-          ca_stats_user: 'usr',
-          ca_stats_passwd: 'pwd',
-          ca_stats_json_url: 'http://fake-ca-status.com/ca-status.json',
-          epipearl_user: 'usr',
-          epipearl_passwd: 'pwd',
-          ldap_host: 'ldap-hostname.some-domain.com',
-          ldap_base_search: 'dc=some-domain,dc=com',
-          ldap_bind_dn: 'cn=fake_usr,dc=some-domain,dc=com',
-          ldap_bind_passwd: 'pwd',
-          capture_agent_manager_git_repo: 'https://github.com/harvard-dce/cadash',
-          capture_agent_manager_git_revision: 'master',
-          capture_agent_manager_database_usr: 'usr',
-          capture_agent_manager_database_pwd: 'pwd'
-        }
-      )
-    end
-
-    def get_capture_agent_manager_app_name
-      ca_info = get_capture_agent_manager_info
-      ca_info[:capture_agent_manager_app_name]
-    end
-
-    def get_capture_agent_manager_usr_name
-      ca_info = get_capture_agent_manager_info
-      ca_info[:capture_agent_manager_usr_name]
-    end
-    
     def get_moscaler_info
       {
           'moscaler_type' => 'disabled',
@@ -593,61 +532,6 @@ module MhOpsworksRecipes
         }.merge(node.fetch(:moscaler, {}))
     end
 
-    def configure_cloudwatch_log(log_name, log_file, datetime_format)
-
-      unless on_aws?
-        return
-      end
-
-      stack_name = stack_shortname
-      log_group_name = stack_name + "_" + log_name
-
-      create_log_group(log_group_name)
-
-      service 'awslogs' do
-        action :nothing
-      end
-
-      template "/var/awslogs/etc/config/#{log_name}.conf" do
-        source 'cwlog_stream.conf.erb'
-        owner 'root'
-        group 'root'
-        mode 0644
-        variables ({
-            :log_name => log_name,
-            :hostname => node[:opsworks][:instance][:hostname],
-            :stack_name => stack_name,
-            :log_file => log_file,
-            :datetime_format => datetime_format
-        })
-        notifies :restart, 'service[awslogs]', :delayed
-      end
-    end
-
-    def create_log_group(log_group_name)
-
-      region = node.fetch(:region, 'us-east-1')
-      retention_days = node.fetch(:cwlogs_retention_days, '30')
-
-      execute 'create log group' do
-        command %Q|aws logs create-log-group --region #{region} --log-group-name #{log_group_name}|
-        returns [0, 255]
-        ignore_failure true
-      end
-
-      execute 'set log group retention policy' do
-        command %Q|aws logs put-retention-policy --region #{region} --log-group-name #{log_group_name} --retention-in-days #{retention_days}|
-        retries 3
-        retry_delay 10
-      end
-
-    end
-
-    def configure_nginx_cloudwatch_logs
-      configure_cloudwatch_log("nginx-access", "/var/log/nginx/access.log", "%d/%b/%Y:%H:%M:%S %z")
-      configure_cloudwatch_log("nginx-error", "/var/log/nginx/error.log", "%d/%b/%Y:%H:%M:%S %z")
-    end
-
     def get_nginx_worker_procs
       number_of_cpus = execute_command(%Q(nproc)).chomp.to_i
       if admin_node? || engage_node?
@@ -659,6 +543,35 @@ module MhOpsworksRecipes
 
     def is_using_local_distribution?
       node[:vagrant_environment] || ( ! node[:cloudfront_url] && ! node[:s3_distribution_bucket_name] )
+    end
+
+		# implementing a standard method for creating a python virtualenv
+    def create_virtualenv(venv_path, user, requirements_path=nil)
+      execute "create virtualenv #{venv_path}" do
+        # use the installed 'virtualenv' package instead of builtin 'venv'
+        command "/usr/bin/python3 -m virtualenv --clear #{venv_path}"
+        user user
+        # don't if virtualenv python is already correct
+        not_if %Q!test -d #{venv_path} && #{venv_path}/bin/python -V | grep -q "$(python3 -V)"!
+      end
+      if !requirements_path.nil?
+        execute "install requirements from #{requirements_path}" do
+          command "#{venv_path}/bin/python -m pip install -r #{requirements_path}"
+          user user
+        end
+      end
+    end
+
+    def is_truthy(val)
+      return ['true', '1'].include? val.to_s.downcase
+    end
+
+    def force_ffmpeg_install?
+      is_truthy(node.fetch(:force_ffmpeg_install, "false"))
+    end
+
+    def dont_start_opencast_automatically?
+      is_truthy(node.fetch(:dont_start_opencast_automatically, "false"))
     end
 
   end
@@ -930,6 +843,13 @@ module MhOpsworksRecipes
         })
       end
 
+			cookbook_file 'opencast_sysconfig' do
+				path '/etc/sysconfig/opencast'
+				owner 'root'
+				group 'root'
+				mode '644'
+			end
+
       template %Q|#{current_deploy_root}/bin/setenv| do
         source 'opencast-setenv.erb'
         owner 'opencast'
@@ -940,7 +860,6 @@ module MhOpsworksRecipes
           java_xms_ram: java_xms_ram,
           java_home: java_home,
           opencast_log_directory: log_dir,
-          enable_newrelic: enable_newrelic_for_layer?(layer_name),
           java_debug_enabled: java_debug_enabled
         })
       end
@@ -1030,19 +949,7 @@ module MhOpsworksRecipes
         variables({
           live_stream_name: live_stream_name,
           live_streaming_url: live_streaming_url,
-          distribution: distribution 
-        })
-      end
-    end
-
-    def install_publish_1x_service_config(current_deploy_root, enabled, engage_url)
-      template %Q|#{current_deploy_root}/etc/edu.harvard.dce.migration.impl.Publish1XUtilImpl.cfg| do
-        source 'edu.harvard.dce.migration.impl.Publish1XUtilImpl.cfg.erb'
-        owner 'opencast'
-        group 'opencast'
-        variables({
-          publish_1x_engage_url: engage_url,
-          publish_1x_enabled: enabled 
+          distribution: distribution
         })
       end
     end
@@ -1055,7 +962,7 @@ module MhOpsworksRecipes
         variables({
           ldap_url: ldap_url,
           ldap_userdn: ldap_userdn,
-          ldap_psw: ldap_psw 
+          ldap_psw: ldap_psw
         })
       end
     end
@@ -1069,7 +976,7 @@ module MhOpsworksRecipes
           enable: enable,
           region: region,
           s3_distribution_bucket_name: s3_distribution_bucket_name,
-          s3_distribution_base_url: s3_distribution_base_url 
+          s3_distribution_base_url: s3_distribution_base_url
         })
       end
     end
@@ -1084,7 +991,7 @@ module MhOpsworksRecipes
           region: region,
           bucket_name: bucket_name,
           access_key_id: access_key_id,
-          secret_access_key: secret_access_key 
+          secret_access_key: secret_access_key
         })
       end
     end
@@ -1106,18 +1013,6 @@ module MhOpsworksRecipes
         group 'opencast'
         variables({
           s3_file_archive_course_list: s3_file_archive_course_list
-        })
-      end
-    end
-
-    def install_ingest_1x_config(current_deploy_root, s3_file_archive_bucket_name, admin_1x_url)
-      template %Q|#{current_deploy_root}/etc/edu.harvard.dce.migration.workflowoperation.Ingest1XWorkflowOperationHandler.cfg| do
-        source 'edu.harvard.dce.migration.workflowoperation.Ingest1XWorkflowOperationHandler.cfg.erb'
-        owner 'opencast'
-        group 'opencast'
-        variables({
-          archive_bucket_name: s3_file_archive_bucket_name,
-          admin_1x_url: admin_1x_url 
         })
       end
     end
@@ -1246,7 +1141,7 @@ module MhOpsworksRecipes
           porta_auto_url: porta_auto_url,
           cookie_name: cookie_name,
           redirect_url: redirect_url,
-          enabled: enabled 
+          enabled: enabled
         })
       end
     end
@@ -1258,7 +1153,7 @@ module MhOpsworksRecipes
         group 'opencast'
         variables({
           porta_url: porta_url,
-          enabled: enabled 
+          enabled: enabled
         })
       end
     end
@@ -1284,8 +1179,8 @@ module MhOpsworksRecipes
         owner 'opencast'
         group 'opencast'
         variables({
-          elasticsearch_data: local_workspace_root, 
-          elasticsearch_log: log_dir 
+          elasticsearch_data: local_workspace_root,
+          elasticsearch_log: log_dir
         })
       end
     end
@@ -1366,7 +1261,7 @@ module MhOpsworksRecipes
         command %Q|cd #{current_deploy_root} && rsync -a build/opencast-dist-#{node_profile.to_s}-*/* .|
       end
     end
-   
+
     # Rute 4/11/2017: not sure what this does?
     def remove_felix_fileinstall(current_deploy_root)
       file %Q|#{current_deploy_root}/etc/load/org.apache.felix.fileinstall-opencast.cfg| do
@@ -1387,18 +1282,6 @@ module MhOpsworksRecipes
     def layer_name_from_hostname
       hostname = node[:opsworks][:instance][:hostname]
       hostname.match(%r{^(?<layer>[a-z\-]+)})[:layer]
-    end
-
-    def newrelic_config
-      node.fetch(:newrelic, {})
-    end
-
-    def enable_newrelic_for_layer?(layer_name)
-      newrelic_config.key?(layer_name)
-    end
-
-    def get_newrelic_agent_version
-      newrelic_config.fetch(:agent_version, "4.2.0")
     end
 
   end

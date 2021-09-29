@@ -7,11 +7,11 @@ include_recipe "oc-opsworks-recipes::update-package-repo"
 
 return unless external_storage?
 
-install_package('squid3')
+install_package('squid')
 
 storage_hostname = get_storage_hostname
 
-template %Q|/etc/squid3/squid.conf| do
+template %Q|/etc/squid/squid.conf| do
   source 'squid.conf.erb'
   owner 'root'
   group 'root'
@@ -20,4 +20,4 @@ template %Q|/etc/squid3/squid.conf| do
   })
 end
 
-execute 'service squid3 restart'
+execute 'service squid restart'

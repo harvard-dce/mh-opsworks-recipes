@@ -2,8 +2,7 @@
 # Recipe:: install-opencast-job-metrics
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
-
-install_package('python3-pip python3-requests python3-six')
+include_recipe "oc-opsworks-recipes::update-python"
 
 rest_auth_info = get_rest_auth_info
 aws_instance_id = node[:opsworks][:instance][:aws_instance_id]
@@ -12,8 +11,8 @@ workers_layer_id = node[:opsworks][:layers][:workers][:id]
 stack_id = node[:opsworks][:stack][:id]
 stack_name = stack_shortname
 
-bash 'install pyhorn' do
-  code 'pip3 install pyhorn'
+execute 'install pyhorn' do
+  command '/usr/bin/python3 -m pip install pyhorn'
   user 'root'
 end
 
@@ -43,4 +42,3 @@ cron_d 'workers_job_load_metrics' do
   command %Q(/usr/local/bin/workers_job_load_metrics.sh "#{stack_name}" "#{stack_id}" "#{workers_layer_id}" "#{private_admin_hostname}" "#{rest_auth_info[:user]}" "#{rest_auth_info[:pass]}" 2>&1 | logger -t info)
   path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 end
-
