@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## v2.26.0 - 09/29/2021
+
 * *REQUIRES MANUAL RECIPE RUN* *REQUIRES EDITS TO CLUSTER CONFIG*
   MI-196: update syntax for esm registration command
   The `ubuntu_advantage_esm` block of the custom json must be updated from this:
