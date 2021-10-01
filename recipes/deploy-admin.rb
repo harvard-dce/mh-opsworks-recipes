@@ -27,7 +27,7 @@ region = node.fetch(:region, 'us-east-1')
 s3_distribution_bucket_name = get_s3_distribution_bucket_name
 
 # credentials for generating the signed urls for exporting videos
-video_export_creds = get_video_export_credentials 
+video_export_creds = get_video_export_credentials
 video_export_access_key_id = video_export_creds[:access_key_id]
 video_export_secret_access_key = video_export_creds[:secret_access_key]
 
@@ -70,9 +70,9 @@ ldap_psw = ldap_conf[:pass]
 
 # Publish to 1.x/migration settings
 publish_1x_conf = get_publish_1x_conf
-publish_1x_enabled = publish_1x_conf[:enabled] 
-publish_1x_engage_url = publish_1x_conf[:engage_url] 
-admin_1x_url = publish_1x_conf[:admin_url] 
+publish_1x_enabled = publish_1x_conf[:enabled]
+publish_1x_engage_url = publish_1x_conf[:engage_url]
+admin_1x_url = publish_1x_conf[:admin_url]
 
 auth_host = node.fetch(:auth_host, 'example.com')
 auth_redirect_location = node.fetch(:auth_redirect_location, 'http://example.com/some/url')
@@ -95,7 +95,7 @@ public_engage_protocol = get_public_engage_protocol
 public_admin_hostname = get_public_admin_hostname_on_admin
 private_hostname = node[:opsworks][:instance][:private_dns_name]
 
-activemq_bind_host = private_hostname 
+activemq_bind_host = private_hostname
 
 database_connection = get_database_connection
 
@@ -207,7 +207,7 @@ end
 
 include_recipe 'oc-opsworks-recipes::register-opencast-to-boot'
 
-unless node[:dont_start_opencast_automatically]
+unless dont_start_opencast_automatically?
   service 'opencast' do
     action :start
     supports restart: true, start: true, stop: true, status: true

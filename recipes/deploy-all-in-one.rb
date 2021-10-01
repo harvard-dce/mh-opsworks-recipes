@@ -35,7 +35,7 @@ video_export_secret_access_key = video_export_creds[:secret_access_key]
 # Configuration for searching transcripts
 search_content_index_url = node.fetch(:transcript_search_endpoint, '')
 search_content_lambda_name = node.fetch(:transcript_index_function, '')
-search_content_enabled = ! search_content_index_url.empty? && ! search_content_lambda_name.empty? 
+search_content_enabled = ! search_content_index_url.empty? && ! search_content_lambda_name.empty?
 ## /all-in-one specific
 
 # S3 file archive service, also needs region
@@ -88,7 +88,7 @@ porta_conf = get_porta_metadata_conf
 porta_enabled = porta_conf[:enabled]
 porta_url = porta_conf[porta_url]
 
-# Porta-auto (check auth) 
+# Porta-auto (check auth)
 porta_auto_conf = get_porta_auth_conf
 porta_auto_enabled = porta_auto_conf[:enabled]
 porta_auto_url = porta_auto_conf[:porta_auto_url]
@@ -101,7 +101,7 @@ other_courses = porta_auto_conf[:other_courses]
 # Publish to 1.x/migration settings
 publish_1x_conf = get_publish_1x_conf
 publish_1x_enabled = publish_1x_conf[:enabled]
-publish_1x_engage_url = publish_1x_conf[:engage_url]   
+publish_1x_engage_url = publish_1x_conf[:engage_url]
 admin_1x_url = publish_1x_conf[:admin_url]
 
 auth_host = node.fetch(:auth_host, 'example.com')
@@ -122,7 +122,7 @@ bug_report_email = node.fetch(:bug_report_email, "no_email_set")
 git_data = node[:deploy][:opencast][:scm]
 
 
-activemq_bind_host = private_hostname 
+activemq_bind_host = private_hostname
 
 database_connection = get_database_connection
 
@@ -174,10 +174,10 @@ deploy_revision "opencast" do
     install_smtp_config(most_recent_deploy)
     install_default_tenant_config(most_recent_deploy, public_hostname, private_hostname)
     install_auth_service(
-      most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated, ldap_url, ldap_userdn, ldap_psw 
+      most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated, ldap_url, ldap_userdn, ldap_psw
     )
     install_porta_auth_service(
-      most_recent_deploy, porta_auto_url, porta_auto_cookie_name, porta_auto_redirect_url, porta_auto_enabled 
+      most_recent_deploy, porta_auto_url, porta_auto_cookie_name, porta_auto_redirect_url, porta_auto_enabled
     )
     install_porta_adapter_service(most_recent_deploy, default_auth_system, other_courses)
     install_porta_metadata_service(most_recent_deploy, porta_url, porta_enabled)
@@ -242,7 +242,7 @@ deploy_revision "opencast" do
   end
 end
 
-unless node[:dont_start_opencast_after_deploy]
+unless dont_start_opencast_automatically?
   service 'opencast' do
     action :start
     supports restart: true, start: true, stop: true, status: true

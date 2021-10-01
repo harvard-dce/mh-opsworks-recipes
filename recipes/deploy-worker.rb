@@ -31,7 +31,7 @@ public_admin_hostname = get_public_admin_hostname
 private_hostname = node[:opsworks][:instance][:private_dns_name]
 private_admin_hostname = get_private_admin_hostname
 
-activemq_bind_host = private_admin_hostname 
+activemq_bind_host = private_admin_hostname
 
 database_connection = get_database_connection
 
@@ -109,7 +109,7 @@ end
 
 include_recipe 'oc-opsworks-recipes::register-opencast-to-boot'
 
-unless node[:dont_start_opencast_automatically]
+unless dont_start_opencast_automatically?
   service 'opencast' do
     action :start
     supports restart: true, start: true, stop: true, status: true
