@@ -2,6 +2,7 @@
 
 ## TO BE RELEASED
 
+* IC cors support, requires nginx update on engage
 
 ## v2.27.1 - 11/01/2021
 
