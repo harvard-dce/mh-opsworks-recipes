@@ -236,7 +236,8 @@ deploy_revision "opencast" do
         live_monitor_url: live_monitor_url,
         job_maxload: nil,
         stack_name: stack_name,
-        activemq_bind_host: activemq_bind_host
+        activemq_bind_host: activemq_bind_host,
+        distribution_type: distribution
       })
     end
   end

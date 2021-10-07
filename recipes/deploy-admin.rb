@@ -199,7 +199,8 @@ deploy_revision "opencast" do
         job_maxload: nil,
         stack_name: stack_name,
         workspace_cleanup_period: 86400,
-        activemq_bind_host: activemq_bind_host
+        activemq_bind_host: activemq_bind_host,
+        distribution_type: distribution
       })
     end
   end
