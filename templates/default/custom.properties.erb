@@ -117,6 +117,9 @@ org.opencastproject.download.url=<%= @engage_protocol %>://<%= @engage_hostname 
 # The directory to store media, metadata, and attachments for download from the engage tool
 org.opencastproject.download.directory=${org.opencastproject.shared_storage.dir}/downloads
 
+# DCE OPC-637 Make Metasynch distributiion configurable
+# Central access to download distribution service type to use (i.e. aws.s3 or download)
+org.opencastproject.distribution.download.type=<%= @distribution_type %>
 
 ######### DATABASE #########
 
