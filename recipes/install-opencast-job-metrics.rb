@@ -11,11 +11,6 @@ workers_layer_id = node[:opsworks][:layers][:workers][:id]
 stack_id = node[:opsworks][:stack][:id]
 stack_name = stack_shortname
 
-#bash 'install older requests-cache' do
-#  code 'pip3 install requests-cache==0.5.2'
-#  user 'root'
-#end
-
 execute 'install pyhorn' do
   command '/usr/bin/python3 -m pip install pyhorn'
   user 'root'
