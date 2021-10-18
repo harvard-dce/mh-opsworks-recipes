@@ -140,6 +140,10 @@ module MhOpsworksRecipes
       node.fetch(:live_streaming_url, 'rtmp://example.com/streaming_url')
     end
 
+    def get_immersive_url
+      node.fetch(:immersive_url, '')
+    end
+
     def get_public_engage_hostname_on_engage
       return node[:public_engage_hostname] if node[:public_engage_hostname]
 

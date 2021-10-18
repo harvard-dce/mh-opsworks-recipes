@@ -11,6 +11,7 @@ shared_storage_root = get_shared_storage_root
 
 public_engage_hostname = get_public_engage_hostname
 engage_whitelist = get_engage_admin_allowed_hosts
+immersive_url = get_immersive_url
 
 ssl_info = node.fetch(:ssl, get_dummy_cert)
 if cert_defined(ssl_info)
@@ -43,7 +44,8 @@ template 'proxy' do
     shared_storage_root: shared_storage_root,
     opencast_backend_http_port: 8080,
     certificate_exists: certificate_exists,
-    public_engage_hostname: public_engage_hostname
+    public_engage_hostname: public_engage_hostname,
+    immersive_url: immersive_url
   })
 end
 
