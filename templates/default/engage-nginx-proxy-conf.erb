@@ -111,35 +111,6 @@ server {
   add_header 'Access-Control-Allow-Credentials' 'true';
   add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
 
-  #
-  # CORS header support (OPC-621 Paella Embed API)
-  #
-  # One way to use this is by placing it into a file called "cors_support"
-  # under your Nginx configuration directory and placing the following
-  # statement inside your **location** block(s):
-  #
-  #   include cors_support;
-  #
-  # As of Nginx 1.7.5, add_header supports an "always" parameter which
-  # allows CORS to work if the backend returns 4xx or 5xx status code.
-  #
-  # For more information on CORS, please see: http://enable-cors.org/
-  # Forked from this Gist: https://gist.github.com/michiel/1064640
-  # Copied from https://gist.github.com/Stanback/7145487
-  #
-  set $cors '';
-  if ($http_origin ~* (https?://.*\.harvard.edu(:[0-9]+)?)) {
-    set $cors "true";
-  }
-  if ($cors = "true") {
-    add_header 'Access-Control-Allow-Origin' '$http_origin';
-    add_header 'X-Frame-Options' 'ALLOW FROM $http_origin';
-    add_header 'Access-Control-Allow-Methods' 'GET, POST';
-    add_header 'Access-Control-Allow-Credentials' 'true';
-    add_header 'Access-Control-Allow-Headers' 'Origin,Content-Type,Accept,Authorization';
-    add_header 'Vary' 'Origin';
-  }
-
   location /static {
     alias <%= @shared_storage_root %>/downloads;
   }
@@ -157,6 +128,34 @@ server {
   }
 
   location / {
+    #
+    # CORS header support (OPC-621 Paella Embed API)
+    #
+    # One way to use this is by placing it into a file called "cors_support"
+    # under your Nginx configuration directory and placing the following
+    # statement inside your **location** block(s):
+    #
+    #   include cors_support;
+    #
+    # As of Nginx 1.7.5, add_header supports an "always" parameter which
+    # allows CORS to work if the backend returns 4xx or 5xx status code.
+    #
+    # For more information on CORS, please see: http://enable-cors.org/
+    # Forked from this Gist: https://gist.github.com/michiel/1064640
+    # Copied from https://gist.github.com/Stanback/7145487
+    #
+    set $cors '';
+    if ($http_origin ~* (https?://.*\.harvard.edu(:[0-9]+)?)) {
+      set $cors "true";
+    }
+    if ($cors = "true") {
+      add_header 'Access-Control-Allow-Origin' '$http_origin';
+      add_header 'X-Frame-Options' 'ALLOW FROM $http_origin';
+      add_header 'Access-Control-Allow-Methods' 'GET, POST';
+      add_header 'Access-Control-Allow-Credentials' 'true';
+      add_header 'Access-Control-Allow-Headers' 'Origin,Content-Type,Accept,Authorization';
+      add_header 'Vary' 'Origin';
+    }
     proxy_pass http://127.0.0.1:<%= @opencast_backend_http_port %>;
   }
 }
