@@ -2,6 +2,11 @@
 
 ## TO BE RELEASED
 
+
+## v2.27.1 - 11/01/2021
+
+* OPC-637 Metasynch configurable distribution. Admin node.
+
 ## v2.26.0 - 09/29/2021
 
 * *REQUIRES MANUAL RECIPE RUN* *REQUIRES EDITS TO CLUSTER CONFIG*
