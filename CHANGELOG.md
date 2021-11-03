@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* IC cors support, requires nginx update on engage
+
 ## v2.26.0 - 09/29/2021
 
 * *REQUIRES MANUAL RECIPE RUN* *REQUIRES EDITS TO CLUSTER CONFIG*
