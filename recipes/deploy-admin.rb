@@ -68,12 +68,6 @@ ldap_url = ldap_conf[:url]
 ldap_userdn = ldap_conf[:userdn]
 ldap_psw = ldap_conf[:pass]
 
-# Publish to 1.x/migration settings
-publish_1x_conf = get_publish_1x_conf
-publish_1x_enabled = publish_1x_conf[:enabled]
-publish_1x_engage_url = publish_1x_conf[:engage_url]
-admin_1x_url = publish_1x_conf[:admin_url]
-
 auth_host = node.fetch(:auth_host, 'example.com')
 auth_redirect_location = node.fetch(:auth_redirect_location, 'http://example.com/some/url')
 auth_activated = node.fetch(:auth_activated, 'true')
@@ -150,14 +144,12 @@ deploy_revision "opencast" do
     if ldap_enabled
       install_ldap_config(most_recent_deploy, ldap_url, ldap_userdn, ldap_psw)
     end
-    install_publish_1x_service_config(most_recent_deploy, publish_1x_enabled, publish_1x_engage_url)
 #    # Admin Specific
     install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host, other_oc_host, other_oc_prefother_series, other_oc_preflocal_series, '')
     install_otherpubs_service_series_impl_config(most_recent_deploy)
     install_aws_s3_export_video_service_config(most_recent_deploy, enable_s3, region, s3_distribution_bucket_name, video_export_access_key_id, video_export_secret_access_key)
     install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name, s3_file_archive_enabled, s3_file_archive_course_list)
     # OPC-224 (only used during migration)
-    install_ingest_1x_config(most_recent_deploy, s3_file_archive_bucket_name, admin_1x_url)
     install_ibm_watson_transcription_service_config(most_recent_deploy, ibm_watson_url, ibm_watson_api_key, ibm_watson_username, ibm_watson_psw)
     # OPC-554 porta metadata service
     install_porta_metadata_service(most_recent_deploy, porta_url, porta_enabled)

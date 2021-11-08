@@ -301,16 +301,6 @@ module MhOpsworksRecipes
       )
     end
 
-    def get_publish_1x_conf
-      node.fetch(
-        :publish_1x_conf, {
-          enabled: false,
-          engage_url: '',
-          admin_url: 'dummyValue'
-        }
-      )
-    end
-
     def get_ibm_watson_transcript_bucket_name
       node[:ibm_watson_transcript_sync_bucket_name]
     end
@@ -942,18 +932,6 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_publish_1x_service_config(current_deploy_root, enabled, engage_url)
-      template %Q|#{current_deploy_root}/etc/edu.harvard.dce.migration.impl.Publish1XUtilImpl.cfg| do
-        source 'edu.harvard.dce.migration.impl.Publish1XUtilImpl.cfg.erb'
-        owner 'opencast'
-        group 'opencast'
-        variables({
-          publish_1x_engage_url: engage_url,
-          publish_1x_enabled: enabled
-        })
-      end
-    end
-
     def install_ldap_config(current_deploy_root, ldap_url, ldap_userdn, ldap_psw)
       template %Q|#{current_deploy_root}/etc/org.opencastproject.userdirectory.ldap-dce.cfg| do
         source 'org.opencastproject.userdirectory.ldap-dce.cfg.erb'
@@ -1013,18 +991,6 @@ module MhOpsworksRecipes
         group 'opencast'
         variables({
           s3_file_archive_course_list: s3_file_archive_course_list
-        })
-      end
-    end
-
-    def install_ingest_1x_config(current_deploy_root, s3_file_archive_bucket_name, admin_1x_url)
-      template %Q|#{current_deploy_root}/etc/edu.harvard.dce.migration.workflowoperation.Ingest1XWorkflowOperationHandler.cfg| do
-        source 'edu.harvard.dce.migration.workflowoperation.Ingest1XWorkflowOperationHandler.cfg.erb'
-        owner 'opencast'
-        group 'opencast'
-        variables({
-          archive_bucket_name: s3_file_archive_bucket_name,
-          admin_1x_url: admin_1x_url
         })
       end
     end

@@ -98,12 +98,6 @@ porta_auto_redirect_url = porta_auto_conf[:redirect_url]
 default_auth_system = porta_auto_conf[:default_auth_system]
 other_courses = porta_auto_conf[:other_courses]
 
-# Publish to 1.x/migration settings
-publish_1x_conf = get_publish_1x_conf
-publish_1x_enabled = publish_1x_conf[:enabled]
-publish_1x_engage_url = publish_1x_conf[:engage_url]
-admin_1x_url = publish_1x_conf[:admin_url]
-
 auth_host = node.fetch(:auth_host, 'example.com')
 auth_redirect_location = node.fetch(:auth_redirect_location, 'http://example.com/some/url')
 auth_activated = node.fetch(:auth_activated, 'true')
@@ -185,14 +179,12 @@ deploy_revision "opencast" do
     if ldap_enabled
       install_ldap_config(most_recent_deploy, ldap_url, ldap_userdn, ldap_psw)
     end
-    install_publish_1x_service_config(most_recent_deploy, publish_1x_enabled, publish_1x_engage_url)
     install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host, other_oc_host, other_oc_prefother_series, other_oc_preflocal_series, bug_report_email)
     install_otherpubs_service_series_impl_config(most_recent_deploy)
     install_helix_googlesheets_service_config(most_recent_deploy, local_workspace_root, helix_googlesheets_cred, helix_googlesheets_defaultdur_min, helix_enabled, helix_token, helix_sheet_id, helix_email_enabled)
     install_bug_report_email(most_recent_deploy, public_hostname)
     install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name, s3_file_archive_enabled, s3_file_archive_course_list)
     # OPC-224 (only used during migration)
-    install_ingest_1x_config(most_recent_deploy, s3_file_archive_bucket_name, admin_1x_url)
     install_ibm_watson_transcription_service_config(most_recent_deploy, ibm_watson_url, ibm_watson_api_key, ibm_watson_username, ibm_watson_psw)
     # OPC-496
     install_adminui_tools_config(most_recent_deploy, zoom_ingester_url, zoom_ingester_api_key)
