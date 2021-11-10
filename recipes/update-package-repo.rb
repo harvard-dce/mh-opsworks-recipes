@@ -8,7 +8,7 @@ execute 'enable epel' do
 end
 
 # not strictly necessary as the standard yum install commands will refresh
-# the package list when needed, but this might save a time when many packages
+# the package list when needed, but this might save time when many packages
 # are being installed sequentially
 execute 'update package list' do
   command 'yum makecache'

@@ -3,6 +3,8 @@
 # System wide functions and aliases
 # Environment stuff goes in /etc/profile
 
+# This is the default amazon linux .bashrc with our custom opsworks stuff
+
 # It's NOT a good idea to change this file unless you know what you
 # are doing. It's much better to create a custom.sh shell script in
 # /etc/profile.d/ to make custom changes to your environment, as this

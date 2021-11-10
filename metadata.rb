@@ -913,6 +913,8 @@ none
 '
 )
 depends 'nfs', '~> 2.1.0'
+# this addresses a dependency issue where we need to pin the version of line,
+# which is a subdependency of another library, for compatibility reasons
 depends 'line', '~> 0.6.3'
 depends 'apt', '~> 2.9.2'
 depends 'cron', '~> 1.6.1'

@@ -19,6 +19,13 @@ module MhOpsworksRecipes
       80
     end
 
+		# this method is called with multiple package names in several recipes.
+		# Because of a quirk in yum we have to install each package with
+		# a separate command. If instead we attempted to install multiple with
+		# a single command, and one of the packagex was already installed,
+		# yum will exit with an non-zero status code (failure), so if your
+		# command is `yum install -y foo bar baz` and foo was already installed,
+		# yum would fail and bar and baz would never get installed.
     def install_package(names, opts="")
       names.gsub(/\s+/m, " ").strip.split(" ").each do |name|
         execute "install #{name}" do
@@ -538,6 +545,7 @@ module MhOpsworksRecipes
       node[:vagrant_environment] || ( ! node[:cloudfront_url] && ! node[:s3_distribution_bucket_name] )
     end
 
+		# implementing a standard method for creating a python virtualenv
     def create_virtualenv(venv_path, user, requirements_path=nil)
       execute "create virtualenv #{venv_path}" do
         # use the installed 'virtualenv' package instead of builtin 'venv'

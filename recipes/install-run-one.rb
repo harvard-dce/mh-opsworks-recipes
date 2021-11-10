@@ -1,6 +1,10 @@
 # Cookbook Name:: oc-opsworks-recipes
 # Recipe:: install-run-one
 
+# run-one is an Ubuntu-native tool that we made much use of in the past
+# it's not available in amazon linux, but it's just a shell script, so we've cribbed
+# it and install the script via this recipe
+
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
 bucket_name = get_shared_asset_bucket_name
