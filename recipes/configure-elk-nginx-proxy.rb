@@ -18,6 +18,10 @@ bash "htpasswd" do
   EOH
 end
 
+file '/etc/nginx/conf.d/kibana.htpasswd' do
+	mode '644'
+end
+
 worker_procs = get_nginx_worker_procs
 
 template 'nginx' do
