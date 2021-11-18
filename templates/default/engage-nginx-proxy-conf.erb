@@ -122,7 +122,7 @@ server {
   set $cors_vary "";
   set $cors_expose_headers "";
 
-  if ($http_origin ~* (https?://.*\.harvard.edu(:[0-9]+)?)) {
+  if ($http_origin ~* (https?://.*\.dcex.harvard.edu(:[0-9]+)?)) {
         set $cors_origin $http_origin;
         set $cors_cred   true;
         set $cors_header $http_access_control_request_headers;
