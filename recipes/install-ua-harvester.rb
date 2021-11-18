@@ -77,3 +77,7 @@ ruby_block 'create sqs queue' do
     execute_command(command)
   end
 end
+
+service "redis" do
+  action [ :enable, :start ]
+end
