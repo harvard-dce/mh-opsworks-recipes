@@ -562,9 +562,16 @@ module MhOpsworksRecipes
       end
     end
 
+    def is_truthy(val)
+      return ['true', '1'].include? val.to_s.downcase
+    end
+
+    def force_ffmpeg_install?
+      is_truthy(node.fetch(:force_ffmpeg_install, "false"))
+    end
+
     def dont_start_opencast_automatically?
-      dont_start = node.fetch(:dont_start_opencast_automatically, "false")
-      return ['true', '1'].include? dont_start.downcase
+      is_truthy(node.fetch(:dont_start_opencast_automatically, "false"))
     end
 
   end

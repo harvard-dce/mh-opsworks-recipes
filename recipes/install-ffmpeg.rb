@@ -10,6 +10,13 @@ bucket_name = get_shared_asset_bucket_name
 ffmpeg_version = node.fetch(:ffmpeg_version, '4.4.1')
 ffmpeg_archive = %Q|ffmpeg-#{ffmpeg_version}-amazon-linux-static.tgz|
 
+# remove any existing installs to force new installation
+if force_ffmpeg_install?
+  bash 'delete existing install(s)' do
+    code %Q|cd /opt && /bin/rm -Rf ffmpeg-*|
+  end
+end
+
 if on_aws?
 	include_recipe "oc-opsworks-recipes::install-awscli"
 	download_command="/usr/local/bin/aws s3 cp s3://#{bucket_name}/#{ffmpeg_archive} ."
