@@ -30,13 +30,13 @@ end
 
 file '/etc/sysconfig/clock' do
   action :create
-  content %|ZONE="#{timezone}"\nUTC=true\n|
+  content %|ZONE="#{timezone}"\nUTC=false\n|
   owner 'root'
   group 'root'
   mode '0644'
 end
 
-link "/usr/share/zoneinfo/#{timezone}" do
-  to "/etc/localtime"
+link "/etc/localtime" do
+  to "/usr/share/zoneinfo/#{timezone}"
   link_type :symbolic
 end
