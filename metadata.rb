@@ -912,6 +912,18 @@ none
   configured in the cluster config "ubuntu_advantage_esm" block
 '
 )
+recipe(
+    'oc-opsworks-recipes::install-nessus-agent',
+    'Installs and configures the nessus agent
+
+=== attributes
+none
+
+=== effects
+* Will execute the nessus cli configuration command using data
+  from the cluster config\'s `nessus` block
+'
+)
 depends 'nfs', '~> 2.1.0'
 # this addresses a dependency issue where we need to pin the version of line,
 # which is a subdependency of another library, for compatibility reasons
