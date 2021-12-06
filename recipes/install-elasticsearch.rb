@@ -6,10 +6,6 @@
 ::Chef::Resource::RubyBlock.send(:include, MhOpsworksRecipes::RecipeHelpers)
 
 elk_info = get_elk_info
-es_major_version = elk_info['es_major_version']
-es_repo_uri = elk_info['es_repo_uri']
-curator_major_version = elk_info['curator_major_version']
-curator_repo_uri = elk_info['curator_repo_uri']
 es_cluster_name = elk_info['es_cluster_name']
 data_path = elk_info['es_data_path']
 es_heap_size = xmx_ram_for_this_node(0.5)
@@ -20,22 +16,18 @@ enable_snapshots = elk_info['es_enable_snapshots']
 es_snapshot_bucket = "#{stack_name}-snapshots"
 
 apt_repository 'elasticsearch' do
-  uri es_repo_uri
+  uri "http://packages.elasticsearch.org/elasticsearch/2.x/debian"
   components ['stable', 'main']
-  keyserver 'ha.pool.sks-keyservers.net'
-  key '46095ACC8548582C1A2699A9D27D666CD88E42B4'
+  key 'https://artifacts.elastic.co/GPG-KEY-elasticsearch'
 end
 
 apt_repository 'curator' do
-  uri curator_repo_uri
+  uri 'http://packages.elastic.co/curator/3/debian'
   components ['stable', 'main']
-  keyserver 'ha.pool.sks-keyservers.net'
-  key '46095ACC8548582C1A2699A9D27D666CD88E42B4'
+  key 'https://artifacts.elastic.co/GPG-KEY-elasticsearch'
 end
 
 include_recipe "oc-opsworks-recipes::update-package-repo"
-pin_package("elasticsearch", "#{es_major_version}.*")
-pin_package("python-elasticsearch-curator", "#{curator_major_version}.*")
 install_package("openjdk-7-jdk openjdk-7-jre elasticsearch python-elasticsearch-curator")
 configure_cloudwatch_log("elasticsearch", "/var/log/elasticsearch/*.log", "%Y-%m-%d %H:%M:%S")
 
@@ -160,4 +152,3 @@ if enable_snapshots
     path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   end
 end
-

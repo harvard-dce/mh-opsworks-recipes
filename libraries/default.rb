@@ -477,20 +477,12 @@ module MhOpsworksRecipes
     def get_elk_info
       stack_name = stack_shortname
       {
-          'es_major_version' => '2.4',
-          'es_repo_uri' => 'http://packages.elasticsearch.org/elasticsearch/2.x/debian',
           'es_cluster_name' => stack_name,
           'es_index_prefix' => "useractions-#{stack_name}",
           'es_data_path' => "/vol/elasticsearch_data",
           'es_enable_snapshots' => true,
-          'logstash_major_version' => '1:2.4',
-          'logstash_repo_uri' => 'http://packages.elasticsearch.org/logstash/2.4/debian',
           'logstash_tcp_port' => '5000',
           'logstash_stdout_output' => false,
-          'kibana_major_version' => '4.6',
-          'kibana_repo_uri' => 'https://packages.elastic.co/kibana/4.6/debian',
-          'curator_major_version' => '3.5',
-          'curator_repo_uri' => 'http://packages.elastic.co/curator/3/debian',
           'http_auth' => {},
           'http_ssl' => get_dummy_cert,
           'harvester_repo' => 'https://github.com/harvard-dce/dce-user-analytics.git',
@@ -574,7 +566,7 @@ module MhOpsworksRecipes
       ca_info = get_capture_agent_manager_info
       ca_info[:capture_agent_manager_usr_name]
     end
-    
+
     def get_moscaler_info
       {
           'moscaler_type' => 'disabled',
@@ -1030,7 +1022,7 @@ module MhOpsworksRecipes
         variables({
           live_stream_name: live_stream_name,
           live_streaming_url: live_streaming_url,
-          distribution: distribution 
+          distribution: distribution
         })
       end
     end
@@ -1042,7 +1034,7 @@ module MhOpsworksRecipes
         group 'opencast'
         variables({
           publish_1x_engage_url: engage_url,
-          publish_1x_enabled: enabled 
+          publish_1x_enabled: enabled
         })
       end
     end
@@ -1055,7 +1047,7 @@ module MhOpsworksRecipes
         variables({
           ldap_url: ldap_url,
           ldap_userdn: ldap_userdn,
-          ldap_psw: ldap_psw 
+          ldap_psw: ldap_psw
         })
       end
     end
@@ -1069,7 +1061,7 @@ module MhOpsworksRecipes
           enable: enable,
           region: region,
           s3_distribution_bucket_name: s3_distribution_bucket_name,
-          s3_distribution_base_url: s3_distribution_base_url 
+          s3_distribution_base_url: s3_distribution_base_url
         })
       end
     end
@@ -1084,7 +1076,7 @@ module MhOpsworksRecipes
           region: region,
           bucket_name: bucket_name,
           access_key_id: access_key_id,
-          secret_access_key: secret_access_key 
+          secret_access_key: secret_access_key
         })
       end
     end
@@ -1117,7 +1109,7 @@ module MhOpsworksRecipes
         group 'opencast'
         variables({
           archive_bucket_name: s3_file_archive_bucket_name,
-          admin_1x_url: admin_1x_url 
+          admin_1x_url: admin_1x_url
         })
       end
     end
@@ -1246,7 +1238,7 @@ module MhOpsworksRecipes
           porta_auto_url: porta_auto_url,
           cookie_name: cookie_name,
           redirect_url: redirect_url,
-          enabled: enabled 
+          enabled: enabled
         })
       end
     end
@@ -1258,7 +1250,7 @@ module MhOpsworksRecipes
         group 'opencast'
         variables({
           porta_url: porta_url,
-          enabled: enabled 
+          enabled: enabled
         })
       end
     end
@@ -1284,8 +1276,8 @@ module MhOpsworksRecipes
         owner 'opencast'
         group 'opencast'
         variables({
-          elasticsearch_data: local_workspace_root, 
-          elasticsearch_log: log_dir 
+          elasticsearch_data: local_workspace_root,
+          elasticsearch_log: log_dir
         })
       end
     end
@@ -1366,7 +1358,7 @@ module MhOpsworksRecipes
         command %Q|cd #{current_deploy_root} && rsync -a build/opencast-dist-#{node_profile.to_s}-*/* .|
       end
     end
-   
+
     # Rute 4/11/2017: not sure what this does?
     def remove_felix_fileinstall(current_deploy_root)
       file %Q|#{current_deploy_root}/etc/load/org.apache.felix.fileinstall-opencast.cfg| do
