@@ -2,12 +2,26 @@
 
 ## TO BE RELEASED
 
-* MI-197: Elasticsearch package repo keyserver has changed
-* MI-195: Dealing with issues related to aging Ubuntu 14.04 python
-		* make sure we're using python3/pip3 everywhere
-		* pre-install an older version of requests-cache prior to pyhorn install in the `install-oc-job-metrics` recipe (this fixes the actual reported issue
-		* install virtualenv for python3 the correct way
-		* finally ripping out all of the unused capture-agent-manager stuff
+## V3.0.0 - 01/10/2022
+
+  * DEPLOY-20: transition opencast opsworks deployment to amazon linux
+    This commit rewrites a substantial number of our custom chef recipes to
+    be compatible with Amazon Linux 2018.03, along with a few other changes
+    here and there.
+
+    At a high-level, the changes include:
+    - standardizing on python3 and defining a common method of creating virtualenvs
+    - removing all of the unused capture-agent-manager stuff
+    - updating the package repos and keys for elasticsearch, et al
+    - removing cloudwatch logs agent setup (we're using the opsworks
+      baked-in functionality now)
+    - removed newrelic installation and configuration
+    - removed ubuntu-specific recipes
+    - installing our own `run-one` script
+    - properly implemented crowdstrike install recipes
+    - removed a bunch of configuration references to 1x stuff
+    - fixed bug in `dont_start_opencast_automatically` flag behavior
+    - added an override mechanism for `dont_start_opencast_automatically`
 
 ## v2.27.1 - 11/01/2021
 
