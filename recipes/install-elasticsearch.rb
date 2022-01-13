@@ -64,8 +64,8 @@ cookbook_file "kopf_settings" do
   mode '644'
 end
 
-template '/etc/default/elasticsearch' do
-  source 'elasticsearch-default.erb'
+template '/etc/sysconfig/elasticsearch' do
+  source 'elasticsearch-sysconfig.erb'
   owner 'root'
   group 'root'
   mode '644'

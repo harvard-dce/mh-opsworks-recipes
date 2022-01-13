@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* DEPLOY-63: fixed path for elasticsearch options file
+
 ## V3.0.0 - 01/10/2022
 
   * DEPLOY-20: transition opencast opsworks deployment to amazon linux
