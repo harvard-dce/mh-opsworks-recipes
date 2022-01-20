@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## v3.0.1 - 01/20/2022
+
 * DEPLOY-63: fixed path for elasticsearch options file
 
 ## V3.0.0 - 01/10/2022
