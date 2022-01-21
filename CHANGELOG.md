@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* DEPLOY-64: update path to public root cert bundle; ensure we're using postfix
+
 ## v3.0.1 - 01/20/2022
 
 * DEPLOY-63: fixed path for elasticsearch options file

@@ -44,13 +44,14 @@ execute 'postmap the sasl_passwd file' do
 end
 
 execute 'tell postfix where CA cert is' do
-  command %Q|postconf -e 'smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt'|
+  command %Q|postconf -e 'smtp_tls_CAfile = /etc/ssl/certs/ca-bundle.crt'|
   retries 5
   retry_delay 5
 end
 
 service 'postfix' do
-  action :reload
+  supports :reload => true
+  action [:reload, :start]
   retries 5
   retry_delay 5
 end

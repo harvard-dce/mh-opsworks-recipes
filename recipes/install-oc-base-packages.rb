@@ -18,6 +18,12 @@ package 'java-1.7.0-openjdk' do
   ignore_failure true
 end
 
+# we use postfix
+package 'sendmail' do
+  action :remove
+  ignore_failure true
+end
+
 include_recipe 'maven'
 
 # create symlink in common system path as deploy operations don't seem to source
