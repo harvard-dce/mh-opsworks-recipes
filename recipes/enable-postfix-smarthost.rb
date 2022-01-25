@@ -2,10 +2,11 @@
 # Recipe:: enable-postfix-smarthost
 
 ::Chef::Recipe.send(:include, MhOpsworksRecipes::RecipeHelpers)
-install_package('postfix')
 
 smtp_info = node.fetch(:smtp_auth, {})
 hostname = node[:opsworks][:instance][:hostname]
+postfix_cert_path = "/etc/ssl/certs/postfix.pem"
+mail_name = stack_shortname
 
 template %Q|/etc/postfix/main.cf| do
   source 'postfix-main.cf.erb'
@@ -13,8 +14,11 @@ template %Q|/etc/postfix/main.cf| do
   group 'root'
   mode '644'
   variables({
+    mail_name: mail_name,
     hostname: hostname,
-    relay_host: smtp_info[:relay_host]
+    origin: "#{hostname}.localdomain",
+    relay_host: smtp_info[:relay_host],
+    postfix_cert_path: postfix_cert_path
   })
 end
 
@@ -30,13 +34,6 @@ template %Q|/etc/postfix/sasl_passwd| do
   })
 end
 
-file '/etc/mailname' do
-  mode '600'
-  owner 'root'
-  group 'root'
-  content "#{hostname}.localdomain\n"
-end
-
 execute 'postmap the sasl_passwd file' do
   command %Q|postmap hash:/etc/postfix/sasl_passwd|
   retries 5
@@ -47,6 +44,19 @@ execute 'tell postfix where CA cert is' do
   command %Q|postconf -e 'smtp_tls_CAfile = /etc/ssl/certs/ca-bundle.crt'|
   retries 5
   retry_delay 5
+end
+
+# creates a file containing both key and cert
+execute 'create dummy key/cert' do
+  command %Q|/etc/pki/tls/certs/make-dummy-cert #{postfix_cert_path}|
+  retries 5
+  retry_delay 5
+end
+
+file postfix_cert_path do
+  mode '400'
+  owner 'root'
+  group 'root'
 end
 
 service 'postfix' do

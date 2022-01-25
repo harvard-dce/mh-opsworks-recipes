@@ -9,7 +9,7 @@ include_recipe "oc-opsworks-recipes::update-package-repo"
 # make sure we get this one from the epel repo or it will cause dep conflicts with tesseract
 install_package("libwebp", %Q|--disablerepo="*" --enablerepo="epel"|)
 
-packages = %Q|java-1.8.0-openjdk java-1.8.0-openjdk-devel mysql56 postfix tesseract|
+packages = %Q|java-1.8.0-openjdk java-1.8.0-openjdk-devel mysql56 postfix mailx tesseract|
 install_package(packages)
 
 # remove java-1.7 so that 1.8 becomes default
