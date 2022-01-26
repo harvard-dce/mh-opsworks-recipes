@@ -307,6 +307,10 @@
     <!-- Deleting annotation, role admin only -->
     <sec:intercept-url pattern="/annotation/**" method="DELETE" access="ROLE_ADMIN, ROLE_DCE_OC_SOCIAL_ADMIN" />
 
+    <!-- OPC-649  Endpoints will only allow access if an LTI session is active. -->
+    <sec:intercept-url pattern="/recordingAction/publicationStatusByCourse/**" method="GET" access="ROLE_ANONYMOUS" />
+    <sec:intercept-url pattern="/recordingAction/haltPublication/**" method="POST" access="ROLE_ANONYMOUS" />
+
     <!-- Enable anonymous access to the OAI-PMH repository              -->
     <!-- The OAI-PMH specification demands boths GET and POST requests  -->
     <!-- Please make sure that the path configured here matches         -->
