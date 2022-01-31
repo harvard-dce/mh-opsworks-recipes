@@ -57,6 +57,10 @@ live_monitor_url = node.fetch(
   :live_monitor_url, 'rtmp://example.com/live/#{caName}-presenter.delivery.stream-960x270_1_200@xyz'
 )
 
+immersive_classroom_url = node.fetch(
+  :immersive_classroom_url, 'None'
+)
+
 live_streaming_url = get_live_streaming_url
 live_stream_name = get_live_stream_name
 distribution = using_local_distribution ? 'download' : 'aws.s3'
@@ -192,7 +196,8 @@ deploy_revision "opencast" do
         stack_name: stack_name,
         workspace_cleanup_period: 86400,
         activemq_bind_host: activemq_bind_host,
-        distribution_type: distribution
+        distribution_type: distribution,
+        immersive_classroom_url: immersive_classroom_url
       })
     end
   end
