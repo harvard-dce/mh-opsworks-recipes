@@ -2,7 +2,10 @@
 
 ## TO BE RELEASED
 
+## v3.0.2 - 02/04/2022
+
 * DEPLOY-64: update path to public root cert bundle; ensure we're using postfix
+* DEPLOY-64: ensure tls enabled at all points
 
 ## v3.0.1 - 01/20/2022
 
