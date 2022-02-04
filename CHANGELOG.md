@@ -2,6 +2,10 @@
 
 ## TO BE RELEASED
 
+## v3.0.3 - 02/07/2022
+
+* OPC-649: New retract recordingAction endpoint GET mh_org access 
+
 ## v3.0.2 - 02/04/2022
 
 * DEPLOY-64: update path to public root cert bundle; ensure we're using postfix
