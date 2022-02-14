@@ -66,6 +66,10 @@ helix_email_enabled = helix_googlesheets_config[:change_notification_email_enabl
 
 using_local_distribution = is_using_local_distribution?
 
+production_management_email = node.fetch(
+  :production_management_email, ''
+)
+
 # S3 distribution service
 enable_s3 = !using_local_distribution
 region = node.fetch(:region, 'us-east-1')
@@ -173,7 +177,8 @@ deploy_revision "opencast" do
         job_maxload: nil,
         stack_name: stack_name,
         workspace_cleanup_period: 0,
-        activemq_bind_host: activemq_bind_host
+        activemq_bind_host: activemq_bind_host,
+        production_management_email: production_management_email
       })
     end
   end
