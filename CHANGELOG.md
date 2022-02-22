@@ -2,6 +2,10 @@
 
 ## TO BE RELEASED
 
+## v3.0.4
+
+* OPC-668: New cluster config param: production_management_email
+
 ## v3.0.3 - 02/07/2022
 
 * OPC-649: New retract recordingAction endpoint GET mh_org access 
