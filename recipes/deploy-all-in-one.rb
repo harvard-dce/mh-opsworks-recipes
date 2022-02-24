@@ -68,6 +68,10 @@ capture_agent_monitor_url = node.fetch(
   :capture_agent_monitor_url, 'http://example.com/monitor_url'
 )
 
+production_management_email = node.fetch(
+  :production_management_email, ''
+)
+
 live_monitor_url = node.fetch(
   :live_monitor_url, 'http://example.com/monitor_url'
 )
@@ -229,7 +233,8 @@ deploy_revision "opencast" do
         job_maxload: nil,
         stack_name: stack_name,
         activemq_bind_host: activemq_bind_host,
-        distribution_type: distribution
+        distribution_type: distribution,
+        production_management_email: production_management_email
       })
     end
   end
