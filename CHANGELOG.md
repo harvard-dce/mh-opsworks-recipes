@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* IC cors support, requires nginx update on engage
+
 ## v3.0.4
 
 * OPC-668: New cluster config param: production_management_email
