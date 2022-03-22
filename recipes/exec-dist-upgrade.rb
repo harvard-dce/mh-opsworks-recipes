@@ -6,8 +6,7 @@
 include_recipe "oc-opsworks-recipes::update-package-repo"
 
 execute "dist upgrade" do
-  environment 'DEBIAN_FRONTEND' => 'noninteractive'
-  command %Q|apt-get -y dist-upgrade|
+  command %Q|yum update -y|
   retries 5
   retry_delay 15
   timeout 180

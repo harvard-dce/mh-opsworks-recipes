@@ -845,13 +845,18 @@ none
 )
 recipe(
     'oc-opsworks-recipes::exec-dist-upgrade',
-    'Executes an apt-get dist-upgrade, necessary for installing kernel updates
+    'Executes a yum update, necessary for installing kernel updates.
+
+Note that this is above and beyond whatever it is Opsworks does when a layer/instance has
+InstallUpdatesOnBoot set to true (the default). That operation will apply security and bugfix
+package updates, but will not touch kernel updates.
 
 === attributes
 none
 
 === effects
-* performs an apt-get dist-upgrade
+* performs a full yum update
+* instances require restart before any kernel updates will take effect
 '
 )
 recipe(
@@ -887,29 +892,6 @@ none
 * downloads the GeoLite2 db archive from the shared assets folder
 * unpacks archive into /opt/geolite2
 * name of archive file can be specified in cluster custom json
-'
-)
-recipe(
-    'oc-opsworks-recipes::install-aws-kernel',
-    'Installs the aws-tuned v4 linux kernel. This is intended for use only in ami building.
-
-=== attributes
-none
-
-=== effects
-* will install and enable the aws-tuned v4 linux kernel
-'
-)
-recipe(
-    'oc-opsworks-recipes::enable-ubuntu-advantage-esm',
-    'Runs the `ubuntu-advantage attach [token]` command.
-
-=== attributes
-none
-
-=== effects
-* Will execute the enable-esm command with the `token` value
-  configured in the cluster config "ubuntu_advantage_esm" block
 '
 )
 depends 'nfs', '~> 2.1.0'

@@ -4,7 +4,7 @@ A custom cookbook in support of [mh-opsworks](https://github.com/harvard-dce/mh-
 
 ## Supported Platforms
 
-Ubuntu 14.04 LTS, and more specifically [amazon
+Amazon Linux 2018.03, and more specifically [amazon
 opsworks](https://aws.amazon.com/opsworks/)
 
 ## Development
