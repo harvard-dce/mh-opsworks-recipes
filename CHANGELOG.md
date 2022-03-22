@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* DEPLOY-76: allow use of prebuilt oc artifacts during deployment
+
 ## v3.0.5 - 03/22/2022
 
 * DEPLOY-75: fix `exec-dist-upgrade` recipe to use yum

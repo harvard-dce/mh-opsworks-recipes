@@ -19,13 +19,13 @@ module MhOpsworksRecipes
       80
     end
 
-		# this method is called with multiple package names in several recipes.
-		# Because of a quirk in yum we have to install each package with
-		# a separate command. If instead we attempted to install multiple with
-		# a single command, and one of the packagex was already installed,
-		# yum will exit with an non-zero status code (failure), so if your
-		# command is `yum install -y foo bar baz` and foo was already installed,
-		# yum would fail and bar and baz would never get installed.
+    # this method is called with multiple package names in several recipes.
+    # Because of a quirk in yum we have to install each package with
+    # a separate command. If instead we attempted to install multiple with
+    # a single command, and one of the packagex was already installed,
+    # yum will exit with an non-zero status code (failure), so if your
+    # command is `yum install -y foo bar baz` and foo was already installed,
+    # yum would fail and bar and baz would never get installed.
     def install_package(names, opts="")
       names.gsub(/\s+/m, " ").strip.split(" ").each do |name|
         execute "install #{name}" do
@@ -545,7 +545,7 @@ module MhOpsworksRecipes
       node[:vagrant_environment] || ( ! node[:cloudfront_url] && ! node[:s3_distribution_bucket_name] )
     end
 
-		# implementing a standard method for creating a python virtualenv
+    # implementing a standard method for creating a python virtualenv
     def create_virtualenv(venv_path, user, requirements_path=nil)
       execute "create virtualenv #{venv_path}" do
         # use the installed 'virtualenv' package instead of builtin 'venv'
@@ -843,12 +843,12 @@ module MhOpsworksRecipes
         })
       end
 
-			cookbook_file 'opencast_sysconfig' do
-				path '/etc/sysconfig/opencast'
-				owner 'root'
-				group 'root'
-				mode '644'
-			end
+      cookbook_file 'opencast_sysconfig' do
+        path '/etc/sysconfig/opencast'
+        owner 'root'
+        group 'root'
+        mode '644'
+      end
 
       template %Q|#{current_deploy_root}/bin/setenv| do
         source 'opencast-setenv.erb'
@@ -1284,5 +1284,28 @@ module MhOpsworksRecipes
       hostname.match(%r{^(?<layer>[a-z\-]+)})[:layer]
     end
 
+    def use_prebuilt_oc
+      is_truthy(oc_prebuilt_artifacts[:enable])
+    end
+
+    def install_prebuilt_oc(bucket, revision, node_profile, current_deploy_root)
+      archive_file = "#{node_profile.to_s}.tgz"
+      revision_object_path = revision.to_s.gsub(/\//, "-")
+      s3_bucket_url = "s3://#{bucket}/#{revision_object_path}/#{archive_file}"
+
+      execute 'download prebuilt archive' do
+        command %Q|/usr/local/bin/aws s3 cp #{s3_bucket_url} #{archive_file}|
+        cwd '/tmp'
+        user 'root'
+        retries 5
+        retry_delay 15
+      end
+
+      execute 'unpack prebuilt oc' do
+        command %Q|/bin/tar -xzf /tmp/#{archive_file}|
+        user 'root'
+        cwd current_deploy_root
+      end
+    end
   end
 end

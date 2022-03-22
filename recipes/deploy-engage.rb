@@ -83,6 +83,9 @@ search_content_enabled = ! search_content_index_url.empty? && ! search_content_l
 ## /Engage specific
 
 git_data = node[:deploy][:opencast][:scm]
+git_revision = git_data.fetch(:revision, 'master')
+oc_prebuilt_artifacts = node.fetch(:oc_prebuilt_artifacts, {})
+use_prebuilt_oc = is_truthy(oc_prebuilt_artifacts[:enable])
 
 activemq_bind_host = private_admin_hostname
 
@@ -103,7 +106,7 @@ deploy_action = get_deploy_action
 deploy_revision "opencast" do
   deploy_to opencast_repo_root
   repo repo_url
-  revision git_data.fetch(:revision, 'master')
+  revision git_revision
 
   user 'opencast'
   group 'opencast'
@@ -118,7 +121,12 @@ deploy_revision "opencast" do
 
   before_symlink do
     most_recent_deploy = path_to_most_recent_deploy(new_resource)
-    maven_build_for(:presentation, most_recent_deploy)
+
+    if use_prebuilt_oc
+      install_prebuilt_oc(oc_prebuilt_artifacts[:bucket], git_revision, :presentation, most_recent_deploy)
+    else
+      maven_build_for(:admin, most_recent_deploy)
+    end
 
     # Copy in the configs as distributed in the git repo
     # Some services will be further tweaked by templates

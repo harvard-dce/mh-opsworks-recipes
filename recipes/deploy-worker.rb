@@ -24,6 +24,9 @@ ldap_userdn = ldap_conf[:userdn]
 ldap_psw = ldap_conf[:pass]
 
 git_data = node[:deploy][:opencast][:scm]
+git_revision = git_data.fetch(:revision, 'master')
+oc_prebuilt_artifacts = node.fetch(:oc_prebuilt_artifacts, {})
+use_prebuilt_oc = is_truthy(oc_prebuilt_artifacts[:enable])
 
 public_engage_hostname = get_public_engage_hostname
 public_engage_protocol = get_public_engage_protocol
@@ -46,7 +49,7 @@ deploy_action = get_deploy_action
 deploy_revision "opencast" do
   deploy_to opencast_repo_root
   repo repo_url
-  revision git_data.fetch(:revision, 'master')
+  revision git_revision
 
   user 'opencast'
   group 'opencast'
@@ -61,7 +64,12 @@ deploy_revision "opencast" do
 
   before_symlink do
     most_recent_deploy = path_to_most_recent_deploy(new_resource)
-    maven_build_for(:worker, most_recent_deploy)
+
+    if use_prebuilt_oc
+      install_prebuilt_oc(oc_prebuilt_artifacts[:bucket], git_revision, :worker, most_recent_deploy)
+    else
+      maven_build_for(:worker, most_recent_deploy)
+    end
 
     # Copy in the configs as distributed in the git repo
     # Some services will be further tweaked by templates
