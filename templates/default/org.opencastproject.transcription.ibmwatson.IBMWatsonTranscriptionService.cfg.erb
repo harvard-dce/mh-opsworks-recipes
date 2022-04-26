@@ -1,4 +1,4 @@
-# Change enabled to true to enable this service. 
+# Change enabled to true to enable this service.
 enabled=true
 
 # IBM Watson Speech-to-Text service url
@@ -23,29 +23,30 @@ ibm.watson.password=<%= @ibm_watson_psw %>
 #ibm.watson.model=en-US_BroadbandModel
 
 # Workflow to be executed when results are ready to be attached to media package.
+# Default: attach-watson-transcripts 
 workflow=dce-int-attach-watson-transcription
-  
+
 # Interval the workflow dispatcher runs to start workflows to attach transcripts to the media package
-# after the transcription job is completed.
-# (in seconds) Default is 1 minute.
+# after the transcription job is completed. In seconds.
+# Default: 60
 workflow.dispatch.interval=120
- 
+
 # How long it should wait to check jobs after their start date + track duration has passed.
-# The default is 10 minutes. This is only used if we didn't get a callback from the
-# ibm watson speech-to-text service.
-# (in seconds)
+# This is only used if we didn't get a callback from the ibm watson speech-to-text service.
+# In seconds.
+# Default: 600
 completion.check.buffer=120
 
-# How long to wait after a transcription is supposed to finish before marking the job as 
-# canceled in the database. Default is 2 hours.
-# (in seconds)
+# How long to wait after a transcription is supposed to finish before marking the job as
+# canceled in the database. In seconds. Default is 2 hours.
+# Default: 7200
 max.processing.time=1800
 
 # How long to keep result files in the working file repository in days.
-# The default is 7 days.
+# Default: 7
 #cleanup.results.days=7
 
-# Email to send notifications of errors. If not informed, the value from
+# Email to send notifications of errors. If not entered, the value from
 # org.opencastproject.admin.email in custom.properties will be used.
 #notification.email=
 

@@ -12,12 +12,19 @@
 # Also note that if this felix installation is proxied behind an Apache HTTPD reverse proxy, and communication is meant
 # to go through that proxy, then server.url should point to the proxy's port (usually 80).
 # Related options (like listening addresses) are located in etc/org.ops4j.pax.web.cfg
+#
+# It is not supported for Opencast or it's tenants to be hosted in a subpath.  Opencast or the tenants need to be served
+# from the root path element. The RFC 3986 URI path component needs to be empty.
 org.opencastproject.server.url=http://<%= @hostname %>
 
 # The environment specified below will show up in the email subject when sending a notification about transcription
 # errors. Useful to differentiate among environments (dev, test, etc) and may be used by other services in the future.
 org.opencastproject.environment.name=<%= @stack_name %>
 
+# The node name is a descriptive title for this Opencast instance, eg admin, worker01, etc. This is a useful alternative
+# to the using the server url in the Admin UI on cloud platforms where nodes may be dynamically generated and not have a
+# sensible hostname.
+org.opencastproject.server.nodename=AllInOne
 
 ######### USER/AUTHENTICATION #########
 
@@ -83,31 +90,14 @@ org.opencastproject.staticfiles.rootdir=${org.opencastproject.shared_storage.dir
 org.opencastproject.workflow.handler.workflow.ZipWorkflowOperationHandler.tmpdir=<%= @shared_storage_root %>/zip-tmp
 
 ######### STREAMING AND DOWNLOAD #########
+# The mime types of streaming formats for which raw streaming URLs will be published automatically under the channel:
+# 'engage-player'. Use the character: '*' if all configured streaming URLs should be published.
+# The publication of streaming URI's is switched off by default
+# Default: *
+#org.opencastproject.publish.streaming.formats=*
 
-# The base URL of the streaming server (ususally "rtmp://<SERVER_URL>/matterhorn-engage").
-# ${org.opencastproject.server.url} can not be used, because the streaming server does not use the HTTP protocol.
-# Streaming is not included in the default workflow, since the Red5 streaming server is a 3rd party component that
-# requires separate installation.
-#org.opencastproject.streaming.url=rtmp://localhost/matterhorn-engage
-
-# The directory where Opencast stores the streams
-#org.opencastproject.streaming.directory=${org.opencastproject.storage.dir}/streams
-
-# The port to use for the streaming server, only used by a Wowza streaming server.
-#org.opencastproject.streaming.port=1935
-
-# Server URL for Adaptive Streaming, usually the same server like RTMP streaming with a different protocol
-#org.opencastproject.adaptive-streaming.url=http(s)://<wowza-server>/<wowza-application>
-
-# Port for Adaptive Streaming (for Wowza usually 1935)
-#org.opencastproject.adaptive-streaming.port=<port_number>
-
-# Some newer streaming server versions expect an "flv:" tag within the rtmp URL.
-# Not every RTMP-streaming server is compatible with this (i.e. nginx), so this
-# is the compatibility mode to the old syntax.
-# true  = without "flv:" tag - old syntax
-# false = with    "flv:" tag - new syntax
-#org.opencastproject.streaming.flvcompatibility=true
+# For more streaming configuration see:
+# org.opencastproject.distribution.streaming.wowza.WowzaStreamingDistributionService.cfg
 
 # The base URL for media downloads.
 # Comment for #DCE: After 2.x, this needs to be set to the internal publication channel i.e. 
@@ -124,27 +114,25 @@ org.opencastproject.distribution.download.type=<%= @distribution_type %>
 
 ######### DATABASE #########
 
-# Relational Database configuration.  By default, Opencast uses an embedded H2 database.  A standalone database server
-# is recommended for production systems.  If you run the ddl script for your db vendor (see docs/scripts/ddl/) manually,
-# (this is recommended) set 'ddl-generation' to 'false'.
-org.opencastproject.db.ddl.generation=false
+# Relational Database configuration.
+# By default, Opencast uses an embedded H2 database.
+# Use a standalone database server for production systems.
 
-# db.vendor can be any of the values listed at under the "eclipselink.target-database" section of
-# http://www.eclipse.org/eclipselink/documentation/2.4/jpa/extensions/p_target_database.htm#target-database
-# Common values include MySQL, PostgreSQL.
-org.opencastproject.db.vendor=MySQL
-
-# Opencast comes with the jdbc drivers for MySQL (com.mysql.jdbc.Driver) and PostgreSQL (org.postgresql.Driver). To add
-# other jdbcDrivers to the Opencast runtime, rebuild the matterhorn-db module with your desired drivers.
+# Opencast comes with the jdbc drivers for MariaDB (org.mariadb.jdbc.Driver) and PostgreSQL (org.postgresql.Driver).
+# To add other jdbcDrivers to the Opencast runtime, rebuild the db module with your desired drivers.
 org.opencastproject.db.jdbc.driver=com.mysql.jdbc.Driver
 
 # The jdbc connection url, username, and password
+# Defaults:
+#  .url=jdbc:h2:${org.opencastproject.storage.dir}/db
+#  .user=sa
+#  .pass=sa
 org.opencastproject.db.jdbc.url=jdbc:mysql://<%= @database[:host] %>/<%= @database[:database] %>
 org.opencastproject.db.jdbc.user=<%= @database[:username] %>
 org.opencastproject.db.jdbc.pass=<%= @database[:password] %>
 
-# The jdbc connection pool properties. See http://www.mchange.com/projects/c3p0/#basic_pool_configuration
-# max.idle.time should be lower than the database server idle connection timeout duration (wait_timeout for mysql)
+# The jdbc connection pool properties. See https://mchange.com/projects/c3p0/#basic_pool_configuration
+# max.idle.time should be lower than the database server idle connection timeout duration (wait_timeout for MariaDB)
 # #DCE values below came from Lukas https://groups.google.com/a/opencast.org/forum/#!msg/users/iep800Gkieo/oW8hN3ttAwAJ
 org.opencastproject.db.jdbc.pool.max.size=15
 org.opencastproject.db.jdbc.pool.min.size=3
@@ -153,7 +141,6 @@ org.opencastproject.db.jdbc.pool.max.statements=0
 org.opencastproject.db.jdbc.pool.login.timeout=1000
 org.opencastproject.db.jdbc.pool.max.idle.time=3600
 org.opencastproject.db.jdbc.pool.max.connection.age=21600
-
 
 ######### Paella player configuration folder #########
 # #DCE paella player config is not retrieved from here, but, currently, from the paella jar (imported from dce-paella-extensions repo)
@@ -173,23 +160,56 @@ org.opencastproject.workspace.cleanup.period=86400
 org.opencastproject.workspace.cleanup.max.age=2592000
 
 
+######### Working File Repository Cleanup #########
+
+# The scheduled period in seconds, at which a working file repository cleanup operation is performed.
+# 86400 seconds equals 24 hours.
+# Default value: -1 (Disable cleanup scheduler)
+#org.opencastproject.working.file.repository.cleanup.period=86400
+
+# The maximum age a file must reach in days before a deletion of the file in the workspace cleanup operation is
+# performed.
+# Default value: -1 (max age will never be reached)
+#org.opencastproject.working.file.repository.cleanup.max.age=100
+
+# A comma separated lists of collections in the working file repository that shouldbe cleaned up.
+# Default value: Not provided (no collection will be cleaned up)
+#org.opencastproject.working.file.repository.cleanup.collections=failed.zips
+
+
 ######### ACTIVE MQ BROKER #########
 
 # This configures the connection to the Active MQ broker so that we can send and receive messages.
 # There are many settings for specifying the broker url: http://activemq.apache.org/activemq-4-connection-uris.html
 # Including with failover support details here: http://activemq.apache.org/failover-transport-reference.html
-# Default (url): failover://(tcp://127.0.0.1:61616)?initialReconnectDelay=2000&maxReconnectAttempts=2
+# Default (url): failover://(tcp://127.0.0.1:61616)?initialReconnectDelay=2000&maxReconnectDelay=60000
 # Default (username/password): None
-activemq.broker.url=failover://(tcp://<%= @activemq_bind_host %>:61616)?initialReconnectDelay=2000&maxReconnectAttempts=2
+activemq.broker.url=failover://(tcp://<%= @activemq_bind_host %>:61616)?initialReconnectDelay=2000&&maxReconnectDelay=60000
 #activemq.broker.username=admin
 #activemq.broker.password=password
 
 
-######### Elastic Search #########
+######### Elasticsearch #########
 
-# The directory where the configuration files for the Elasticsearch indices are located. This directory should
-# be persistent between reboots (i.e., not /tmp)
-org.opencastproject.elasticsearch.config.dir=${karaf.etc}/index
+# The hostname of the Elasticsearch node for Opencast to use.
+# Default: localhost
+#org.opencastproject.elasticsearch.server.hostname=localhost
+
+# The scheme of the Elasticsearch node for Opencast to use.
+# Default: http
+#org.opencastproject.elasticsearch.server.scheme=http
+
+# The port of the Elasticsearch node for Opencast to use.
+# Default: 9200
+#org.opencastproject.elasticsearch.server.port=9200
+
+# The username of Elasticsearch for Opencast to use.
+# Default: None
+#org.opencastproject.elasticsearch.username=
+
+# The password of Elasticsearch for Opencast to use.
+# Default: None
+#org.opencastproject.elasticsearch.password=
 
 
 ######### SOLR #########
@@ -229,6 +249,11 @@ org.opencastproject.solr.dir=${org.opencastproject.storage.dir}/solr-indexes
 # Default: true
 #org.opencastproject.job.load.acceptexceeding=true
 
+# The max load on this server.
+# Default: number of cores
+#org.opencastproject.server.maxload=
+
+
 ######### Capture and Ingest #########
 
 # Timeout for capture agent status, in minutes.
@@ -250,9 +275,6 @@ org.opencastproject.file.repo.url=<%= @admin_url %>
 # Default: 0
 #org.opencastproject.ingest.max.concurrent=0
 
-# The maximum number of concurrent files to ingest from the inbox directory
-# Default: 1
-#org.opencastproject.inbox.threads=1
 
 ######### Third-party Binaries #########
 
@@ -269,8 +291,10 @@ org.opencastproject.file.repo.url=<%= @admin_url %>
 #org.opencastproject.textanalyzer.tesseract.path=/opt/tesseract/tesseract
 
 # Additional options for Tesseract like language or page segmentation mode.
+# Tesseract allows you to specify multiple languages like this:
+#   -l eng+deu --psm 3
 # The default are no additional options.
-#org.opencastproject.textanalyzer.tesseract.options=-l eng -psm 3
+#org.opencastproject.textanalyzer.tesseract.options=-l eng --psm 3
 
 # Path to the hunspell binary used by the dictionary-hunspell
 # module. The default ist just "hunspell" which requires hunspell to be in the
@@ -286,15 +310,6 @@ org.opencastproject.file.repo.url=<%= @admin_url %>
 
 # The path for SoX command line used by audio normalization
 #org.opencastproject.sox.path=/opt/sox/sox
-
-######### Test Data #########
-
-# Whether opencast should import test-data by the given csv file path.
-# Default: false
-#org.opencastproject.dataloader.testdata=false
-
-# The path to the CSV file to import the data from it
-org.opencastproject.dataloader.csv=${karaf.etc}/dataimport
 
 
 ######### Static Files #########
@@ -324,6 +339,12 @@ org.opencastproject.staticfiles.webserver.enabled=false
 # Default: 1 minute
 #org.opencastproject.userdirectory.cache.expiry=1
 
+# This regex is used to reduce the users in the filter selectbox.
+# A username that matches this regex will be listed in the filter selection
+# The filter is located in the top right corner in the admin ui.
+# Default (allow all users): .*
+#org.opencastproject.adminui.filter.user.regex = .*
+
 
 ######### KARAF CONFIGURATION #########
 
@@ -352,10 +373,6 @@ karaf.pid.file=/var/run/opencast/karaf.pid
 
 ######### Miscellaneous #########
 
-# Send server configuration data to the Opencast project to help us track how people are using Opencast.  No security
-# related information will be sent to the opencast project.  Comment this out to disable this feature.
-#org.opencastproject.anonymous.feedback.url=http://opencast.org/form/tracking
-
 # The mount point of the OAI-PMH servlet.
 # Please make sure that the path configured is accessible without any login (see security.xml)
 # This setting is configured here and not in the OAI-PMH server's config since it is shared amongst several
@@ -367,7 +384,7 @@ karaf.pid.file=/var/run/opencast/karaf.pid
 # distributed artifacts on the downloads and streaming servers, all of which are protected by verification components.
 # Default is 60 seconds as it shouldn't take longer than that to make a request to a server. This will have no impact on
 # a system where url signing is not configured. For more information please see:
-# http://docs.opencast.org/latest/admin/configuration/stream-security/#configuration-of-url-signing-timeout-values
+# http://docs.opencast.org/develop/admin/configuration/stream-security/#configuration-of-url-signing-timeout-values
 #org.opencastproject.security.internal.url.signing.duration=60
 
 # #DCE Production management email (OPC-668)
