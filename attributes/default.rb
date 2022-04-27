@@ -3,6 +3,7 @@
 default['maven']['version'] = '3.3.9'
 default['maven']['setup_bin'] = true
 default['maven']['mavenrc']['opts'] = '-Dmaven.repo.local=/root/.m2/repository -Xms1024m -Xmx1024m'
+default['maven']['url'] = 'https://dlcdn.apache.org/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz'
 
 # ActiveMQ
 default['activemq']['install_java'] = false
