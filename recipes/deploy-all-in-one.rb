@@ -16,7 +16,6 @@ public_hostname = node[:opsworks][:instance][:public_dns_name]
 public_engage_protocol = get_public_engage_protocol
 private_hostname = node[:opsworks][:instance][:private_dns_name]
 
-
 ## all-in-one specific
 
 using_local_distribution = is_using_local_distribution?
@@ -220,6 +219,7 @@ deploy_revision "opencast" do
       variables({
         opencast_backend_http_port: 8080,
         hostname: private_hostname,
+        nodename: "allinone",
         local_workspace_root: local_workspace_root,
         shared_storage_root: shared_storage_root,
         admin_url: "http://#{public_hostname}",
