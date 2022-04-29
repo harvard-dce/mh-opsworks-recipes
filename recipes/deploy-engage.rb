@@ -125,7 +125,7 @@ deploy_revision "opencast" do
     if use_prebuilt_oc
       install_prebuilt_oc(oc_prebuilt_artifacts[:bucket], git_revision, :presentation, most_recent_deploy)
     else
-      maven_build_for(:admin, most_recent_deploy)
+      maven_build_for(:presentation, most_recent_deploy)
     end
 
     # Copy in the configs as distributed in the git repo

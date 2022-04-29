@@ -2,13 +2,17 @@
 
 ## TO BE RELEASED
 
+## v3.1.1 - 04/29/2022
+
+* Fix typo in deploy-engage recipe (`:presentation` vs `:admin`)
+
 ## v3.1.0 - 04/28/2022
 
 * DEPLOY-76: allow use of prebuilt oc artifacts during deployment
 
 ## v3.0.6 - 04/27/2022
 
-* Fix download url for maven 
+* Fix download url for maven
 
 ## v3.0.5 - 03/22/2022
 
