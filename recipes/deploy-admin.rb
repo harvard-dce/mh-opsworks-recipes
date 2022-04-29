@@ -91,6 +91,7 @@ public_engage_hostname = get_public_engage_hostname
 public_engage_protocol = get_public_engage_protocol
 public_admin_hostname = get_public_admin_hostname_on_admin
 private_hostname = node[:opsworks][:instance][:private_dns_name]
+nodename = node[:opsworks][:instance][:hostname]
 
 activemq_bind_host = private_hostname
 
@@ -186,6 +187,7 @@ deploy_revision "opencast" do
       variables({
         opencast_backend_http_port: 8080,
         hostname: private_hostname,
+        nodename: nodename,
         local_workspace_root: local_workspace_root,
         shared_storage_root: shared_storage_root,
         admin_url: "http://#{public_admin_hostname}",

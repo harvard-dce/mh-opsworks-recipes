@@ -15,6 +15,7 @@ stack_name = stack_shortname
 public_engage_hostname = get_public_engage_hostname_on_engage
 public_engage_protocol = get_public_engage_protocol
 private_hostname = node[:opsworks][:instance][:private_dns_name]
+nodename = node[:opsworks][:instance][:hostname]
 private_admin_hostname = get_private_admin_hostname
 
 capture_agent_monitor_url = node.fetch(
@@ -173,6 +174,7 @@ deploy_revision "opencast" do
       variables({
         opencast_backend_http_port: 8080,
         hostname: private_hostname,
+        nodename: nodename,
         local_workspace_root: local_workspace_root,
         shared_storage_root: shared_storage_root,
         admin_url: "http://#{public_admin_hostname}",
