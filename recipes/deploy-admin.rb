@@ -39,6 +39,10 @@ ibm_watson_username = ibm_watson_credentials[:user]
 ibm_watson_psw = ibm_watson_credentials[:pass]
 ibm_watson_transcript_bucket = get_ibm_watson_transcript_bucket_name
 
+# External elasticsearch index (admin ui + external api)
+elasticsearch_host = get_elasticsearch_config[:host]
+elasticsearch_protocol = get_elasticsearch_config[:protocol]
+
 # Push series metadata to porta system
 porta_conf = get_porta_metadata_conf
 porta_enabled = porta_conf[:enabled]
@@ -188,6 +192,8 @@ deploy_revision "opencast" do
         opencast_backend_http_port: 8080,
         hostname: private_hostname,
         nodename: nodename,
+        elasticsearch_host: elasticsearch_host,
+        elasticsearch_protocol: elasticsearch_protocol,
         local_workspace_root: local_workspace_root,
         shared_storage_root: shared_storage_root,
         admin_url: "http://#{public_admin_hostname}",
