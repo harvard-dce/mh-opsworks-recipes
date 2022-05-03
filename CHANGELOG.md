@@ -3,6 +3,7 @@
 ## TO BE RELEASED
 
 * Fixing/adding a couple of metadata fields that foodcritic was complianing about
+* oops. fixing the fix. Don't mess with those metadata version values, i guess.
 
 ## v3.1.1 - 04/29/2022
 

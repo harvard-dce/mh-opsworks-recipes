@@ -2,7 +2,7 @@
 name              "opsworks_initial_setup"
 description       "override/workaround"
 license           "Apache 2.0"
-version           "0.1.0"
+version           "1.0.0"
 maintainer       'Jay Luker'
 maintainer_email 'jay_luker@harvard.edu'
 issues_url       'http://github.com/harvard-dce/oc-opsworks-recipes/issues' if respond_to?(:issues_url)

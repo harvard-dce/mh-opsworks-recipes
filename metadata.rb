@@ -4,7 +4,7 @@ maintainer_email 'jay_luker@harvard.edu'
 license          'All rights reserved'
 description      'Installs/Configures oc-opsworks-recipes'
 long_description 'Installs/Configures oc-opsworks-recipes'
-version          '3.1.1'
+version          '0.1.0'
 issues_url       'http://github.com/harvard-dce/oc-opsworks-recipes/issues' if respond_to?(:issues_url)
 source_url       'http://github.com/harvard-dce/oc-opsworks-recipes/' if respond_to?(:source_url)
 
