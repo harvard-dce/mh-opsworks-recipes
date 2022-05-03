@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* Fixing/adding a couple of metadata fields that foodcritic was complianing about
+
 ## v3.1.1 - 04/29/2022
 
 * Fix typo in deploy-engage recipe (`:presentation` vs `:admin`)
