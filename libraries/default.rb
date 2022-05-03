@@ -124,6 +124,15 @@ module MhOpsworksRecipes
       node.fetch(:nginx_log_root_dir, '/var/log')
     end
 
+    def get_elasticsearch_config
+      node.fetch(
+        :elasticsearch, {
+          host: 'localhost',
+          protocol: 'http'
+        }
+      )
+    end
+
     def get_live_stream_name
       node.fetch(:live_stream_name, '#{caName}-#{flavor}.stream-#{resolution}_1_200@')
     end

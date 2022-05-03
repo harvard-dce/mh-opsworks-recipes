@@ -193,11 +193,11 @@ activemq.broker.url=failover://(tcp://<%= @activemq_bind_host %>:61616)?initialR
 
 # The hostname of the Elasticsearch node for Opencast to use.
 # Default: localhost
-#org.opencastproject.elasticsearch.server.hostname=localhost
+org.opencastproject.elasticsearch.server.hostname=<%= @elasticsearch_host %>
 
 # The scheme of the Elasticsearch node for Opencast to use.
 # Default: http
-#org.opencastproject.elasticsearch.server.scheme=http
+org.opencastproject.elasticsearch.server.scheme=<%= @elasticsearch_protocol %>
 
 # The port of the Elasticsearch node for Opencast to use.
 # Default: 9200
