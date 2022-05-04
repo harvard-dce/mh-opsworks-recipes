@@ -1201,21 +1201,6 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_elasticsearch_index_config(current_deploy_root,index_name)
-      local_workspace_root = node.fetch(:local_workspace_root, '/var/opencast-workspace')
-      log_dir = node.fetch(:opencast_log_directory, '/var/log/opencast')
-
-      template %Q|#{current_deploy_root}/etc/index/#{index_name}/settings.yml| do
-        source %Q|settings-#{index_name}.yml.erb|
-        owner 'opencast'
-        group 'opencast'
-        variables({
-          elasticsearch_data: local_workspace_root,
-          elasticsearch_log: log_dir
-        })
-      end
-    end
-
     def install_capture_agent_sync_config(current_deploy_root)
       capture_agent_sync = node.fetch(:capture_agent_sync, {
             url: '',

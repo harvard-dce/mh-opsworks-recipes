@@ -145,8 +145,8 @@ deploy_revision "opencast" do
     install_opencast_log_configuration(most_recent_deploy)
     install_opencast_log_management
     install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_engage_hostname, public_engage_protocol)
-    install_elasticsearch_index_config(most_recent_deploy,'adminui')
-    install_elasticsearch_index_config(most_recent_deploy,'externalapi')
+# oc11.x    install_elasticsearch_index_config(most_recent_deploy,'adminui')
+# oc11.x    install_elasticsearch_index_config(most_recent_deploy,'externalapi')
 #    remove_felix_fileinstall(most_recent_deploy)
     install_smtp_config(most_recent_deploy)
     install_default_tenant_config(most_recent_deploy, public_admin_hostname, private_hostname)
