@@ -37,6 +37,28 @@ module MhOpsworksRecipes
       end
     end
 
+    # Need a better way to do this...
+    def install_java_11
+      execute "install_java 11 1/3" do
+        command "sudo rpm --import https://yum.corretto.aws/corretto.key"
+        retries 5
+        retry_delay 15
+        timeout 180
+      end
+      execute "install_java 11 2/3" do
+        command "sudo curl -L -o /etc/yum.repos.d/corretto.repo https://yum.corretto.aws/corretto.repo" 
+        retries 5
+        retry_delay 15
+        timeout 180
+      end
+      execute "install_java 11 3/3" do
+        command "sudo yum install -y java-11-amazon-corretto-devel"
+        retries 5
+        retry_delay 15
+        timeout 180
+      end
+    end
+
     def pin_package(name, version)
       apt_preference name do
         pin "version #{version}"
