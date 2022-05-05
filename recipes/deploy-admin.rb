@@ -181,7 +181,8 @@ deploy_revision "opencast" do
     install_capture_agent_sync_config(most_recent_deploy)
 
     # ADMIN SPECIFIC
-    initialize_database(most_recent_deploy)
+    # oc 11.x: Do not create the db tables 
+    # initialize_database(most_recent_deploy)
     # /ADMIN SPECIFIC
 
     template %Q|#{most_recent_deploy}/etc/custom.properties| do
