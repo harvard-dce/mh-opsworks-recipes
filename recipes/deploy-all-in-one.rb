@@ -201,7 +201,8 @@ deploy_revision "opencast" do
     install_capture_agent_sync_config(most_recent_deploy)
 #
 #    # all-in-one SPECIFIC
-    initialize_database(most_recent_deploy)
+    # oc 11.x Do not create the db tables 
+    # initialize_database(most_recent_deploy)
 
     install_aws_s3_distribution_service_config(most_recent_deploy, enable_s3, region, s3_distribution_bucket_name, s3_distribution_base_url)
     install_aws_s3_export_video_service_config(most_recent_deploy, enable_s3, region, s3_distribution_bucket_name, video_export_access_key_id, video_export_secret_access_key)
