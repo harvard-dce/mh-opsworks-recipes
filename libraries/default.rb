@@ -150,7 +150,8 @@ module MhOpsworksRecipes
       node.fetch(
         :elasticsearch, {
           host: 'localhost',
-          protocol: 'http'
+          protocol: 'http',
+          port: 9200
         }
       )
     end
