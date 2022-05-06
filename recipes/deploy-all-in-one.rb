@@ -52,6 +52,7 @@ ibm_watson_psw = ibm_watson_credentials[:pass]
 # External elasticsearch index (admin ui + external api)
 elasticsearch_host = get_elasticsearch_config[:host]
 elasticsearch_protocol = get_elasticsearch_config[:protocol]
+elasticsearch_port = get_elasticsearch_config[:port]
 
 # OPC-496 Zoom ingester config
 zoom_ingester_config = get_zoom_ingester_config
@@ -227,6 +228,7 @@ deploy_revision "opencast" do
         nodename: "allinone",
         elasticsearch_host: elasticsearch_host,
         elasticsearch_protocol: elasticsearch_protocol,
+        elasticsearch_port: elasticsearch_port,
         local_workspace_root: local_workspace_root,
         shared_storage_root: shared_storage_root,
         admin_url: "http://#{public_hostname}",

@@ -42,6 +42,7 @@ ibm_watson_transcript_bucket = get_ibm_watson_transcript_bucket_name
 # External elasticsearch index (admin ui + external api)
 elasticsearch_host = get_elasticsearch_config[:host]
 elasticsearch_protocol = get_elasticsearch_config[:protocol]
+elasticsearch_port = get_elasticsearch_config[:port]
 
 # Push series metadata to porta system
 porta_conf = get_porta_metadata_conf
@@ -195,6 +196,7 @@ deploy_revision "opencast" do
         nodename: nodename,
         elasticsearch_host: elasticsearch_host,
         elasticsearch_protocol: elasticsearch_protocol,
+        elasticsearch_port: elasticsearch_port,
         local_workspace_root: local_workspace_root,
         shared_storage_root: shared_storage_root,
         admin_url: "http://#{public_admin_hostname}",
