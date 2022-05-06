@@ -184,7 +184,7 @@ org.opencastproject.workspace.cleanup.max.age=2592000
 # Including with failover support details here: http://activemq.apache.org/failover-transport-reference.html
 # Default (url): failover://(tcp://127.0.0.1:61616)?initialReconnectDelay=2000&maxReconnectDelay=60000
 # Default (username/password): None
-activemq.broker.url=failover://(tcp://<%= @activemq_bind_host %>:61616)?initialReconnectDelay=2000&&maxReconnectDelay=60000
+activemq.broker.url=failover://(tcp://<%= @activemq_bind_host %>:61616)?initialReconnectDelay=2000&maxReconnectDelay=60000
 #activemq.broker.username=admin
 #activemq.broker.password=password
 
