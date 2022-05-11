@@ -264,12 +264,6 @@ org.opencastproject.solr.dir=${org.opencastproject.storage.dir}/solr-indexes
 # The ID of the default workflow definition to run when media are ingested
 #org.opencastproject.workflow.default.definition=schedule-and-upload
 
-# #DCE only config: org.opencastproject.file.repo.url? It's not in 5x dev Mar 2018
-# The base URL of the file server.  When using a shared filesystem between servers, set all servers to use the same URL.
-# Only then will hard linking between the working file repository and the workspace be enabled to prevent downloads.
-#DCE Rute: with 5.x this is gotten from the mh_default_org configuration instead? To do: confim.
-org.opencastproject.file.repo.url=<%= @admin_url %>
-
 # The max number of ingests to allow at the same time. If more ingests try than the max they will receive service
 # unavailable. A value of 0 means that the server will accept all ingests.
 # Default: 0
