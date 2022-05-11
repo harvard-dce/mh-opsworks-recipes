@@ -835,11 +835,11 @@ module MhOpsworksRecipes
           Dir[current_deploy_root + '/etc/workflows/dce*.xml'].each do |wf_file|
             editor = Chef::Util::FileEdit.new(wf_file)
             editor.search_file_replace(
-              /publish-aws/,
+              /publish-engage-aws/,
               "publish-engage"
             )
             editor.search_file_replace(
-              /retract-aws/,
+              /retract-engage-aws/,
               "retract-engage"
             )
             editor.search_file_replace(
