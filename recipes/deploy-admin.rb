@@ -146,19 +146,15 @@ deploy_revision "opencast" do
     install_opencast_log_configuration(most_recent_deploy)
     install_opencast_log_management
     install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_engage_hostname, public_engage_protocol)
-# oc11.x    install_elasticsearch_index_config(most_recent_deploy,'adminui')
-# oc11.x    install_elasticsearch_index_config(most_recent_deploy,'externalapi')
-#    remove_felix_fileinstall(most_recent_deploy)
+
+    install_elasticsearch_index_config(most_recent_deploy, stack_name)
     install_smtp_config(most_recent_deploy)
     install_default_tenant_config(most_recent_deploy, public_admin_hostname, private_hostname)
-#    install_auth_service(
-#      most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated
-#    )
     install_live_streaming_service_config(most_recent_deploy, live_stream_name, live_streaming_url, distribution)
     if ldap_enabled
       install_ldap_config(most_recent_deploy, ldap_url, ldap_userdn, ldap_psw)
     end
-#    # Admin Specific
+    # Admin Specific
     install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host, other_oc_host, other_oc_prefother_series, other_oc_preflocal_series, '')
     install_otherpubs_service_series_impl_config(most_recent_deploy)
     install_aws_s3_export_video_service_config(most_recent_deploy, enable_s3, region, s3_distribution_bucket_name, video_export_access_key_id, video_export_secret_access_key)
