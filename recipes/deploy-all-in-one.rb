@@ -170,9 +170,6 @@ deploy_revision "opencast" do
     install_opencast_log_configuration(most_recent_deploy)
     install_opencast_log_management
     install_multitenancy_config(most_recent_deploy, public_hostname, public_hostname, public_engage_protocol)
-# oc11.x    install_elasticsearch_index_config(most_recent_deploy,'adminui')
-# oc11.x    install_elasticsearch_index_config(most_recent_deploy,'externalapi')
-#    remove_felix_fileinstall(most_recent_deploy)
     install_smtp_config(most_recent_deploy)
     install_default_tenant_config(most_recent_deploy, public_hostname, private_hostname)
     install_auth_service(
@@ -200,15 +197,16 @@ deploy_revision "opencast" do
     # f/OPC-344-notify-ca
     # External Capture Agent Sync service
     install_capture_agent_sync_config(most_recent_deploy)
-#
-#    # all-in-one SPECIFIC
+
+    # all-in-one SPECIFIC
     # oc 11.x Do not create the db tables 
     # initialize_database(most_recent_deploy)
 
     install_aws_s3_distribution_service_config(most_recent_deploy, enable_s3, region, s3_distribution_bucket_name, s3_distribution_base_url)
     install_aws_s3_export_video_service_config(most_recent_deploy, enable_s3, region, s3_distribution_bucket_name, video_export_access_key_id, video_export_secret_access_key)
     install_search_content_service_config(most_recent_deploy, search_content_enabled, region, s3_distribution_bucket_name, stack_name, search_content_index_url, search_content_lambda_name)
-#    install_opencast_images_properties(most_recent_deploy)
+    install_elasticsearch_index_config(most_recent_deploy, stack_name)
+
     # OPC-139 Oauth config (for Engage)
     install_oauthconsumerdetails_service_config(most_recent_deploy)
 

@@ -1137,6 +1137,17 @@ module MhOpsworksRecipes
       end
     end
 
+    def install_elasticsearch_index_config(current_deploy_root, stack_name)
+      template %Q|#{current_deploy_root}/etc/org.opencastproject.elasticsearch.index.ElasticsearchIndex.cfg| do
+        source 'org.opencastproject.elasticsearch.index.ElasticsearchIndex.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          stack_name: stack_name
+        })
+      end
+    end
+
     def setup_transcript_result_sync_to_s3(shared_storage_root, transcript_bucket_name)
       transcript_path = shared_storage_root + '/files/collection/transcripts'
       cron_d 'sync_transcripts_to_s3' do
