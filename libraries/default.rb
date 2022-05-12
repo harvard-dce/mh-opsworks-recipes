@@ -1319,7 +1319,7 @@ module MhOpsworksRecipes
     def install_prebuilt_oc(bucket, revision, node_profile, current_deploy_root)
       archive_file = "#{node_profile.to_s}.tgz"
       revision_object_path = revision.to_s.gsub(/\//, "-")
-      s3_bucket_url = "s3://#{bucket}/#{revision_object_path}/#{archive_file}"
+      s3_bucket_url = "s3://#{bucket}/opencast/#{revision_object_path}/#{archive_file}"
 
       execute 'download prebuilt archive' do
         command %Q|/usr/local/bin/aws s3 cp #{s3_bucket_url} #{archive_file}|
