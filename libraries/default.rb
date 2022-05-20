@@ -843,8 +843,8 @@ module MhOpsworksRecipes
               "retract-engage"
             )
             editor.search_file_replace(
-              /retract-element-aws/,
-              "retract-element-engage"
+              /retract-partial-aws/,
+              "retract-partial"
             )
             editor.write_file
           end
