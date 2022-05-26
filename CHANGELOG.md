@@ -2,6 +2,9 @@
 
 ## TO BE RELEASED
 
+## v3.2.0 - 05/26/2022
+
+* DEPLOY-77: updated `buildspec.yml`, new artifact handling & notifications
 * Fixing/adding a couple of metadata fields that foodcritic was complianing about
 * oops. fixing the fix. Don't mess with those metadata version values, i guess.
 
