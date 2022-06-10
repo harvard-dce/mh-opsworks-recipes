@@ -31,6 +31,10 @@ log4j2.logger.hudce.level = <%= @dce_log_level %>
 #log4j2.logger.ingest.name = org.opencastproject.ingest
 #log4j2.logger.ingest.level = DEBUG
 
+# OC11 Temporary
+log4j2.logger.security.name = org.opencastproject.kernel.security
+log4j2.logger.security.level = DEBUG
+
 # For Karaf, Felix & CXF, we want to see some more details in the logs
 log4j2.logger.karaf.name = org.apache.karaf
 log4j2.logger.karaf.level = WARN
