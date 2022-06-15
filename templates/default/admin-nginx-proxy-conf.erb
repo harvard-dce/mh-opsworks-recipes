@@ -1,0 +1,138 @@
+# increase size of default proxy buffers so that proxied content
+# doesn't get written to temp files
+proxy_buffers 16 16k;
+
+# if the client closes the request connection (happens a lot)
+# don't abort the upstream request as it will sometimes make
+# Opencast throw jetty EofExceptions
+proxy_ignore_client_abort on;
+
+# All traffic that comes to http://SOMETHING.harvard.edu will be redirected to https.
+# The "harvard.edu" was used to exclude: the internal host name (used by Opencast job dispatching),
+# dev clusters that do not bother to set auth/ssl up, local vagrant.
+server {
+  listen 80;
+
+  server_name ~(.+).harvard.edu;
+  return 301 https://$1.harvard.edu$request_uri;
+}
+
+server {
+  listen 80 default_server;
+  listen [::]:80 default_server ipv6only=on;
+
+  <% if @certificate_exists %>
+  location /admin-ng/login.html {
+    return 301 https://$host$request_uri;
+  }
+  <% end %>
+
+  root /usr/share/nginx/html;
+  index index.html index.htm;
+
+  # Make site accessible from http://localhost/
+  server_name localhost;
+
+  proxy_read_timeout 30m;
+  proxy_send_timeout 30m;
+
+  proxy_set_header Host $host;
+  proxy_set_header X-Real-IP $remote_addr;
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+  client_max_body_size 102400m;
+
+  # don't write proxied responses > 1m to temp files, just serve synchronously
+  # explanation: if a response is too big to fit in the proxy memory buffers
+  # nginx will buffer to a temp file. This is totally fine for small files
+  # but the temp file is on the root partition and we wouldn't want to
+  # risk having that fill up. it is also possible to set the temp file path
+  # to another directory, but the logical path would be somewhere on the
+  # NFS share and then you run into race-condition issues between when nginx
+  # is first started up vs. when the NFS share gets mounted.
+  proxy_max_temp_file_size 1m;
+
+  gzip on;
+
+  location / {
+    proxy_request_buffering off;
+    proxy_pass http://127.0.0.1:<%= @opencast_backend_http_port %>;
+  }
+
+  # responses from the /assets endpoint are likely big media files, so
+  # don't try to buffer them
+  location /assets {
+    proxy_buffering off;
+    proxy_request_buffering off;
+    proxy_pass http://127.0.0.1:<%= @opencast_backend_http_port %>/assets;
+  }
+
+  access_log /var/log/nginx/access.log request_time;
+
+  include /etc/nginx/proxy-includes/*.conf;
+}
+
+<% if @certificate_exists %>
+server {
+  listen 443 ssl default_server;
+  listen [::]:443 ipv6only=on ssl;
+
+  root /usr/share/nginx/html;
+  index index.html index.htm;
+
+  ssl_certificate     ssl/certificate.cert;
+  ssl_certificate_key ssl/certificate.key;
+
+  # Some settings are recommended by https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html
+  # Need SSLv3 for IE on some older windows, this is the default set.
+  ssl_protocols TLSv1.1 TLSv1.2;
+  ssl_prefer_server_ciphers on;
+  ssl_session_cache shared:SSL:10m;
+
+  # Make site accessible from http://localhost/
+  server_name localhost;
+
+  proxy_read_timeout 30m;
+  proxy_send_timeout 30m;
+
+  proxy_set_header Host $host;
+  proxy_set_header X-Real-IP $remote_addr;
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+  # Ask opencast to redirect to HTTPS
+  proxy_set_header X-Forwarded-SSL on;
+  # Rewrite outgoing redirects to be HTTPS
+  proxy_redirect http://<%= @public_admin_hostname %>/ https://<%= @public_admin_hostname %>/;
+  
+  client_max_body_size 102400m;
+
+  # don't write proxied responses > 1m to temp files, just serve synchronously
+  # explanation: if a response is too big to fit in the proxy memory buffers
+  # nginx will buffer to a temp file. This is totally fine for small files
+  # but the temp file is on the root partition and we wouldn't want to
+  # risk having that fill up. it is also possible to set the temp file path
+  # to another directory, but the logical path would be somewhere on the
+  # NFS share and then you run into race-condition issues between when nginx
+  # is first started up vs. when the NFS share gets mounted.
+  proxy_max_temp_file_size 1m;
+
+  gzip on;
+
+  location / {
+    proxy_request_buffering off;
+    proxy_pass http://127.0.0.1:<%= @opencast_backend_http_port %>;
+  }
+
+  # responses from the /assets endpoint are likely big media files, so
+  # don't try to buffer them
+  location /assets {
+    proxy_buffering off;
+    proxy_request_buffering off;
+    proxy_pass http://127.0.0.1:<%= @opencast_backend_http_port %>/assets;
+  }
+
+  access_log /var/log/nginx/access.log request_time;
+
+  include /etc/nginx/proxy-includes/*.conf;
+}
+<% end %>

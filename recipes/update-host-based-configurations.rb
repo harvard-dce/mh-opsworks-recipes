@@ -11,26 +11,13 @@ production_deploy_root = opencast_repo_root + '/current'
 public_engage_hostname = get_public_engage_hostname
 public_engage_protocol = get_public_engage_protocol
 public_admin_hostname = get_public_admin_hostname
+public_admin_protocol = get_public_admin_protocol
 
 if File.directory?(production_deploy_root)
   # This is being run during the config lifecycle after a successful deploy,
   # so everytime a node goes online or off and right before deployment.
   # We only care about the fact that it runs before a node changes its online state
 
-  install_multitenancy_config(production_deploy_root, public_admin_hostname, public_engage_hostname, public_engage_protocol)
+  install_multitenancy_config(production_deploy_root, public_admin_hostname, public_admin_protocol, public_engage_hostname, public_engage_protocol)
 
-  ruby_block "update engage hostname" do
-    block do
-      editor = Chef::Util::FileEdit.new(production_deploy_root + '/etc/config.properties')
-      editor.search_file_replace_line(
-        /edu\.harvard\.dce\.external\.host=/,
-        "edu.harvard.dce.external.host=#{public_engage_hostname}"
-      )
-      editor.search_file_replace_line(
-        /org\.opencastproject\.file\.repo\.url=/,
-        "org.opencastproject.file.repo.url=http://#{public_admin_hostname}"
-      )
-      editor.write_file
-    end
-  end
 end

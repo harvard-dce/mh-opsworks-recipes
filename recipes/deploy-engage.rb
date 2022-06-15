@@ -91,6 +91,7 @@ use_prebuilt_oc = is_truthy(oc_prebuilt_artifacts[:enable])
 activemq_bind_host = private_admin_hostname
 
 public_admin_hostname = get_public_admin_hostname
+public_admin_protocol = get_public_admin_protocol
 
 hostname = node[:opsworks][:instance][:hostname]
 
@@ -137,7 +138,7 @@ deploy_revision "opencast" do
     install_init_scripts(most_recent_deploy, opencast_repo_root)
     install_opencast_log_configuration(most_recent_deploy)
     install_opencast_log_management
-    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_engage_hostname, public_engage_protocol)
+    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_admin_protocol, public_engage_hostname, public_engage_protocol)
 #    remove_felix_fileinstall(most_recent_deploy)
     install_smtp_config(most_recent_deploy)
 
@@ -145,7 +146,7 @@ deploy_revision "opencast" do
       install_ldap_config(most_recent_deploy, ldap_url, ldap_userdn, ldap_psw)
     end
 
-    install_default_tenant_config(most_recent_deploy, public_engage_hostname, private_hostname)
+    install_default_tenant_config(most_recent_deploy)
     install_auth_service(
       most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated, ldap_url, ldap_userdn, ldap_psw
     )
@@ -176,7 +177,7 @@ deploy_revision "opencast" do
         nodename: nodename,
         local_workspace_root: local_workspace_root,
         shared_storage_root: shared_storage_root,
-        admin_url: "http://#{public_admin_hostname}",
+        admin_url: "#{public_admin_protocol}://#{public_admin_hostname}",
         rest_auth: rest_auth_info,
         admin_auth: admin_user_info,
         database: database_connection,
