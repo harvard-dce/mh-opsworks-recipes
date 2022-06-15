@@ -63,7 +63,7 @@ name=Opencast Project
 #
 # Default: http://localhost:8080
 # prop.org.opencastproject.host.localhost = http://localhost:8080
-prop.org.opencastproject.host.<%= @admin_hostname %>=http://<%= @admin_hostname %>
+prop.org.opencastproject.host.<%= @admin_hostname %>=<%= @admin_protocol %>://<%= @admin_hostname %>
 
 # Identifier of the Administrative role.
 #
@@ -92,7 +92,7 @@ prop.org.opencastproject.file.repo.url=${prop.org.opencastproject.admin.ui.url}
 # Value: <a complete url with scheme and port>
 # Default: ${org.opencastproject.server.url}
 #
-prop.org.opencastproject.admin.ui.url=http://<%= @admin_hostname %>
+prop.org.opencastproject.admin.ui.url=<%= @admin_protocol %>://<%= @admin_hostname %>
 
 ###
 # OAI-PMH
@@ -160,7 +160,7 @@ prop.org.opencastproject.engage.ui.url=<%= @engage_protocol %>://<%= @engage_hos
 # Default: ${org.opencastproject.server.url}
 #
 #DCE External host name
-prop.org.opencastproject.assetmanager.url=http://<%= @admin_hostname %>
+prop.org.opencastproject.assetmanager.url=<%= @admin_protocol %>://<%= @admin_hostname %>
 
 # Set a flag to display External Roles on User modal
 #

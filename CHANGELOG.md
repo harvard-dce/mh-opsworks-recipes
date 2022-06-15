@@ -2,6 +2,11 @@
 
 ## TO BE RELEASED
 
+## v4.0.0
+
+Changes for Opencast 11.
+Admin node can use https. Needs a change in the default cluster config (Admin layer).
+
 * Fixing/adding a couple of metadata fields that foodcritic was complianing about
 * oops. fixing the fix. Don't mess with those metadata version values, i guess.
 

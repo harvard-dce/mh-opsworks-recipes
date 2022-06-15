@@ -31,6 +31,7 @@ use_prebuilt_oc = is_truthy(oc_prebuilt_artifacts[:enable])
 public_engage_hostname = get_public_engage_hostname
 public_engage_protocol = get_public_engage_protocol
 public_admin_hostname = get_public_admin_hostname
+public_admin_protocol = get_public_admin_protocol
 private_hostname = node[:opsworks][:instance][:private_dns_name]
 nodename = node[:opsworks][:instance][:hostname]
 private_admin_hostname = get_private_admin_hostname
@@ -80,7 +81,7 @@ deploy_revision "opencast" do
     install_init_scripts(most_recent_deploy, opencast_repo_root)
     install_opencast_log_configuration(most_recent_deploy)
     install_opencast_log_management
-    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_engage_hostname, public_engage_protocol)
+    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_admin_protocol, public_engage_hostname, public_engage_protocol)
 #    remove_felix_fileinstall(most_recent_deploy)
 #    install_smtp_config(most_recent_deploy)
     if ldap_enabled
@@ -101,7 +102,7 @@ deploy_revision "opencast" do
         nodename: nodename,
         local_workspace_root: local_workspace_root,
         shared_storage_root: shared_storage_root,
-        admin_url: "http://#{public_admin_hostname}",
+        admin_url: "#{public_admin_protocol}://#{public_admin_hostname}",
         rest_auth: rest_auth_info,
         admin_auth: admin_user_info,
         database: database_connection,

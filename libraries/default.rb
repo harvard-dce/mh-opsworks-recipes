@@ -239,6 +239,11 @@ module MhOpsworksRecipes
       'http'
     end
 
+    def get_public_admin_protocol
+      return node[:public_admin_protocol] if node[:public_admin_protocol]
+      'http'
+    end
+
     def get_public_engage_ip
       (private_engage_hostname, engage_attributes) = node[:opsworks][:layers][:engage][:instances].first
       engage_attributes[:ip]
@@ -897,7 +902,7 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_multitenancy_config(current_deploy_root, admin_hostname, engage_hostname, engage_protocol)
+    def install_multitenancy_config(current_deploy_root, admin_hostname, admin_protocol, engage_hostname, engage_protocol)
       template %Q|#{current_deploy_root}/etc/org.opencastproject.organization-mh_default_org.cfg| do
         source 'org.opencastproject.organization-mh_default_org.cfg.erb'
         owner 'opencast'
@@ -905,23 +910,20 @@ module MhOpsworksRecipes
         variables({
           hostname: admin_hostname,
           admin_hostname: admin_hostname,
+          admin_protocol: admin_protocol,
           engage_hostname: engage_hostname,
           engage_protocol: engage_protocol
         })
       end
     end
 
-    def install_default_tenant_config(current_deploy_root, public_dns_name, private_dns_name)
-      lti_oauth_info = get_lti_auth_info
+    def install_default_tenant_config(current_deploy_root)
       ldap_conf = get_ldap_conf
       template %Q|#{current_deploy_root}/etc/security/mh_default_org.xml| do
         source 'mh_default_org.xml.erb'
         owner 'opencast'
         group 'opencast'
         variables({
-          lti_oauth: lti_oauth_info,
-          unproxied_name: public_dns_name,
-          proxy_name: public_dns_name,
           ldap_conf: ldap_conf
         })
       end
