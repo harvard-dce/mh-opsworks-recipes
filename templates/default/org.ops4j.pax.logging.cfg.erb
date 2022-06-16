@@ -26,6 +26,10 @@ log4j2.logger.opencast.level = <%= @opencast_log_level %>
 log4j2.logger.hudce.name = edu.harvard.dce
 log4j2.logger.hudce.level = <%= @dce_log_level %>
 
+# TEMPORARY
+log4j2.logger.springcas.name = org.springframework.security
+log4j2.logger.springcas.level = TRACE
+
 # You can specify different log levels for different packages/modules by specifying their package component names. For
 # example, to raise the log level to DEBUG for the rest endpoints contained in the kernel module, set:
 #log4j2.logger.ingest.name = org.opencastproject.ingest

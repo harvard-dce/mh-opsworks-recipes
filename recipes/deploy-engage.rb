@@ -17,6 +17,8 @@ public_engage_protocol = get_public_engage_protocol
 private_hostname = node[:opsworks][:instance][:private_dns_name]
 nodename = node[:opsworks][:instance][:hostname]
 private_admin_hostname = get_private_admin_hostname
+cas_enabled = node.fetch(:cas_enabled, false)
+cas_service = (public_engage_protocol + "://" + public_engage_hostname + "/cas") if cas_enabled
 
 capture_agent_monitor_url = node.fetch(
   :capture_agent_monitor_url, 'http://example.com/monitor_url'
@@ -140,7 +142,7 @@ deploy_revision "opencast" do
       install_ldap_config(most_recent_deploy, ldap_url, ldap_userdn, ldap_psw)
     end
 
-    install_default_tenant_config(most_recent_deploy)
+    install_default_tenant_config(most_recent_deploy, cas_enabled, public_engage_hostname)
     install_porta_auth_service(
       most_recent_deploy, porta_auto_url, porta_auto_cookie_name, porta_auto_redirect_url, porta_auto_enabled
     )
@@ -178,7 +180,8 @@ deploy_revision "opencast" do
         stack_name: stack_name,
         workspace_cleanup_period: 0,
         activemq_bind_host: activemq_bind_host,
-        production_management_email: production_management_email
+        production_management_email: production_management_email,
+        cas_service: cas_service
       })
     end
   end

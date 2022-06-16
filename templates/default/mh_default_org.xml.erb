@@ -29,6 +29,7 @@
 
     <!-- Allow anonymous access to the login form -->
     <sec:intercept-url pattern="/" access="ROLE_ANONYMOUS" />
+    <sec:intercept-url pattern="/cas*" access="ROLE_ANONYMOUS" />
     <sec:intercept-url pattern="/admin-ng/login.html" access="ROLE_ANONYMOUS" />
     <sec:intercept-url pattern="/sysinfo/bundles/version" method="GET" access="ROLE_ANONYMOUS" />
 
@@ -405,8 +406,8 @@
     <!-- Uncomment to enable x509 client certificates for identifying clients -->
     <!-- sec:x509 subject-principal-regex="CN=(.*?)," user-service-ref="userDetailsService" / -->
 
+    <!-- CAS: allow form-based login even if using HK/CAS -->
     <!-- Enable and configure the failure URL for form-based logins -->
-    <!-- CAS Auth: Comment this if using CAS authentication -->
     <sec:form-login authentication-failure-url="/admin-ng/login.html?error" authentication-success-handler-ref="authSuccessHandler" />
 
     <!-- Authentication filter chain -->
@@ -421,9 +422,11 @@
     <sec:custom-filter ref="shibbolethHeaderFilter" position="PRE_AUTH_FILTER"/>
     -->
 
-    <!-- CAS Auth:  Uncomment this if using CAS authentication
-    <sec:custom-filter position="FORM_LOGIN_FILTER" ref="casFilter" />
-    -->
+
+<% if @cas_enabled %>
+    <!-- CAS Auth. CAS filter comes after form user/psw login -->
+    <sec:custom-filter after="FORM_LOGIN_FILTER" ref="casFilter" />
+<% end %>
 
     <!-- JWT header authentication filter
     <sec:custom-filter ref="jwtHeaderFilter" position="PRE_AUTH_FILTER"/>
@@ -438,12 +441,13 @@
     <!-- If any URLs are to be exposed to anonymous users, the "sec:anonymous" filter must be present -->
     <sec:anonymous enabled="false" />
 
-    <!-- CAS Auth:  Uncomment this if using CAS authentication  -->
-    <!-- Enables CAS Single Sign Out
-    <sec:logout logout-success-url="/cas-logout.jsp"/>
+<% if @cas_enabled %>
+    <!-- CAS Auth -->
+    <!-- Enables CAS Single Sign Out -->
+    <sec:logout />
     <sec:custom-filter ref="requestSingleLogoutFilter" before="LOGOUT_FILTER"/>
-    <sec:custom-filter ref="singleLogoutFilter" before="FORM_LOGIN_FILTER"/>
-    -->
+    <sec:custom-filter ref="singleLogoutFilter" before="CAS_FILTER"/>
+<% end %>
 
     <!-- Enables log out -->
     <sec:logout success-handler-ref="logoutSuccessHandler" />
@@ -530,10 +534,12 @@
 
   <!-- Differentiates between "normal" user requests and those requesting digest auth -->
   <bean id="opencastEntryPoint" class="org.opencastproject.kernel.security.DelegatingAuthenticationEntryPoint">
-    <!-- CAS Auth:  Comment this if using CAS authentication -->
+<% if @cas_enabled %>
+    <!-- CAS Auth -->
+    <property name="userEntryPoint" ref="casEntryPoint" />
+<% else %>
     <property name="userEntryPoint" ref="userEntryPoint" />
-    <!-- CAS Auth:  Uncomment this if using CAS authentication -->
-    <!-- <property name="userEntryPoint" ref="casEntryPoint" /> -->
+<% end %>
     <property name="digestAuthenticationEntryPoint" ref="digestEntryPoint" />
   </bean>
 
@@ -615,15 +621,16 @@
     <property name="authHandler" ref="ltiLaunchAuthenticationHandler" />
   </bean>  
 
+<% if @cas_enabled %>
   <!-- ############### -->
   <!-- # CAS Support # -->
   <!-- ############### -->
-  <!--
   <bean id="casFilter"
     class="org.springframework.security.cas.web.CasAuthenticationFilter">
     <property name="authenticationManager" ref="authenticationManager"/>
     <property name="authenticationSuccessHandler" ref="authSuccessHandler" />
     <property name="serviceProperties" ref="serviceProperties" />
+    <property name="filterProcessesUrl" value="/cas"/>
     <property name="authenticationDetailsSource">
       <bean class="org.springframework.security.cas.web.authentication.ServiceAuthenticationDetailsSource"/>
     </property>
@@ -631,13 +638,14 @@
 
   <bean id="casEntryPoint"
     class="org.springframework.security.cas.web.CasAuthenticationEntryPoint">
-    <property name="loginUrl" value="https://auth-test.berkeley.edu/cas/login"/>
+    <property name="loginUrl" value="https://www.pin1.harvard.edu/cas/login"/>
     <property name="serviceProperties" ref="serviceProperties"/>
   </bean>
 
   <bean id="serviceProperties"
     class="org.springframework.security.cas.ServiceProperties">
-    <property name="service" value="https://localhost/j_spring_cas_security_check"/>
+    <!-- property name="service" value="https://<%= @public_host %>/j_spring_cas_security_check"/ -->
+    <property name="service" value="https://<%= @public_host %>/cas"/>
     <property name="sendRenew" value="false"/>
   </bean>
 
@@ -645,13 +653,16 @@
     class="org.springframework.security.cas.authentication.CasAuthenticationProvider">
     <property name="serviceProperties" ref="serviceProperties" />
     <property name="authenticationUserDetailsService">
-      <bean class="org.springframework.security.core.userdetails.UserDetailsByNameServiceWrapper">
-          <constructor-arg ref="userDetailsService" />
+      <bean class="edu.harvard.dce.security.cas.DCECasUserDetailsServiceWrapper">
+          <property name="userDetailsService" ref="userDetailsService" />
+          <property name="securityService" ref="securityService" />
+          <property name="userReferenceProvider" ref="userReferenceProvider" />
+          <property name="userDirectoryService" ref="userDirectoryService" />
       </bean>
     </property>
     <property name="ticketValidator">
-      <bean class="org.jasig.cas.client.validation.Cas20ServiceTicketValidator">
-        <constructor-arg index="0" value="https://auth-test.berkeley.edu/cas" />
+      <bean class="edu.harvard.dce.security.cas.DCECas30ServiceTicketValidator">
+        <constructor-arg index="0" value="https://www.pin1.harvard.edu/cas" />
       </bean>
     </property>
     <property name="key" value="cas"/>
@@ -660,13 +671,12 @@
   <bean id="singleLogoutFilter" class="org.jasig.cas.client.session.SingleSignOutFilter"/>
 
   <bean id="requestSingleLogoutFilter" class="org.springframework.security.web.authentication.logout.LogoutFilter">
-    <constructor-arg value="https://auth-test.berkeley.edu/cas/logout"/>
+    <constructor-arg value="https://www.pin1.harvard.edu/cas/logout"/>
     <constructor-arg>
       <bean class= "org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler"/>
     </constructor-arg>
-    <property name="filterProcessesUrl" value="https://localhost/j_spring_security_logout"/>
   </bean>
-  -->
+<% end %>
 
 <%# ----------------------------------------- %>
 <%# This is only included if ldap is enabled. %>
@@ -735,9 +745,9 @@
   <osgi:reference id="securityService" cardinality="1..1"
                   interface="org.opencastproject.security.api.SecurityService" />
 
-  <!-- Uncomment to enable external users e.g. used together with shibboleth and JWT -->
-  <!-- <osgi:reference id="userReferenceProvider" cardinality="1..1"
-                  interface="org.opencastproject.userdirectory.api.UserReferenceProvider"  /> -->
+  <!-- Uncomment to enable external users e.g. used together with shibboleth and JWT (and CAS) -->
+  <osgi:reference id="userReferenceProvider" cardinality="1..1"
+                  interface="org.opencastproject.userdirectory.api.UserReferenceProvider"  />
 
   <osgi:reference id="userDirectoryService" cardinality="1..1"
                   interface="org.opencastproject.security.api.UserDirectoryService" />
@@ -769,8 +779,10 @@
 
   <sec:authentication-manager alias="authenticationManager">
     <sec:authentication-provider ref="rememberMeAuthenticationProvider"/>
-    <!-- CAS Auth: Uncomment this if using CAS authentication -->
-    <!-- <sec:authentication-provider ref="casAuthenticationProvider" /> -->
+<% if @cas_enabled %>
+    <!-- CAS Auth -->
+    <sec:authentication-provider ref="casAuthenticationProvider" />
+<% end %>
     <!-- Uncomment this if using Shibboleth or JWT authentication -->
     <!-- <sec:authentication-provider ref="preauthAuthProvider" /> -->
     <sec:authentication-provider user-service-ref="userDetailsService">

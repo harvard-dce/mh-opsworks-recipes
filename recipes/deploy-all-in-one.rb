@@ -165,7 +165,7 @@ deploy_revision "opencast" do
     install_opencast_log_management
     install_multitenancy_config(most_recent_deploy, public_hostname, public_hostname, public_engage_protocol)
     install_smtp_config(most_recent_deploy)
-    install_default_tenant_config(most_recent_deploy)
+    install_default_tenant_config(most_recent_deploy, false, public_hostname)
     install_porta_auth_service(
       most_recent_deploy, porta_auto_url, porta_auto_cookie_name, porta_auto_redirect_url, porta_auto_enabled
     )
