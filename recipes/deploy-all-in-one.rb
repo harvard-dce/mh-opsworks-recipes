@@ -171,7 +171,7 @@ deploy_revision "opencast" do
     install_opencast_log_management
     install_multitenancy_config(most_recent_deploy, public_hostname, public_hostname, public_engage_protocol)
     install_smtp_config(most_recent_deploy)
-    install_default_tenant_config(most_recent_deploy)
+    install_default_tenant_config(most_recent_deploy, false, public_hostname)
     install_auth_service(
       most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated, ldap_url, ldap_userdn, ldap_psw
     )

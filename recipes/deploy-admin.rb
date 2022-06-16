@@ -98,6 +98,7 @@ public_admin_hostname = get_public_admin_hostname_on_admin
 public_admin_protocol = get_public_admin_protocol
 private_hostname = node[:opsworks][:instance][:private_dns_name]
 nodename = node[:opsworks][:instance][:hostname]
+cas_enabled = node.fetch(:cas_enabled, false)
 
 activemq_bind_host = private_hostname
 
@@ -150,7 +151,7 @@ deploy_revision "opencast" do
 
     install_elasticsearch_index_config(most_recent_deploy, stack_name)
     install_smtp_config(most_recent_deploy)
-    install_default_tenant_config(most_recent_deploy)
+    install_default_tenant_config(most_recent_deploy, cas_enabled, public_admin_hostname)
     install_live_streaming_service_config(most_recent_deploy, live_stream_name, live_streaming_url, distribution)
     if ldap_enabled
       install_ldap_config(most_recent_deploy, ldap_url, ldap_userdn, ldap_psw)

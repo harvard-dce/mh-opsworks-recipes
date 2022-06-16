@@ -917,14 +917,16 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_default_tenant_config(current_deploy_root)
+    def install_default_tenant_config(current_deploy_root, cas_enabled, public_host)
       ldap_conf = get_ldap_conf
       template %Q|#{current_deploy_root}/etc/security/mh_default_org.xml| do
         source 'mh_default_org.xml.erb'
         owner 'opencast'
         group 'opencast'
         variables({
-          ldap_conf: ldap_conf
+          ldap_conf: ldap_conf,
+          cas_enabled: cas_enabled,
+          public_host: public_host
         })
       end
     end
@@ -953,6 +955,15 @@ module MhOpsworksRecipes
       lti_oauth_info = get_lti_auth_info
       template %Q|#{current_deploy_root}/etc/org.opencastproject.kernel.security.OAuthConsumerDetailsService.cfg| do
         source 'org.opencastproject.kernel.security.OAuthConsumerDetailsService.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          lti_oauth: lti_oauth_info
+        })
+      end
+
+      template %Q|#{current_deploy_root}/etc/org.opencastproject.security.lti.LtiLaunchAuthenticationHandler.cfg| do
+        source 'org.opencastproject.security.lti.LtiLaunchAuthenticationHandler.cfg.erb'
         owner 'opencast'
         group 'opencast'
         variables({
