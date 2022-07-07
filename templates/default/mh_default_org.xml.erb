@@ -394,6 +394,8 @@
     <sec:intercept-url pattern="/admin-ng/" method="GET" access="ROLE_ADMIN, ROLE_ADMIN_UI" />
     <sec:intercept-url pattern="/admin-ng/index.html" access="ROLE_ADMIN, ROLE_ADMIN_UI" />
     <sec:intercept-url pattern="/index.html" access="ROLE_ADMIN, ROLE_ADMIN_UI" />
+    <!-- OC Upstream #3959, #DCE OPC-719 Grant Producers access to "Go to admin" button from Engage -->
+    <sec:intercept-url pattern="/index.js" access="ROLE_ADMIN, ROLE_ADMIN_UI" />
     <sec:intercept-url pattern="/**" access="ROLE_ADMIN" />
 
     <!-- ############################# -->
