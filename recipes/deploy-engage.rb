@@ -18,6 +18,7 @@ private_hostname = node[:opsworks][:instance][:private_dns_name]
 nodename = node[:opsworks][:instance][:hostname]
 private_admin_hostname = get_private_admin_hostname
 cas_enabled = node.fetch(:cas_enabled, false)
+cas_service = (public_engage_protocol + "://" + public_engage_hostname) if cas_enabled
 
 capture_agent_monitor_url = node.fetch(
   :capture_agent_monitor_url, 'http://example.com/monitor_url'
@@ -189,7 +190,8 @@ deploy_revision "opencast" do
         stack_name: stack_name,
         workspace_cleanup_period: 0,
         activemq_bind_host: activemq_bind_host,
-        production_management_email: production_management_email
+        production_management_email: production_management_email,
+        cas_service: cas_service
       })
     end
   end

@@ -406,10 +406,9 @@
     <!-- Uncomment to enable x509 client certificates for identifying clients -->
     <!-- sec:x509 subject-principal-regex="CN=(.*?)," user-service-ref="userDetailsService" / -->
 
-<% if !@cas_enabled %>
+    <!-- CAS: allow form-based login even if using HK/CAS -->
     <!-- Enable and configure the failure URL for form-based logins -->
     <sec:form-login authentication-failure-url="/admin-ng/login.html?error" authentication-success-handler-ref="authSuccessHandler" />
-<% end %>
 
     <!-- Authentication filter chain -->
     <sec:custom-filter position="BASIC_AUTH_FILTER" ref="authenticationFilters" />
@@ -423,9 +422,10 @@
     <sec:custom-filter ref="shibbolethHeaderFilter" position="PRE_AUTH_FILTER"/>
     -->
 
+
 <% if @cas_enabled %>
-    <!-- CAS Auth -->
-    <sec:custom-filter position="FORM_LOGIN_FILTER" ref="casFilter" />
+    <!-- CAS Auth. CAS filter comes after form user/psw login -->
+    <sec:custom-filter after="FORM_LOGIN_FILTER" ref="casFilter" />
 <% end %>
 
     <!-- JWT header authentication filter

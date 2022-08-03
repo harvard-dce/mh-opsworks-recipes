@@ -99,6 +99,7 @@ public_admin_protocol = get_public_admin_protocol
 private_hostname = node[:opsworks][:instance][:private_dns_name]
 nodename = node[:opsworks][:instance][:hostname]
 cas_enabled = node.fetch(:cas_enabled, false)
+cas_service = (public_admin_protocol + "://" + public_admin_hostname) if cas_enabled
 
 activemq_bind_host = private_hostname
 
@@ -209,7 +210,8 @@ deploy_revision "opencast" do
         stack_name: stack_name,
         workspace_cleanup_period: 86400,
         activemq_bind_host: activemq_bind_host,
-        distribution_type: distribution
+        distribution_type: distribution,
+        cas_service: cas_service
       })
     end
   end
