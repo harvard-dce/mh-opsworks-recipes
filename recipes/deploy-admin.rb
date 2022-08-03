@@ -99,7 +99,7 @@ public_admin_protocol = get_public_admin_protocol
 private_hostname = node[:opsworks][:instance][:private_dns_name]
 nodename = node[:opsworks][:instance][:hostname]
 cas_enabled = node.fetch(:cas_enabled, false)
-cas_service = (public_admin_protocol + "://" + public_admin_hostname) if cas_enabled
+cas_service = (public_admin_protocol + "://" + public_admin_hostname + "/cas") if cas_enabled
 
 activemq_bind_host = private_hostname
 
