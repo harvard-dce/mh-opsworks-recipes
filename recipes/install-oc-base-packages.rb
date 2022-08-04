@@ -5,22 +5,28 @@
 
 include_recipe "oc-opsworks-recipes::update-package-repo"
 
-
 # make sure we get this one from the epel repo or it will cause dep conflicts with tesseract
 install_package("libwebp", %Q|--disablerepo="*" --enablerepo="epel"|)
 
-install_java_11
-
 packages = %Q|mysql57 postfix mailx tesseract|
+
+if mh_node?
+  install_java_11
+  Chef::Log.info "install_java_11" 
+
+  package 'java-1.8.0-openjdk' do
+    action :remove
+    ignore_failure true
+  end
+else
+  packages = packages + " java-1.8.0-openjdk java-1.8.0-openjdk-devel"
+  Chef::Log.info packages
+end
+
 install_package(packages)
 
-# remove java-1.7 so that 11 becomes default
+# remove java-1.7 if needed 
 package 'java-1.7.0-openjdk' do
-  action :remove
-  ignore_failure true
-end
-# needed?
-package 'java-1.8.0-openjdk' do
   action :remove
   ignore_failure true
 end
