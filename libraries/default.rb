@@ -959,6 +959,14 @@ module MhOpsworksRecipes
           lti_oauth: lti_oauth_info
         })
       end
+      template %Q|#{current_deploy_root}/etc/org.opencastproject.security.lti.LtiLaunchAuthenticationHandler.cfg| do
+        source 'org.opencastproject.security.lti.LtiLaunchAuthenticationHandler.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          lti_oauth: lti_oauth_info
+        })
+      end
     end
 
     def install_smtp_config(current_deploy_root)
