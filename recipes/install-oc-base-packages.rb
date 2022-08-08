@@ -18,6 +18,12 @@ package 'java-1.7.0-openjdk' do
   ignore_failure true
 end
 
+# remove Java 11
+package 'java-11-amazon-corretto-devel' do
+  action :remove
+  ignore_failure true
+end
+
 # we use postfix
 package 'sendmail' do
   action :remove
