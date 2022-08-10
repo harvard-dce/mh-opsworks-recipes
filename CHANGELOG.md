@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+* IC cors support, requires nginx update on engage
+
 ## v3.2.0 - 05/26/2022
 
 * DEPLOY-77: updated `buildspec.yml`, new artifact handling & notifications
