@@ -37,9 +37,11 @@
 KARAF_DEBUG=<%= @java_debug_enabled %>
 LOGDIR=<%= @opencast_log_directory %>
 
-GC="-Xloggc:${LOGDIR}/gcnormal.log -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps"
-GC="${GC} -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCApplicationConcurrentTime -XX:+PrintHeapAtGC"
-GC="${GC} -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=20 -XX:GCLogFileSize=32M -XX:+UseG1GC"
+GC=""
+# TODO Re-evaluate for OC 11.x, options have changed
+#-Xloggc:${LOGDIR}/gcnormal.log -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps"
+#GC="${GC} -XX:+PrintGCApplicationStoppedTime -XX:+PrintGCApplicationConcurrentTime -XX:+PrintHeapAtGC"
+#GC="${GC} -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=20 -XX:GCLogFileSize=32M -XX:+UseG1GC"
 
 export EXTRA_JAVA_OPTS="$GC -Dorg.eclipse.jetty.server.Request.maxFormContentSize=1500000 -Dfile.encoding=UTF-8"
 export JAVA_MAX_MEM=<%= @java_xmx_ram %>M

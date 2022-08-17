@@ -39,6 +39,11 @@ ibm_watson_username = ibm_watson_credentials[:user]
 ibm_watson_psw = ibm_watson_credentials[:pass]
 ibm_watson_transcript_bucket = get_ibm_watson_transcript_bucket_name
 
+# External elasticsearch index (admin ui + external api)
+elasticsearch_host = get_elasticsearch_config[:host]
+elasticsearch_protocol = get_elasticsearch_config[:protocol]
+elasticsearch_port = get_elasticsearch_config[:port]
+
 # Push series metadata to porta system
 porta_conf = get_porta_metadata_conf
 porta_enabled = porta_conf[:enabled]
@@ -90,7 +95,9 @@ use_prebuilt_oc = is_truthy(oc_prebuilt_artifacts[:enable])
 public_engage_hostname = get_public_engage_hostname
 public_engage_protocol = get_public_engage_protocol
 public_admin_hostname = get_public_admin_hostname_on_admin
+public_admin_protocol = get_public_admin_protocol
 private_hostname = node[:opsworks][:instance][:private_dns_name]
+nodename = node[:opsworks][:instance][:hostname]
 
 activemq_bind_host = private_hostname
 
@@ -139,20 +146,16 @@ deploy_revision "opencast" do
     install_init_scripts(most_recent_deploy, opencast_repo_root)
     install_opencast_log_configuration(most_recent_deploy)
     install_opencast_log_management
-    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_engage_hostname, public_engage_protocol)
-    install_elasticsearch_index_config(most_recent_deploy,'adminui')
-    install_elasticsearch_index_config(most_recent_deploy,'externalapi')
-#    remove_felix_fileinstall(most_recent_deploy)
+    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_admin_protocol, public_engage_hostname, public_engage_protocol)
+
+    install_elasticsearch_index_config(most_recent_deploy, stack_name)
     install_smtp_config(most_recent_deploy)
-    install_default_tenant_config(most_recent_deploy, public_admin_hostname, private_hostname)
-#    install_auth_service(
-#      most_recent_deploy, auth_host, auth_redirect_location, auth_key, auth_activated
-#    )
+    install_default_tenant_config(most_recent_deploy)
     install_live_streaming_service_config(most_recent_deploy, live_stream_name, live_streaming_url, distribution)
     if ldap_enabled
       install_ldap_config(most_recent_deploy, ldap_url, ldap_userdn, ldap_psw)
     end
-#    # Admin Specific
+    # Admin Specific
     install_otherpubs_service_config(most_recent_deploy, opencast_repo_root, auth_host, other_oc_host, other_oc_prefother_series, other_oc_preflocal_series, '')
     install_otherpubs_service_series_impl_config(most_recent_deploy)
     install_aws_s3_export_video_service_config(most_recent_deploy, enable_s3, region, s3_distribution_bucket_name, video_export_access_key_id, video_export_secret_access_key)
@@ -176,7 +179,8 @@ deploy_revision "opencast" do
     install_capture_agent_sync_config(most_recent_deploy)
 
     # ADMIN SPECIFIC
-    initialize_database(most_recent_deploy)
+    # oc 11.x: Do not create the db tables 
+    # initialize_database(most_recent_deploy)
     # /ADMIN SPECIFIC
 
     template %Q|#{most_recent_deploy}/etc/custom.properties| do
@@ -186,9 +190,13 @@ deploy_revision "opencast" do
       variables({
         opencast_backend_http_port: 8080,
         hostname: private_hostname,
+        nodename: nodename,
+        elasticsearch_host: elasticsearch_host,
+        elasticsearch_protocol: elasticsearch_protocol,
+        elasticsearch_port: elasticsearch_port,
         local_workspace_root: local_workspace_root,
         shared_storage_root: shared_storage_root,
-        admin_url: "http://#{public_admin_hostname}",
+        admin_url: "#{public_admin_protocol}://#{public_admin_hostname}",
         rest_auth: rest_auth_info,
         admin_auth: admin_user_info,
         database: database_connection,

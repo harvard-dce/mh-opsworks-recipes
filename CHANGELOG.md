@@ -2,6 +2,13 @@
 
 ## TO BE RELEASED
 
+## v4.0.0
+
+* Changes for Opencast 11.
+* Bump version of Java and Maven.
+* Admin node can use https. Needs a change in the default cluster config (Admin layer).
+* Opencast configuration changes (elastic search, lti, active mq, watson, others)
+
 ## v3.2.0 - 05/26/2022
 
 * DEPLOY-77: updated `buildspec.yml`, new artifact handling & notifications

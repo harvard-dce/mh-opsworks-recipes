@@ -37,6 +37,28 @@ module MhOpsworksRecipes
       end
     end
 
+    # Need a better way to do this...
+    def install_java_11
+      execute "install_java 11 1/3" do
+        command "sudo rpm --import https://yum.corretto.aws/corretto.key"
+        retries 5
+        retry_delay 15
+        timeout 180
+      end
+      execute "install_java 11 2/3" do
+        command "sudo curl -L -o /etc/yum.repos.d/corretto.repo https://yum.corretto.aws/corretto.repo" 
+        retries 5
+        retry_delay 15
+        timeout 180
+      end
+      execute "install_java 11 3/3" do
+        command "sudo yum install -y java-11-amazon-corretto-devel"
+        retries 5
+        retry_delay 15
+        timeout 180
+      end
+    end
+
     def pin_package(name, version)
       apt_preference name do
         pin "version #{version}"
@@ -124,6 +146,16 @@ module MhOpsworksRecipes
       node.fetch(:nginx_log_root_dir, '/var/log')
     end
 
+    def get_elasticsearch_config
+      node.fetch(
+        :elasticsearch, {
+          host: 'localhost',
+          protocol: 'http',
+          port: 9200
+        }
+      )
+    end
+
     def get_live_stream_name
       node.fetch(:live_stream_name, '#{caName}-#{flavor}.stream-#{resolution}_1_200@')
     end
@@ -204,6 +236,11 @@ module MhOpsworksRecipes
 
     def get_public_engage_protocol
       return node[:public_engage_protocol] if node[:public_engage_protocol]
+      'http'
+    end
+
+    def get_public_admin_protocol
+      return node[:public_admin_protocol] if node[:public_admin_protocol]
       'http'
     end
 
@@ -803,16 +840,16 @@ module MhOpsworksRecipes
           Dir[current_deploy_root + '/etc/workflows/dce*.xml'].each do |wf_file|
             editor = Chef::Util::FileEdit.new(wf_file)
             editor.search_file_replace(
-              /publish-aws/,
+              /publish-engage-aws/,
               "publish-engage"
             )
             editor.search_file_replace(
-              /retract-aws/,
+              /retract-engage-aws/,
               "retract-engage"
             )
             editor.search_file_replace(
-              /retract-element-aws/,
-              "retract-element-engage"
+              /retract-partial-aws/,
+              "retract-partial"
             )
             editor.write_file
           end
@@ -865,7 +902,7 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_multitenancy_config(current_deploy_root, admin_hostname, engage_hostname, engage_protocol)
+    def install_multitenancy_config(current_deploy_root, admin_hostname, admin_protocol, engage_hostname, engage_protocol)
       template %Q|#{current_deploy_root}/etc/org.opencastproject.organization-mh_default_org.cfg| do
         source 'org.opencastproject.organization-mh_default_org.cfg.erb'
         owner 'opencast'
@@ -873,23 +910,20 @@ module MhOpsworksRecipes
         variables({
           hostname: admin_hostname,
           admin_hostname: admin_hostname,
+          admin_protocol: admin_protocol,
           engage_hostname: engage_hostname,
           engage_protocol: engage_protocol
         })
       end
     end
 
-    def install_default_tenant_config(current_deploy_root, public_dns_name, private_dns_name)
-      lti_oauth_info = get_lti_auth_info
+    def install_default_tenant_config(current_deploy_root)
       ldap_conf = get_ldap_conf
       template %Q|#{current_deploy_root}/etc/security/mh_default_org.xml| do
         source 'mh_default_org.xml.erb'
         owner 'opencast'
         group 'opencast'
         variables({
-          lti_oauth: lti_oauth_info,
-          unproxied_name: public_dns_name,
-          proxy_name: public_dns_name,
           ldap_conf: ldap_conf
         })
       end
@@ -919,6 +953,14 @@ module MhOpsworksRecipes
       lti_oauth_info = get_lti_auth_info
       template %Q|#{current_deploy_root}/etc/org.opencastproject.kernel.security.OAuthConsumerDetailsService.cfg| do
         source 'org.opencastproject.kernel.security.OAuthConsumerDetailsService.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          lti_oauth: lti_oauth_info
+        })
+      end
+      template %Q|#{current_deploy_root}/etc/org.opencastproject.security.lti.LtiLaunchAuthenticationHandler.cfg| do
+        source 'org.opencastproject.security.lti.LtiLaunchAuthenticationHandler.cfg.erb'
         owner 'opencast'
         group 'opencast'
         variables({
@@ -1105,6 +1147,17 @@ module MhOpsworksRecipes
       end
     end
 
+    def install_elasticsearch_index_config(current_deploy_root, stack_name)
+      template %Q|#{current_deploy_root}/etc/org.opencastproject.elasticsearch.index.ElasticsearchIndex.cfg| do
+        source 'org.opencastproject.elasticsearch.index.ElasticsearchIndex.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          stack_name: stack_name
+        })
+      end
+    end
+
     def setup_transcript_result_sync_to_s3(shared_storage_root, transcript_bucket_name)
       transcript_path = shared_storage_root + '/files/collection/transcripts'
       cron_d 'sync_transcripts_to_s3' do
@@ -1166,21 +1219,6 @@ module MhOpsworksRecipes
         variables({
           default_auth_system: default_auth_system,
           other_courses: other_courses
-        })
-      end
-    end
-
-    def install_elasticsearch_index_config(current_deploy_root,index_name)
-      local_workspace_root = node.fetch(:local_workspace_root, '/var/opencast-workspace')
-      log_dir = node.fetch(:opencast_log_directory, '/var/log/opencast')
-
-      template %Q|#{current_deploy_root}/etc/index/#{index_name}/settings.yml| do
-        source %Q|settings-#{index_name}.yml.erb|
-        owner 'opencast'
-        group 'opencast'
-        variables({
-          elasticsearch_data: local_workspace_root,
-          elasticsearch_log: log_dir
         })
       end
     end

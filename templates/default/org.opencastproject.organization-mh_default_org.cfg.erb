@@ -9,12 +9,13 @@
 # installation:
 #
 #   - id
-#   - server
+#   - prop.org.opencastproject.host.<server url>
 #   - port
 #   - prop.org.opencastproject.admin.ui.url
 #   - prop.org.opencastproject.engage.ui.url
 #   - prop.org.opencastproject.external.api.url
 #   - prop.org.opencastproject.assetmanager.url
+#
 #
 
 # Identifier of the tenant on this Opencast installation.
@@ -32,27 +33,37 @@ id=mh_default_org
 #
 name=Opencast Project
 
-# Server name that identifies the organization (tenant) on this Opencast installation.
-#
-# Use the public url that is assigned to this tenant. In out-of-the-box installations
-# with only one tenant, this value corresponds to the server.url in etc/config.properties.
-# Make sure to adjust these two keys accordingly:
-#
-#   - prop.org.opencastproject.admin.ui.url
-#   - prop.org.opencastproject.engage.ui.url
-#
-# Value: <hostname without schema and port>
-#
-server=<%= @hostname %>
+# Tenant-specific Host URL Mappings.
 
-# Port for this tenant.
+# Map the internal host URL to the tenant-specific one for all nodes running Opencast services in your system.
 #
-# When run behind a proxy server, set this to -1 since most proxies won't forward the
-# original port and set the corresponding field in the request to this value.
+# The usage of this is to map a request to a specific organization. For example, if admin-a.opencast.org is configured
+# as part of this organizations server list and an HTTP request uses this domain name, Opencast knows that the requests
+# belongs to this organization.
 #
-# Value: <integer port number>
+# Additionally these are used to map a host's internal URL to the tenant-specific URL in the endpoint
+# services/available.
 #
-port=-1
+# If multi-tenancy is not configured, you don't need to configure this either.
+#
+# The configuration needs to look like this:
+# prop.org.opencastproject.host.<org.opencastproject.server.url of node without scheme> =
+# <tenant-specific server url of node without scheme>
+#
+# Example Configuration:
+#
+# prop.org.opencastproject.host.admin-presentation.opencast.com=http://tenant1.admin-presentation.opencast.com
+# prop.org.opencastproject.host.ingest.opencast.com=https://tenant1.ingest.opencast.com
+# prop.org.opencastproject.host.worker.opencast.com=https://tenant1.worker.opencast.com:8433
+#
+# Important notices:
+#  - Values read from here are stored in the database (table oc_organization_node) and will not be removed if a node is
+#    removed from this list.
+#  - Do not include schema or port in the URLs.
+#
+# Default: http://localhost:8080
+# prop.org.opencastproject.host.localhost = http://localhost:8080
+prop.org.opencastproject.host.<%= @admin_hostname %>=<%= @admin_protocol %>://<%= @admin_hostname %>
 
 # Identifier of the Administrative role.
 #
@@ -81,7 +92,7 @@ prop.org.opencastproject.file.repo.url=${prop.org.opencastproject.admin.ui.url}
 # Value: <a complete url with scheme and port>
 # Default: ${org.opencastproject.server.url}
 #
-prop.org.opencastproject.admin.ui.url=http://<%= @admin_hostname %>
+prop.org.opencastproject.admin.ui.url=<%= @admin_protocol %>://<%= @admin_hostname %>
 
 ###
 # OAI-PMH
@@ -95,7 +106,7 @@ prop.org.opencastproject.oaipmh.server.hosturl=${prop.org.opencastproject.engage
 # If the property is specified, the admin ui help menu will link to the documentation.
 # The value needs to be a URL if set.
 # Default: undefined
-prop.org.opencastproject.admin.help.documentation.url=http://docs.opencast.org
+prop.org.opencastproject.admin.help.documentation.url=https://docs.opencast.org
 
 # Link to the Opencast REST service documentation for the local system.
 #
@@ -149,27 +160,7 @@ prop.org.opencastproject.engage.ui.url=<%= @engage_protocol %>://<%= @engage_hos
 # Default: ${org.opencastproject.server.url}
 #
 #DCE External host name
-prop.org.opencastproject.assetmanager.url=http://<%= @admin_hostname %>
-
-# Path to the logo that is displayed in the upper left part of the
-# media module page.
-#
-# Value: <a complete url with scheme and port>
-#
-prop.logo_mediamodule=/engage/ui/img/logo/opencast-icon.svg
-
-# Path to the logo that is displayed in the Opencast 2.0 player
-#
-# Value: <a complete url with scheme and port>
-#
-prop.logo_player=/engage/theodul/ui/img/opencast.svg
-
-# Define size of Chunksize on upload in KB.
-#
-# Value: <integer>
-# Default: 2048
-#
-prop.adminui.chunksize=2048
+prop.org.opencastproject.assetmanager.url=<%= @admin_protocol %>://<%= @admin_hostname %>
 
 # Set a flag to display External Roles on User modal
 #
@@ -180,204 +171,21 @@ prop.adminui.user.external_role_display=false
 # Name of the list to provide a user listing as used in the group editor of the admin ui.
 #
 # Values:
-# - USERS.INVERSE will list users by name (e.g. "John Sample")
-# - USERS.INVERSE.WITH.EMAIL will list users by name and email (e.g. "John Sample <j.sample@opencast.org>")
-# - USERS.INVERSE.WITH.USERNAME will list users by name and username (e.g. "John Sample (jsample)")
-# Default: USERS.INVERSE.WITH.USERNAME
-#prop.adminui.user.listname=USERS.INVERSE.WITH.USERNAME
+# - USERS.NAME will list users by name (e.g. "John Sample")
+# - USERS.NAME.AND.EMAIL will list users by name and email (e.g. "John Sample <j.sample@opencast.org>")
+# - USERS.NAME.AND.USERNAME will list users by name and username (e.g. "John Sample (jsample)")
+# Default: USERS.NAME.AND.USERNAME
+#prop.adminui.user.listname=USERS.NAME.AND.USERNAME
 
-# Defines whether to display the default login and username on the login page
+# Path to the default video player used by the engage interfaces and the LTI tools. Parameters for selecting the
+# specific videos will be appended automatically.  Common values include:
 #
-# Values: true | false
-# Default: false
+# - theodul player: /engage/theodul/ui/core.html?id=#{id}
+# - paella  player: /paella/ui/watch.html?id=#{id}
 #
-prop.login.display_defaults=true
-
-# Flag for displaying the download link.
-#
-# Values: true, false
-# Default:
-#
-prop.engageui.link_download.enable=false
-
-# Flag for enabling annotations globally.
-#
-# Values: true, false
-# Default: true
-#
-prop.engageui.annotations.enable=true
-
-# Flag for displaying the media module.
-#
-# Values: true, false
-# Default: true
-#
-prop.engageui.links_media_module.enable=true
-
-# Flag for displaying a redirect when surfing with a mobile device
-#
-# Values: true, false
-# Default: false
-#
-prop.engageui.link_mobile_redirect.enable=false
-
-# URL for the mobile redirect.
-#
-# Value: A URL for a html URL tag
-# Default: <none>
-#
-prop.engageui.link_mobile_redirect.url=http://opencast.org/
-
-# Description for the mobile redirect.
-#
-# Value: <text>
-# Default: <none>
-#
-prop.engageui.link_mobile_redirect.description=For more information have a look at the official site.
-
-#
-# USER TRACKING IN PLAYER
-# These settings allow a tracking of user interaction with Piwik (https://piwik.org/) in the Opencast Player
-# Only if a Piwik server is provided the Piwik plugin will be activated.
-#
-
-# The Piwik server from which the Piwik JS library will be loaded and where the dat awill be reported
-#prop.player.piwik.server=http://localhost/piwik
-
-# The Piwik site ID has to be numeric value. If not set this will be 1.
-#prop.player.piwik.site_id=1
-
-# The heartbeat setting to track how long a user stayed on the player page. Set to 0 or comment this line to
-# disable the heartbeat
-#prop.player.piwik.heartbeat=30
-
-# This setting lets you track several player events. Add the events that you want to track to the list. Comment this
-# line to prevent event tracking
-# Events that can be tracked:
-# - play: play has been pressed (will also be called if after seeking).
-# - pause: pause has been pressend (will also be called if before seeking).
-# - seek: user jumps to a different time. Time in seconds will be stored
-# - ended: video has reached the end
-# - playbackrate: user changes the playback speed (values 0.75 to 3.00)
-# - volume: Volume change by the user value 0.0 to 1.0
-# - quality: manual change of video quality (quality tag is stored)
-# - fullscreen: user presses fullscreen button
-# - focus: user selects one video to be enlarged (flavor of selected video is stored)
-# - layout_reset: user switches back to default layout
-# - zoom: user changes the zoom of the video
-#prop.player.piwik.track_events=play, pause, seek, ended, playbackrate, volume, quality, fullscreen, focus, layout_reset, zoom
-
-# Choose the default video player
-# comment in the following line for the old flash player
-# prop.player=/engage/ui/player.html
-# comment in the following line for the html5 player
-# #DCE OPC-3, paella as default player
-# prop.player=/engage/theodul/ui/core.html
+# Default: /paella/ui/watch.html?id=#{id}
 # #DCE re-using historic DCE path for paella player
-prop.player=engage/player/watch.html
-
-# The default flavor of the master video (the video on the "left side" in the video display)
-prop.player.mastervideotype=presenter/delivery
-
-# Play only videos that are tagged with one of these tags
-# default: don't filter for tags at all
-prop.player.allowedtags=engage-download,engage-streaming
-
-# Play only videos that use these video/streaming formats.
-# The format setting in the browser will be done for what is left after these have been filtered
-# with this setting.
-# default: don't filter for video/streaming formats at all
-# allowed values: hls,dash,rtmp,mp4,webm,audio
-# prop.player.allowedformats=hls,dash,mp4
-
-# Choose where the controls will be rendered
-# Options:
-#   - top
-#   - bottom
-prop.player.positioncontrols=bottom
-
-# Choose which layout should be applied if none is stored in the local storage of the browser
-# Options:
-#   - left
-#   - right
-#   - beside
-#   - off (default)
-prop.player.layout=off
-
-# Choose which flavor (without subflavor) should be focused in the layout if none is stored in the local storage.
-# The focused flavor will only be used if prop.player.layout is not "off".
-prop.player.focusedflavor=presentation
-
-# Hide the browser context menu on video elements (true|false)
-# Default: false
-prop.player.hide_video_context_menu=false
-
-# Link back to Media Module from Theodul player (true|false)
-# Default: false
-prop.link_mediamodule=true
-
-# Link back to Media Module from Theodul player (true|false)
-# Default: false
-prop.show_embed_links=true
-
-# Shortcut definitions for the html5 player
-# - modifier keys
-#   - shift
-#   - ctrl
-#   - alt
-#   - option
-#   - meta
-#   - command
-#   - mod -- combines Mac 'command' and Windows/Linux 'ctrl'
-# - special keys
-#   - backspace
-#   - tab
-#   - enter
-#   - return
-#   - capslock
-#   - esc
-#   - escape
-#   - space
-#   - pageup
-#   - pagedown
-#   - end
-#   - home
-#   - left
-#   - up
-#   - right
-#   - down
-#   - ins
-#   - del
-#   - plus
-# - any other key
-#   - should be referenceable by name like a, /, $, *, or =
-# - for more information have a look at the player docs
-prop.player.shortcut.controls.playPause=space
-prop.player.shortcut.controls.seekRight=right
-prop.player.shortcut.controls.seekLeft=left
-prop.player.shortcut.controls.jumpToBegin=backspace
-prop.player.shortcut.controls.prevChapter=pagedown
-prop.player.shortcut.controls.nextChapter=pageup
-prop.player.shortcut.playbackrate.increase=t
-prop.player.shortcut.playbackrate.decrease=T
-prop.player.shortcut.volume.muteToggle=m
-prop.player.shortcut.volume.up=9
-prop.player.shortcut.volume.down=8
-prop.player.shortcut.fullscreen.enable=mod+enter
-prop.player.shortcut.fullscreen.cancel=escape
-prop.player.shortcut.layout.focusNext=>
-prop.player.shortcut.layout.focusPrev=<
-prop.player.shortcut.layout.movePiP=p
-prop.player.shortcut.layout.togglePiP=o
-prop.player.shortcut.zoom.moveLeft=a
-prop.player.shortcut.zoom.moveRight=d
-prop.player.shortcut.zoom.moveUp=w
-prop.player.shortcut.zoom.moveDown=s
-## DCE t/OPC-314 - OC MH-12911
-prop.player.shortcut.zoom.in=plus
-prop.player.shortcut.zoom.out=-
-
-prop.player.shortcut-sequence=controls,volume,playbackrate,layout,zoom,fullscreen
+prop.player=/engage/player/watch.html?id=\#{id}
 
 # Shortcut definitions for admin UI video player
 # Format: prop.admin.shortcut.player<action>=<key>
@@ -388,11 +196,9 @@ prop.admin.shortcut.player.previous_segment=up
 prop.admin.shortcut.player.next_segment=down
 prop.admin.shortcut.player.step_backward=ctrl+left
 prop.admin.shortcut.player.step_forward=ctrl+right
-## DCE t/OPC-314 - OC MH-12911
 prop.admin.shortcut.player.volume_up=plus
 prop.admin.shortcut.player.volume_down=-
 prop.admin.shortcut.player.mute=m
-
 ## DCE t/OPC-155
 prop.admin.shortcut.player.previous_second=j
 prop.admin.shortcut.player.next_second=l
@@ -417,24 +223,17 @@ prop.admin.shortcut.general.select_next_dashboard_filter=f
 prop.admin.shortcut.general.select_previous_dashboard_filter=F
 prop.admin.shortcut.general.main_menu=m
 
-## DCE t/OPC-314 (OC MH-12911) - Disable it to use a new cheatsheet
-# prop.admin.shortcut.general.help=?
+# Default values for fields in the tab Source of the Add Event wizard
+#
+# Automatically populates fields in the tab Source of the Add Event wizard.
+# The fields populated are 'Start Date', 'Start Time', 'End Time' and 'Duration' which are set as follows:
+#
+#  Start Date: Current day if the calculated timeslot is earlier than the cutoff time for the day, or the next day,
+#              i.e. today if possible, otherwise tomorrow.
+#  Start Time: Current time rounded up to the next available timeslot, or the first available timeslot on the next day.
+#  Duration:   The default duration of events
+#  End Time:   Start Time + Duration (implicit end date may be on next day)
 
-# Default values for a few fields in New Event Creation modal
-#
-# Properties: prop.admin.event.new.[start_time|end_time|duration|interval]
-#
-# Description: automatically populates fields in the Source tab during the
-#              creation of new events. The fields populated are 'Start Date',
-#              'Start Time' and 'Duration', and are set as follows
-#
-#              Start Time - current time rounded up to the next available timeslot,
-#                           or the first available timeslot on the next day.
-#              Start Date - current day if the calculated timeslot is earlier
-#                           than the cutoff time for the day, or the next day,
-#                           i.e. today if possible, otherwise tomorrow.
-#              Duration   - the default duration of events
-#
 # Start time of first timeslot in the day
 # Format: HH:mm
 # Default: 08:00
@@ -455,6 +254,13 @@ prop.admin.shortcut.general.main_menu=m
 
 # Note: prop.admin.event.new.duration need not match prop.admin.event.new.interval;
 #       this is to allow short intermissions between consecutive events.
+
+# Preselect an appropriate weekday when scheduling multiple events.
+#
+# Format: Boolean
+# Default: true
+#
+#prop.admin.event.new.preselect_day=true
 
 #
 # Display durations for different notification types in SECONDS.
@@ -482,10 +288,72 @@ prop.admin.shortcut.general.main_menu=m
 #
 #prop.admin.notification.duration.warning=5
 
-# #DCE OPC-201-live-monitor
-# f/OPC-485-live-monitor-link - to detach it from student live stream
-prop.dce.live.monitor.ca.stream=capture.device.live.monitor
-prop.dce.live.monitor.ca.stream.template=rtmp://19862561.r.cdnsun.net/19862561/_definst_/#{caName}-presenter-delivery.stream-960x270
+# Display position for global notifications
+#
+# Possible positions are:
+# - top-right
+# - top-left
+# - top-center
+# - bottom-right
+# - bottom-left
+# - bottom-center
+#
+# Default: bottom-right
+#
+prop.admin.notification.position.global=top-center
+
+# If the preview mode in the video editor is enabled per default.
+#
+# Format: Boolean
+# Default: true
+#
+#prop.admin.editor.previewmode.default=true
+
+# Event access control update mode when modifying series permissions.
+# Possible modes are:
+# - always:   When modifying series permissions, automatically remove all permission rules specific to single episodes
+#             belonging to the series. This enforces every episode has the rules of the series in effect as soon as they
+#             are changed.
+# - never:    Only update the series permissions but never replace permissions set on event level. This can mean that
+#             updated rules have no effect on already existing events.
+# - optional: Like `never` but present users with a button in the series permission dialog which allows them to
+#             replace the event specific permissions if they want to.
+# Default: optional
+#prop.admin.series.acl.event.update.mode=optional
+
+# Default values for  trim segment in the editor.
+# Default: In milliseconds
+#
+# start_length: Length of trim segment at the beginning of each video.
+# end_length: Length of trim segment at the end of each video.
+# minimum_length: The minimum length of any one segment at any point in the video.
+
+# Length of trim segment at the beginning of each video.
+#
+# Format: An integer
+# Default: 0
+#prop.admin.editor.segment.start_length=3000
+
+# Length of trim segment at the end of each video.
+#
+# Format: An integer
+# Default: 0
+#prop.admin.editor.segment.end_length=3000
+
+# The minimum length of any one segment.
+#
+# Format: An integer
+# Default: 0
+#prop.admin.editor.segment.minimum_length=1000
+
+# The location of the video editor linked in the admin interface
+#
+# Format: A URL or path
+# Common values:
+#   The internal editor: #!/events/events/$id/tools/editor
+#   The external editing tool: /editor-ui/index.html?mediaPackageId=$id
+# Default: #!/events/events/$id/tools/editor
+#prop.admin.editor.url=#!/events/events/$id/tools/editor
 
 # #DCE OPC-699
 # Thumbnail settings for admin UI series properties
