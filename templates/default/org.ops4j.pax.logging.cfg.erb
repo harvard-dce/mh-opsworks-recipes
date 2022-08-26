@@ -32,8 +32,6 @@ log4j2.logger.hudce.level = <%= @dce_log_level %>
 #log4j2.logger.ingest.level = DEBUG
 
 # OC11 Temporary
-log4j2.logger.security.name = org.opencastproject.kernel.security
-log4j2.logger.security.level = DEBUG
 log4j2.logger.hardlink.name = org.opencastproject.workspace.impl
 log4j2.logger.hardlink.level = TRACE 
 
@@ -44,6 +42,10 @@ log4j2.logger.felix.name = org.apache.felix
 log4j2.logger.felix.level = WARN
 log4j2.logger.cxf.name = org.apache.cxf
 log4j2.logger.cxf.level = WARN
+
+# Set aws logging to WARN
+log4j2.logger.awssdk.name = com.amazonaws
+log4j2.logger.awssdk.level = WARN
 
 # Helps to have these at DEBUG level or accessible to toggle to DEBUG as needed
 log4j2.logger.lti.name = org.opencastproject.lti.LtiServlet

@@ -165,16 +165,16 @@ org.opencastproject.workspace.cleanup.max.age=2592000
 # The scheduled period in seconds, at which a working file repository cleanup operation is performed.
 # 86400 seconds equals 24 hours.
 # Default value: -1 (Disable cleanup scheduler)
-#org.opencastproject.working.file.repository.cleanup.period=86400
+org.opencastproject.working.file.repository.cleanup.period=86400
 
 # The maximum age a file must reach in days before a deletion of the file in the workspace cleanup operation is
 # performed.
 # Default value: -1 (max age will never be reached)
-#org.opencastproject.working.file.repository.cleanup.max.age=100
+org.opencastproject.working.file.repository.cleanup.max.age=7
 
 # A comma separated lists of collections in the working file repository that shouldbe cleaned up.
 # Default value: Not provided (no collection will be cleaned up)
-#org.opencastproject.working.file.repository.cleanup.collections=failed.zips
+org.opencastproject.working.file.repository.cleanup.collections=asset_aws_s3
 
 
 ######### ACTIVE MQ BROKER #########
