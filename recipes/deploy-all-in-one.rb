@@ -68,6 +68,9 @@ helix_token = helix_googlesheets_config[:token]
 helix_sheet_id = helix_googlesheets_config[:helix_sheet_id]
 helix_email_enabled = helix_googlesheets_config[:change_notification_email_enabled]
 
+# OPC-737 Admin UI thumbnail mailto
+production_management_email= node.fetch(:production_management_email, '')
+
 capture_agent_monitor_url = node.fetch(
   :capture_agent_monitor_url, 'http://example.com/monitor_url'
 )
@@ -169,7 +172,7 @@ deploy_revision "opencast" do
     install_init_scripts(most_recent_deploy, opencast_repo_root)
     install_opencast_log_configuration(most_recent_deploy)
     install_opencast_log_management
-    install_multitenancy_config(most_recent_deploy, public_hostname, public_hostname, public_engage_protocol)
+    install_multitenancy_config(most_recent_deploy, public_hostname, public_hostname, public_engage_protocol, production_management_email)
     install_smtp_config(most_recent_deploy)
     install_default_tenant_config(most_recent_deploy)
     install_auth_service(

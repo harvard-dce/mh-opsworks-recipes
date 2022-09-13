@@ -77,6 +77,9 @@ region = node.fetch(:region, 'us-east-1')
 s3_distribution_bucket_name = get_s3_distribution_bucket_name
 s3_distribution_base_url=get_base_media_download_url(public_engage_hostname)
 
+# OPC-737 Admin UI thumbnail mailto
+production_management_email= node.fetch(:production_management_email, '')
+
 # Configuration for searching transcripts
 search_content_index_url = node.fetch(:transcript_search_endpoint, '')
 search_content_lambda_name = node.fetch(:transcript_index_function, '')
@@ -138,7 +141,7 @@ deploy_revision "opencast" do
     install_init_scripts(most_recent_deploy, opencast_repo_root)
     install_opencast_log_configuration(most_recent_deploy)
     install_opencast_log_management
-    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_admin_protocol, public_engage_hostname, public_engage_protocol)
+    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_admin_protocol, public_engage_hostname, public_engage_protocol, production_management_email)
 #    remove_felix_fileinstall(most_recent_deploy)
     install_smtp_config(most_recent_deploy)
 

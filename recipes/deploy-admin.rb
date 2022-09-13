@@ -11,8 +11,10 @@ shared_storage_root = get_shared_storage_root
 rest_auth_info = get_rest_auth_info
 admin_user_info = get_admin_user_info
 stack_name = stack_shortname
-
 using_local_distribution = is_using_local_distribution?
+
+# OPC-737 Admin UI thumbnail mailto
+production_management_email= node.fetch(:production_management_email, '')
 
 # S3 file archive service
 region = node.fetch(:region, 'us-east-1')
@@ -146,7 +148,7 @@ deploy_revision "opencast" do
     install_init_scripts(most_recent_deploy, opencast_repo_root)
     install_opencast_log_configuration(most_recent_deploy)
     install_opencast_log_management
-    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_admin_protocol, public_engage_hostname, public_engage_protocol)
+    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_admin_protocol, public_engage_hostname, public_engage_protocol, production_management_email)
 
     install_elasticsearch_index_config(most_recent_deploy, stack_name)
     install_smtp_config(most_recent_deploy)
@@ -208,6 +210,7 @@ deploy_revision "opencast" do
         stack_name: stack_name,
         workspace_cleanup_period: 86400,
         activemq_bind_host: activemq_bind_host,
+        production_management_email: production_management_email,
         distribution_type: distribution
       })
     end
