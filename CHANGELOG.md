@@ -2,6 +2,20 @@
 
 ## TO BE RELEASED
 
+## v4.2.0
+
+* Remove legacy auth configuration
+* Add thread id to log
+
+## v4.1.1
+
+* Remove uneccesary template
+
+## v4.1.a
+
+* Enable logging aws metrics
+* Revert cleanup config for collection not used anymore (asset_aws_s3)
+
 ## v4.0.0
 
 * Changes for Opencast 11.
