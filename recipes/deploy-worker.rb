@@ -36,6 +36,9 @@ private_hostname = node[:opsworks][:instance][:private_dns_name]
 nodename = node[:opsworks][:instance][:hostname]
 private_admin_hostname = get_private_admin_hostname
 
+# OPC-737 Admin UI thumbnail mailto
+production_management_email= node.fetch(:production_management_email, '')
+
 activemq_bind_host = private_admin_hostname
 
 database_connection = get_database_connection
@@ -81,7 +84,7 @@ deploy_revision "opencast" do
     install_init_scripts(most_recent_deploy, opencast_repo_root)
     install_opencast_log_configuration(most_recent_deploy)
     install_opencast_log_management
-    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_admin_protocol, public_engage_hostname, public_engage_protocol)
+    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_admin_protocol, public_engage_hostname, public_engage_protocol, production_management_email)
 #    remove_felix_fileinstall(most_recent_deploy)
 #    install_smtp_config(most_recent_deploy)
     if ldap_enabled
