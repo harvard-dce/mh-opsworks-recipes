@@ -338,9 +338,7 @@ module MhOpsworksRecipes
           enabled: false,
           porta_auto_url: '',
           cookie_name: '',
-          redirect_url: '',
-          default_auth_system: 'acid',
-          other_courses: ''
+          redirect_url: ''
         }
       )
     end
@@ -1168,23 +1166,6 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_auth_service(current_deploy_root, auth_host, redirect_location, auth_key, auth_activated = 'true', ldap_url, ldap_userdn, ldap_psw)
-      template %Q|#{current_deploy_root}/etc/edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.cfg| do
-        source 'edu.harvard.dce.auth.impl.HarvardDCEAuthServiceImpl.cfg.erb'
-        owner 'opencast'
-        group 'opencast'
-        variables({
-          auth_host: auth_host,
-          redirect_location: redirect_location,
-          auth_activated: auth_activated,
-          auth_key: auth_key,
-          ldap_url: ldap_url,
-          ldap_userdn: ldap_userdn,
-          ldap_psw: ldap_psw
-        })
-      end
-    end
-
     def install_porta_auth_service(current_deploy_root, porta_auto_url, cookie_name, redirect_url, enabled = 'true')
       template %Q|#{current_deploy_root}/etc/edu.harvard.dce.auth.porta.impl.PortaAuthServiceImpl.cfg| do
         source 'edu.harvard.dce.auth.porta.impl.PortaAuthServiceImpl.cfg.erb'
@@ -1207,18 +1188,6 @@ module MhOpsworksRecipes
         variables({
           porta_url: porta_url,
           enabled: enabled
-        })
-      end
-    end
-
-    def install_porta_adapter_service(current_deploy_root, default_auth_system, other_courses)
-      template %Q|#{current_deploy_root}/etc/edu.harvard.dce.auth.migration.AuthServiceAdapterImpl.cfg| do
-        source 'edu.harvard.dce.auth.migration.AuthServiceAdapterImpl.cfg.erb'
-        owner 'opencast'
-        group 'opencast'
-        variables({
-          default_auth_system: default_auth_system,
-          other_courses: other_courses
         })
       end
     end

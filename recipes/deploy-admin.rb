@@ -74,9 +74,6 @@ ldap_userdn = ldap_conf[:userdn]
 ldap_psw = ldap_conf[:pass]
 
 auth_host = node.fetch(:auth_host, 'example.com')
-auth_redirect_location = node.fetch(:auth_redirect_location, 'http://example.com/some/url')
-auth_activated = node.fetch(:auth_activated, 'true')
-auth_key = node.fetch(:auth_key, '')
 
 # OPC-149 other oc host for pub list merge
 # The ignore_flag default value signals the config consumer
