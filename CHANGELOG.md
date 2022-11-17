@@ -2,6 +2,10 @@
 
 ## TO BE RELEASED
 
+## v4.3.0
+
+* Add configuration for HarvardKey login.
+
 ## v4.2.0
 
 * Remove legacy auth configuration
