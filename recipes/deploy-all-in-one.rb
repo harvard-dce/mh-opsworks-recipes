@@ -74,6 +74,9 @@ capture_agent_monitor_url = node.fetch(
 
 production_management_email = node.fetch(
   :production_management_email, ''
+
+immersive_classroom_url = node.fetch(
+  :immersive_classroom_url, ''
 )
 
 live_monitor_url = node.fetch(
@@ -231,7 +234,8 @@ deploy_revision "opencast" do
         stack_name: stack_name,
         activemq_bind_host: activemq_bind_host,
         distribution_type: distribution,
-        production_management_email: production_management_email
+        production_management_email: production_management_email,
+        immersive_classroom_url: immersive_classroom_url
       })
     end
   end

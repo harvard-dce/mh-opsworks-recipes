@@ -9,6 +9,9 @@ shared_storage_root = get_shared_storage_root
 
 public_engage_hostname = get_public_engage_hostname
 engage_whitelist = get_engage_admin_allowed_hosts
+# Use last 3 parts of Engage hostname domain for CORs domain check
+# Escape the 2 dots to use as literal dot chars in regex
+engage_domain_cors_regex = public_engage_hostname[/((?=.)(\w+))((?:.)(\w+)){2}\z/].gsub(/\./, "\\.")
 
 ssl_info = node.fetch(:ssl, get_dummy_cert)
 if cert_defined(ssl_info)
@@ -41,7 +44,8 @@ template 'proxy' do
     shared_storage_root: shared_storage_root,
     opencast_backend_http_port: 8080,
     certificate_exists: certificate_exists,
-    public_engage_hostname: public_engage_hostname
+    public_engage_hostname: public_engage_hostname,
+    engage_domain_cors_regex: engage_domain_cors_regex
   })
 end
 
