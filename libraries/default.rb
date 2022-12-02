@@ -900,7 +900,7 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_multitenancy_config(current_deploy_root, admin_hostname, admin_protocol, engage_hostname, engage_protocol)
+    def install_multitenancy_config(current_deploy_root, admin_hostname, admin_protocol, engage_hostname, engage_protocol, stack_name)
       template %Q|#{current_deploy_root}/etc/org.opencastproject.organization-mh_default_org.cfg| do
         source 'org.opencastproject.organization-mh_default_org.cfg.erb'
         owner 'opencast'
@@ -910,7 +910,8 @@ module MhOpsworksRecipes
           admin_hostname: admin_hostname,
           admin_protocol: admin_protocol,
           engage_hostname: engage_hostname,
-          engage_protocol: engage_protocol
+          engage_protocol: engage_protocol,
+          stack_name: stack_name
         })
       end
     end

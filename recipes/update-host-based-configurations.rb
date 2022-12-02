@@ -7,6 +7,7 @@
 opencast_repo_root = node[:opencast_repo_root]
 
 production_deploy_root = opencast_repo_root + '/current'
+stack_name = stack_shortname
 
 public_engage_hostname = get_public_engage_hostname
 public_engage_protocol = get_public_engage_protocol
@@ -18,6 +19,6 @@ if File.directory?(production_deploy_root)
   # so everytime a node goes online or off and right before deployment.
   # We only care about the fact that it runs before a node changes its online state
 
-  install_multitenancy_config(production_deploy_root, public_admin_hostname, public_admin_protocol, public_engage_hostname, public_engage_protocol)
+  install_multitenancy_config(production_deploy_root, public_admin_hostname, public_admin_protocol, public_engage_hostname, public_engage_protocol, stack_name)
 
 end
