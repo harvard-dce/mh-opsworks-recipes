@@ -2,6 +2,15 @@
 
 ## TO BE RELEASED
 
+## v4.4.0
+
+* Add stack name to org props in order to display it on the admin ui
+* Fix for admin-ui series properties endpoint access 
+
+## v4.3.1
+
+* Hot-fix for maven 3.8.7 
+
 ## v4.3.0
 
 * Add configuration for HarvardKey login.
