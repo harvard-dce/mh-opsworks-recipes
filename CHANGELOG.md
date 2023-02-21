@@ -2,6 +2,9 @@
 
 ## TO BE RELEASED
 
+* IC: `*.dcex.harvard.edu` cors support, requires nginx update on engage
+* IC: OC admin ability to reference a specific IC server (for mpId trim updates)
+
 ## v4.4.0
 
 * Add stack name to org props in order to display it on the admin ui
