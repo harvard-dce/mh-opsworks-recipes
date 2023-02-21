@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## v4.4.1
+
 * IC: `*.dcex.harvard.edu` cors support, requires nginx update on engage
 * IC: OC admin ability to reference a specific IC server (for mpId trim updates)
 
