@@ -2,6 +2,10 @@
 
 ## TO BE RELEASED
 
+## v4.4.3
+
+* OPC-848: Immersive classroom url added to organization props.
+
 ## v4.4.2
 
 * IC: OPC-851 `*.dcex.harvard.edu` cors support from Prod OC Engage

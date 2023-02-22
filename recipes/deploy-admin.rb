@@ -149,7 +149,7 @@ deploy_revision "opencast" do
     install_init_scripts(most_recent_deploy, opencast_repo_root)
     install_opencast_log_configuration(most_recent_deploy)
     install_opencast_log_management
-    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_admin_protocol, public_engage_hostname, public_engage_protocol, stack_name)
+    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_admin_protocol, public_engage_hostname, public_engage_protocol, stack_name, immersive_classroom_url)
 
     install_elasticsearch_index_config(most_recent_deploy, stack_name)
     install_smtp_config(most_recent_deploy)
@@ -212,8 +212,7 @@ deploy_revision "opencast" do
         workspace_cleanup_period: 86400,
         activemq_bind_host: activemq_bind_host,
         distribution_type: distribution,
-        cas_service: cas_service,
-        immersive_classroom_url: immersive_classroom_url
+        cas_service: cas_service
       })
     end
   end

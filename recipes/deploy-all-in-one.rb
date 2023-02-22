@@ -166,7 +166,7 @@ deploy_revision "opencast" do
     install_init_scripts(most_recent_deploy, opencast_repo_root)
     install_opencast_log_configuration(most_recent_deploy)
     install_opencast_log_management
-    install_multitenancy_config(most_recent_deploy, public_hostname, public_hostname, public_engage_protocol, stack_name)
+    install_multitenancy_config(most_recent_deploy, public_hostname, public_hostname, public_engage_protocol, stack_name, immersive_classroom_url)
     install_smtp_config(most_recent_deploy)
     install_default_tenant_config(most_recent_deploy, false, public_hostname)
     install_porta_auth_service(
@@ -234,8 +234,7 @@ deploy_revision "opencast" do
         stack_name: stack_name,
         activemq_bind_host: activemq_bind_host,
         distribution_type: distribution,
-        production_management_email: production_management_email,
-        immersive_classroom_url: immersive_classroom_url
+        production_management_email: production_management_email
       })
     end
   end
