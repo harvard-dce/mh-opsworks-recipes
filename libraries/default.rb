@@ -258,6 +258,15 @@ module MhOpsworksRecipes
       node.fetch(:vpn_ips, []) + ["127.0.0.1/32"]
     end
 
+    # Same subdomain CORS supprt
+    # If special public_engage_hostname_cors config exists, use that for subdomain CORS support
+    # Otherwise, use regular engage hostname for subdomain CORS support
+    def get_public_engage_hostname_cors
+      return node[:public_engage_hostname_cors] if node[:public_engage_hostname_cors]
+
+      get_public_engage_hostname
+    end
+
     def get_cloudfront_url
       node[:cloudfront_url]
     end
