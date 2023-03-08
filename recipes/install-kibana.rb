@@ -19,6 +19,7 @@ install_package("kibana")
 service 'kibana' do
   action :enable
   supports :restart => true
+  provider Chef::Provider::Service::Systemd
 end
 
 template '/opt/kibana/config/kibana.yml' do

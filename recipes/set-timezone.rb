@@ -26,6 +26,7 @@ service 'chrony' do
   service_name 'chronyd'
   supports :restart => true, :status => true, :reload => true
   action [:start, :enable]
+  provider Chef::Provider::Service::Systemd
 end
 
 file '/etc/sysconfig/clock' do

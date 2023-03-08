@@ -12,14 +12,14 @@ rpm = crowdstrike[:rpm] || 'crowdstrike-falcon-sensor.rpm'
 
 if on_aws?
   include_recipe "oc-opsworks-recipes::install-awscli"
-  download_command="/usr/local/bin/aws s3 cp s3://#{bucket_name}/#{rpm} ."
+  download_command="aws s3 cp s3://#{bucket_name}/#{rpm} ."
 
   bash 'install crowdstrike falcon sensor' do
     code %Q|
 cd /opt &&
 /bin/rm -f #{rpm} &&
 #{download_command} &&
-yum install -y #{rpm}
+yum localinstall -y #{rpm}
 |
     retries 3
     retry_delay 10

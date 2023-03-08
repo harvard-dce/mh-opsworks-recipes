@@ -59,8 +59,12 @@ cookbook_file 'nginx-status.conf' do
 end
 
 service 'nginx' do
-  supports :restart => true, :start => true, :stop => true, :reload => true
   action [:enable, :start]
+  supports start: true, stop: true, restart: true, reload: true
+  start_command   "/bin/systemctl start nginx"
+  stop_command   "/bin/systemctl stop nginx"
+  restart_command  "/bin/systemctl restart nginx"
+  reload_command  "/bin/systemctl reload nginx"
   subscribes :reload, "template[nginx]", :immediately
   subscribes :reload, "template[proxy]", :immediately
   # don't do these immediately as it will trigger a reload when the ssl key
@@ -68,4 +72,5 @@ service 'nginx' do
   # on initial node setup run
   subscribes :reload, "file[/etc/nginx/ssl/certificate.key]"
   subscribes :reload, "file[/etc/nginx/ssl/certificate.cert]"
+  provider Chef::Provider::Service::Systemd
 end

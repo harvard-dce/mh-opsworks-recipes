@@ -12,3 +12,7 @@ namespace="AWS/OpsworksCustom"
 # All opsworks metrics go to us-east-1, no matter what region
 # instances live in. Force this region for all metrics and alarms
 region="us-east-1"
+
+# sourcing this here again as i'm not confident `.bashrc` and `/etc/profile.d`
+# gets picked up by the user executing the custom metric scripts
+source scl_source enable rh-python38

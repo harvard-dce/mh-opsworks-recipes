@@ -3,6 +3,8 @@
 
 service 'opencast' do
   action :start
-  supports restart: true, start: true, stop: true, status: true
-  only_if '[ -f /etc/init.d/opencast ]'
+  supports start: true, stop: true, restart: false, status: true
+  start_command   "/bin/systemctl start opencast"
+  status_command  "/bin/systemctl status opencast"
+  provider Chef::Provider::Service::Systemd
 end

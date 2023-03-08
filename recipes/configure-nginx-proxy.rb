@@ -37,8 +37,11 @@ cookbook_file 'nginx-status.conf' do
 end
 
 service 'nginx' do
-  supports :restart => true, :start => true, :stop => true, :reload => true
+  supports :start => true, :stop => true, :reload => true
   action [:enable, :start]
+  start_command   "/bin/systemctl start nginx"
+  reload_command  "/bin/systemctl reload nginx"
   subscribes :reload, "template[nginx]", :immediately
   subscribes :reload, "template[proxy]", :immediately
+  provider Chef::Provider::Service::Systemd
 end

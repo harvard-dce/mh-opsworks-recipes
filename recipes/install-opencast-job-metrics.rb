@@ -11,10 +11,7 @@ workers_layer_id = node[:opsworks][:layers][:workers][:id]
 stack_id = node[:opsworks][:stack][:id]
 stack_name = stack_shortname
 
-execute 'install pyhorn' do
-  command '/usr/bin/python3 -m pip install pyhorn'
-  user 'root'
-end
+pip_install("pyhorn")
 
 ["queued_job_count.py",
  "queued_job_count_metric.sh",

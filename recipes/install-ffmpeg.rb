@@ -19,7 +19,7 @@ end
 
 if on_aws?
 	include_recipe "oc-opsworks-recipes::install-awscli"
-	download_command="/usr/local/bin/aws s3 cp s3://#{bucket_name}/#{ffmpeg_archive} ."
+	download_command="aws s3 cp s3://#{bucket_name}/#{ffmpeg_archive} ."
 else
 	download_command="wget -O #{ffmpeg_archive} https://s3.amazonaws.com/#{bucket_name}/#{ffmpeg_archive}"
 end

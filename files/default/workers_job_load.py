@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 """
 Outputs the number of Opencast jobs with 'QUEUED' status. See --help for options.
@@ -105,5 +105,3 @@ if __name__ == '__main__':
         getattr(jlc, args.mode)()
     else:
         raise RuntimeError("invalid mode: {}".format(args.mode))
-
-

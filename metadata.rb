@@ -160,15 +160,14 @@ recipe(
   'oc-opsworks-recipes::install-awscli',
   'Installs the commandline aws-cli client
 
-The default version is <tt>1.10.5</tt>. You can install whatever version you
+The default version is <tt>1.27.78</tt>. You can install whatever version you
 want by setting the parameter below.
 
 === Attributes
 * <tt>node[:awscli_version]</tt>
 
 === Effects
-* the python3-pip package is installed
-* the aws-cli is installed into /usr/local/bin
+* the awscli python package is installed
 '
 )
 recipe(
@@ -715,7 +714,7 @@ recipe(
 '
 )
 recipe(
-  'oc-opsworks-recipes::register-opencast-to-boot',
+  'oc-opsworks-recipes::configure-opencast-service',
   'FIXME'
 )
 recipe(
@@ -892,6 +891,28 @@ none
 * downloads the GeoLite2 db archive from the shared assets folder
 * unpacks archive into /opt/geolite2
 * name of archive file can be specified in cluster custom json
+'
+)
+recipe(
+    'oc-opsworks-recipes::configure-selinux',
+    'Sets selinux to PERMISSIVE mode (log but don\'t block)
+
+== attributes
+none
+
+== effects
+* /etc/seclinux/config gets SELINUXMODE=Permissive
+'
+)
+recipe(
+  'oc-opsworks-recipes::create-karaf-var-directories',
+  'Creates /var/run/opencast and /var/lock/opencast for karaf lock and pid files
+
+== attributes
+none
+
+== effects
+* /var/lock/opencast and /var/run/opencast are created and chowned to the opencast user
 '
 )
 depends 'nfs', '~> 2.1.0'

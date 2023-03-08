@@ -37,28 +37,6 @@ module MhOpsworksRecipes
       end
     end
 
-    # Need a better way to do this...
-    def install_java_11
-      execute "install_java 11 1/3" do
-        command "sudo rpm --import https://yum.corretto.aws/corretto.key"
-        retries 5
-        retry_delay 15
-        timeout 180
-      end
-      execute "install_java 11 2/3" do
-        command "sudo curl -L -o /etc/yum.repos.d/corretto.repo https://yum.corretto.aws/corretto.repo" 
-        retries 5
-        retry_delay 15
-        timeout 180
-      end
-      execute "install_java 11 3/3" do
-        command "sudo yum install -y java-11-amazon-corretto-devel"
-        retries 5
-        retry_delay 15
-        timeout 180
-      end
-    end
-
     def pin_package(name, version)
       apt_preference name do
         pin "version #{version}"
@@ -483,7 +461,7 @@ module MhOpsworksRecipes
       file '/etc/sudoers.d/opencast' do
         owner 'root'
         group 'root'
-        content %Q|opencast ALL=NOPASSWD:/etc/init.d/opencast\n|
+        content %Q|opencast ALL=NOPASSWD:/bin/systemctl\n|
         mode '0600'
       end
     end
@@ -599,10 +577,10 @@ module MhOpsworksRecipes
     def create_virtualenv(venv_path, user, requirements_path=nil)
       execute "create virtualenv #{venv_path}" do
         # use the installed 'virtualenv' package instead of builtin 'venv'
-        command "/usr/bin/python3 -m virtualenv --clear #{venv_path}"
+        command "/usr/bin/scl enable rh-python38 -- python -m venv --clear #{venv_path}"
         user user
         # don't if virtualenv python is already correct
-        not_if %Q!test -d #{venv_path} && #{venv_path}/bin/python -V | grep -q "$(python3 -V)"!
+        not_if %Q!test -d #{venv_path} && #{venv_path}/bin/python -V | grep -q "$(python -V)"!
       end
       if !requirements_path.nil?
         execute "install requirements from #{requirements_path}" do
@@ -622,6 +600,12 @@ module MhOpsworksRecipes
 
     def dont_start_opencast_automatically?
       is_truthy(node.fetch(:dont_start_opencast_automatically, "false"))
+    end
+
+    def pip_install(package)
+      execute "install python package #{package}" do
+        command "/usr/bin/scl enable rh-python38 -- python -m pip install -U #{package}"
+      end
     end
 
   end
@@ -883,11 +867,11 @@ module MhOpsworksRecipes
 
       layer_name = layer_name_from_hostname
 
-      template %Q|/etc/init.d/opencast| do
-        source 'etc-init.d-opencast.erb'
-        owner 'opencast'
-        group 'opencast'
-        mode '755'
+      template %Q|/etc/systemd/system/opencast.service| do
+        source 'opencast.service.erb'
+        owner 'root'
+        group 'root'
+        mode '644'
         variables({
           opencast_root: current_deploy_root
         })
@@ -1320,9 +1304,8 @@ module MhOpsworksRecipes
       archive_file = "#{node_profile.to_s}.tgz"
       revision_object_path = revision.to_s.gsub(/\//, "-")
       s3_bucket_url = "s3://#{bucket}/opencast/#{revision_object_path}/#{archive_file}"
-
       execute 'download prebuilt archive' do
-        command %Q|/usr/local/bin/aws s3 cp #{s3_bucket_url} #{archive_file}|
+        command %Q|aws s3 cp #{s3_bucket_url} #{archive_file}|
         cwd '/tmp'
         user 'root'
         retries 5

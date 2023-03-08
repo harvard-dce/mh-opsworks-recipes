@@ -64,4 +64,5 @@ service 'postfix' do
   action [:reload, :start]
   retries 5
   retry_delay 5
+  provider Chef::Provider::Service::Systemd
 end

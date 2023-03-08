@@ -4,7 +4,7 @@ env:
 phases:
   install:
     runtime-versions:
-      ruby: "2.6"
+      ruby: 2.6
     commands:
       - printenv
       - gem install chef-config -v '< 16.5.77'
@@ -13,14 +13,14 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - "# webhook triggered runs will have CODEBUILD_WEBHOOK_TRIGGER, e.g. `tag/[tag name]` or `branch/[branch name]`"
-      - "# manually triggered runs will only have CODEBUILD_SOURCE_VERSION"
-      - "# get the tag or branch name to use for the s3 object path"
+      - '# webhook triggered runs will have CODEBUILD_WEBHOOK_TRIGGER, e.g. `tag/[tag name]` or `branch/[branch name]`'
+      - '# manually triggered runs will only have CODEBUILD_SOURCE_VERSION'
+      - '# get the tag or branch name to use for the s3 object path'
       - TRIGGER_BRANCH_OR_TAG=$CODEBUILD_WEBHOOK_TRIGGER
       - if [ -z "$TRIGGER_BRANCH_OR_TAG" ]; then TRIGGER_BRANCH_OR_TAG="manual/${CODEBUILD_SOURCE_VERSION}"; fi
-      - "# - at this point TRIGGER_BRANCH_OR_TAG should look like `branch/[branch name]`, `tag/[tag name]`, or `manual/[branch or tag]`"
-      - "# - `cut` with `-f2-` will cut off the leading token (i.e. `branch/` or `tag/`) leaving other `/` characters intact"
-      - "# - `sed` will replace any remaning `/` with `-`"
+      - '# - at this point TRIGGER_BRANCH_OR_TAG should look like `branch/[branch name]`, `tag/[tag name]`, or `manual/[branch or tag]`'
+      - '# - `cut` with `-f2-` will cut off the leading token (i.e. `branch/` or `tag/`) leaving other `/` characters intact'
+      - '# - `sed` will replace any remaning `/` with `-`'
       - export TRIGGER_BRANCH_OR_TAG=$(echo $TRIGGER_BRANCH_OR_TAG | cut -d'/' -f2- | sed -e 's/\//-/g')
       - echo trigger branch or tag "$TRIGGER_BRANCH_OR_TAG"
       - ./bin/run_foodcritic.sh
@@ -36,5 +36,5 @@ phases:
 artifacts:
   discard-paths: true
   files:
-    - "*.tar.gz"
+    - '*.tar.gz'
   name: cookbook/${TRIGGER_BRANCH_OR_TAG}

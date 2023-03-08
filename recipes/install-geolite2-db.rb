@@ -10,7 +10,7 @@ geolite2_db_archive = elk_info['geolite2_db_archive']
 
 if on_aws?
   include_recipe 'oc-opsworks-recipes::install-awscli'
-  geolite2_dl_cmd = "/usr/local/bin/aws s3 cp s3://#{shared_assets_bucket}/#{geolite2_db_archive} ."
+  geolite2_dl_cmd = "aws s3 cp s3://#{shared_assets_bucket}/#{geolite2_db_archive} ."
 else
   geolite2_dl_cmd = "wget https://s3.amazonaws.com/#{shared_assets_bucket}/#{geolite2_db_archive}"
 end
@@ -33,4 +33,3 @@ cd /opt/geolite2 &&
   retry_delay 5
   not_if { ::File::exists?("/opt/geolite2/#{geolite2_db_archive}") }
 end
-

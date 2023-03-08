@@ -93,4 +93,12 @@ if ! shopt -q login_shell; then # We're not a login shell
   unset i
   unset pathmunge
 fi
+
+# enable the rhel7 software collections; to get up-to-date versions of python
+# and mysql we have to use these "scl" packages provided by redhat. This software
+# gets installed at non-traditional paths under `/opt` and must be "enabled" if
+# you want them to override the default versions. 
+source scl_source enable rh-python38
+source scl_source enable rh-mysql57
+
 # vim:ts=4:sw=4

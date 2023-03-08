@@ -1,0 +1,10 @@
+[Unit]
+Description=Ganglia Monitoring Daemon
+After=network-online.target
+
+[Service]
+Type=forking
+ExecStart=/usr/sbin/gmond
+
+[Install]
+WantedBy=multi-user.target

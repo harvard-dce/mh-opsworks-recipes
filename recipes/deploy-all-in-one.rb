@@ -194,7 +194,7 @@ deploy_revision "opencast" do
     install_capture_agent_sync_config(most_recent_deploy)
 
     # all-in-one SPECIFIC
-    # oc 11.x Do not create the db tables 
+    # oc 11.x Do not create the db tables
     # initialize_database(most_recent_deploy)
 
     install_aws_s3_distribution_service_config(most_recent_deploy, enable_s3, region, s3_distribution_bucket_name, s3_distribution_base_url)
@@ -242,11 +242,5 @@ deploy_revision "opencast" do
   end
 end
 
-unless dont_start_opencast_automatically?
-  service 'opencast' do
-    action :start
-    supports restart: true, start: true, stop: true, status: true
-  end
-end
-
+include_recipe 'oc-opsworks-recipes::configure-opencast-service'
 include_recipe "oc-opsworks-recipes::monitor-opencast-daemon"

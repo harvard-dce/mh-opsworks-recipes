@@ -28,7 +28,8 @@ if on_aws?
       aws_instance_id = node[:opsworks][:instance][:aws_instance_id]
       region = 'us-east-1'
       # This is idempotent according to the aws docs
-      topic_arn = execute_command(%Q(aws sns create-topic --name "#{topic_name}" --region #{region} --output text)).chomp
+      create_topic_cmd = %Q(aws sns create-topic --name "#{topic_name}" --region #{region} --output text)
+      topic_arn = execute_command(create_topic_cmd).chomp
 
       command = %Q(aws cloudwatch put-metric-alarm --region "#{region}" --alarm-name "#{alarm_name_prefix}_opencast_availability" --alarm-description "Opencast is unavailable #{alarm_name_prefix}" --metric-name OpencastAvailable --namespace AWS/OpsworksCustom --statistic Minimum --period 120 --threshold 1 --comparison-operator LessThanThreshold --dimensions Name=InstanceId,Value=#{aws_instance_id} --evaluation-periods 4 --alarm-actions "#{topic_arn}")
       Chef::Log.info command

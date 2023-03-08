@@ -30,6 +30,17 @@ ruby_block "max_memory" do
   only_if { increase_max_memory }
 end
 
+template 'activemq_service' do
+  path '/etc/systemd/system/activemq.service'
+  source 'activemq.service.erb'
+  mode '644'
+  owner 'root'
+  group 'root'
+  variables({
+    activemq_base: activemq_base
+  })
+end
+
 template 'activemq_config' do
   path %Q|#{activemq_base}/conf/activemq.xml|
   source 'activemq.xml.erb'
@@ -42,10 +53,18 @@ template 'activemq_config' do
 end
 
 service 'activemq' do
-  supports start: true, stop: true, restart: true, status: true
   action [:enable, :start]
+  supports start: true, stop: true, status: true, restart: true
   subscribes :restart, "template[activemq_config]", :immediately
   subscribes :restart, "ruby_block[max_memory]", :immediately
+  provider Chef::Provider::Service::Systemd
+end
+
+# symlink the wrapper's correct pidfile location into /var/run
+# the 3rd-party cookbook we use gets this location wrong
+link '/var/run/activemq.pid' do
+  to "#{activemq_base}/data/activemq.pid"
+  not_if 'test -f /var/run/activemq.pid'
 end
 
 activemq_log = "#{activemq_base}/data/activemq.log"

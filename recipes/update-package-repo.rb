@@ -1,8 +1,8 @@
 # Cookbook Name:: oc-opsworks-recipes
 # Recipe:: update-package-repo
 
-execute 'enable epel' do
-  command 'yum-config-manager --enable epel'
+execute 'enable optional repos' do
+  command 'yum-config-manager --enable rhel-7-server-rhui-optional-rpms'
   retries 5
   retry_delay 15
 end

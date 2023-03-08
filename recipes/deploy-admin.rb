@@ -184,7 +184,7 @@ deploy_revision "opencast" do
     install_capture_agent_sync_config(most_recent_deploy)
 
     # ADMIN SPECIFIC
-    # oc 11.x: Do not create the db tables 
+    # oc 11.x: Do not create the db tables
     # initialize_database(most_recent_deploy)
     # /ADMIN SPECIFIC
 
@@ -220,13 +220,5 @@ deploy_revision "opencast" do
   end
 end
 
-include_recipe 'oc-opsworks-recipes::register-opencast-to-boot'
-
-unless dont_start_opencast_automatically?
-  service 'opencast' do
-    action :start
-    supports restart: true, start: true, stop: true, status: true
-  end
-end
-
+include_recipe 'oc-opsworks-recipes::configure-opencast-service'
 include_recipe "oc-opsworks-recipes::monitor-opencast-daemon"

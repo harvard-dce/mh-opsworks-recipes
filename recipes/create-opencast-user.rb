@@ -20,3 +20,5 @@ directory '/home/opencast/.ssh' do
   group 'opencast'
   mode '700'
 end
+
+include_recipe "oc-opsworks-recipes::create-karaf-var-directories"

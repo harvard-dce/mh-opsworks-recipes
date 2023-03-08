@@ -101,7 +101,7 @@ org.opencastproject.workflow.handler.workflow.ZipWorkflowOperationHandler.tmpdir
 # org.opencastproject.distribution.streaming.wowza.WowzaStreamingDistributionService.cfg
 
 # The base URL for media downloads.
-# Comment for #DCE: After 2.x, this needs to be set to the internal publication channel i.e. 
+# Comment for #DCE: After 2.x, this needs to be set to the internal publication channel i.e.
 # http://ENGAGE/static. The S3 distributioni configuration now have a separate url where
 # we specify the bucket url or the cloudfront address.
 org.opencastproject.download.url=<%= @engage_protocol %>://<%= @engage_hostname %>/static
@@ -128,7 +128,7 @@ org.opencastproject.db.jdbc.driver=com.mysql.jdbc.Driver
 #  .url=jdbc:h2:${org.opencastproject.storage.dir}/db
 #  .user=sa
 #  .pass=sa
-org.opencastproject.db.jdbc.url=jdbc:mysql://<%= @database[:host] %>/<%= @database[:database] %>
+org.opencastproject.db.jdbc.url=jdbc:mysql://<%= @database[:host] %>/<%= @database[:database] %>?autoReconnect=true&useSSL=false
 org.opencastproject.db.jdbc.user=<%= @database[:username] %>
 org.opencastproject.db.jdbc.pass=<%= @database[:password] %>
 
@@ -388,4 +388,3 @@ edu.harvard.dce.production.email=<%= @production_management_email %>
 # #DCE OPC-696
 edu.harvard.dce.cas.login.url=https://www.pin1.harvard.edu/cas/login
 edu.harvard.dce.cas.service=<%= @cas_service %>
-

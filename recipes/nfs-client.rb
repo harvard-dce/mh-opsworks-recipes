@@ -48,6 +48,7 @@ end
 service 'autofs' do
   action :restart
   not_if %Q|grep '#{storage_hostname}:#{nfs_server_export_root} ' /proc/mounts|
+  provider Chef::Provider::Service::Systemd
 end
 
 execute 'warm directory' do

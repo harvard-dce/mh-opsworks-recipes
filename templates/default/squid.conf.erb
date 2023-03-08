@@ -16,7 +16,7 @@ acl Safe_ports port 591         # filemaker
 acl Safe_ports port 777         # multiling http
 acl CONNECT method CONNECT
 
-# zadara ACLs as defined here: https://support.zadarastorage.com/entries/69891364-Setup-Backup-To-S3-B2S3-Through-a-Proxy-In-Your-AWS-VPC
+# zadara ACLs as defined here: https://support.zadarastorage.com/hc/en-us/articles/213024906-Setup-Backup-To-S3-B2S3-Through-a-Proxy-In-Your-AWS-VPC
 acl vpsa src <%= @storage_ip_address %>/32
 
 # From https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 """
 Outputs the number of Opencast jobs with 'QUEUED' status. See --help for options.

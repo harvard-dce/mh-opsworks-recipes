@@ -21,6 +21,7 @@ install_package("logstash")
 service 'logstash' do
   action :enable
   supports :restart => true
+  provider Chef::Provider::Service::Systemd
 end
 
 cookbook_file "/etc/default/logstash" do

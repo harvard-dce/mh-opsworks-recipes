@@ -19,7 +19,7 @@ bash "htpasswd" do
 end
 
 file '/etc/nginx/conf.d/kibana.htpasswd' do
-	mode '644'
+  mode '644'
 end
 
 worker_procs = get_nginx_worker_procs
@@ -52,4 +52,5 @@ service 'nginx' do
   # is first written, which is prior to our config templates being generated
   # on initial node setup run
   subscribes :reload, "file[/etc/nginx/ssl/certificate.key]"
+  provider Chef::Provider::Service::Systemd
 end

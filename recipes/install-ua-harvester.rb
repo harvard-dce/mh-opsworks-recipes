@@ -80,4 +80,5 @@ end
 
 service "redis" do
   action [ :enable, :start ]
+  provider Chef::Provider::Service::Systemd
 end

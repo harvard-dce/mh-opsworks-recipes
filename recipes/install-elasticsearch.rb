@@ -30,11 +30,13 @@ yum_repository 'curator' do
 end
 
 include_recipe "oc-opsworks-recipes::update-package-repo"
-install_package("java-1.8.0-openjdk java-1.8.0-openjdk-devel elasticsearch python-elasticsearch-curator")
+install_package("java-1.8.0-openjdk java-1.8.0-openjdk-devel elasticsearch")
+pip_install("elasticsearch-curator==3.5.1")
 
 service 'elasticsearch' do
   action :enable
   supports :restart => true
+  provider Chef::Provider::Service::Systemd
 end
 
 {
