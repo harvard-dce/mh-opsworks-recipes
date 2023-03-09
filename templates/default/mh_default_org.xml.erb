@@ -1,14 +1,14 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:sec="http://www.springframework.org/schema/security"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:osgi="http://www.springframework.org/schema/osgi"
+       xmlns:bp="http://www.osgi.org/xmlns/blueprint/v1.0.0"
        xmlns:util="http://www.springframework.org/schema/util"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0
+                           http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+                           http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/util
                            http://www.springframework.org/schema/util/spring-util-3.1.xsd
-                           http://www.springframework.org/schema/osgi
-                           http://www.springframework.org/schema/osgi/spring-osgi.xsd
                            http://www.springframework.org/schema/security
                            http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
@@ -419,7 +419,7 @@
     <sec:custom-filter ref="asyncTimeoutRedirectFilter" after="EXCEPTION_TRANSLATION_FILTER"/>
 
     <!-- Opencast is shipping its own implementation of the anonymous filter -->
-    <sec:custom-filter ref="anonymousFilter" position="ANONYMOUS_FILTER" />
+    <!-- Spring update repaces custom anonymouse filter -->
 
     <!-- Shibboleth header authentication filter
     <sec:custom-filter ref="shibbolethHeaderFilter" position="PRE_AUTH_FILTER"/>
@@ -474,13 +474,13 @@
     <property name="cookieName" value="oc-remember-me"/>
     <!-- The following key will be augmented by system properties. Thus, leaving this untouched is okay -->
     <!-- This key must be equal to the key passed to rememberMeAuthenticationProvider (s. below) -->
-    <property name="key" value="opencast"/>
+    <constructor-arg value="opencast"/>
   </bean>
 
   <bean id="rememberMeAuthenticationProvider"
         class="org.opencastproject.kernel.security.SystemTokenBasedRememberMeAuthenticationProvider">
     <!-- This key must be equal to the key passed to rememberMeServices (s. above) -->
-    <property name="key" value="opencast"/>
+    <constructor-arg value="opencast"/>
   </bean>
 
   <!-- ############################# -->
@@ -521,14 +521,21 @@
   <!-- # Custom Anonymous Filter Definition   # -->
   <!-- ######################################## -->
 
-  <bean id="anonymousFilter" class="org.opencastproject.kernel.security.TrustedAnonymousAuthenticationFilter">
-    <property name="userAttribute" ref="anonymousUserAttributes" />
-    <property name="key" value="anonymousKey" />
+  <!-- #DCE OPC-757 updated for spring security migration 3.1.4 to 5.2.3 -->
+  <!-- These replace the OC custom anonymousFilter and OC custom anonymousUserAttributes -->
+
+  <bean id="anonymousAuthFilter"
+	class="org.springframework.security.web.authentication.AnonymousAuthenticationFilter">
+    <!-- Updated for Spring 4+ -->
+    <constructor-arg value="anonymousKey"/>
+    <constructor-arg value="anonymousUser"/>
+    <constructor-arg value="ROLE_ANONYMOUS"/>
   </bean>
 
-  <bean id="anonymousUserAttributes" class="org.springframework.security.core.userdetails.memory.UserAttribute">
-    <property name="authoritiesAsString" value="ROLE_ANONYMOUS"/>
-    <property name="password" value="empty"/>
+  <bean id="anonymousAuthenticationProvider"
+	class="org.springframework.security.authentication.AnonymousAuthenticationProvider">
+    <!-- Updated for Spring 4+ -->
+    <constructor-arg value="anonymousKey"/>
   </bean>
 
   <!-- ######################################## -->
@@ -548,8 +555,16 @@
 
   <!-- Redirects unauthenticated requests to the login form -->
   <bean id="userEntryPoint" class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
-    <property name="loginFormUrl" value="/admin-ng/login.html" />
+    <!-- Updated for spring 4+ -->
+    <constructor-arg value="/admin-ng/login.html" />
   </bean>
+
+  <!-- Redirect unauthenticated requests to custom login url with configurable redirect query parameter
+       Example: http://localhost/Shibboleth.sso/Login?target=<RELATIVE_REQUEST_URL> -->
+  <!--bean id="userEntryPoint" class="org.opencastproject.kernel.security.RedirectQueryParamAuthenticationEntryPoint">
+    <constructor-arg index="0" value="/Shibboleth.sso/Login" />
+    <constructor-arg index="1" value="target" />
+  </bean-->
 
   <!-- Returns a 401 request for authentication via digest auth -->
   <bean id="digestEntryPoint" class="org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint">
@@ -635,7 +650,9 @@
     <property name="serviceProperties" ref="serviceProperties" />
     <property name="filterProcessesUrl" value="/cas"/>
     <property name="authenticationDetailsSource">
-      <bean class="org.springframework.security.cas.web.authentication.ServiceAuthenticationDetailsSource"/>
+      <bean class="org.springframework.security.cas.web.authentication.ServiceAuthenticationDetailsSource">
+        <constructor-arg ref="serviceProperties"/>
+      </bean>
     </property>
   </bean>
 
@@ -737,28 +754,28 @@
 <% end %>
 <%# ----------------------------------------- %>
 
-  <!-- #################### -->
-  <!-- # OSGI Integration # -->
-  <!-- #################### -->
+  <!-- #################################################################### -->
+  <!-- # OSGI Integration (uses blueprint for injection into Spring bean) # -->
+  <!-- #################################################################### -->
 
   <!-- Obtain services from the OSGI service registry -->
-  <osgi:reference id="userDetailsService" cardinality="1..1"
+  <bp:reference id="userDetailsService" cardinality="1..1"
                   interface="org.springframework.security.core.userdetails.UserDetailsService" />
 
-  <osgi:reference id="securityService" cardinality="1..1"
+  <bp:reference id="securityService" cardinality="1..1"
                   interface="org.opencastproject.security.api.SecurityService" />
 
   <!-- Uncomment to enable external users e.g. used together with shibboleth and JWT (and CAS) -->
-  <osgi:reference id="userReferenceProvider" cardinality="1..1"
+  <bp:reference id="userReferenceProvider" cardinality="1..1"
                   interface="org.opencastproject.userdirectory.api.UserReferenceProvider"  />
 
-  <osgi:reference id="userDirectoryService" cardinality="1..1"
+  <bp:reference id="userDirectoryService" cardinality="1..1"
                   interface="org.opencastproject.security.api.UserDirectoryService" />
 
-  <osgi:reference id="oAuthConsumerDetailsService" cardinality="1..1"
+  <bp:reference id="oAuthConsumerDetailsService" cardinality="1..1"
                   interface="org.springframework.security.oauth.provider.ConsumerDetailsService" />
 
-  <osgi:reference id="ltiLaunchAuthenticationHandler" cardinality="1..1"
+  <bp:reference id="ltiLaunchAuthenticationHandler" cardinality="1..1"
                   interface="org.springframework.security.oauth.provider.OAuthAuthenticationHandler" />
 
 
@@ -767,7 +784,7 @@
 <%# ----------------------------------------- %>
 <% if @ldap_conf[:enabled] %>
 
-  <osgi:reference id="authoritiesPopulator" cardinality="1..1"
+  <bp:reference id="authoritiesPopulator" cardinality="1..1"
                   interface="org.springframework.security.ldap.userdetails.LdapAuthoritiesPopulator"
                   filter="(instanceId=dce)" />
 
