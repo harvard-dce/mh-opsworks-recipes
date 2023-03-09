@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## v4.4.2
+
 * IC: OPC-851 `*.dcex.harvard.edu` cors support from Prod OC Engage
 
 ## v4.4.1
