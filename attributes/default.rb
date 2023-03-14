@@ -1,9 +1,9 @@
 
 # Maven
-default['maven']['version'] = '3.8.7'
+default['maven']['version'] = '3.8.8'
 default['maven']['setup_bin'] = true
 default['maven']['mavenrc']['opts'] = '-Dmaven.repo.local=/root/.m2/repository -Xms1024m -Xmx1024m'
-default['maven']['url'] = 'https://dlcdn.apache.org/maven/maven-3/3.8.7/binaries/apache-maven-3.8.7-bin.tar.gz'
+default['maven']['url'] = 'https://dlcdn.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz'
 
 # ActiveMQ
 default['activemq']['install_java'] = false
