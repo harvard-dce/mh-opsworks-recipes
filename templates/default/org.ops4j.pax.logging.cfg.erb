@@ -10,7 +10,7 @@ color.trace = cyan
 log4j2.pattern =  %d{ISO8601} | %-5.5p | %tid | (%C{1}:%L) - %m%n
 
 # Root logger
-log4j2.rootLogger.level = WARN
+log4j2.rootLogger.level = DEBUG
 log4j2.rootLogger.appenderRef.File.ref = File
 log4j2.rootLogger.appenderRef.PaxOsgi.ref = PaxOsgi
 log4j2.rootLogger.appenderRef.Console.ref = Console
@@ -41,11 +41,11 @@ log4j2.logger.hardlink.level = TRACE
 
 # For Karaf, Felix & CXF, we want to see some more details in the logs
 log4j2.logger.karaf.name = org.apache.karaf
-log4j2.logger.karaf.level = WARN
+log4j2.logger.karaf.level = TRACE
 log4j2.logger.felix.name = org.apache.felix
-log4j2.logger.felix.level = WARN
+log4j2.logger.felix.level = TRACE
 log4j2.logger.cxf.name = org.apache.cxf
-log4j2.logger.cxf.level = WARN
+log4j2.logger.cxf.level = DEBUG
 
 # Set aws logging to WARN
 log4j2.logger.awssdk.name = com.amazonaws
