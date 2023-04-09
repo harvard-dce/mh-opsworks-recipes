@@ -1,5 +1,5 @@
 #!/bin/bash
-
+echo "Generating docs"
 install_dependencies() {
   BUNDLE_GEMFILE=test/support/Gemfile bundle install
 }
