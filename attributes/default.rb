@@ -1,7 +1,7 @@
 
 # Maven
-default['maven']['version'] = '3.8.8'
 default['maven']['setup_bin'] = true
+default['maven']['version'] = '3.8.8'
 default['maven']['mavenrc']['opts'] = '-Dmaven.repo.local=/root/.m2/repository -Xms1024m -Xmx1024m'
 default['maven']['url'] = "https://#{node.fetch(:shared_asset_bucket_name, 'mh-opsworks-shared-assets')}.s3.amazonaws.com/apache-maven-3.8.8-bin.tar.gz"
 
