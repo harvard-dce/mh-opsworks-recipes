@@ -324,6 +324,8 @@
 
     <!-- Enable access to Opencast Editor -->
     <sec:intercept-url pattern="/editor/**" access="ROLE_ADMIN, ROLE_USER" />
+    <!-- #DCE OPC-845 -->
+    <sec:intercept-url pattern="/editor-ui/manifest.json" access="ROLE_ANONYMOUS" />
     <sec:intercept-url pattern="/editor-ui/**" access="ROLE_USER" />
 
     <!-- Enable anonymous access to the series endpoints -->
@@ -349,8 +351,8 @@
     <sec:intercept-url pattern="/annotation/**" method="DELETE" access="ROLE_ADMIN, ROLE_DCE_OC_SOCIAL_ADMIN" />
 
     <!-- OPC-649  Endpoints will only allow access if an LTI session is active. -->
-    <sec:intercept-url pattern="/recordingAction/publicationStatusByCourse/**" method="GET" access="ROLE_ANONYMOUS" />
-    <sec:intercept-url pattern="/recordingAction/haltPublication/**" method="POST" access="ROLE_ANONYMOUS" />
+    <sec:intercept-url pattern="/recordingAction/publicationStatusByCourse/**" method="GET" access="ROLE_DCE_COURSE_STAFF, ROLE_ADMIN" />
+    <sec:intercept-url pattern="/recordingAction/haltPublication/**" method="POST" access="ROLE_DCE_COURSE_STAFF, ROLE_ADMIN" />
 
     <!-- Enable anonymous access to the rss and atom feeds -->
     <sec:intercept-url pattern="/feeds/**" method="GET" access="ROLE_ANONYMOUS" />
