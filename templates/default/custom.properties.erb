@@ -41,7 +41,8 @@ org.opencastproject.admin.email=dce-dedev-notify@lists.fas.harvard.edu
 
 # Optional custom roles which can used in ACLs and granted to users or groups (comma-separated list of role names)
 # OPC-675 Add ROLE_DCE_PRODUCTION
-org.opencastproject.security.custom.roles=ROLE_DCE_PRODUCTION
+# OPC-845 Add ROLE_DCE_COURSE_STAFF_YYYYTT99999
+org.opencastproject.security.custom.roles=ROLE_DCE_PRODUCTION,ROLE_DCE_COURSE_STAFF_%SERIESID%
 
 # Optional custom roles pattern (regular expression). Roles matching this pattern can be added to ACLs.
 #org.opencastproject.security.custom.roles.pattern=^[0-9a-f-]+_(Learner|Instructor)$
