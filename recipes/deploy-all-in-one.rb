@@ -79,6 +79,8 @@ immersive_classroom_url = node.fetch(
   :immersive_classroom_url, ''
 )
 
+immersive_classroom_engage_id = get_immersive_classroom_engage_id
+
 live_monitor_url = node.fetch(
   :live_monitor_url, 'http://example.com/monitor_url'
 )
@@ -166,7 +168,7 @@ deploy_revision "opencast" do
     install_init_scripts(most_recent_deploy, opencast_repo_root)
     install_opencast_log_configuration(most_recent_deploy)
     install_opencast_log_management
-    install_multitenancy_config(most_recent_deploy, public_hostname, public_hostname, public_engage_protocol, stack_name, immersive_classroom_url)
+    install_multitenancy_config(most_recent_deploy, public_hostname, public_hostname, public_engage_protocol, stack_name, immersive_classroom_url, immersive_classroom_engage_id)
     install_smtp_config(most_recent_deploy)
     install_default_tenant_config(most_recent_deploy, false, public_hostname)
     install_porta_auth_service(
