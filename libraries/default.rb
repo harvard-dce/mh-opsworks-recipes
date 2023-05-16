@@ -172,7 +172,8 @@ module MhOpsworksRecipes
 
     def get_immersive_classroom_engage_id
       engage_id = node[:public_engage_hostname_cors] ? node[:public_engage_hostname_cors] : node[:public_engage_hostname]
-      engage_id.split('.', 2)[0]
+      return engage_id.split('.', 2)[0] if engage_id
+      ""
     end
 
     def get_public_admin_hostname_on_admin
