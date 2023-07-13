@@ -170,6 +170,12 @@ module MhOpsworksRecipes
       node[:opsworks][:instance][:public_dns_name]
     end
 
+    def get_immersive_classroom_engage_id
+      engage_id = node[:public_engage_hostname_cors] ? node[:public_engage_hostname_cors] : node[:public_engage_hostname]
+      return engage_id.split('.', 2)[0] if engage_id
+      ""
+    end
+
     def get_public_admin_hostname_on_admin
       return node[:public_admin_hostname] if node[:public_admin_hostname]
 
@@ -909,7 +915,7 @@ module MhOpsworksRecipes
       end
     end
 
-    def install_multitenancy_config(current_deploy_root, admin_hostname, admin_protocol, engage_hostname, engage_protocol, stack_name, immersive_classroom_url)
+    def install_multitenancy_config(current_deploy_root, admin_hostname, admin_protocol, engage_hostname, engage_protocol, stack_name, immersive_classroom_url, immersive_classroom_engage_id)
       template %Q|#{current_deploy_root}/etc/org.opencastproject.organization-mh_default_org.cfg| do
         source 'org.opencastproject.organization-mh_default_org.cfg.erb'
         owner 'opencast'
@@ -921,7 +927,8 @@ module MhOpsworksRecipes
           engage_hostname: engage_hostname,
           engage_protocol: engage_protocol,
           stack_name: stack_name,
-          immersive_classroom_url: immersive_classroom_url
+          immersive_classroom_url: immersive_classroom_url,
+          immersive_classroom_engage_id: immersive_classroom_engage_id
         })
       end
     end
