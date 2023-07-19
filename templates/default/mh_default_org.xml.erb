@@ -286,9 +286,13 @@
     <!-- anonymous access to user interface configuration -->
     <sec:intercept-url pattern="/ui/config/**" access="ROLE_ANONYMOUS" />
 
-    <!-- Paella player -->
+    <!-- Paella player 6 -->
     <sec:intercept-url pattern="/paella/ui/auth.html" access="ROLE_USER" />
     <sec:intercept-url pattern="/paella/ui/**" access="ROLE_ANONYMOUS" />
+
+    <!-- Paella player 7 -->
+    <sec:intercept-url pattern="/paella7/ui/auth.html" access="ROLE_USER" />
+    <sec:intercept-url pattern="/paella7/ui/**" access="ROLE_ANONYMOUS" />
 
     <!-- #DCE KHD: MATT-2231 require login for annots summary (extra data auth on oauth performed in endpoint) -->
     <sec:intercept-url pattern="/engage/ui/annots/**" access="ROLE_ADMIN, ROLE_OAUTH_USER, ROLE_DCE_OC_SOCIAL_ADMIN" />
