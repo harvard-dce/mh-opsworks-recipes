@@ -368,6 +368,10 @@ prop.org.opencastproject.cluster.name=<%= @stack_name %>
 
 # #DCE OPC-848 Immersive classroom base url. Used to:
 # 1) push a notification when a video is replaced by its trimmed version
-# 2) list IC links in the pub listing page
+# 2) list IC links in the video listing page (temporary)
 prop.edu.harvard.dce.immersive.classroom.url=<%= @immersive_classroom_url %>
+# This is the host passed to IC to identify this opencast cluster e.g.
+# the HOST piece of the link to the IC videos:
+# IMMERSIVE_CASSROOM_URL/players/HOST/courses/CANVAS_COURSE_ID/videos/MP_ID
+prop.edu.harvard.dce.immersive.classroom.engage.id=<%= @immersive_classroom_engage_id %>
 

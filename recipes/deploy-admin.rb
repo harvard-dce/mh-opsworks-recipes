@@ -66,6 +66,8 @@ immersive_classroom_url = node.fetch(
   :immersive_classroom_url, ''
 )
 
+immersive_classroom_engage_id = get_immersive_classroom_engage_id
+
 live_streaming_url = get_live_streaming_url
 live_stream_name = get_live_stream_name
 distribution = using_local_distribution ? 'download' : 'aws.s3'
@@ -149,7 +151,7 @@ deploy_revision "opencast" do
     install_init_scripts(most_recent_deploy, opencast_repo_root)
     install_opencast_log_configuration(most_recent_deploy)
     install_opencast_log_management
-    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_admin_protocol, public_engage_hostname, public_engage_protocol, stack_name, immersive_classroom_url)
+    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_admin_protocol, public_engage_hostname, public_engage_protocol, stack_name, immersive_classroom_url, immersive_classroom_engage_id)
 
     install_elasticsearch_index_config(most_recent_deploy, stack_name)
     install_smtp_config(most_recent_deploy)

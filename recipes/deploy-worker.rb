@@ -20,6 +20,8 @@ immersive_classroom_url = node.fetch(
   :immersive_classroom_url, ''
 )
 
+immersive_classroom_engage_id = get_immersive_classroom_engage_id
+
 # LDAP credentials
 ldap_conf = get_ldap_conf
 ldap_enabled = ldap_conf[:enabled]
@@ -85,7 +87,7 @@ deploy_revision "opencast" do
     install_init_scripts(most_recent_deploy, opencast_repo_root)
     install_opencast_log_configuration(most_recent_deploy)
     install_opencast_log_management
-    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_admin_protocol, public_engage_hostname, public_engage_protocol, stack_name, immersive_classroom_url)
+    install_multitenancy_config(most_recent_deploy, public_admin_hostname, public_admin_protocol, public_engage_hostname, public_engage_protocol, stack_name, immersive_classroom_url, immersive_classroom_engage_id)
 #    remove_felix_fileinstall(most_recent_deploy)
 #    install_smtp_config(most_recent_deploy)
     if ldap_enabled
