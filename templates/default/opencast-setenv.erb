@@ -47,7 +47,7 @@ GC=""
 #GC="${GC} -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=20 -XX:GCLogFileSize=32M -XX:+UseG1GC"
 
 # #DCE OPC-773 Publish AWS metrics
-export EXTRA_JAVA_OPTS="${EXTRA_JAVA_OPTS} -Djdk.util.zip.disableZip64ExtraFieldValidation=true -Dcom.amazonaws.sdk.enableDefaultMetrics $GC -Dorg.eclipse.jetty.server.Request.maxFormContentSize=1500000 -Dfile.encoding=UTF-8"
+export EXTRA_JAVA_OPTS="${EXTRA_JAVA_OPTS} -Dcom.amazonaws.sdk.enableDefaultMetrics $GC -Dorg.eclipse.jetty.server.Request.maxFormContentSize=1500000 -Dfile.encoding=UTF-8"
 export JAVA_MAX_MEM=<%= @java_xmx_ram %>M
 export JAVA_HOME=<%= @java_home %>
 
