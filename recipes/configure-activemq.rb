@@ -30,6 +30,11 @@ ruby_block "max_memory" do
   only_if { increase_max_memory }
 end
 
+execute 'systemd reload' do
+  command 'systemctl daemon-reload'
+  action :nothing
+end
+
 template 'activemq_service' do
   path '/etc/systemd/system/activemq.service'
   source 'activemq.service.erb'
@@ -39,6 +44,8 @@ template 'activemq_service' do
   variables({
     activemq_base: activemq_base
   })
+  # this execute block is definied in the DeployHelpers
+  notifies :run, 'execute[systemd reload]', :immediately
 end
 
 template 'activemq_config' do

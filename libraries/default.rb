@@ -867,6 +867,11 @@ module MhOpsworksRecipes
 
       layer_name = layer_name_from_hostname
 
+      execute 'systemd reload' do
+        command 'systemctl daemon-reload'
+        action :nothing
+      end
+
       template %Q|/etc/systemd/system/opencast.service| do
         source 'opencast.service.erb'
         owner 'root'
@@ -875,6 +880,7 @@ module MhOpsworksRecipes
         variables({
           opencast_root: current_deploy_root
         })
+        notifies :run, 'execute[systemd reload]', :immediately
       end
 
       cookbook_file 'opencast_sysconfig' do
