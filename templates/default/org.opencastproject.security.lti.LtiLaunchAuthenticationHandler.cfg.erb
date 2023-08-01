@@ -52,7 +52,7 @@ lti.oauth.highly_trusted_consumer_key.1=<%= @lti_oauth[:consumerkey] %>
 # This persists the LTI Users in the database, giving them the ability to create long running tasks like ingesting a video.
 #
 # Default: true
-lti.create_jpa_user_reference = false
+lti.create_jpa_user_reference = true
 
 # Determines which LTI roles should be persisted in the database on LTI user logins.
 # The "lti.create_jpa_user_reference" config key has to be "true", otherwise this config key will be ignored.
@@ -69,14 +69,17 @@ lti.create_jpa_user_reference = false
 #
 # Default: *
 #
-# lti.create_jpa_user_reference.roles = *
+lti.create_jpa_user_reference.roles = Instructor,urn:lti:role:ims/lis/TeachingAssistant,urn:lti:instrole:ims/lis/Administrator
 
 # Add Custom Roles to users who has the role with custom_role_name
 # Default: empty no custom roles
 
-#lti.custom_role_name=Instructor
+lti.custom_role_name=Instructor,urn:lti:role:ims/lis/TeachingAssistant
 #This Role set is an example for a user which can open the editor for an event and upload videos via opencast studio.
 #lti.custom_roles=ROLE_ADMIN_UI,ROLE_API_EVENTS_METADATA_DELETE,ROLE_API_EVENTS_METADATA_EDIT,ROLE_API_EVENTS_METADATA_VIEW,ROLE_UI_EVENTS_DETAILS_COMMENTS_CREATE,ROLE_UI_EVENTS_DETAILS_COMMENTS_DELETE,ROLE_UI_EVENTS_DETAILS_COMMENTS_EDIT,ROLE_UI_EVENTS_DETAILS_COMMENTS_REPLY,ROLE_UI_EVENTS_DETAILS_COMMENTS_RESOLVE,ROLE_UI_EVENTS_DETAILS_COMMENTS_VIEW,ROLE_UI_EVENTS_EDITOR_EDIT,ROLE_UI_EVENTS_EDITOR_VIEW,ROLE_STUDIO
+# ROLE_DCE_COURSE_STAFF_YYYYTT99999 to run a workflow on that media package
+# ROLE_DCE_COURSE_STAFF to access recordingAction endpoint
+lti.custom_roles=ROLE_DCE_COURSE_STAFF_%SERIESID%,ROLE_DCE_COURSE_STAFF
 
 # Prefix for LTI context based roles based on OAuth consumer keys.
 # The LTI context (e.g. the course identifier) is used to generate context roles like “12345_Learner”.
