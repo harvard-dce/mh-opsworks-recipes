@@ -2,6 +2,16 @@
 
 ## TO BE RELEASED
 
+## v4.4.5
+
+* OPC-682: paella7 paths 
+* Add engage host id to use in IC video urls
+* Self-service standalone video editor role configuration
+
+## v4.4.4
+
+* Maven 3.8.8
+
 ## v4.4.3
 
 * OPC-848: Immersive classroom url added to organization props.
