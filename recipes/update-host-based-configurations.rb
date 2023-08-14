@@ -12,6 +12,7 @@ stack_name = stack_shortname
 immersive_classroom_url = node.fetch(
   :immersive_classroom_url, ''
 )
+immersive_classroom_engage_id = get_immersive_classroom_engage_id
 
 public_engage_hostname = get_public_engage_hostname
 public_engage_protocol = get_public_engage_protocol
@@ -23,6 +24,6 @@ if File.directory?(production_deploy_root)
   # so everytime a node goes online or off and right before deployment.
   # We only care about the fact that it runs before a node changes its online state
 
-  install_multitenancy_config(production_deploy_root, public_admin_hostname, public_admin_protocol, public_engage_hostname, public_engage_protocol, stack_name, immersive_classroom_url)
+  install_multitenancy_config(production_deploy_root, public_admin_hostname, public_admin_protocol, public_engage_hostname, public_engage_protocol, stack_name, immersive_classroom_url, immersive_classroom_engage_id)
 
 end
