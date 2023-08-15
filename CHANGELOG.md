@@ -2,6 +2,11 @@
 
 ## TO BE RELEASED
 
+## v4.4.6
+
+* fix for missing engage id not being passed to `install_multitenancy_config` from the 
+  `update-host-based-configurations` recipe and causing configure lifecycle event failures
+
 ## v4.4.5
 
 * OPC-682: paella7 paths 
