@@ -2,6 +2,32 @@
 
 ## TO BE RELEASED
 
+## v5.0.0 - 08/21/2023
+
+DEPLOY-86: update recipes to be compatible with RHEL7
+    
+Siginificant changes include:
+    
+- java 11 openjdk installed (instead of amazon corretto)
+- installation and enabling of rhel7 "software collections" for python
+  3.8 and mysql 5.7
+- switch to using systemd service units for activemq and opencast
+- update chef service blocks to explicitly use systemd
+- setting selinux to permissive, meaning it will log warnings but not
+  block anything
+- creating a common function for pip installing python packages
+- fixed issue where karaf pid/lock directories weren't getting created
+  prior to OC start
+- crowdstrike recipe needed to use `yum localinstall` to prevent errors
+  when package was already installed (eg as part of the AMI)
+- provide an updated `java.security` file to allow TLSv1.1 which OC
+  needs for the jdbc connection handshake
+- disable ssl on the jdbc connection from OC to MySQL:
+  The RDS instance is on a private subnet and all communication between OC
+  and the RDS resources takes place within the VPC, so disabling SSL is OK
+- fixing a bug in the ganglia monitoring service definition file causing
+  hung opsworks configure lifecycle events
+
 ## v4.4.6
 
 * fix for missing engage id not being passed to `install_multitenancy_config` from the 
