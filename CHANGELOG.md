@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+- Fixing again the MemoryUsed metric; first try didn't end up with the correct modification
+
 ## v5.0.0 - 08/21/2023
 
 DEPLOY-86: update recipes to be compatible with RHEL7
