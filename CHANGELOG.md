@@ -3,6 +3,7 @@
 ## TO BE RELEASED
 
 - Fixing again the MemoryUsed metric; first try didn't end up with the correct modification
+- mysql backup cronjob wasn't sourcing anything that enabled the msyql software collection
 
 ## v5.0.0 - 08/21/2023
 

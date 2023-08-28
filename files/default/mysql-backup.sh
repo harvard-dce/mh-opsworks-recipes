@@ -3,6 +3,8 @@
 # Dumps the database and compresses the output
 #
 
+. /etc/profile.d/enable_scls.sh
+
 backupdir="$1"
 mysqluser=root
 options="--compress --single-transaction --extended-insert --disable-keys --quick --set-charset --skip-comments"
