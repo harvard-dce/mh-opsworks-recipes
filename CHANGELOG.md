@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+## v5.0.1 - 09/08/2023
+
 - Fixing again the MemoryUsed metric; first try didn't end up with the correct modification
 - mysql backup cronjob wasn't sourcing anything that enabled the msyql software collection
 - add missing SASL packages needed by postfix
