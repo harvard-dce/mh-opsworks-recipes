@@ -13,6 +13,10 @@ proxy_buffers 16 16k;
 # Opencast throw jetty EofExceptions
 proxy_ignore_client_abort on;
 
+# prevents http 431/400 errors if e.g. cookies are too large;
+# default is 4 buffers of 8k
+large_client_header_buffers 4 16k;
+
 # All traffic that comes to http://SOMETHING.harvard.edu will be redirected to https.
 # The "harvard.edu" was used to exclude: the internal host name (used by Opencast job dispatching),
 # dev clusters that do not bother to set auth/ssl up, local vagrant.

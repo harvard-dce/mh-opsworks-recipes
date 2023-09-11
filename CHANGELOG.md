@@ -2,6 +2,11 @@
 
 ## TO BE RELEASED
 
+## v5.0.2 - 09/12/2023
+
+- Upping the engage nginx `large_client_header_buffers` setting (from 4 * 8k to
+  4 * 16k) to allow for big cookies and avoid HTTP 431/400 errors
+
 ## v5.0.1 - 09/08/2023
 
 - Fixing again the MemoryUsed metric; first try didn't end up with the correct modification
