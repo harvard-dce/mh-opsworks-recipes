@@ -61,15 +61,6 @@ cron_d 'load_episodes' do
   path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 end
 
-# fetch and index meeting and session data from the zoom api
-cron_d 'zoom_harvest' do
-  user 'ua_harvester'
-  minute '0'
-  hour '5'
-  command %Q(cd /home/ua_harvester/harvester && source venv/bin/activate && /usr/bin/run-one ./harvest.py zoom 2>&1 | logger -t info)
-  path '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
-end
-
 ruby_block 'create sqs queue' do
   block do
     command = %Q(aws sqs create-queue --region "#{region}" --queue-name "#{sqs_queue_name}")

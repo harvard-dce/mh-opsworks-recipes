@@ -3,6 +3,7 @@
 ## TO BE RELEASED
 
 - Clean pip cache just like we do for yum
+- Removed the bits of the ua-harvester that were pulling zoom analytics
 
 ## v5.0.2 - 09/12/2023
 
