@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+- Clean pip cache just like we do for yum
+
 ## v5.0.2 - 09/12/2023
 
 - Upping the engage nginx `large_client_header_buffers` setting (from 4 * 8k to
