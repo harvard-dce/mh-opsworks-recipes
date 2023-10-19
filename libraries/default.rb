@@ -878,7 +878,7 @@ module MhOpsworksRecipes
         group 'root'
         mode '644'
         variables({
-          opencast_root: current_deploy_root
+          opencast_root: opencast_repo_root + '/current'
         })
         notifies :run, 'execute[systemd reload]', :immediately
       end

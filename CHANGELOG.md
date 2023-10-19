@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+- `opencast.service` file should use path to the current deployment (vs hardcoded release path)
+
 # v5.0.3 - 10/04/2023
 
 - Clean pip cache just like we do for yum

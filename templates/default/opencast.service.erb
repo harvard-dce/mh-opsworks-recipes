@@ -7,8 +7,8 @@ After=network.target
 After=remote-fs.target
 
 [Service]
-ExecStart=/<%= @opencast_root %>/bin/start-opencast server
-ExecStop=/<%= @opencast_root %>/bin/stop-opencast
+ExecStart=<%= @opencast_root %>/bin/start-opencast server
+ExecStop=<%= @opencast_root %>/bin/stop-opencast
 Restart=always
 User=opencast
 
