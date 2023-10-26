@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+# v5.0.4 - 10/26/2023
+
 - `opencast.service` file should use path to the current deployment (vs hardcoded release path)
 
 # v5.0.3 - 10/04/2023
