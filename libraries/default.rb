@@ -348,6 +348,10 @@ module MhOpsworksRecipes
       node[:s3_file_archive_bucket_name]
     end
 
+    def get_s3_cold_archive_bucket_name
+      node[:s3_cold_archive_bucket_name]
+    end
+
     def get_s3_file_archive_course_list
       node.fetch(:s3_file_archive_course_list, '')
     end
@@ -1064,6 +1068,19 @@ module MhOpsworksRecipes
         group 'opencast'
         variables({
           s3_file_archive_course_list: s3_file_archive_course_list
+        })
+      end
+    end
+
+    def install_aws_s3_cold_archive_service_config(current_deploy_root, region, s3_file_archive_bucket_name, s3_cold_archive_bucket_name)
+      template %Q|#{current_deploy_root}/etc/edu.harvard.dce.cold.archive.S3ColdArchiveService.cfg| do
+        source 'edu.harvard.dce.cold.archive.S3ColdArchiveService.cfg.erb'
+        owner 'opencast'
+        group 'opencast'
+        variables({
+          region: region,
+          s3_file_archive_bucket_name: s3_file_archive_bucket_name,
+          s3_cold_archive_bucket_name: s3_cold_archive_bucket_name
         })
       end
     end
