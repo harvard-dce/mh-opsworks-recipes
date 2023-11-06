@@ -1,0 +1,40 @@
+
+# S3 buckets region
+# defaullt: us-east-1
+#archive.region=
+
+# Asset manager bucket name (usually CLUSTER-file-archive)
+# If empty, the service is disabled
+asset.manager.aws.s3.bucket=<%= @s3_file_archive_bucket_name %>
+
+# Cold archive bucket name (usually CLUSTER-cold-archive)
+# If empty, the service is disabled
+cold.archive.aws.s3.bucket=<%= @s3_cold_archive_bucket_name %>
+
+# Indicate if recordings will be deleted from Opencast after being archived
+# to cold storage
+# default: true
+#archive.enable.opencast.deletion=true
+
+# Retract workflow to be used when deleting recordings, it should be the same
+# retract workflow as in org.opencastproject.adminui.impl.AdminUIConfiguration.
+archive.retract.workflow=dce-int-retract
+
+# Default workflow to be used when re-ingested archived recordings
+retrieve.ingest.workflow=dce-int-reingest-from-cold-storage
+
+# Default flavors to be restored from Glacier deep archive
+retrieve.flavors=presenter/source,presentation/source,smil/*
+
+# Number of days to temporary restore files from Glacier deep archive
+# default: 7
+#retrieve.glacier.restore.days=7
+
+# Number of seconds between each check for object restore
+# default: 900 (15 minutes)
+#retrieve.check.restore.secs=900
+
+# Maximum number of hours to wait for object restore
+# default: 24
+#retrieve.max.wait.restore.hours=24
+

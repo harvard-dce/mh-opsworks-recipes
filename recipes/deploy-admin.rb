@@ -21,6 +21,9 @@ s3_file_archive_enabled = !s3_file_archive_bucket_name.to_s.empty?
 s3_file_archive_course_list = get_s3_file_archive_course_list
 # S3 file archive service
 
+# S3 cold archive service
+s3_cold_archive_bucket_name = get_s3_cold_archive_bucket_name
+
 # S3 distribution config to be used by the video export feature
 enable_s3 = !using_local_distribution
 region = node.fetch(:region, 'us-east-1')
@@ -165,6 +168,7 @@ deploy_revision "opencast" do
     install_otherpubs_service_series_impl_config(most_recent_deploy)
     install_aws_s3_export_video_service_config(most_recent_deploy, enable_s3, region, s3_distribution_bucket_name, video_export_access_key_id, video_export_secret_access_key)
     install_aws_s3_file_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name, s3_file_archive_enabled, s3_file_archive_course_list)
+    install_aws_s3_cold_archive_service_config(most_recent_deploy, region, s3_file_archive_bucket_name, s3_cold_archive_bucket_name)
     # OPC-224 (only used during migration)
     install_ibm_watson_transcription_service_config(most_recent_deploy, ibm_watson_url, ibm_watson_api_key, ibm_watson_username, ibm_watson_psw)
     # OPC-554 porta metadata service
