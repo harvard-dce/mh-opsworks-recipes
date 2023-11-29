@@ -307,6 +307,8 @@
     <sec:intercept-url pattern="/otherpubs/otherpubspref/**" method="PUT" access="ROLE_ADMIN, ROLE_DCE_TEST_LOCAL" />
     <!-- OPC-363 report a problem -->
     <sec:intercept-url pattern="/otherpubs/problemReport/**" method="POST" access="ROLE_ANONYMOUS" />
+    <!-- Protect free search on search index -->
+    <sec:intercept-url pattern="/search/lucene*" method="GET" access="ROLE_ADMIN" />
     <!-- Default Matterhorn engage player module loads at engage-player -->
     <!--  #DCE -->
 
