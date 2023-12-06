@@ -2,6 +2,10 @@
 
 ## TO BE RELEASED
 
+# v5.0.5 - 12/11/2023
+
+- /search/lucene* endpoint to be accessed only by admins 
+
 # v5.0.4 - 10/26/2023
 
 - `opencast.service` file should use path to the current deployment (vs hardcoded release path)
