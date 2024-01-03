@@ -7,6 +7,7 @@ include_recipe "oc-opsworks-recipes::install-nginx"
 
 shared_storage_root = get_shared_storage_root
 
+old_public_engage_hostname = get_old_public_engage_hostname
 public_engage_hostname = get_public_engage_hostname
 public_engage_hostname_cors = get_public_engage_hostname_cors
 
@@ -47,6 +48,7 @@ template 'proxy' do
     opencast_backend_http_port: 8080,
     certificate_exists: certificate_exists,
     public_engage_hostname: public_engage_hostname,
+    old_public_engage_hostname: old_public_engage_hostname,
     engage_domain_cors_regex: engage_domain_cors_regex
   })
 end

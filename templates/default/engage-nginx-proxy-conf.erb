@@ -97,6 +97,25 @@ server {
   # Make site accessible from http://localhost/
   server_name localhost;
 
+<% unless @old_public_engage_hostname.empty? %>
+  # Change matterhorn.dce to opencast.dcex if host is matterhorn.dce and
+  # path is not an lti tool (because Canvas does not play well with 301s).
+  # This was done here instead of a server block so that we didn't have to
+  # duplicate a lot (or create an include of the config that is repeated).
+  set $change_host 1;
+  # Test for old engage host name (matterhorn.dce)
+  if ($host != '<%= @old_public_engage_hostname %>') {
+    set $change_host 0;
+  }
+  # Test for /lti and /lti/player (embedded video)
+  if ($uri ~ ^/lti.*) {
+    set $change_host 0;
+  }
+  if ($change_host = 1) {
+    return 301 https://<%= @public_engage_hostname %>$request_uri;
+  }
+<% end %>
+
   proxy_set_header Host $host;
   proxy_set_header X-Real-IP $remote_addr;
   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

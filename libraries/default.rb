@@ -218,6 +218,11 @@ module MhOpsworksRecipes
       public_engage_hostname
     end
 
+    def get_old_public_engage_hostname
+      return node[:old_public_engage_hostname] if node[:old_public_engage_hostname]
+      ''
+    end
+
     def get_public_engage_protocol
       return node[:public_engage_protocol] if node[:public_engage_protocol]
       'http'
