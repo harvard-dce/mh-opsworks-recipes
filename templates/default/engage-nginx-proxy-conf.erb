@@ -111,6 +111,10 @@ server {
   if ($uri ~ ^/lti.*) {
     set $change_host 0;
   }
+  # Test for /info
+  if ($uri ~ ^/info.*) {
+    set $change_host 0;
+  }
   if ($change_host = 1) {
     return 301 https://<%= @public_engage_hostname %>$request_uri;
   }
