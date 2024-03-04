@@ -3,6 +3,7 @@
 ## TO BE RELEASED
 
 - Adding tags to the crowdstrike config
+- Bump activemq version to 5.15.16
 
 # v5.0.5 - 12/11/2023
 
