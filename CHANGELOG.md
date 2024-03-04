@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+- Adding tags to the crowdstrike config
+
 # v5.0.5 - 12/11/2023
 
 - /search/lucene* endpoint to be accessed only by admins 

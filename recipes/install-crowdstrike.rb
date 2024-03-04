@@ -9,6 +9,7 @@ crowdstrike = node.fetch(:crowdstrike, {})
 
 return if !crowdstrike[:cid]
 rpm = crowdstrike[:rpm] || 'crowdstrike-falcon-sensor.rpm'
+group_tags = crowdstrike[:group_tags] || %Q|opencast,#{stack_shortname}|
 
 if on_aws?
   include_recipe "oc-opsworks-recipes::install-awscli"
@@ -32,7 +33,7 @@ yum localinstall -y #{rpm}
   end
 
   execute 'set cid' do
-    command "/opt/CrowdStrike/falconctl -s -f --cid=#{crowdstrike[:cid]}"
+    command "/opt/CrowdStrike/falconctl -s -f --cid=#{crowdstrike[:cid]} --tags='#{group_tags}'"
     # only run when notified by the previous block
     action :nothing
   end
