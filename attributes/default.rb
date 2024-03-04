@@ -8,7 +8,7 @@ default['maven']['url'] = "https://#{node.fetch(:shared_asset_bucket_name, 'mh-o
 
 # ActiveMQ
 default['activemq']['install_java'] = false
-default['activemq']['version'] = '5.15.4'
+default['activemq']['version'] = '5.15.16'
 default['activemq']['transport_protocols'] = 'TLSv1.1,TLSv1.2'
 default['activemq']['home'] = '/opt/opencast/activemq'
 # this is only to tell the 3rd-party activemq recipe not to issue its own

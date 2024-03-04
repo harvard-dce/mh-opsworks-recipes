@@ -2,6 +2,8 @@
 
 ## TO BE RELEASED
 
+- Bump activemq version to 5.15.16
+
 # v5.0.5 - 12/11/2023
 
 - /search/lucene* endpoint to be accessed only by admins 
